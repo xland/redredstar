@@ -13,9 +13,12 @@
 * 到目前为止“想学吗”不会保存您的任何账号数据；
 
 ## 界面截图
-<p align="center">
-<img width="100" src="" alt="Vue logo">
-</p>
+
+* ![知识首页](/publicity/mac_index.png)
+
+* ![知识编辑](/publicity/mac_edit.png)
+
+* ![知识发布](/publicity/mac_publish.png)
 
 ## 责权声明
 
