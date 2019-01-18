@@ -1,0 +1,17 @@
+#app {
+  height: 100%;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  font-size: 13px;
+  z-index: 9;
+  display: flex;
+  flex-flow: column;
+  background: #f6f6f6;
+}
+
+#app .main {
+  overflow: hidden;
+  flex: 1;
+}

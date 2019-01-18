@@ -1,0 +1,7 @@
+{
+    "main": "start.js",
+    "name": "xxm",
+    "node-remote": "*://localhost/*",
+    "version": "6.0.2",
+    "chromium-args": "--mixed-context"
+}

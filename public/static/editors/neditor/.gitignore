@@ -1,0 +1,7 @@
+/dialogs/*
+/kityformula-plugin/*
+!/kityformula-plugin/defaultFilterFix.js
+!/kityformula-plugin/addKityFormulaDialog.js
+/themes/*
+/third-party/*
+/i18n/*
