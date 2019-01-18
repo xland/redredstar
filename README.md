@@ -14,6 +14,8 @@
 
 ## 界面截图
 
+* <img width="360" src="/publicity/mac_index.png" alt="Vue logo">
+
 * ![知识首页](/publicity/mac_index.png)
 
 * ![知识编辑](/publicity/mac_edit.png)
