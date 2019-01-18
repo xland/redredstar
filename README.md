@@ -14,13 +14,12 @@
 
 ## 界面截图
 
-* <img width="360" src="/publicity/mac_index.png" alt="Vue logo">
+* <img width="680" src="/publicity/mac_index.png" >
 
-* ![知识首页](/publicity/mac_index.png)
+* <img width="680" src="/publicity/mac_edit.png" >
 
-* ![知识编辑](/publicity/mac_edit.png)
+* <img width="680" src="/publicity/mac_publish.png" >
 
-* ![知识发布](/publicity/mac_publish.png)
 
 ## 责权声明
 
