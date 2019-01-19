@@ -29,13 +29,13 @@ var runVue = function () {
 var runNw = function () {
     console.log("build nwjs");
     var nw = new NwBuilder({
-        files: ['/project/cnblogs/xxm/nwjs/**'],
+        files: ['/project/xiangxuema/nwjs/**'],
         platforms: ['osx64'], //,'win64'
         version: '0.35.5',
         flavor: 'normal',
-        macIcns: '/project/cnblogs/xxm/icon/icon.icns',
-        winIco: '/project/cnblogs/xxm/icon/icon.ico',
-        cacheDir: '/project/cnblogs/xxm/cache/',
+        macIcns: '/project/xiangxuema/icon/icon.icns',
+        winIco: '/project/xiangxuema/icon/icon.ico',
+        cacheDir: '/project/xiangxuema/cache/',
     });
     nw.on('log', console.log);
     nw.build().then(function () {

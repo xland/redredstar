@@ -33,7 +33,9 @@ const store = {
             if (err) {
                 console.log(err);
             }
-            cb();
+            if(cb){
+                cb();
+            }
         });
     },
     saveContent(cb) {
