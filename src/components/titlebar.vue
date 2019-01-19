@@ -1,11 +1,20 @@
 <template>
     <div class="titleBar">
         <div class="right">
-            <div @click="setting" class="titleBarBtn" title="系统设置">
+            <div @click="setting" class="leftBtn settingBtn" title="系统设置">
                 <i class="iconfont icon-setting"></i>
             </div>
+            <div v-if="!isMac" @click="min()" class="leftBtn min">
+                <i class="iconfont icon-min tool-i"></i>
+            </div>
+            <div v-if="!isMac" @click='max()' class="leftBtn max">
+                <i class="iconfont icon-mac-max tool-i"></i>
+            </div>
+            <div v-if="!isMac" @click="close()" class="leftBtn close">
+                <i class="iconfont icon-guanbi tool-i"></i>
+            </div>
         </div>
-        <div class="left">
+        <div class="left" v-if="isMac">
             <div @click="close()" class="leftBtn close">
                 <i class="iconfont icon-guanbi tool-i"></i>
             </div>
@@ -25,8 +34,11 @@
     export default {
         data() {
             return {
-
+                isMac: true,
             }
+        },
+        created() {
+            this.isMac = window.nw.require("os").platform == "darwin";
         },
         methods: {
             setting() {
@@ -36,7 +48,7 @@
                 });
             },
             close() {
-                window.nw.App.quit();//todo:
+                window.nw.App.quit(); //todo:
                 //window.nw.Window.get().close();
             },
             min() {
@@ -58,8 +70,10 @@
 
     .right {
         float: right;
-        padding-right: 8px;
+        padding-right: 3px;
         -webkit-app-region: no-drag;
+        width: 120px;
+        text-align: right;
     }
 
     .titleBar {
@@ -70,14 +84,6 @@
         color: #666;
         border-bottom: 1px solid #e6e6e6;
         -webkit-app-region: drag;
-    }
-
-    .titleBarBtn {
-        text-align: center;
-    }
-
-    .titleBarBtn:hover {
-        color: #447bd2;
     }
 
     .titleBar .title {
@@ -115,6 +121,12 @@
     .titleBar .max {
         background: #34c84a;
         color: #34c84a;
+    }
+    .right .leftBtn:hover{
+        border:1px solid #fff;
+    }
+    .right i {
+        color: #333 !important;
     }
 
     .tool-i {
