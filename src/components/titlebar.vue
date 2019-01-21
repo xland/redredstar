@@ -122,9 +122,6 @@
         background: #34c84a;
         color: #34c84a;
     }
-    .right .leftBtn:hover{
-        border:1px solid #fff;
-    }
     .right i {
         color: #333 !important;
     }

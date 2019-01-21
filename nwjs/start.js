@@ -1,7 +1,6 @@
-const isProduction = process.env.NODE_ENV === 'production'
-var filePath = "ui/index.html";
-//todo:
-const winURL = false ? filePath : 'http://localhost:1025/'
+var isProduction = process.versions["nw-flavor"] != "sdk"
+//isProduction = false;
+const winURL = isProduction ? "ui/index.html" : 'http://localhost:1025/'
 
 var fs = nw.require("fs");
 var path = nw.require("path");

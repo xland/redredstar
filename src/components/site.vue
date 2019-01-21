@@ -11,7 +11,7 @@
                         <img :src="'static/icons/'+item.id+'.png'" />
                     </div>
                     <div class="tarSiteName">
-                        <i :class="['iconfont',item.component?'icon-eye':'icon-eyeslash']"></i>
+                        <i :class="['iconfont',item.component?'icon-eye green':'icon-eyeslash gray']"></i>
                         {{item.title}}
                     </div>
                 </div>
@@ -23,11 +23,13 @@
 <script>
     import cnblogs from "./sites/cnblogs";
     import jianshu from "./sites/jianshu";
+    import oschina from "./sites/oschina";
     import swal from 'sweetalert';
     export default {
         components: {
             cnblogs,
-            jianshu
+            jianshu,
+            oschina
         },
         data() {
             return {
@@ -39,6 +41,9 @@
                     title: '简书',
                     component: jianshu,
                 }, {
+                    id: 'weixin',
+                    title: '微信公众号',
+                }, {
                     id: 'zhihu',
                     title: '知乎',
                 }, {
@@ -48,6 +53,7 @@
                 }, {
                     id: 'oschina',
                     title: '开源中国',
+                    component:oschina,
                 }, {
                     id: 'csdn',
                     title: 'CSDN',
@@ -91,7 +97,12 @@
         display: flex;
         flex-direction: column;
     }
-
+.green{
+    color: green;
+}
+.gray{
+    color: #ccc;
+}
     .tarSiteMask {
         position: absolute;
         top: 66px;

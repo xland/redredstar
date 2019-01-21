@@ -29,7 +29,11 @@ var runVue = function () {
 var runNw = function () {
     console.log("build nwjs");
     var nw = new NwBuilder({
-        files: ['/project/xiangxuema/nwjs/**'],
+        files: ['/project/xiangxuema/nwjs/start.js',
+        '/project/xiangxuema/nwjs/package.json',
+        '/project/xiangxuema/nwjs/ui/**',
+        '!/project/xiangxuema/nwjs/ui/js/*.map'
+    ],
         platforms: ['osx64'], //,'win64'
         version: '0.35.5',
         flavor: 'normal',
