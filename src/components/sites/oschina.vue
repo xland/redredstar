@@ -20,7 +20,8 @@
         },
         loadUrl() {
             if (this.$root.article.oschina) {
-                this.url = 'https://my.oschina.net/u/'+this.$root.article.oschina.userId+'/blog/write/' + this.$root.article.oschina.articleId;
+                this.url = 'https://my.oschina.net/u/' + this.$root.article.oschina.userId + '/blog/write/' + this.$root
+                    .article.oschina.articleId;
             } else {
                 this.url = 'https://www.oschina.net/blog';
             }
@@ -47,7 +48,7 @@
                         return;
                     }
                     if (curUrl == 'https://my.oschina.net/u/' + self.article.oschina.userId + '/blog/write') {
-                        //CKEDITOR.instances.body.insertHtml("allen")
+                        self.uploadImgs();
                     }
                     var reg = new RegExp('^https:\/\/my\.oschina\.net\/u\/' + self.article.oschina.userId +
                         '\/blog\/\d+\/{0,1}$', 'gi')
@@ -56,10 +57,10 @@
                         self.$root.article.oschina.articleId = id;
                         self.$root.save();
                         self.$parent.$parent.showSites = false;
-                        self.$parent.publishText = "博客园：发布成功！";
+                        self.$parent.publishText = "OSC：发布成功！";
                         swal({
                             icon: "success",
-                            text: "博客园：知识发布成功,现在查看？",
+                            text: "OSC：知识发布成功,现在查看？",
                             buttons: [
                                 '取消', "带我去"
                             ]
@@ -71,52 +72,48 @@
                         });
                         return;
                     }
-                    if (curUrl == "https://i.cnblogs.com/") {
-                        //如果没这篇文章了，那么就新建一篇；
-                        self.url = 'https://i.cnblogs.com/EditPosts.aspx?opt=1';
-                        return;
+                    if ($(".error-page-wrap #errorIcon")) {
+                        self.$parent.$parent.showSites = true;
                     }
                 });
             },
-            uploadOneImg(file, id) {
-                var formData = new FormData();
-                formData.append('imageFile', file);
-                formData.append("mimeType", file.type);
+            uploadOneImg(file, id, token) {
                 var self = this;
-                self.frame.$.ajax({
-                    type: 'POST',
-                    url: 'https://upload.cnblogs.com/imageuploader/CorsUpload',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    dataType: 'json',
-                    xhrFields: {
-                        withCredentials: true
-                    },
-                    success: function (result) {
-                        var editorDocument = document.getElementById("ueditor_0").contentWindow.document;
-                        var imgDom = editorDocument.getElementById(id);
-                        imgDom.dataset.img_cnblogs = result.message;
+                var formData = new FormData();
+                formData.append('upload', file);
+                formData.append("ckCsrfToken", token);
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", 'https://my.oschina.net/u/1432189/space/ckeditor_dialog_img_upload', true);
+                xhr.setRequestHeader("Cache-Control", "no-cache");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 304)) {
+                        var imgObj = JSON.parse(xhr.responseText);
+                        var editorDocument = document.getElementById("ueditor_0").contentWindow
+                            .document;
+                        var imgDom = editorDocument.getElementById(domId);
+                        imgDom.dataset.img_oschina = imgObj.url;
                         self.uploadImgNum -= 1;
                         if (self.uploadImgNum <= 0) {
-                            self.publish();
+                            self.postNote();
                         }
                     }
-                });
+                };
+                xhr.send(formData);
             },
             uploadImgs() {
+                var token = self.frame.CKEDITOR.tools.getCsrfToken()
                 var editorDocument = document.getElementById("ueditor_0").contentWindow.document;
                 var imgs = editorDocument.getElementsByTagName("img");
                 var justPublish = true;
                 for (var i = 0; i < imgs.length; i++) {
                     var item = imgs[i];
-                    if (!item.dataset.img_cnblogs && item.src.startsWith('file://')) {
+                    if (!item.dataset.oschina && item.src.startsWith('file://')) {
                         this.$parent.publishText = "博客园：正在上传图片..."
                         var filePath = decodeURI(item.src.substr(7));
                         var fileName = path.basename(filePath);
                         var file = new File(filePath, fileName);
                         this.uploadImgNum += 1;
-                        this.uploadOneImg(file, item.id);
+                        this.uploadOneImg(file, item.id, token);
                         justPublish = false;
                     }
                 }
@@ -126,19 +123,11 @@
             },
             publish() {
                 this.$root.article.content = window.UE.instants.ueditorInstant0.getContent();
-                this.$parent.publishText = "博客园：正在发布文章...";
-                var msg = this.frame.$.trim(this.frame.$('Editor_Messages').text());
-                if (msg) {
-                    swal({
-                        icon: "error",
-                        text: '博客园反馈：' + msg,
-                    });
-                    return;
-                }
-                var html = this.$parent.prepareImgSrc('cnblogs');
-                this.frame.$("#Editor_Edit_txbTitle").val(this.$root.article.title);
-                this.frame.blogEditor.setContent(html);
-                this.frame.$("#Editor_Edit_lkbPost").click();
+                this.$parent.publishText = "OSC：正在发布文章...";
+                var html = this.$parent.prepareImgSrc('oschina');
+                this.frame.$("input[name='title']").val(this.$root.article.title);
+                this.frame.CKEDITOR.instances["body"].setData(html);
+                this.frame.$(".primary.large.submit.button").click();
             }
         }
     }
