@@ -64,7 +64,8 @@
                 self.frame.document.body.appendChild(dom);
                 self.frame.$.ajaxSetup({
                     error: function (r) {
-                        if (r.responseText =='继续操作前请注册或者登录.' || r.responseText == '{"error":"继续操作前请注册或者登录."}') {                            
+                        if (r.responseText == '继续操作前请注册或者登录.' || r.responseText ==
+                            '{"error":"继续操作前请注册或者登录."}') {
                             self.frame.location.href = "https://www.jianshu.com/sign_in";
                             return;
                         }
@@ -74,7 +75,7 @@
                         });
                         self.$parent.$parent.showSites = false;
                         return;
-                        
+
                     }
                 });
             },
@@ -151,6 +152,8 @@
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
                             success: function (publicizeData) {
+                                self.$root.needSave.a = true;
+                                self.$root.needSave.c = true;
                                 self.$root.save();
                                 self.$parent.$parent.showSites = false;
                                 self.$parent.publishText = "简书：发布成功！";

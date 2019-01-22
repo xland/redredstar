@@ -38,14 +38,14 @@ const store = {
         });
     },
     saveContent(cb) {
-        if(!this.article){
+        if(this.aIndex < 0){
             if(cb){
                 cb();
             }
             return;
         }
-        this.article.update = new Date().getTime();
-        var aPath = path.join(this.basePath, this.article.id + "/a.data");
+        this.a[this.aIndex].update = new Date().getTime();
+        var aPath = path.join(this.basePath, this.a[this.aIndex].id + "/a.data");
         var str = window.UE.instants.ueditorInstant0.getContent();
         var self = this;
         fs.writeFile(aPath, str, this.readFileConfig, function (err) {

@@ -48,6 +48,8 @@
                     if (curUrl.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
                         var id = curUrl.getParamVal('postid');
                         self.article.cnblogsId = id;
+                        self.$root.needSave.a = true;
+                        self.$root.needSave.c = true;
                         self.$root.save();
                         self.$parent.$parent.showSites = false;
                         self.$parent.publishText = "博客园：发布成功！";

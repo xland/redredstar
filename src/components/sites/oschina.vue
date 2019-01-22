@@ -34,8 +34,7 @@
         methods: {
             loadUrl() {
                 if (this.article.oschina) {
-                    this.url = 'https://my.oschina.net/u/' + this.article.oschina.userId + '/blog/write/' + this.$root
-                        .article.oschina.articleId;
+                    this.url = 'https://my.oschina.net/u/' + this.article.oschina.userId + '/blog/write/' + this.article.oschina.articleId;
                 } else {
                     this.url = 'https://www.oschina.net/blog';
                 }
@@ -58,8 +57,8 @@
                         self.frame.location.href = "https://my.oschina.net/u/" + userId + "/blog/write";
                         return;
                     }
-                    if (curUrl == 'https://my.oschina.net/u/' + self.article.oschina.userId +
-                        '/blog/write') {
+                    if (curUrl.startsWith('https://my.oschina.net/u/' + self.article.oschina.userId +
+                        '/blog/write')) {
                         var html = $("select[name='classification']").html().replace(' ', '');
                         document.getElementById("oscSelect").innerHTML = html;
                         swal({
@@ -85,6 +84,8 @@
                     if ($("h2.header").text().trim().includes(self.article.title)) {
                         var id = $(".article-like")[0].dataset.id;
                         self.article.oschina.articleId = id;
+                        self.$root.needSave.a = true;
+                        self.$root.needSave.c = true;
                         self.$root.save();
                         self.$parent.$parent.showSites = false;
                         self.$parent.publishText = "OSC：发布成功！";
@@ -121,11 +122,11 @@
                         var imgObj = JSON.parse(xhr.responseText);
                         var editorDocument = document.getElementById("ueditor_0").contentWindow
                             .document;
-                        var imgDom = editorDocument.getElementById(domId);
+                        var imgDom = editorDocument.getElementById(id);
                         imgDom.dataset.img_oschina = imgObj.url;
                         self.uploadImgNum -= 1;
                         if (self.uploadImgNum <= 0) {
-                            self.postNote();
+                            self.publish();
                         }
                     }
                 };
