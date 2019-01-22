@@ -1,6 +1,6 @@
-var isProduction = process.versions["nw-flavor"] != "sdk"
+var isDev = process.versions["nw-flavor"] == "sdk"
 //isProduction = false;
-const winURL = isProduction ? "ui/index.html" : 'http://localhost:1025/'
+const winURL = isDev ? 'http://localhost:1025/':"ui/index.html";
 
 var fs = nw.require("fs");
 var path = nw.require("path");
