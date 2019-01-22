@@ -1,9 +1,9 @@
 <template>
-  <div id="article" v-if="$root.article">
+  <div id="article" v-if="$root.aIndex>=0">
     <div class="blankLine">
       <div style="flex: 1;display: flex">
         <input autocomplete="off" id="articleTitleInput" @keydown.meta.83="savekeyUp" @keydown.tab="titleTab" @change="titleChange"
-          class="textInput" v-model="$root.article.title" placeholder="请输入文章标题">
+          class="textInput" v-model="article.title" placeholder="请输入文章标题">
       </div>
       <div class="publishBtn" @click="showSites = true">
         <i class="iconfont icon-fabu" style="font-size: 18px !important;"></i>
@@ -38,6 +38,11 @@
         showSites: false,
       };
     },
+    computed:{
+      article(){
+        return this.$root.a[this.$root.aIndex];
+      }
+    },
     beforeRouteUpdate(to, from, next) {
       var self = this;
       self.$root.save(function () { //两篇文章切换，也要先保存一下上一篇文章；
@@ -52,37 +57,26 @@
         next(); //跳转到其他页面前，要先把当前的文章保存一下；
       });
     },
-    watch:{
-      "$root.article": {
-        handler: function (val, oldVal) {
-          if(this.$root.article){
-            this.$root.article.update = new Date().getTime();
-          }
-        },
-        deep: true
-      },
-    },
     mounted() {
       this.getArticle(this.$route.params.id);
     },
     methods: {
       getTags() {
         var arr = this.$root.t.filter(v => {
-          return this.$root.article.tagIds.some(tagId => {
+          return this.article.tagIds.some(tagId => {
             return tagId == v.id;
           })
         })
         return arr;
       },
       getArticle(id) {
-        var doc = this.$root.a.find(item => {
+        this.$root.aIndex = this.$root.a.findIndex(item => {
           return item.id == id;
-        })
-        this.$root.article = doc;
-        this.$root.showEditor = true;
-        this.$nextTick(function () {
+        });
+        var self = this;
+        this.$nextTick(function () { 
           window.document.getElementById("articleTitleInput").focus();
-          window.editorContentReady(doc.id);
+          window.editorContentReady(self.article.id);
         })
       },
       titleTab() {
@@ -96,11 +90,10 @@
         }
       },
       titleChange() {
-        var title = this.$root.article.title;
-        this.$root.u.tabs[this.$root.u.tabIndex].text = title;
+        this.$root.u.tabs[this.$root.u.tabIndex].text = this.article.title;
       },
       removeTag(index) {
-        var tagId = this.$root.article.tagIds.splice(index, 1)[0];
+        var tagId = this.article.tagIds.splice(index, 1)[0];
         var parentIndex = this.$root.t.findIndex(v => {
           return v.id == tagId;
         });
@@ -108,7 +101,7 @@
         if (tag.refer <= 1) {
           this.$root.t.splice(parentIndex, 1);
         } else {
-          var articleIdIndex = tag.articleIds.indexOf(this.$root.article.id);
+          var articleIdIndex = tag.articleIds.indexOf(this.article.id);
           if (articleIdIndex >= 0) {
             tag.articleIds.splice(articleIdIndex, 1);
           }

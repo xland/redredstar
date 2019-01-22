@@ -1,5 +1,5 @@
 <template>
-    <div v-show="$root.showEditor" id="editor">
+    <div v-show="$root.aIndex>=0" id="editor">
         <div id="editorContainer"></div>
     </div>
 </template>
@@ -14,6 +14,11 @@
 
             }
         },
+        computed: {
+            article() {
+                return this.$root.a[this.$root.aIndex];
+            }
+        },
         methods: {
             initEditor() {
                 var editor = window.UE.getEditor('editorContainer');
@@ -23,22 +28,22 @@
                     self.hookImgRemove();
                     self.hookSaveKeyEvent();
                     self.hookContentChange();
-                    if (self.$root.article) {
-                        window.editorContentReady(self.$root.article.id);
+                    if (self.article) {
+                        window.editorContentReady(self.article.id);
                     }
                 });
             },
-            hookContentChange(){
+            hookContentChange() {
                 var self = this;
                 var subContent = document.getElementById("ueditor_0").contentWindow.document;
-                subContent.oninput = function(e){
+                subContent.oninput = function (e) {
                     self.$root.needSave.c = true;
                 }
             },
             hookSaveKeyEvent() {
                 var self = this;
                 window.saveArticleKeyEvent = function () {
-                    if(!self.$root.needSave.c){
+                    if (!self.$root.needSave.c) {
                         return;
                     }
                     self.$root.saveContent();
@@ -78,7 +83,7 @@
             hookImgInsert() {
                 var self = this;
                 window.editorImgInsert = function (file) {
-                    var basePath = path.join(window.nw.App.dataPath, "/xxm/" + self.$root.article.id);
+                    var basePath = path.join(window.nw.App.dataPath, "/xxm/" + self.article.id);
                     var id = "img" + new Date().getTime();
                     var name = path.join(basePath, id + '.' + file.name.split('.').last());
                     var fr = new FileReader();

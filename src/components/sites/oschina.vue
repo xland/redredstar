@@ -23,13 +23,18 @@
         created() {
             this.loadUrl();
         },
+        computed: {
+            article() {
+                return this.$root.a[this.$root.aIndex];
+            }
+        },
         mounted() {
             this.showWebview = true;
         },
         methods: {
             loadUrl() {
-                if (this.$root.article.oschina) {
-                    this.url = 'https://my.oschina.net/u/' + this.$root.article.oschina.userId + '/blog/write/' + this.$root
+                if (this.article.oschina) {
+                    this.url = 'https://my.oschina.net/u/' + this.article.oschina.userId + '/blog/write/' + this.$root
                         .article.oschina.articleId;
                 } else {
                     this.url = 'https://www.oschina.net/blog';
@@ -48,12 +53,12 @@
                     if (curUrl == 'https://www.oschina.net/blog' || curUrl.startsWith(
                             'https://www.oschina.net/?nocache=')) {
                         var userId = $(".avatar[data-user-id]")[0].dataset.userId;
-                        self.$root.article.oschina = {};
-                        self.$root.article.oschina.userId = userId;
+                        self.article.oschina = {};
+                        self.article.oschina.userId = userId;
                         self.frame.location.href = "https://my.oschina.net/u/" + userId + "/blog/write";
                         return;
                     }
-                    if (curUrl == 'https://my.oschina.net/u/' + self.$root.article.oschina.userId +
+                    if (curUrl == 'https://my.oschina.net/u/' + self.article.oschina.userId +
                         '/blog/write') {
                         var html = $("select[name='classification']").html().replace(' ', '');
                         document.getElementById("oscSelect").innerHTML = html;
@@ -77,9 +82,9 @@
                         });
                         return;
                     }
-                    if ($("h2.header").text().trim().includes(self.$root.article.title)) {
+                    if ($("h2.header").text().trim().includes(self.article.title)) {
                         var id = $(".article-like")[0].dataset.id;
-                        self.$root.article.oschina.articleId = id;
+                        self.article.oschina.articleId = id;
                         self.$root.save();
                         self.$parent.$parent.showSites = false;
                         self.$parent.publishText = "OSC：发布成功！";
@@ -91,7 +96,7 @@
                             ]
                         }).then((value) => {
                             if (!value) return;
-                            var url = 'https://my.oschina.net/u/' + self.$root.article.oschina.userId +
+                            var url = 'https://my.oschina.net/u/' + self.article.oschina.userId +
                                 '/blog/' + id;
                             window.nw.Shell.openExternal(url);
                         });
@@ -147,10 +152,9 @@
                 }
             },
             publish() {
-                this.$root.article.content = window.UE.instants.ueditorInstant0.getContent();
                 this.$parent.publishText = "OSC：正在发布文章...";
                 var html = this.$parent.prepareImgSrc('oschina');
-                this.frame.$("input[name='title']").val(this.$root.article.title);
+                this.frame.$("input[name='title']").val(this.article.title);
                 this.frame.CKEDITOR.instances["body"].setData(html);
                 var self = this;
                 setTimeout(function(){

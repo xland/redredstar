@@ -17,13 +17,16 @@
                 jqueryData: ''
             }
         },
+        computed: {
+            article() {
+                return this.$root.a[this.$root.aIndex];
+            }
+        },
         created() {
             var jqueryPath = path.join(window.process.mainModule.filename, '/ui/static/tools/jquery-3.3.1.min.js');
             this.jqueryData = fs.readFileSync(jqueryPath, {
                 encoding: "utf8"
             });
-        },
-        mounted() {
         },
         methods: {
             createNote() {
@@ -43,7 +46,7 @@
                         }),
                         dataType: "json",
                         success: function (data) {
-                            self.$root.article.jianshu = {
+                            self.article.jianshu = {
                                 bookId,
                                 noteId: data.id.toString(),
                                 autosave_control: 1, //版本号
@@ -125,26 +128,25 @@
             },
             postNote() {
                 var self = this;
-                self.$root.article.content = window.UE.instants.ueditorInstant0.getContent();
                 self.$parent.publishText = "简书：正在发布文章...";
                 var html = self.$parent.prepareImgSrc('jianshu');
                 self.frame.$.ajax({
                     type: "PUT", //保存文章
-                    url: "https://www.jianshu.com/author/notes/" + self.$root.article.jianshu.noteId,
+                    url: "https://www.jianshu.com/author/notes/" + self.article.jianshu.noteId,
                     contentType: "application/json; charset=utf-8",
                     data: JSON.stringify({
-                        id: self.$root.article.jianshu.noteId,
-                        autosave_control: self.$root.article.jianshu.autosave_control,
-                        title: self.$root.article.title,
+                        id: self.article.jianshu.noteId,
+                        autosave_control: self.article.jianshu.autosave_control,
+                        title: self.article.title,
                         content: html
                     }),
                     dataType: "json",
                     success: function (data) {
                         //todo: 如果文章被浏览器编辑过，那么这个版本号可能会改变
-                        self.$root.article.jianshu.autosave_control += 1;
+                        self.article.jianshu.autosave_control += 1;
                         self.frame.$.ajax({
                             type: "POST", //发布文章
-                            url: 'https://www.jianshu.com/author/notes/' + self.$root.article.jianshu
+                            url: 'https://www.jianshu.com/author/notes/' + self.article.jianshu
                                 .noteId + '/publicize',
                             contentType: "application/json; charset=utf-8",
                             dataType: "json",
@@ -160,7 +162,7 @@
                                     ]
                                 }).then((value) => {
                                     if (!value) return;
-                                    var url = 'https://www.jianshu.com/p/' + self.$root.article
+                                    var url = 'https://www.jianshu.com/p/' + self.article
                                         .jianshu.slug;
                                     window.nw.Shell.openExternal(url);
                                 });
@@ -184,7 +186,7 @@
                     return;
                 }
                 self.injectJq();
-                if (!self.$root.article.jianshu) {
+                if (!self.article.jianshu) {
                     self.createNote();
                 } else {
                     self.uploadImgs();

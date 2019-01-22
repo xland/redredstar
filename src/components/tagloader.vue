@@ -23,13 +23,18 @@
                 tagInputLeft: '16px',
             };
         },
+        computed: {
+            article() {
+                return this.$root.a[this.$root.aIndex];
+            }
+        },
         methods: {
             tagInputBlur() {
-                // var self = this;
-                // setTimeout(function () {
-                //     self.tagInputText = "";
-                //     self.findTagResult = [];
-                // }, 518);
+                var self = this;
+                setTimeout(function () {
+                    self.tagInputText = "";
+                    self.findTagResult = [];
+                }, 518);
             },
             tagInputFocus() {
                 this.tagInputLeft = (document.getElementById("tagInputBox").offsetLeft + 8) + 'px';
@@ -51,7 +56,7 @@
                         });
                         return;
                     }
-                    if (this.$root.article.tagIds.length >= 6) {
+                    if (this.article.tagIds.length >= 6) {
                         swal({
                             icon: "error",
                             text: "最多输入6个标签",
@@ -61,7 +66,7 @@
                     var tag = this.$root.t.find(item => {
                         return item.text == text;
                     })
-                    if (tag && this.$root.article.tagIds.includes(tag.id)) {
+                    if (tag && this.article.tagIds.includes(tag.id)) {
                         swal({
                             icon: "error",
                             text: "该文章已经存在该标签",
@@ -90,7 +95,7 @@
                 var regExp = new RegExp('.*' + text + '.*', 'gi');
                 var arr = this.$root.t.filter(tag => {
                     var matchFlag = regExp.test(tag.text);
-                    var notHaveFlag = !this.$root.article.tagIds.includes(tag.id);
+                    var notHaveFlag = !this.article.tagIds.includes(tag.id);
                     return matchFlag && notHaveFlag;
                 })
                 this.findTagResult = arr;
@@ -101,8 +106,8 @@
             },
             addTagRefer(tag) {
                 tag.refer += 1;
-                this.$root.article.tagIds.push(tag.id);
-                tag.articleIds.push(this.$root.article.id);
+                this.article.tagIds.push(tag.id);
+                tag.articleIds.push(this.article.id);
                 this.tagInputText = "";
                 this.findTagResult = [];
             }
@@ -110,7 +115,7 @@
     }
 </script>
 <style scoped lang="scss">
-    .tagTipContainer .tag{
+    .tagTipContainer .tag {
         padding-right: 6px;
     }
 </style>

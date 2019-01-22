@@ -18,12 +18,15 @@
         created() {
             this.loadUrl();
         },
-        mounted() {
+        computed: {
+            article() {
+                return this.$root.a[this.$root.aIndex];
+            }
         },
         methods: {
             loadUrl() {
-                if (this.$root.article.cnblogsId) {
-                    this.url = 'https://i.cnblogs.com/EditPosts.aspx?postid=' + this.$root.article.cnblogsId;
+                if (this.article.cnblogsId) {
+                    this.url = 'https://i.cnblogs.com/EditPosts.aspx?postid=' + this.article.cnblogsId;
                 } else {
                     this.url = 'https://i.cnblogs.com/EditPosts.aspx?opt=1';
                 }
@@ -44,7 +47,7 @@
                     }
                     if (curUrl.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
                         var id = curUrl.getParamVal('postid');
-                        self.$root.article.cnblogsId = id;
+                        self.article.cnblogsId = id;
                         self.$root.save();
                         self.$parent.$parent.showSites = false;
                         self.$parent.publishText = "博客园：发布成功！";
@@ -115,7 +118,6 @@
                 }
             },
             publish() {
-                this.$root.article.content = window.UE.instants.ueditorInstant0.getContent();
                 this.$parent.publishText = "博客园：正在发布文章...";
                 var msg = this.frame.$.trim(this.frame.$('Editor_Messages').text());
                 if (msg) {
@@ -126,7 +128,7 @@
                     return;
                 }
                 var html = this.$parent.prepareImgSrc('cnblogs');
-                this.frame.$("#Editor_Edit_txbTitle").val(this.$root.article.title);
+                this.frame.$("#Editor_Edit_txbTitle").val(this.article.title);
                 this.frame.blogEditor.setContent(html);
                 this.frame.$("#Editor_Edit_lkbPost").click();
             }

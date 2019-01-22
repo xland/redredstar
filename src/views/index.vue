@@ -141,8 +141,7 @@
             }
         },
         mounted: function () {
-            this.$root.showEditor = false;
-            this.$root.article = null;
+            this.$root.aIndex = -1;
             this.search();
         }
     }
