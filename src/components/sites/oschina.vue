@@ -1,6 +1,11 @@
 <template>
     <div :style="showWebview?'z-index:99;':'z-index:1;'">
         <iframe id="oschinaFrame" @load="frameLoad" nwdisable nwfaketop :src="url" :nwUserAgent="$root.agent"></iframe>
+        <div style="display: none">
+            <div id="oscClasses">
+                请选择文章分类<br /><select id='oscSelect'></select>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -18,18 +23,18 @@
         created() {
             this.loadUrl();
         },
-        loadUrl() {
-            if (this.$root.article.oschina) {
-                this.url = 'https://my.oschina.net/u/' + this.$root.article.oschina.userId + '/blog/write/' + this.$root
-                    .article.oschina.articleId;
-            } else {
-                this.url = 'https://www.oschina.net/blog';
-            }
-        },
         mounted() {
             this.showWebview = true;
         },
         methods: {
+            loadUrl() {
+                if (this.$root.article.oschina) {
+                    this.url = 'https://my.oschina.net/u/' + this.$root.article.oschina.userId + '/blog/write/' + this.$root
+                        .article.oschina.articleId;
+                } else {
+                    this.url = 'https://www.oschina.net/blog';
+                }
+            },
             frameLoad() {
                 var self = this;
                 self.frame = document.getElementById('oschinaFrame').contentWindow;
@@ -40,19 +45,39 @@
                         self.frame.location.href = "https://www.oschina.net/home/login";
                         return;
                     }
-                    if (curUrl.startsWith('https://www.oschina.net/?nocache=')) {
+                    if (curUrl == 'https://www.oschina.net/blog' || curUrl.startsWith(
+                            'https://www.oschina.net/?nocache=')) {
                         var userId = $(".avatar[data-user-id]")[0].dataset.userId;
-                        self.article.oschina = {};
-                        self.article.oschina.userId = userId;
+                        self.$root.article.oschina = {};
+                        self.$root.article.oschina.userId = userId;
                         self.frame.location.href = "https://my.oschina.net/u/" + userId + "/blog/write";
                         return;
                     }
-                    if (curUrl == 'https://my.oschina.net/u/' + self.article.oschina.userId + '/blog/write') {
-                        self.uploadImgs();
+                    if (curUrl == 'https://my.oschina.net/u/' + self.$root.article.oschina.userId +
+                        '/blog/write') {
+                        var html = $("select[name='classification']").html().replace(' ', '');
+                        document.getElementById("oscSelect").innerHTML = html;
+                        swal({
+                            content: document.getElementById("oscClasses"),
+                            buttons: {
+                                cancel: {
+                                    visible: false,
+                                },
+                                confirm: {
+                                    text: "OK",
+                                    value: true,
+                                    visible: true,
+                                }
+                            }
+                        }).then((value) => {
+                            if (!value) return;
+                            var classId = document.getElementById("oscSelect").value;
+                            $("select[name='classification']").val(classId);
+                            self.uploadImgs();
+                        });
+                        return;
                     }
-                    var reg = new RegExp('^https:\/\/my\.oschina\.net\/u\/' + self.article.oschina.userId +
-                        '\/blog\/\d+\/{0,1}$', 'gi')
-                    if (reg.test(curUrl)) {
+                    if ($("h2.header").text().trim().includes(self.$root.article.title)) {
                         var id = $(".article-like")[0].dataset.id;
                         self.$root.article.oschina.articleId = id;
                         self.$root.save();
@@ -66,7 +91,7 @@
                             ]
                         }).then((value) => {
                             if (!value) return;
-                            var url = 'https://my.oschina.net/u/' + self.article.oschina.userId +
+                            var url = 'https://my.oschina.net/u/' + self.$root.article.oschina.userId +
                                 '/blog/' + id;
                             window.nw.Shell.openExternal(url);
                         });
@@ -77,8 +102,9 @@
                     }
                 });
             },
-            uploadOneImg(file, id, token) {
+            uploadOneImg(file, id) {
                 var self = this;
+                var token = self.frame.CKEDITOR.tools.getCsrfToken();
                 var formData = new FormData();
                 formData.append('upload', file);
                 formData.append("ckCsrfToken", token);
@@ -101,7 +127,6 @@
                 xhr.send(formData);
             },
             uploadImgs() {
-                var token = self.frame.CKEDITOR.tools.getCsrfToken()
                 var editorDocument = document.getElementById("ueditor_0").contentWindow.document;
                 var imgs = editorDocument.getElementsByTagName("img");
                 var justPublish = true;
@@ -113,7 +138,7 @@
                         var fileName = path.basename(filePath);
                         var file = new File(filePath, fileName);
                         this.uploadImgNum += 1;
-                        this.uploadOneImg(file, item.id, token);
+                        this.uploadOneImg(file, item.id);
                         justPublish = false;
                     }
                 }
@@ -127,7 +152,10 @@
                 var html = this.$parent.prepareImgSrc('oschina');
                 this.frame.$("input[name='title']").val(this.$root.article.title);
                 this.frame.CKEDITOR.instances["body"].setData(html);
-                this.frame.$(".primary.large.submit.button").click();
+                var self = this;
+                setTimeout(function(){
+                    self.frame.$(".primary.large.submit.button").click();
+                },518);
             }
         }
     }
