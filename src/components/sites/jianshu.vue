@@ -13,20 +13,13 @@
                 url: 'https://www.jianshu.com/writer#/',
                 showWebview: false,
                 uploadImgNum: 0,
-                frame: null,
-                jqueryData: ''
+                frame: null
             }
         },
         computed: {
             article() {
                 return this.$root.a[this.$root.aIndex];
             }
-        },
-        created() {
-            var jqueryPath = path.join(window.process.mainModule.filename, '/ui/static/tools/jquery-3.3.1.min.js');
-            this.jqueryData = fs.readFileSync(jqueryPath, {
-                encoding: "utf8"
-            });
         },
         methods: {
             createNote() {
@@ -57,25 +50,30 @@
                     });
                 })
             },
-            injectJq() {
+            injectJq(cb) {
+                var request = window.nw.require('request');
                 var self = this;
-                var dom = self.frame.document.createElement("script");
-                dom.innerHTML = self.jqueryData;
-                self.frame.document.body.appendChild(dom);
-                self.frame.$.ajaxSetup({
-                    error: function (r) {
-                        if (r.responseText == '继续操作前请注册或者登录.' || r.responseText ==
-                            '{"error":"继续操作前请注册或者登录."}') {
-                            self.frame.location.href = "https://www.jianshu.com/sign_in";
+                request('https://code.jquery.com/jquery-3.3.1.min.js', function (error, response, body) {
+                    var dom = self.frame.document.createElement("script");
+                    dom.innerHTML = body;
+                    self.frame.document.body.appendChild(dom);
+                    self.frame.$.ajaxSetup({
+                        error: function (r) {
+                            if (r.responseText == '继续操作前请注册或者登录.' || r.responseText ==
+                                '{"error":"继续操作前请注册或者登录."}') {
+                                self.frame.location.href = "https://www.jianshu.com/sign_in";
+                                return;
+                            }
+                            swal({
+                                icon: "error",
+                                text: "请求异常，请联系作者",
+                            });
+                            self.$parent.$parent.showSites = false;
                             return;
                         }
-                        swal({
-                            icon: "error",
-                            text: "请求异常，请联系作者",
-                        });
-                        self.$parent.$parent.showSites = false;
-                        return;
-
+                    });
+                    if (cb) {
+                        cb();
                     }
                 });
             },
@@ -188,12 +186,14 @@
                     self.frame.location.href = self.url;
                     return;
                 }
-                self.injectJq();
-                if (!self.article.jianshu) {
-                    self.createNote();
-                } else {
-                    self.uploadImgs();
-                }
+                self.injectJq(function () {
+                    if (!self.article.jianshu) {
+                        self.createNote();
+                    } else {
+                        self.uploadImgs();
+                    }
+                });
+
             }
         }
     }

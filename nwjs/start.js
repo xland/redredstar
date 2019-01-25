@@ -1,5 +1,5 @@
 var isDev = process.versions["nw-flavor"] == "sdk"
-//isProduction = false;
+//isDev = false;
 const winURL = isDev ? 'http://localhost:1025/':"ui/index.html";
 
 var fs = nw.require("fs");
