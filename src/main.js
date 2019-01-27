@@ -1,5 +1,6 @@
 import Vue from 'vue'
-import './utils/util'
+import './utils/util.js'
+import './utils/version.js'
 import store from './utils/store.js'
 import router from './utils/router.js'
 import "./assets/base.scss"

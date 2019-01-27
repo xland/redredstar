@@ -13,7 +13,9 @@ var NwBuilder = require('nw-builder');
 
 var execCmd = function (cmdStr, onOut) {
     var cmd = exec(cmdStr);
-    cmd.stdout.on('data', onOut);
+    if(onOut){
+        cmd.stdout.on('data', onOut);
+    }
     cmd.stdout.pipe(process.stdout);
 }
 
@@ -43,7 +45,8 @@ var runNw = function () {
     });
     nw.on('log', console.log);
     nw.build().then(function () {
-        console.log('all done!');
+        exec("create-dmg 想学吗.app",{cwd: '/project/xiangxuema/build/想学吗/osx64'});
+        console.log("build done");
     }).catch(function (error) {
         console.error(error);
     });

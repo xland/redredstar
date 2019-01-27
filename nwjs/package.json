@@ -1,7 +1,7 @@
 {
     "main": "start.js",
-    "name": "xxm",
+    "name": "想学吗",
     "node-remote": "*://localhost/*",
-    "version": "6.0.2",
+    "version": "6.0.3",
     "chromium-args": "--mixed-context"
 }

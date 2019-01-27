@@ -4,6 +4,11 @@
 
 “想学吗”是一个更快的、私有化的、标签式的、持续演进的个人知识管理工具；
 
+## 下载地址
+
+* mac64: http://www.xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
+* win64: http://www.xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.exe
+
 ## 功能说明
 
 * 您通过“想学吗”编辑的知识，以及知识内部的图片、个人设置等数据均保存在本地；
@@ -14,11 +19,11 @@
 
 ## 界面截图
 
-* <img width="680" src="/publicity/mac_index.png" >
+> <img width="680" src="/publicity/mac_index.png" >
 
-* <img width="680" src="/publicity/mac_edit.png" >
+> <img width="680" src="/publicity/mac_edit.png" >
 
-* <img width="680" src="/publicity/mac_publish.png" >
+> <img width="680" src="/publicity/mac_publish.png" >
 
 
 ## 责权声明

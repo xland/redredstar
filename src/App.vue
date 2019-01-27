@@ -61,49 +61,9 @@
         setInterval(function(){
           self.$root.save();
         },this.$root.u.autoSaveIntervalSeconds*1000);
-      },
-      checkVersion() {
-        //todo:用真正的版本号检测是否该升级
-        const request = httpUtil.get(
-          'https://gitee.com/xland/cnblogs/releases',
-          function (responseText) {
-            var doc = new DOMParser().parseFromString(responseText, "text/html");
-            var v = doc.getElementsByClassName('tag-name')[0].innerText.trim();
-            var arr = v.split('.').map((v) => {
-              return parseInt(v)
-            });
-            var curArr = window.nw.App.manifest.version.split('.').map((v) => {
-              return parseInt(v);
-            });
-            var flag = false;
-            if (arr[0] > curArr[0]) {
-              flag = true;
-            } else if (arr[0] == curArr[0]) {
-              if (arr[1] > curArr[1]) {
-                flag = true;
-              } else if (arr[1] == curArr[1]) {
-                if (arr[2] > curArr[2]) {
-                  flag = true;
-                }
-              }
-            }
-            if (flag) {
-              swal({
-                icon: "info",
-                text: "有新版本可供升级",
-                buttons: [
-                  true, "去升级！"
-                ]
-              }).then((value) => {
-                if (!value) return;
-                window.nw.Shell.openExternal('https://gitee.com/xland/cnblogs/releases');
-              })
-            }
-          })
       }
     },
     mounted: function () {
-      this.checkVersion();
       this.hookWinClose();
       this.autoSave();
       //nw.Window.get().showDevTools(); //todo:     
