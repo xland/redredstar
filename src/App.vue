@@ -52,7 +52,8 @@
         var self = this;
         window.nw.Window.get().on('close', function () {
           self.$root.save(function(){
-            window.nw.Window.get().close(true);
+            window.nw.App.quit();
+            //window.nw.Window.get().close(true);
           });
         });
       },

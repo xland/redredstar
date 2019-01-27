@@ -1,28 +1,28 @@
 <template>
     <div class="titleBar">
         <div class="right">
-            <div @click="setting" class="leftBtn settingBtn" title="系统设置">
-                <i class="iconfont icon-setting"></i>
+            <div @click="setting" class="rightBtn" title="系统设置">
+                <i class="iconfont icon-shezhi"></i>
             </div>
-            <div v-if="!isMac" @click="min()" class="leftBtn min">
-                <i class="iconfont icon-min tool-i"></i>
+            <div v-if="!isMac" @click="min()" class="rightBtn">
+                <i class="iconfont icon-min tool-i-right"></i>
             </div>
-            <div v-if="!isMac" @click='max()' class="leftBtn max">
-                <i class="iconfont icon-mac-max tool-i"></i>
+            <div v-if="!isMac" @click='max()' class="rightBtn">
+                <i class="iconfont icon-tubiaozhizuomoban tool-i-right"></i>
             </div>
-            <div v-if="!isMac" @click="close()" class="leftBtn close">
-                <i class="iconfont icon-guanbi tool-i"></i>
+            <div v-if="!isMac" @click="close()" class="rightBtn">
+                <i style="color: #fc0d1b !important" class="iconfont icon-guanbi tool-i-right"></i>
             </div>
         </div>
         <div class="left" v-if="isMac">
             <div @click="close()" class="leftBtn close">
-                <i class="iconfont icon-guanbi tool-i"></i>
+                <i class="iconfont icon-guanbi tool-i-left"></i>
             </div>
             <div @click="min()" class="leftBtn min">
-                <i class="iconfont icon-min tool-i"></i>
+                <i class="iconfont icon-min tool-i-left"></i>
             </div>
             <div @click='max()' class="leftBtn max">
-                <i class="iconfont icon-mac-max tool-i"></i>
+                <i class="iconfont icon-mac-max tool-i-left"></i>
             </div>
         </div>
         <div class="title">
@@ -35,10 +35,12 @@
         data() {
             return {
                 isMac: true,
+                isMax:false,
             }
         },
         created() {
             this.isMac = window.nw.require("os").platform == "darwin";
+            this.isMac = false;
         },
         methods: {
             setting() {
@@ -48,14 +50,19 @@
                 });
             },
             close() {
-                window.nw.App.quit(); //todo:
-                //window.nw.Window.get().close();
+                window.nw.Window.get().close();
             },
             min() {
                 window.nw.Window.get().minimize();
             },
             max() {
-                window.nw.Window.get().maximize();
+                if(this.isMax){
+                    window.nw.Window.get().restore();
+                    this.isMax = false;
+                }else{
+                    window.nw.Window.get().maximize();
+                    this.isMax = true;
+                }
             }
             //todo:设置，neditor要精简
         }
@@ -75,7 +82,18 @@
         width: 120px;
         text-align: right;
     }
-
+    .rightBtn{
+        display: inline-block;
+        width: 24px;
+        height: 23px;
+        line-height: 26px;
+        overflow: hidden;
+        text-align: center;
+    }
+    .rightBtn:hover{
+        cursor: pointer;
+        color: #34c84a;
+    }
     .titleBar {
         height: 24px;
         background: #f6f6f6;
@@ -126,7 +144,10 @@
         color: #333 !important;
     }
 
-    .tool-i {
+    .tool-i-left {
         font-size: 12px !important;
+    }
+    .tool-i-right{
+        font-size: 16px !important;
     }
 </style>

@@ -22,12 +22,12 @@ var runVue = function () {
 var runNw = function(){
     console.log("starting nwjs");
     var nw = new NwBuilder({
-        files: ['/project/cnblogs/xxm/nwjs/**'],
+        files: ['/project/xiangxuema/nwjs/**'],
         platforms: ['osx64'],
         flavor:'sdk',
-        winIco:'/project/cnblogs/xxm/icon/icon.png',
-        macIcns:'/project/cnblogs/xxm/icon/icon.icns',
-        cacheDir:'/project/cnblogs/xxm/cache/',
+        winIco:'/project/xiangxuema/icon/icon.png',
+        macIcns:'/project/xiangxuema/icon/icon.icns',
+        cacheDir:'/project/xiangxuema/cache/',
         version:'0.35.5',
     });
     nw.on('log', console.log);

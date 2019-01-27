@@ -38,18 +38,18 @@ const store = {
         });
     },
     saveContent(cb) {
-        if(this.aIndex < 0){
+        var self = this;
+        self.needSave.c = false;
+        if(self.aIndex < 0){
             if(cb){
                 cb();
             }
             return;
         }
-        this.a[this.aIndex].update = new Date().getTime();
-        var aPath = path.join(this.basePath, this.a[this.aIndex].id + "/a.data");
+        self.a[self.aIndex].update = new Date().getTime();
+        var aPath = path.join(self.basePath, self.a[self.aIndex].id + "/a.data");
         var str = window.UE.instants.ueditorInstant0.getContent();
-        var self = this;
-        fs.writeFile(aPath, str, this.readFileConfig, function (err) {
-            self.needSave.c = false;
+        fs.writeFile(aPath, str, self.readFileConfig, function (err) {
             if (err) {
                 console.log(err);
             }
