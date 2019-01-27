@@ -232,6 +232,7 @@
     }
 
     .searchInput {
+        margin-right: -28px;
         line-height: 28px;
         display: block;
         flex: 1;
