@@ -105,7 +105,7 @@
 }
     .tarSiteMask {
         position: absolute;
-        top: 66px;
+        top: 41px;
         left: 8px;
         right: 8px;
         border-radius: 3px;

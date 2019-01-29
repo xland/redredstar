@@ -12,13 +12,11 @@
   var fs = nw.require('fs');
   var path = nw.require('path');
   import swal from 'sweetalert';
-  import titlebar from "./components/titlebar";
   import tabbar from "./components/tabbar";
   import bottombar from "./components/bottombar";
   import editor from "./components/editor";
   export default {
     components: {
-      titlebar,
       tabbar,
       bottombar,
       editor

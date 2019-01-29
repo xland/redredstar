@@ -2,6 +2,9 @@
     "main": "start.js",
     "name": "想学吗",
     "node-remote": "*://localhost/*",
-    "version": "6.0.3",
-    "chromium-args": "--mixed-context"
+    "version": "6.0.4",
+    "chromium-args": "--mixed-context",
+    "window": {
+		"icon": "icon.png"
+	}
 }

@@ -124,6 +124,7 @@
         overflow-y: hidden;
         display: -webkit-box;
         overflow-x: hidden;
+        border-top: 1px solid #efefef;
     }
 
     .tabbar:hover {
