@@ -70,7 +70,7 @@
                     });
                     return;
                 }
-                this.publishText = "文章发布至" + item.title;
+                this.publishText = "知识发布至" + item.title;
                 this.component = item.component;
                 this.initWebview = true;
             },

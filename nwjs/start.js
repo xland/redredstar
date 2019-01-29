@@ -30,5 +30,5 @@ nw.Window.open(winURL, {
     "height": 600,
     "min_width": 1000,
     "min_height": 600,
-    "frame": false
+    "frame": true
 })

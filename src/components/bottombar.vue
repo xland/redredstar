@@ -1,13 +1,16 @@
 <template>
     <div class="bottombar">
         <div class="bottombarRight">
+            <div @click="setting">
+                <i class="iconfont icon-shezhi"></i> Setting
+            </div>
             <div @click="addBug">
                 <i class="iconfont icon-bug icon"></i> Bug
             </div>
             <div @click="addDonate">
                 <i class="iconfont icon-juanzeng icon"></i> Donate
             </div>
-            <div @click="viewVersion">
+            <div>
                 <i class="iconfont icon-version icon"></i> {{getVersion()}}
             </div>
         </div>
@@ -73,6 +76,12 @@
             },
         },
         methods: {
+            setting(){
+                this.bus.$emit('findOrAddTab', {
+                    url: '/setting',
+                    text: "系统设置",
+                });
+            },
             addDonate() {
                 swal({
                     content: document.getElementById("donatePics"),
@@ -80,10 +89,7 @@
                 });
             },
             addBug() {
-                window.nw.Shell.openExternal("https://gitee.com/xland/cnblogs/issues");
-            },
-            viewVersion() {
-                window.nw.Shell.openExternal("https://gitee.com/xland/cnblogs/releases");
+                window.nw.Shell.openExternal("https://github.com/xland/xiangxuema/issues");
             },
             getVersion() {
                 return window.nw.App.manifest.version;
@@ -122,7 +128,7 @@
 
     .bottombarRight {
         float: right;
-        width: 180px;
+        width: 280px;
         text-align: right;
         padding-right: 8px;
     }
@@ -139,7 +145,6 @@
     }
 
     .bottombarLeft {
-        margin-right: 180px;
         overflow: hidden;
         text-overflow: ellipsis;
         padding-left: 8px;

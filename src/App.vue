@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <editor></editor>
-    <titlebar></titlebar>
     <tabbar></tabbar>
     <div class="main">
       <router-view />

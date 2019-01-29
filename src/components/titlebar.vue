@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="title">
-            想学吗「个人知识管理工具」
+            「想学吗」个人知识管理工具
         </div>
     </div>
 </template>
@@ -40,7 +40,6 @@
         },
         created() {
             this.isMac = window.nw.require("os").platform == "darwin";
-            this.isMac = false;
         },
         methods: {
             setting() {
