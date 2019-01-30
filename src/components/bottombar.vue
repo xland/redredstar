@@ -26,7 +26,7 @@
             <!-- <div>
                 <i class="iconfont icon-zishu icon"></i>
             </div> -->
-            <div :class="rotating&&$root.showEditor?'rotating':''">
+            <div :class="rotating&&$root.aIndex>=0?'rotating':''">
                 <i class='iconfont icon-baocun icon'></i>
             </div>
         </div>

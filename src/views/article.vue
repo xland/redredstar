@@ -52,7 +52,7 @@
     },
     beforeRouteLeave(to, from, next) {
       var self = this;
-      self.$root.showEditor = false;
+      this.$root.aIndex = -1;
       self.$root.save(function () {
         next(); //跳转到其他页面前，要先把当前的文章保存一下；
       });

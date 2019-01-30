@@ -57,6 +57,9 @@
                 }, {
                     id: 'csdn',
                     title: 'CSDN',
+                }, {
+                    id: 'segmentfault',
+                    title: '思否',
                 }]
             }
         },

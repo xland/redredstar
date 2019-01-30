@@ -141,7 +141,6 @@
             }
         },
         mounted: function () {
-            this.$root.aIndex = -1;
             this.search();
         }
     }
