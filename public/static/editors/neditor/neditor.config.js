@@ -102,7 +102,7 @@
                     "map",
                     //"gmap",
                     "insertframe",
-                    //'kityformula',
+                    'kityformula',
                     // "webapp",
                     //"pagebreak",
                     //"template",

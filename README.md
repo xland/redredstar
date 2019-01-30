@@ -25,6 +25,8 @@
 
 > <img width="680" src="/publicity/mac_publish.png" >
 
+> <img width="680" src="/publicity/formula.png" >
+
 
 ## 责权声明
 
