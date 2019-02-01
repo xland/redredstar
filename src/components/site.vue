@@ -6,8 +6,8 @@
         <div class="z1">
             <div class="tarSiteMaskHeader" v-html="publishText"></div>
             <div v-show="!initWebview" class="tarSiteContainer">
-                <div @click="publish(item)" class="tarSiteItem" v-for="(item,index) in sites">
-                    <div :class="['tarSiteIcon']">
+                <div @click="publish(item)" :class="['tarSiteItem',item.component?'':'notReady']" v-for="(item,index) in sites">
+                    <div class="tarSiteIcon">
                         <img :src="'static/icons/'+item.id+'.png'" />
                     </div>
                     <div class="tarSiteName">
@@ -41,12 +41,6 @@
                     title: '简书',
                     component: jianshu,
                 }, {
-                    id: 'weixin',
-                    title: '微信公众号',
-                }, {
-                    id: 'zhihu',
-                    title: '知乎',
-                }, {
                     id: 'cnblogs',
                     title: '博客园',
                     component: cnblogs,
@@ -55,11 +49,26 @@
                     title: '开源中国',
                     component:oschina,
                 }, {
+                    id: 'weixin',
+                    title: '微信公众号',
+                }, {
+                    id: 'zhihu',
+                    title: '知乎',
+                }, {
                     id: 'csdn',
                     title: 'CSDN',
                 }, {
                     id: 'segmentfault',
                     title: '思否',
+                }, {
+                    id: 'douban',
+                    title: '豆瓣',
+                }, {
+                    id: 'wordpress',
+                    title: 'wordpress',
+                }, {
+                    id: 'qqzone',
+                    title: 'QQ空间',
                 }]
             }
         },
@@ -120,17 +129,30 @@
     }
 
     .tarSiteContainer {
-        flex: 1;
+        text-align: center;
+        margin-left: 38px;
+        margin-right: 38px;
         display: flex;
+        flex-wrap:wrap;
+        align-content: center;
         justify-content: center;
     }
-
+    .tarSiteItem {
+        width: 106px;
+        min-width: 106px;
+        height: 98px;
+        background: #fff;
+        overflow: hidden;
+        border-radius: 3px;
+        margin: 12px;
+        cursor: pointer;
+    }
     .tarSiteMaskHeader {
         width: 100%;
         margin-top: 8px;
-        height: 108px;
+        height: 80px;
         text-align: center;
-        line-height: 108px;
+        line-height: 80px;
         font-size: 38px;
         color: #fff;
         font-weight: bolder;
@@ -164,43 +186,30 @@
         color: red;
     }
 
-    .tarSiteItem {
-        width: 116px;
-        height: 116px;
-        background: #fff;
-        overflow: hidden;
-        border-radius: 3px;
-        margin: 8px;
-        cursor: pointer;
-    }
-
     .tarSiteItem:hover {
         box-shadow: 0 3px 6px rgba(16, 16, 16, 0.6);
     }
 
     .tarSiteIcon {
-        width: 60px;
-        height: 60px;
-        margin-top: 18px;
-        margin-left: 28px;
-        margin-right: 28px;
         text-align: center;
     }
 
     .notReady {
-        filter: grayscale(100%);
-        filter: gray;
+        filter: blur(2px);   
+        cursor: default; 
     }
-
+    .notReady:hover{
+        box-shadow: none;
+    }
     .tarSiteIcon img {
-        height: 36px;
-        width: 36px;
-        margin-top: 10px;
+        height: 32px;
+        width: 32px;
+        margin-top: 22px;
     }
 
     .tarSiteName {
-        height: 28px;
-        line-height: 28px;
+        height: 36px;
+        line-height: 36px;
         text-align: center;
         color: #666;
     }
