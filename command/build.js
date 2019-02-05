@@ -36,7 +36,7 @@ var runNw = function () {
         '/project/xiangxuema/nwjs/ui/**',
         '!/project/xiangxuema/nwjs/ui/js/*.map'
     ],
-        platforms: ['osx64'], //,'win64'
+        platforms: ['osx64','linux64'], 
         version: '0.35.5',
         flavor: 'normal',
         macIcns: '/project/xiangxuema/icon/icon.icns',

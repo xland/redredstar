@@ -35,7 +35,15 @@ http.get('http://xiangxuema.com/version.json', (resp) => {
                 ]
             }).then((value) => {
                 if (!value) return;
-                var os = window.nw.require("os").platform == "darwin" ? "mac" : "win";
+                var osName = window.nw.require("os").platform;
+                var os;
+                if(osName == "darwin"){
+                    os = "mac";
+                }else if(osName == "win32"){
+                    os = "win"
+                }else{
+                    os = "linux"
+                }
                 var url = encodeURI(versionObj.baseurl + versionObj[os]);
                 window.nw.Shell.openExternal(url);
             })
