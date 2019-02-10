@@ -8,7 +8,8 @@
 
 * mac64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
 * win64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.exe
-<!-- * linux64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.tar.gz -->
+* linux64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.tar.gz
+- (linux64命令行：sudo ./想学吗)
 
 ## 功能说明
 
