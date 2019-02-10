@@ -52,3 +52,5 @@ var runNw = function () {
     });
 }
 runVue();
+
+//tar -zcvf /project/xiangxuema/build/想学吗/想学吗.tar.gz /project/xiangxuema/build/想学吗/linux64

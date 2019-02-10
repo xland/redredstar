@@ -6,9 +6,9 @@
 
 ## 下载地址
 
-* mac64: http://www.xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
-* win64: http://www.xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.exe
-<!-- * linux64: http://www.xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.tar.gz -->
+* mac64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
+* win64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.exe
+<!-- * linux64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.tar.gz -->
 
 ## 功能说明
 
