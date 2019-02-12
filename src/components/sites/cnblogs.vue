@@ -48,6 +48,7 @@
                     if (curUrl.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
                         var id = curUrl.getParamVal('postid');
                         self.article.cnblogsId = id;
+                        var url = self.frame.$("#link_post_title").attr("href");
                         self.$root.needSave.a = true;
                         self.$root.needSave.c = true;
                         self.$root.save();
@@ -61,7 +62,7 @@
                             ]
                         }).then((value) => {
                             if (!value) return;
-                            var url = 'https://www.cnblogs.com/liulun/p/' + id + '.html';
+                            
                             window.nw.Shell.openExternal(url);
                         });
                         return;
