@@ -139,7 +139,7 @@
                 for (var i = 0; i < imgs.length; i++) {
                     var item = imgs[i];
                     if (!item.dataset.oschina && item.src.startsWith('file://')) {
-                        this.$parent.publishText = "博客园：正在上传图片..."
+                        this.$parent.publishText = "OSC：正在上传图片..."
                         var filePath = decodeURI(item.src.substr(7));
                         var fileName = path.basename(filePath);
                         var file = new File(filePath, fileName);

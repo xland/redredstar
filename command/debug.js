@@ -28,7 +28,7 @@ var runNw = function(){
         winIco:'/project/xiangxuema/icon/icon.png',
         macIcns:'/project/xiangxuema/icon/icon.icns',
         cacheDir:'/project/xiangxuema/cache/',
-        version:'0.35.5',
+        version:'0.36.1',
     });
     nw.on('log', console.log);
     nw.run().then(function () {

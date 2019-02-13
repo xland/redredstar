@@ -5,7 +5,7 @@
 </template>
 <script>
     //todo:图片放大缩小需要按比例
-    //todo:公式插件有问题
+    //todo:公式插件base64 to file
     const fs = nw.require('fs');
     const path = nw.require('path');
     export default {
