@@ -21,13 +21,13 @@
 
 ## 界面截图
 
-> <img width="680" src="/publicity/mac_index.png" >
+> <img width="680" src="/doc/imgs/mac_index.png" >
 
-> <img width="680" src="/publicity/mac_edit.png" >
+> <img width="680" src="/doc/imgs/mac_edit.png" >
 
-> <img width="680" src="/publicity/mac_publish.png" >
+> <img width="680" src="/doc/imgs/mac_publish.png" >
 
-> <img width="680" src="/publicity/formula.png" >
+> <img width="680" src="/doc/imgs/formula.png" >
 
 
 ## 责权声明
