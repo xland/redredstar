@@ -1,16 +1,37 @@
-var path = nw.require('path');
-var fs = nw.require('fs');
-var basePath = path.join(window.nw.App.dataPath, "xxm");
-var readFileConfig = {
-    encoding: 'utf8'
+const electron = require('electron');
+var fs = require('fs');
+var path = require('path');
+
+//数据存储目录，如果不存在就创建
+var basePath = path.join(electron.remote.app.getPath('userData'), "/xxm");
+if (!fs.existsSync(basePath)) {
+    fs.mkdirSync(basePath);
+    var userData = {
+        autoSaveIntervalSeconds: 8,
+        tabs: [{
+            text: "我的知识",
+            url: '/'
+        }],
+        tabIndex: 0,
+        userName:'',
+        phoneNum:'',
+        sex:'',
+        domain:[],
+        createAt: new Date().getTime()
+    };
+    fs.writeFileSync(path.join(basePath,"u.data"), JSON.stringify(userData));
+    fs.writeFileSync(path.join(basePath,"a.data"), '[]');
+    fs.writeFileSync(path.join(basePath,"t.data"), '[]');
 }
+
 var initData = function (name) {
-    var dataStr = fs.readFileSync(path.join(basePath, name + ".data"), readFileConfig);
+    var dataStr = fs.readFileSync(path.join(basePath, name + ".data"), {
+        encoding: 'utf8'
+    });
     return JSON.parse(dataStr);
 };
 const store = {
     basePath,
-    readFileConfig,
     u: initData("u"),
     a: initData("a"),
     t: initData("t"),
