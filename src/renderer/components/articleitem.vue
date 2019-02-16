@@ -12,8 +12,8 @@
     </div>
 </template>
 <script>
-    var path = nw.require('path');
-    var fs = nw.require('fs');
+    var fs = require('fs');
+    var path = require('path');
     import swal from 'sweetalert';
     export default {
         props: ['item', 'index'],
@@ -54,17 +54,17 @@
                             this.$root.t.splice(parentIndex, 1);
                         } else {
                             var articleIdIndex = tag.articleIds.indexOf(article.id);
-                            if(articleIdIndex>=0){
+                            if (articleIdIndex >= 0) {
                                 tag.articleIds.splice(articleIdIndex, 1);
                             }
                             tag.refer -= 1;
                         }
                     });
                     //删文章库
-                    var articleIndex = self.$root.a.findIndex(v=>{
+                    var articleIndex = self.$root.a.findIndex(v => {
                         return v.id == article.id;
                     });
-                    self.$root.a.splice(articleIndex,1);
+                    self.$root.a.splice(articleIndex, 1);
                     //删TAB页
                     self.bus.$emit('removeTab', {
                         url: '/article/' + article.id

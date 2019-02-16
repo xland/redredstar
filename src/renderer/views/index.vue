@@ -56,8 +56,8 @@
     </div>
 </template>
 <script>
-    var fs = nw.require('fs');
-    var path = nw.require('path');
+    var fs = require('fs');
+    var path = require('path');
     import articleitem from "../components/articleitem";
     export default {
         components: {
@@ -178,6 +178,7 @@
     #index .addBtn:hover {
         background: #137ae3;
     }
+
     .articles::-webkit-scrollbar {
         width: 2px;
         background-color: #f6f6f6;
@@ -191,6 +192,7 @@
         border-radius: 2px;
         background-color: #bbb;
     }
+
     .articles {
         flex: 1;
         margin-left: 8px;
@@ -202,6 +204,7 @@
         padding-top: 8px;
 
     }
+
     .articles:hover {
         overflow-y: auto;
     }
@@ -259,7 +262,7 @@
         overflow-y: auto;
         margin-top: 0px;
         margin-bottom: 8px;
-        padding-right:8px; 
+        padding-right: 8px;
         flex: 1;
         padding-top: 11px;
         padding-bottom: 6px;

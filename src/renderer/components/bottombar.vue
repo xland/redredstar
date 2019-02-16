@@ -47,6 +47,7 @@
 </template>
 <script>
     import swal from 'sweetalert';
+    const {app} = require('electron').remote
     export default {
         data() {
             return {
@@ -92,7 +93,7 @@
                 window.nw.Shell.openExternal("https://github.com/xland/xiangxuema/issues");
             },
             getVersion() {
-                return window.nw.App.manifest.version;
+                return app.getVersion();
             },
         },
         mounted() {

@@ -11,5 +11,8 @@ new Vue({
   data:store,
   components: { App },
   router,
+  beforeCreate() {
+    Vue.prototype.bus = this
+  },
   template: '<App/>'
 }).$mount('#app')

@@ -6,8 +6,8 @@
 <script>
     //todo:图片放大缩小需要按比例
     //todo:公式插件base64 to file
-    const fs = nw.require('fs');
-    const path = nw.require('path');
+    var fs = require('fs');
+    var path = require('path');
     export default {
         data() {
             return {
@@ -50,8 +50,9 @@
                 };
             },
             hookContentReady() {
+                var self = this;
                 window.editorContentReady = function (articleId) {
-                    var aPath = path.join(window.nw.App.dataPath, "/xxm/" + articleId + "/a.data");
+                    var aPath = path.join(self.$root.basePath , articleId + "/a.data");
                     var content = fs.readFileSync(aPath, {
                         encoding: 'utf8'
                     });
@@ -83,7 +84,7 @@
             hookImgInsert() {
                 var self = this;
                 window.editorImgInsert = function (file) {
-                    var basePath = path.join(window.nw.App.dataPath, "/xxm/" + self.article.id);
+                    var basePath = path.join(self.$root.basePath, "/xxm/" + self.article.id);
                     var id = "img" + new Date().getTime();
                     var name = path.join(basePath, id + '.' + file.name.split('.').last());
                     var fr = new FileReader();
