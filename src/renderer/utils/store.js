@@ -41,6 +41,10 @@ const store = {
         t: false,
         c: false,
     },
+    saveU(){
+        var str = JSON.stringify(this.u);
+        fs.writeFileSync(path.join(this.basePath, "u.data"), str);
+    },
     aIndex: -1,
     timer: null,
     timerGuard: 8,
