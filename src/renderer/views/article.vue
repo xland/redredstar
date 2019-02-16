@@ -24,8 +24,8 @@
   </div>
 </template>
 <script>
-  const fs = nw.require('fs');
-  const path = nw.require('path');
+    var fs = require('fs');
+    var path = require('path');
   import tagloader from "../components/tagloader";
   import site from "../components/site";
   export default {

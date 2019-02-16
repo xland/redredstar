@@ -47,7 +47,7 @@
 </template>
 <script>
     import swal from 'sweetalert';
-    const {app} = require('electron').remote
+    var electron = require('electron');
     export default {
         data() {
             return {
@@ -90,10 +90,10 @@
                 });
             },
             addBug() {
-                window.nw.Shell.openExternal("https://github.com/xland/xiangxuema/issues");
+                electron.remote.shell.openExternal("https://github.com/xland/xiangxuema/issues");
             },
             getVersion() {
-                return app.getVersion();
+                return electron.remote.app.getVersion();
             },
         },
         mounted() {

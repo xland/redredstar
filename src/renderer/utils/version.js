@@ -1,5 +1,6 @@
 import swal from 'sweetalert';
 var http = window.nw.require('http');
+var electron = require('electron');
 http.get('http://xiangxuema.com/version.json', (resp) => {
     let data = '';
     resp.on('data', (chunk) => {
@@ -45,7 +46,7 @@ http.get('http://xiangxuema.com/version.json', (resp) => {
                     os = "linux"
                 }
                 var url = encodeURI(versionObj.baseurl + versionObj[os]);
-                window.nw.Shell.openExternal(url);
+                electron.remote.shell.openExternal(url);
             })
         }
     });
