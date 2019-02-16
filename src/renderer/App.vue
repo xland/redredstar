@@ -2,9 +2,7 @@
   <div id="app">
     <editor></editor>
     <tabbar></tabbar>
-    <div class="main">
-      <router-view />
-    </div>
+    <router-view />
     <bottombar></bottombar>
   </div>
 </template>
@@ -23,10 +21,5 @@
 </script>
 
 <style>
-  html,body{
-    margin: 0px;
-    padding: 0px;
-    height: 100%;
-    width: 100%;
-  }
+  @import "./assets/app.scss";
 </style>

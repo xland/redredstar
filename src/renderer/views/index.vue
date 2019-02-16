@@ -1,5 +1,5 @@
 <template>
-    <div id="index">
+    <div id="index" class="view">
         <div class="rightContainer">
             <div class="tagContainer box">
                 <div :title="item.text+'['+item.refer+']'" @click="tagClick(item)" class="tag tagIndex" v-for="(item,index) in $root.t">
@@ -146,10 +146,6 @@
     }
 </script>
 <style scoped lang="scss">
-    #index {
-        height: 100%;
-    }
-
     .searchBtn {
         width: 38px;
         line-height: 28px;

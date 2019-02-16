@@ -1,0 +1,52 @@
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: #f6f6f6;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 0px;
+    background-color: #f6f6f6;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+    background-color: #eee;
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+html,
+body {
+    margin: 0px;
+    padding: 0px;
+    user-select: none;
+    -webkit-text-size-adjust: 100%;
+    font-size: 13px;
+    height: 100%;
+    overflow-y: hidden;
+    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    position: absolute;
+    font-size: 13px;
+    z-index: 9;
+    display: flex;
+    flex-flow: column;
+    background: #f6f6f6;
+}
+.view {
+    overflow: hidden;
+    flex: 1;
+}

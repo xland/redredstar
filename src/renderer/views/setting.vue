@@ -1,5 +1,5 @@
 <template>
-    <div class="setting">
+    <div class="setting view">
         <div class="formItem">
             <div>自动保存文章的时间间隔：</div>
             <div>
