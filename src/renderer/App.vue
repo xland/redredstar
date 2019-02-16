@@ -14,7 +14,11 @@
   import bottombar from "./components/bottombar";
   import editor from "./components/editor";
   export default {
-    name: 'xiangxuema'
+    components: {
+      tabbar,
+      bottombar,
+      editor
+    },
   }
 </script>
 
