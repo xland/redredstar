@@ -25,7 +25,7 @@
                     <div class="tag" v-for="(item,index) in searchTags">
                         <div class="tagText">{{item.text}}</div>
                         <div @click.stop="closeTag(index)" class="tagClose">
-                            <i class="iconfont icon-guanbi" style="font-size: 10px !important;"></i>
+                            <i class="iconfont icon-guanbi" style="font-size: 14px !important;"></i>
                         </div>
                     </div>
                 </div>
