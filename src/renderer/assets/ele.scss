@@ -19,6 +19,11 @@ input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+iframe {
+    height: 100%;
+    width: 100%;
+    border: none;
+}
 
 html,
 body {

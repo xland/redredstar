@@ -43,7 +43,7 @@
         require('electron').remote.getCurrentWindow().on('close', evt => {
           evt.preventDefault()
           self.$root.save(function(){
-            window.nw.App.quit();
+            electron.remote.app.quit();
           });
         })
       },
@@ -56,8 +56,7 @@
     },
     mounted: function () {
       this.hookWinClose();
-      this.autoSave();
-      //nw.Window.get().showDevTools(); //todo:     
+      this.autoSave(); 
     }
   }
 </script>

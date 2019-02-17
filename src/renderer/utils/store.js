@@ -41,9 +41,15 @@ const store = {
         t: false,
         c: false,
     },
-    saveU(){
-        var str = JSON.stringify(this.u);
-        fs.writeFileSync(path.join(this.basePath, "u.data"), str);
+    saveUAT(name){
+        var str = JSON.stringify(this[name]);
+        var uPath = path.join(this.basePath, name+".data");
+        fs.writeFileSync(uPath, str);
+    },
+    saveC(){
+        var str = window.UE.instants.ueditorInstant0.getContent();
+        var cPath = path.join(self.basePath, self.a[self.aIndex].id + "/c.data");
+        fs.writeFileSync(cPath, str);
     },
     aIndex: -1,
     timer: null,

@@ -63,18 +63,18 @@
             }
         },
         watch: {
-            "$root.needSave": {
-                handler: function (val, oldVal) {
-                    if (!val.a && !val.c && !val.t && !val.u) {
-                        this.rotating = true;
-                        var self = this;
-                        setTimeout(function () {
-                            self.rotating = false;
-                        }, 600);
-                    }
-                },
-                deep: true
-            },
+            // "$root.needSave": {
+            //     handler: function (val, oldVal) {
+            //         if (!val.a && !val.c && !val.t && !val.u) {
+            //             this.rotating = true;
+            //             var self = this;
+            //             setTimeout(function () {
+            //                 self.rotating = false;
+            //             }, 600);
+            //         }
+            //     },
+            //     deep: true
+            // },
         },
         methods: {
             setting(){

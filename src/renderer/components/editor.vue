@@ -37,22 +37,20 @@
                 var self = this;
                 var subContent = document.getElementById("ueditor_0").contentWindow.document;
                 subContent.oninput = function (e) {
+                    console.log("1");
                     self.$root.needSave.c = true;
                 }
             },
             hookSaveKeyEvent() {
                 var self = this;
                 window.saveArticleKeyEvent = function () {
-                    if (!self.$root.needSave.c) {
-                        return;
-                    }
                     self.$root.saveContent();
                 };
             },
             hookContentReady() {
                 var self = this;
                 window.editorContentReady = function (articleId) {
-                    var aPath = path.join(self.$root.basePath , articleId + "/a.data");
+                    var aPath = path.join(self.$root.basePath, articleId + "/a.data");
                     var content = fs.readFileSync(aPath, {
                         encoding: 'utf8'
                     });
@@ -109,5 +107,23 @@
     }
 </script>
 <style scoped lang="scss">
+    #editor {
+        position: absolute;
+        bottom: 72px;
+        left: 8px;
+        top: 76px;
+        right: 8px;
+        z-index: 9;
+        border-top: 1px solid #e5e5e5;
+        border-bottom: 1px solid #e5e5e5;
+    }
 
+    #editorContainer {
+        height: 100% !important;
+    }
+
+    #ta {
+        height: 100% !important;
+        width: 100% !important;
+    }
 </style>

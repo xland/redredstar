@@ -52,9 +52,9 @@
     },
     beforeRouteLeave(to, from, next) {
       var self = this;
-      this.$root.aIndex = -1;
       self.$root.save(function () {
         next(); //跳转到其他页面前，要先把当前的文章保存一下；
+        self.$root.aIndex = -1;
       });
     },
     mounted() {
@@ -85,9 +85,7 @@
         }, 80);
       },
       savekeyUp(e) {
-        if(this.$root.needSave.a){
-          this.$root.save();
-        }
+        self.$root.saveUAT("a");
       },
       titleChange() {
         this.$root.u.tabs[this.$root.u.tabIndex].text = this.article.title;

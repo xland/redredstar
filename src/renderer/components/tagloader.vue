@@ -118,4 +118,37 @@
     .tagTipContainer .tag {
         padding-right: 6px;
     }
+    .tagloader{
+    flex: 1;
+    padding-top: 1px;
+}
+.tagloader input{
+    width: 100%
+}
+.tagTipContainer {
+    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
+    height: 36px;
+    background: #fff;
+    line-height: 36px;
+    background: #f6f6f6;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 8px;
+  }
+
+  .findTagResult {
+    position: absolute;
+    bottom: 72px;
+    z-index: 99;
+  }
+
+  .arrow-down {
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #f6f6f6;
+  }
 </style>
