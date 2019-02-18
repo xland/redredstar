@@ -49,8 +49,8 @@
                 }
                 self = this;
                 var win = new BrowserWindow({
-                    width: 800,
-                    height: 600,
+                    width: 1024,
+                    height: 680,
                     webPreferences: {
                         nodeIntegration: false,
                         preload: path.join(__static, 'sites/' + item.id + '/inject.js')
@@ -69,7 +69,8 @@
                         title: self.$root.a[self.$root.aIndex].title,
                         content: window.UE.instants.ueditorInstant0.getContent(),
                         id: self.$root.a[self.$root.aIndex].id,
-                        winId:item.winId
+                        winId:item.winId,
+                        siteId:item.id
                     });
                 });
             },

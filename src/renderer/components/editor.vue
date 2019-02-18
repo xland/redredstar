@@ -37,7 +37,6 @@
                 var self = this;
                 var subContent = document.getElementById("ueditor_0").contentWindow.document;
                 subContent.oninput = function (e) {
-                    console.log("1");
                     self.$root.needSave.c = true;
                 }
             },
@@ -82,7 +81,7 @@
             hookImgInsert() {
                 var self = this;
                 window.editorImgInsert = function (file) {
-                    var basePath = path.join(self.$root.basePath, "/xxm/" + self.article.id);
+                    var basePath = path.join(self.$root.basePath,self.article.id.toString());
                     var id = "img" + new Date().getTime();
                     var name = path.join(basePath, id + '.' + file.name.split('.').last());
                     var fr = new FileReader();
