@@ -42,21 +42,24 @@
                     });
                     return;
                 }
-                var win = BrowserWindow.fromId(item.id);
-                if(win){
-                    win.focus();
+                console.log(item);
+                if(item.winId){
+                   var win = BrowserWindow.fromId(item.winId);
+                   win.focus();
+                   return;
                 }
                 self = this;
-                win = new BrowserWindow({
+                var win = new BrowserWindow({
                     width: 800,
                     height: 600,
-                    id:item.id,
                     webPreferences: {
                         nodeIntegration: false,
                         preload: path.join(__static, 'sites/' + item.id + '/inject.js')
                     }
                 });
+                item.winId = win.id;
                 win.on('closed', () => {
+                    item.winId = null;
                     win = null
                 })
                 win.loadURL(item.url, {
