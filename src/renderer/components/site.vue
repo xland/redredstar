@@ -18,12 +18,18 @@
     </div>
 </template>
 <script>
+    var fs = require('fs');
+    var path = require('path');
     import swal from 'sweetalert';
+    import sites from '../utils/site';
+    const {
+        BrowserWindow
+    } = require('electron').remote
     export default {
         data() {
             return {
                 initWebview: false,
-                sites: window.targetSites,
+                sites: sites,
             }
         },
         mounted() {},
@@ -36,24 +42,32 @@
                     });
                     return;
                 }
+                var win = BrowserWindow.fromId(item.id);
+                if(win){
+                    win.focus();
+                }
                 self = this;
-                var isDev = nw.require("process").versions["nw-flavor"] == "sdk"
-                var preStr = isDev ? 'http://localhost:1025/' : "ui/";
-                nw.Window.open(preStr + 'static/sites/index.html?id=' + item.id, {
-                    "id": item.id,
-                    "title": "文章发布至：" + item.title,
-                    "new_instance": false,
-                    "width": 1024,
-                    "height": 680,
-                    "focus": true,
-                }, function (subWin) {
-                    subWin.data = {
-                        site: item,
-                        article: {
-                            ...self.$root.a[self.$root.aIndex],
-                            content: UE.instants.ueditorInstant0.getContent()
-                        }
+                win = new BrowserWindow({
+                    width: 800,
+                    height: 600,
+                    id:item.id,
+                    webPreferences: {
+                        nodeIntegration: false,
+                        preload: path.join(__static, 'sites/' + item.id + '/inject.js')
                     }
+                });
+                win.on('closed', () => {
+                    win = null
+                })
+                win.loadURL(item.url, {
+                    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+                });
+                win.webContents.on('did-finish-load', () => {
+                    win.webContents.send('message', {
+                        title: self.$root.a[self.$root.aIndex].title,
+                        content: window.UE.instants.ueditorInstant0.getContent(),
+                        id: self.$root.a[self.$root.aIndex].id
+                    });
                 });
             },
             prepareImgSrc(site) {

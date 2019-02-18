@@ -5,7 +5,7 @@
         <input autocomplete="off" id="articleTitleInput" @keydown.meta.83="savekeyUp" @keydown.tab="titleTab" @change="titleChange"
           class="textInput" v-model="article.title" placeholder="请输入文章标题">
       </div>
-      <div class="publishBtn" @click="showSites = true">
+      <div class="publishBtn" @click="publishBtnClick">
         <i class="iconfont icon-fabu" style="font-size: 18px !important;"></i>
       </div>
     </div>
@@ -61,6 +61,10 @@
       this.getArticle(this.$route.params.id);
     },
     methods: {
+      publishBtnClick(){
+        this.$root.save();
+        this.showSites = true;
+      },
       getTags() {
         var arr = this.$root.t.filter(v => {
           return this.article.tagIds.some(tagId => {

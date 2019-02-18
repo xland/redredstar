@@ -1,7 +1,7 @@
-window.targetSites = [{
+export default [{
     id: 'cnblogs',
     title: '博客园',
-    url: 'https://i.cnblogs.com/EditPosts.aspx?opt=1',
+    url: 'https://passport.cnblogs.com/user/signin',
 }, {
     id: 'jianshu',
     title: '简书',
@@ -32,4 +32,4 @@ window.targetSites = [{
 }, {
     id: 'qqzone',
     title: 'QQ空间',
-}]
+}];
