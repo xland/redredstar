@@ -1,7 +1,8 @@
 export default [{
     id: 'cnblogs',
     title: '博客园',
-    url: 'https://passport.cnblogs.com/user/signin',
+    url: 'https://i.cnblogs.com/EditPosts.aspx?opt=1',
+    edit:'https://i.cnblogs.com/EditPosts.aspx?postid=$id$&update=1'
 }, {
     id: 'jianshu',
     title: '简书',

@@ -1,11 +1,20 @@
-const ipc = require('electron').ipcRenderer;
-ipc.on('message', (event, message) => {
-    console.log(message); // logs out "Hello second window!"
-})
+const { clipboard,ipcRenderer } = require('electron');
+const {
+    BrowserWindow
+} = require('electron').remote
 document.addEventListener("DOMContentLoaded", function () {
+    console.log(BrowserWindow);
     var titleTb = document.getElementById("Editor_Edit_txbTitle");
-    if(!titleTb || !blogEditor){
+    if(!titleTb){
         return;//没有标题和内容区域，就认定不是文章编辑页面
     }
-    console.log("alen");
+    ipcRenderer.on('message', (event, article) => {
+        window.onbeforeunload = null;
+        var win = BrowserWindow.fromId(article.winId);
+        win.focus();
+        titleTb.value = article.title;
+        clipboard.writeHTML(article.content)
+        tinyMCE.getInstanceById('Editor_Edit_EditorBody').focus();
+        win.webContents.paste();
+    })
 });

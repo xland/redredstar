@@ -42,7 +42,6 @@
                     });
                     return;
                 }
-                console.log(item);
                 if(item.winId){
                    var win = BrowserWindow.fromId(item.winId);
                    win.focus();
@@ -69,7 +68,8 @@
                     win.webContents.send('message', {
                         title: self.$root.a[self.$root.aIndex].title,
                         content: window.UE.instants.ueditorInstant0.getContent(),
-                        id: self.$root.a[self.$root.aIndex].id
+                        id: self.$root.a[self.$root.aIndex].id,
+                        winId:item.winId
                     });
                 });
             },
