@@ -5,7 +5,7 @@
         </div>
         <div class="z1">
             <div v-show="!initWebview" class="tarSiteContainer">
-                <div @click="publish(item)" :class="['tarSiteItem',item.url?'':'notReady']" v-for="(item,index) in sites">
+                <div @click="publish(item)" :class="['tarSiteItem',item.ready?'':'notReady']" v-for="(item,index) in sites">
                     <div class="tarSiteIcon">
                         <img :src="'./static/sites/'+item.id+'/logo.png'" />
                     </div>
@@ -35,7 +35,7 @@
         mounted() {},
         methods: {
             publish(item) {
-                if (!item.url) {
+                if (!item.ready) {
                     swal({
                         icon: "error",
                         text: "暂时还不支持发布至" + item.title,
@@ -61,10 +61,14 @@
                     item.winId = null;
                     win = null
                 })
-                win.loadURL(item.url, {
+                var url = item.newUrl;
+                if(self.$root.a[self.$root.aIndex][item.id]){
+                    url = self.$root.a[self.$root.aIndex][item.id].url;
+                }
+                win.loadURL(url, {
                     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
                 });
-                win.webContents.on('did-finish-load', () => {
+                win.webContents.on('dom-ready', () => {
                     win.webContents.send('message', {
                         title: self.$root.a[self.$root.aIndex].title,
                         content: window.UE.instants.ueditorInstant0.getContent(),

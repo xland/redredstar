@@ -2,20 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const {
     clipboard,
-    ipcRenderer
+    ipcRenderer,
+    remote
 } = require('electron');
-const {
-    BrowserWindow
-} = require('electron').remote;
+const base = require('../base');
 
 let imgProcessor = {
-    mime: {
-        "jpeg": "image/jpeg",
-        "jpg": "image/jpeg",
-        "png": "image/png",
-        "gif": "image/gif",
-        "bmp": 'image/bmp'
-    },
     imgs: null,
     siteId: null,
     doc: null,
@@ -27,15 +19,14 @@ let imgProcessor = {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", 'https://upload.cnblogs.com/imageuploader/CorsUpload', true);
         xhr.withCredentials = true;
-        //xhr.setRequestHeader("Cache-Control", "no-cache");
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 304)) {
                 var imgObj = JSON.parse(xhr.responseText);
                 dom.dataset[this.siteId] = imgObj.message;
                 this.guard -= 1;
                 if (this.guard < 1) {
-                    ipcRenderer.send('articleRefreshMain', {
-                        content : this.doc.body.innerHTML
+                    ipcRenderer.send('contentRefreshMain', {
+                        content: this.doc.body.innerHTML
                     });
                     this.end();
                 }
@@ -66,14 +57,14 @@ let imgProcessor = {
                 var extname = path.extname(filePath).substr(1);
                 var buffer = fs.readFileSync(filePath);
                 var file = new window.File([new Uint8Array(buffer)], path.basename(filePath), {
-                    type: this.mime[extname]
+                    type: base.mime[extname]
                 });
                 this.uploadImg(v, file);
             }
-            if (this.guard < 1) {
-                this.end();
-            }
         });
+        if (this.guard < 1) {
+            this.end();
+        }
     },
     init(article) {
         var parser = new DOMParser();
@@ -89,27 +80,22 @@ let imgProcessor = {
     }
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    console.log(BrowserWindow);
+ipcRenderer.on('message', (event, article) => {
+    window.onbeforeunload = null;
+    if (window.location.href.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
+        var url = document.getElementById("TipsPanel_LinkEdit").href
+        ipcRenderer.send('articleRefreshMain', {
+            url: url
+        });
+        alert("发布成功!");
+        remote.shell.openExternal(document.getElementById("TipsPanel_LinkViewPost").href);
+        remote.getCurrentWindow().close();
+    }
+    //编辑文章的逻辑
     var titleTb = document.getElementById("Editor_Edit_txbTitle");
     if (!titleTb) {
         return; //没有标题和内容区域，就认定不是文章编辑页面
     }
-    ipcRenderer.on('message', (event, article) => {
-        window.onbeforeunload = null;
-        titleTb.value = article.title;
-        imgProcessor.init(article);
-
-
-
-        // var re = new RegExp("data-img_" + article.siteId, "gi");
-        // content = article.content.replace(re, 'src');
-        // content = content.replace(/data-img_.+?=".+?"/gi, '');
-
-        // var win = BrowserWindow.fromId(article.winId);
-        // win.focus();
-        // clipboard.writeHTML(article.content)
-        // tinyMCE.getInstanceById('Editor_Edit_EditorBody').focus();
-        // win.webContents.paste();
-    })
-});
+    titleTb.value = article.title;
+    imgProcessor.init(article);
+})

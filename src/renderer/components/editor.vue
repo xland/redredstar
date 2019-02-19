@@ -32,6 +32,7 @@
                     self.hookSaveKeyEvent();
                     self.hookContentChange();
                     self.hookContentRefresh();
+                    self.hookArticleRefresh();
                     if (self.article) {
                         window.editorContentReady(self.article.id);
                     }
@@ -46,9 +47,19 @@
             },
             hookContentRefresh() {
                 var self = this;
-                ipcRenderer.on('articleRefreshRenderer', (e,message) => {
+                ipcRenderer.on('contentRefreshRenderer', (e, message) => {
                     window.UE.instants.ueditorInstant0.setContent(message.content);
                     self.$root.needSave.c = true;
+                });
+            },
+            hookArticleRefresh() {
+                var self = this;
+                ipcRenderer.on('articleRefreshRenderer', (e, message) => {
+                    self.$root.a[self.$root.aIndex].cnblogs = {
+                        url: message.url
+                    }
+                    console.log(self.$root.a[self.$root.aIndex]);
+                    self.$root.needSave.a = true;
                 });
             },
             hookSaveKeyEvent() {

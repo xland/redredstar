@@ -1,8 +1,8 @@
 export default [{
+    ready:true,
     id: 'cnblogs',
     title: '博客园',
-    url: 'https://i.cnblogs.com/EditPosts.aspx?opt=1',
-    edit:'https://i.cnblogs.com/EditPosts.aspx?postid=$id$&update=1'
+    newUrl: 'https://i.cnblogs.com/EditPosts.aspx?opt=1',
 }, {
     id: 'jianshu',
     title: '简书',
