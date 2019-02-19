@@ -1,4 +1,5 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow,ipcMain } from 'electron'
+const ipcRenderer = require('electron').ipcRenderer;
 
 /**
  * Set `__static` path to static files in production
@@ -48,6 +49,10 @@ app.on('activate', () => {
     createWindow()
   }
 })
+
+ipcMain.on('articleRefreshMain', (event, message) => {
+  mainWindow.webContents.send('articleRefreshRenderer', message);
+});
 
 /**
  * Auto Updater

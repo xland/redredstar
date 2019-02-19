@@ -8,6 +8,9 @@
     //todo:公式插件base64 to file
     var fs = require('fs');
     var path = require('path');
+    const {
+        ipcRenderer
+    } = require('electron');
     export default {
         data() {
             return {
@@ -28,6 +31,7 @@
                     self.hookImgRemove();
                     self.hookSaveKeyEvent();
                     self.hookContentChange();
+                    self.hookContentRefresh();
                     if (self.article) {
                         window.editorContentReady(self.article.id);
                     }
@@ -39,6 +43,13 @@
                 subContent.oninput = function (e) {
                     self.$root.needSave.c = true;
                 }
+            },
+            hookContentRefresh() {
+                var self = this;
+                ipcRenderer.on('articleRefreshRenderer', (e,message) => {
+                    window.UE.instants.ueditorInstant0.setContent(message.content);
+                    self.$root.needSave.c = true;
+                });
             },
             hookSaveKeyEvent() {
                 var self = this;
@@ -81,7 +92,7 @@
             hookImgInsert() {
                 var self = this;
                 window.editorImgInsert = function (file) {
-                    var basePath = path.join(self.$root.basePath,self.article.id.toString());
+                    var basePath = path.join(self.$root.basePath, self.article.id.toString());
                     var id = "img" + new Date().getTime();
                     var name = path.join(basePath, id + '.' + file.name.split('.').last());
                     var fr = new FileReader();

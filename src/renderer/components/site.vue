@@ -42,14 +42,14 @@
                     });
                     return;
                 }
-                if(item.winId){
-                   var win = BrowserWindow.fromId(item.winId);
-                   win.focus();
-                   return;
+                if (item.winId) {
+                    var win = BrowserWindow.fromId(item.winId);
+                    win.focus();
+                    return;
                 }
                 self = this;
                 var win = new BrowserWindow({
-                    width: 1024,
+                    width: 1056,
                     height: 680,
                     webPreferences: {
                         nodeIntegration: false,
@@ -69,8 +69,8 @@
                         title: self.$root.a[self.$root.aIndex].title,
                         content: window.UE.instants.ueditorInstant0.getContent(),
                         id: self.$root.a[self.$root.aIndex].id,
-                        winId:item.winId,
-                        siteId:item.id
+                        winId: item.winId,
+                        siteId: item.id
                     });
                 });
             },
