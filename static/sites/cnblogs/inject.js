@@ -35,7 +35,6 @@ let imgProcessor = {
         xhr.send(formData);
     },
     end() {
-        //todo: give it to main window
         this.imgs.forEach(v => {
             v.src = v.dataset[this.siteId]
             Object.keys(v.dataset).forEach(ds => {
@@ -43,11 +42,6 @@ let imgProcessor = {
             })
         });
         blogEditor.setContent(this.doc.body.innerHTML);
-        // var win = BrowserWindow.fromId(this.winId);
-        // win.focus();
-        // clipboard.writeHTML(this.doc.body.innerHTML);
-        // tinyMCE.getInstanceById('Editor_Edit_EditorBody').focus();
-        // win.webContents.paste();
     },
     start() {
         this.imgs.forEach(v => {
@@ -75,7 +69,7 @@ let imgProcessor = {
         if (this.imgs.length > 0) {
             this.start();
         } else {
-            this.end();
+            blogEditor.setContent(this.doc.body.innerHTML);
         }
     }
 }
@@ -85,6 +79,7 @@ ipcRenderer.on('message', (event, article) => {
     if (window.location.href.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
         var url = document.getElementById("TipsPanel_LinkEdit").href
         ipcRenderer.send('articleRefreshMain', {
+            siteId:'cnblogs',
             url: url
         });
         alert("发布成功!");

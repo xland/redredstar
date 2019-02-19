@@ -55,7 +55,7 @@
             hookArticleRefresh() {
                 var self = this;
                 ipcRenderer.on('articleRefreshRenderer', (e, message) => {
-                    self.$root.a[self.$root.aIndex].cnblogs = {
+                    self.$root.a[self.$root.aIndex][message.siteId] = {
                         url: message.url
                     }
                     console.log(self.$root.a[self.$root.aIndex]);

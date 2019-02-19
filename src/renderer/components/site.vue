@@ -61,9 +61,11 @@
                     item.winId = null;
                     win = null
                 })
-                var url = item.newUrl;
+                var url = item.url;
+                var type = "new"
                 if(self.$root.a[self.$root.aIndex][item.id]){
                     url = self.$root.a[self.$root.aIndex][item.id].url;
+                    type = "edit";
                 }
                 win.loadURL(url, {
                     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
@@ -74,7 +76,9 @@
                         content: window.UE.instants.ueditorInstant0.getContent(),
                         id: self.$root.a[self.$root.aIndex].id,
                         winId: item.winId,
-                        siteId: item.id
+                        siteId: item.id,
+                        url,
+                        type
                     });
                 });
             },

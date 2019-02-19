@@ -2,10 +2,12 @@ export default [{
     ready:true,
     id: 'cnblogs',
     title: '博客园',
-    newUrl: 'https://i.cnblogs.com/EditPosts.aspx?opt=1',
+    url: 'https://i.cnblogs.com/EditPosts.aspx?opt=1',
 }, {
+    ready:true,
     id: 'jianshu',
     title: '简书',
+    url:'https://www.jianshu.com/writer#/',
 }, {
     id: 'cnblogs',
     title: '博客园',
