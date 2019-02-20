@@ -25,7 +25,7 @@
 
 > <img width="680" src="/doc/imgs/mac_edit.png" >
 
-> <img width="680" src="/doc/imgs/mac_publish.png" >
+> <img width="680" src="/doc/imgs/sites.png" >
 
 > <img width="680" src="/doc/imgs/formula.png" >
 
