@@ -1,0 +1,24 @@
+/*可以在这里添加你自己的css*/
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: #efefef;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 0px;
+    background-color: #efefef;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+    background-color: #dfdfdf;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+.view{
+    height: 96% !important;
+}
