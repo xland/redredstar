@@ -1,19 +1,18 @@
 export default [{
-    ready:true,
+    ready: true,
     id: 'cnblogs',
     title: '博客园',
     url: 'https://i.cnblogs.com/EditPosts.aspx?opt=1',
 }, {
-    ready:true,
+    ready: true,
     id: 'jianshu',
     title: '简书',
-    url:'https://www.jianshu.com/writer#/',
+    url: 'https://www.jianshu.com/writer#/',
 }, {
-    id: 'cnblogs',
-    title: '博客园',
-}, {
+    ready: true,
     id: 'oschina',
     title: '开源中国',
+    url:'https://www.oschina.net/blog'
 }, {
     id: 'zhihu',
     title: '知乎',

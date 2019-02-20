@@ -58,7 +58,6 @@
                     self.$root.a[self.$root.aIndex][message.siteId] = {
                         url: message.url
                     }
-                    console.log(self.$root.a[self.$root.aIndex]);
                     self.$root.needSave.a = true;
                 });
             },
