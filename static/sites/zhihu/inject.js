@@ -45,13 +45,18 @@ let imgProcessor = {
         var win = remote.BrowserWindow.fromId(this.winId);
         win.focus();
         setTimeout(function () {
-            document.getElementsByClassName("public-DraftEditor-content")[0].click();
-            clipboard.writeHTML(this.doc.body.innerHTML);
+            document.getElementsByClassName("WriteIndex-titleInput")[0].children[0].focus();
+            clipboard.writeText(this.title);
             win.webContents.paste();
-            ipcRenderer.send('articleRefreshMain', {
-                siteId: 'zhihu',
-                url: window.location.href
-            });
+            setTimeout(function () {
+                document.getElementsByClassName("public-DraftEditor-content")[0].click();
+                clipboard.writeHTML(this.doc.body.innerHTML);
+                win.webContents.paste();
+                ipcRenderer.send('articleRefreshMain', {
+                    siteId: 'zhihu',
+                    url: window.location.href
+                });
+            }.bind(this), 800)
         }.bind(this), 800)
     },
     start() {
@@ -77,6 +82,7 @@ let imgProcessor = {
         this.imgs = this.doc.querySelectorAll('img');
         this.siteId = article.siteId;
         this.winId = article.winId;
+        this.title = article.title;
         if (this.imgs.length > 0) {
             this.start();
         } else {
@@ -93,7 +99,6 @@ ipcRenderer.on('message', (event, article) => {
     }
     if (document.getElementsByClassName("WriteIndex-titleInput")[0]) {
         imgProcessor.init(article);
-        document.getElementsByClassName("WriteIndex-titleInput")[0].children[0].value = article.title
     }
     return;
 })
