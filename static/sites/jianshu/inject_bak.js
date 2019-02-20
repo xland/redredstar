@@ -12,8 +12,8 @@ let imgProcessor = {
     siteId: null,
     doc: null,
     guard: 0,
-    resultHtml:'',
-    finished:false,
+    resultHtml: '',
+    finished: false,
     uploadImg(dom, file) {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", 'https://www.jianshu.com/upload_images/token.json?filename=' + file.name, true);
@@ -114,22 +114,17 @@ ipcRenderer.on('message', (event, article) => {
                         var newTime = parseInt(obj.content_updated_at + "000")
                         var curTime = new Date().getTime();
                         if (curTime - newTime < 6000) {
-                            document.getElementsByClassName("_24i7u")[0].addEventListener("change", function(){
-                                
-                            }
-                            setTimeout(function(){
-                                imgProcessor.init(article);
-                                document.getElementsByClassName("_24i7u")[0].value = article.title;
-                            },800);
+                            imgProcessor.init(article);
+                            document.getElementsByClassName("_24i7u")[0].value = article.title;
                         }
                     }
                 }
             }, false);
             open.apply(this, arguments);
         };
-        setTimeout(function(){
+        setTimeout(function () {
             alert("请先选择文集并新建文章");
-        },800);
+        }, 800);
     }
     // if (window.location.href.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
     //     var url = document.getElementById("TipsPanel_LinkEdit").href
@@ -146,5 +141,5 @@ ipcRenderer.on('message', (event, article) => {
         return; //没有标题和内容区域，就认定不是文章编辑页面
     }
     titleTb.value = article.title;
-    
+
 })

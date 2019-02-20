@@ -12,19 +12,18 @@ let imgProcessor = {
     siteId: null,
     doc: null,
     guard: 0,
-    userId:'',
     uploadImg(dom, file) {
-        var token = CKEDITOR.tools.getCsrfToken();
         var formData = new FormData();
-        formData.append('upload', file);
-        formData.append("ckCsrfToken", token);
+        formData.append('picture', file);
+        formData.append("source", "article");
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", 'https://my.oschina.net/u/'+this.userId+'/space/ckeditor_dialog_img_upload', true);
-        xhr.withCredentials = true;
+        xhr.open("POST", 'https://zhuanlan.zhihu.com/api/uploaded_images', true);
+        xhr.setRequestHeader("X-Requested-With", "Fetch");
+        xhr.setRequestHeader("accept", "application/json, text/plain, */*");
         xhr.onreadystatechange = () => {
             if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 304)) {
                 var imgObj = JSON.parse(xhr.responseText);
-                dom.dataset[this.siteId] = imgObj.url;
+                dom.dataset[this.siteId] = imgObj.src;
                 this.guard -= 1;
                 if (this.guard < 1) {
                     ipcRenderer.send('contentRefreshMain', {
@@ -43,14 +42,17 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        CKEDITOR.instances["body"].setData('');
         var win = remote.BrowserWindow.fromId(this.winId);
         win.focus();
         setTimeout(function () {
-            CKEDITOR.instances["body"].focus();
+            document.getElementsByClassName("public-DraftEditor-content")[0].click();
             clipboard.writeHTML(this.doc.body.innerHTML);
             win.webContents.paste();
-        }.bind(this), 800);
+            ipcRenderer.send('articleRefreshMain', {
+                siteId: 'zhihu',
+                url: window.location.href
+            });
+        }.bind(this), 800)
     },
     start() {
         this.imgs.forEach(v => {
@@ -75,7 +77,6 @@ let imgProcessor = {
         this.imgs = this.doc.querySelectorAll('img');
         this.siteId = article.siteId;
         this.winId = article.winId;
-        this.userId = article.userId;
         if (this.imgs.length > 0) {
             this.start();
         } else {
@@ -87,32 +88,12 @@ let imgProcessor = {
 ipcRenderer.on('message', (event, article) => {
     window.onbeforeunload = null;
     var url = window.location.href;
-    var userId = $("#headerNavMenu").find(".osc-avatar").attr("data-user-id");
-    if (!url.includes('/blog/write') && !userId && !url.includes("/home/login")) {
-        window.location.href = 'https://www.oschina.net/home/login';
+    if (url.startsWith("https://www.zhihu.com/signin")) {
         return;
     }
-    if(url.includes("/home/login")){
-        return;
-    }
-    if(article.type == "new"){
-        window.location.href = "https://my.oschina.net/u/" + userId + "/blog/write";
-        return;
-    }else if(!url.includes('/blog/write')){
-        window.location.href = article.url;
-    }
-    if ($("h2.header").text().trim().includes(article.title)) {
-        var id = $(".article-like")[0].dataset.id;
-        ipcRenderer.send('articleRefreshMain', {
-            siteId: 'oschina',
-            url: 'https://my.oschina.net/u/' + userId + '/blog/write/' + id
-        });
-        return;
-    }
-    if ($("input[name='title']")[0]) {
-        article.userId = userId;
+    if (document.getElementsByClassName("WriteIndex-titleInput")[0]) {
         imgProcessor.init(article);
-        $("input[name='title']").val(article.title);
-        return;
+        document.getElementsByClassName("WriteIndex-titleInput")[0].children[0].value = article.title
     }
+    return;
 })
