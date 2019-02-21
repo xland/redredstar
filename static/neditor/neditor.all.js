@@ -7612,8 +7612,8 @@ var fillCharReg = new RegExp(domUtils.fillChar, "g");
           //设置四周的留边
           ".view{padding:0;word-wrap:break-word;cursor:text;height:90%;}\n" +
           //设置默认字体和字号
-          //font-family不能呢随便改，在safari下fillchar会有解析问题
-          "body{margin:8px;font-family:sans-serif;font-size:14px;}" +
+          //font-family不能呢随便改，在safari下fillchar会有解析问题 //todo allen
+          "body{margin:8px;font-family: 'Avenir', 'Helvetica', 'Arial', 'sans-serif','Microsoft YaHei';font-size:14px;}" +
           //设置placeholder
           "body.empty:before{content:attr(placeholder);position:absolute;color:#999;}"+
           //设置段落间距

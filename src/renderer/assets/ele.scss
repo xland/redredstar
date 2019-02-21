@@ -34,7 +34,10 @@ body {
     font-size: 13px;
     height: 100%;
     overflow-y: hidden;
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
+    font-family: "Avenir", "Helvetica", "Arial", "sans-serif","Microsoft YaHei";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+input{
+    font-family: "Avenir", "Helvetica", "Arial", "sans-serif","Microsoft YaHei";
 }
