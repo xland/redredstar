@@ -23,11 +23,12 @@ function createWindow () {
     "height": 600,
     "minWidth": 1000,
     "minHeight": 600,
-    webSecurity: false,
-    webPreferences: {
-      webSecurity: false
+    "autoHideMenuBar":false,
+    "webPreferences": {
+      "webSecurity": false
     }
   })
+  mainWindow.setMenu(null);
 
   mainWindow.loadURL(winURL)
 

@@ -3,10 +3,10 @@
   "version": "6.0.6",
   "author": "liulun <412588801@qq.com>",
   "description": "xiangxuema",
-  "license": null,
+  "license": "MIT",
   "main": "./dist/electron/main.js",
   "scripts": {
-    "build": "node .electron-vue/build.js && electron-builder --win --x64",
+    "build": "node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
     "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
@@ -17,7 +17,7 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "xiangxuema",
+    "productName": "想学吗",
     "appId": "com.xiangxuema",
     "directories": {
       "output": "build"

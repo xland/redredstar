@@ -56,6 +56,7 @@
                         preload: path.join(__static, 'sites/' + item.id + '/inject.js')
                     }
                 });
+                win.setMenu(null);
                 item.winId = win.id;
                 win.on('closed', () => {
                     item.winId = null;
