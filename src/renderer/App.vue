@@ -43,7 +43,7 @@
         require('electron').remote.getCurrentWindow().on('close', evt => {
           evt.preventDefault()
           self.$root.save(function(){
-            electron.remote.app.quit();
+            electron.remote.app.exit();
           });
         })
       },
