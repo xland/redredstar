@@ -1,6 +1,5 @@
 import { app, BrowserWindow,ipcMain } from 'electron'
 const curVersion = require('../../package.json').version;
-console.log(curVersion);
 
 let winURL = ""
 let mainWindow
