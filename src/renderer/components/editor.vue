@@ -58,7 +58,6 @@
                     self.$root.a[self.$root.aIndex][message.siteId] = {
                         url: message.url
                     }
-                    self.$root.needSave.a = true;
                 });
             },
             hookSaveKeyEvent() {
@@ -112,6 +111,7 @@
                             fs.writeFileSync(name, buffer);
                             var imgDom = '<img id="' + id + '" src="file://' + name + '" />';
                             window.UE.instants.ueditorInstant0.execCommand("inserthtml", imgDom);
+                            self.$root.needSave.c = true;
                         }
                     };
                     fr.readAsArrayBuffer(file);

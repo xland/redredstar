@@ -44,79 +44,32 @@ const store = {
         t: false,
         c: false,
     },
-    saveUAT(name){
-        var str = JSON.stringify(this[name]);
-        var uPath = path.join(this.basePath, name+".data");
-        fs.writeFileSync(uPath, str);
-    },
-    saveC(){
-        var str = window.UE.instants.ueditorInstant0.getContent();
-        var cPath = path.join(self.basePath, self.a[self.aIndex].id + "/c.data");
-        fs.writeFileSync(cPath, str);
-    },
     aIndex: -1,
     timer: null,
     timerGuard: 8,
-    saveOneData(name, cb) {
+    saveOneData(name) {
         var str = JSON.stringify(this[name]);
-        var self = this;
-        fs.writeFile(path.join(this.basePath, name + ".data"), str, this.readFileConfig, function (err) {
-            self.needSave[name] = false;
-            if (err) {
-                console.log(err);
-            }
-            if(cb){
-                cb();
-            }
-        });
+        fs.writeFileSync(path.join(this.basePath, name + ".data"), str, this.readFileConfig);
+        this.needSave[name] = false;
     },
-    saveContent(cb) {
-        var self = this;
-        self.needSave.c = false;
-        if(self.aIndex < 0){
-            if(cb){
-                cb();
-            }
-            return;
-        }
-        self.a[self.aIndex].update = new Date().getTime();
-        var aPath = path.join(self.basePath, self.a[self.aIndex].id + "/a.data");
+    saveContent() {
+        this.needSave.c = false;
+        var cPath = path.join(this.basePath, this.a[this.aIndex].id + "/a.data");
         var str = window.UE.instants.ueditorInstant0.getContent();
-        fs.writeFile(aPath, str, self.readFileConfig, function (err) {
-            if (err) {
-                console.log(err);
-            }
-            if(cb){
-                cb();
-            }
-        });
+        fs.writeFileSync(cPath, str, this.readFileConfig);
     },
-    save(cb) {
-        var guardNum = 0;
-        var selfCb = function () {
-            guardNum -= 1;
-            if (cb && guardNum <= 0) {
-                cb();
-            }
-        }
-        if (this.needSave.c) {
-            guardNum += 1;
-            this.saveContent(selfCb);
+    save() {
+        if (this.needSave.c && this.aIndex >=0) {
+            this.saveContent();
         }
         if (this.needSave.u) {
-            guardNum += 1;
-            this.saveOneData("u", selfCb);
+            this.saveOneData("u");
         }
         if (this.needSave.t) {
-            guardNum += 1;
-            this.saveOneData("t", selfCb);
+            this.saveOneData("t");
         }
         if (this.needSave.a) {
-            guardNum += 1;
-            this.saveOneData("a", selfCb);
-        }
-        if (guardNum == 0) {
-            selfCb();
+            this.saveOneData("a");
         }
     }
 }

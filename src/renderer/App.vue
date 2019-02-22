@@ -11,6 +11,9 @@
   import tabbar from "./components/tabbar";
   import bottombar from "./components/bottombar";
   import editor from "./components/editor";
+  const {
+        ipcRenderer,remote
+    } = require('electron');
   export default {
     components: {
       tabbar,
@@ -38,25 +41,23 @@
       },
     },
     methods: {
-      hookWinClose() {
-        var self = this;
-        require('electron').remote.getCurrentWindow().on('close', evt => {
-          evt.preventDefault()
-          self.$root.save(function(){
-            electron.remote.app.exit();
-          });
-        })
-      },
-      autoSave(){
+      autoSave() {
         var self = this
-        setInterval(function(){
+        setInterval(function () {
           self.$root.save();
-        },this.$root.u.autoSaveIntervalSeconds*1000);
-      }
+        }, this.$root.u.autoSaveIntervalSeconds * 1000);
+      },
+      hookSaveArticle() {
+        var self = this;
+        ipcRenderer.on('saveArticleRenderer', (e, message) => {
+          self.$root.save();
+          ipcRenderer.send('appQuit', {});
+        });
+      },
     },
     mounted: function () {
-      this.hookWinClose();
-      this.autoSave(); 
+      this.hookSaveArticle();
+      this.autoSave();
     }
   }
 </script>

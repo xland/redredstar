@@ -24,8 +24,8 @@
   </div>
 </template>
 <script>
-    var fs = require('fs');
-    var path = require('path');
+  var fs = require('fs');
+  var path = require('path');
   import tagloader from "../components/tagloader";
   import site from "../components/site";
   export default {
@@ -38,30 +38,28 @@
         showSites: false,
       };
     },
-    computed:{
-      article(){
+    computed: {
+      article() {
         return this.$root.a[this.$root.aIndex];
       }
     },
     beforeRouteUpdate(to, from, next) {
-      var self = this;
-      self.$root.save(function () { //两篇文章切换，也要先保存一下上一篇文章；
-        self.getArticle(to.params.id);
-        next();
-      });
+      //两篇文章切换，也要先保存一下上一篇文章；
+      this.$root.save();
+      this.getArticle(to.params.id);
+      next();
     },
     beforeRouteLeave(to, from, next) {
-      var self = this;
-      self.$root.save(function () {
-        next(); //跳转到其他页面前，要先把当前的文章保存一下；
-        self.$root.aIndex = -1;
-      });
+      //跳转到其他页面前，要先把当前的文章保存一下；
+      this.$root.save();
+      next();
+      this.$root.aIndex = -1;
     },
     mounted() {
       this.getArticle(this.$route.params.id);
     },
     methods: {
-      publishBtnClick(){
+      publishBtnClick() {
         this.$root.save();
         this.showSites = true;
       },
@@ -78,7 +76,7 @@
           return item.id == id;
         });
         var self = this;
-        this.$nextTick(function () { 
+        this.$nextTick(function () {
           window.document.getElementById("articleTitleInput").focus();
           window.editorContentReady(self.article.id);
         })
@@ -89,7 +87,7 @@
         }, 80);
       },
       savekeyUp(e) {
-        self.$root.saveUAT("a");
+        this.$root.save();
       },
       titleChange() {
         this.$root.u.tabs[this.$root.u.tabIndex].text = this.article.title;
