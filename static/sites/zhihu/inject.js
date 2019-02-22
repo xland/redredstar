@@ -86,7 +86,7 @@ let imgProcessor = {
         if (this.imgs.length > 0) {
             this.start();
         } else {
-            CKEDITOR.instances["body"].setData(this.doc.body.innerHTML);
+            this.end();
         }
     }
 }

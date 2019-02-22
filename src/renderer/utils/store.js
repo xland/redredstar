@@ -1,7 +1,9 @@
 const electron = require('electron');
 var fs = require('fs');
 var path = require('path');
-
+var readFileConfig = {
+    encoding: 'utf8'
+}
 //数据存储目录，如果不存在就创建
 var basePath = path.join(electron.remote.app.getPath('userData'), "/xxm");
 if (!fs.existsSync(basePath)) {
@@ -32,6 +34,7 @@ var initData = function (name) {
 };
 const store = {
     basePath,
+    readFileConfig,
     u: initData("u"),
     a: initData("a"),
     t: initData("t"),

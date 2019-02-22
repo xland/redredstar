@@ -50,7 +50,6 @@ ipcMain.on('contentRefreshMain', (event, message) => {
   mainWindow.webContents.send('contentRefreshRenderer', message);
 });
 ipcMain.on('articleRefreshMain', (event, message) => {
-  console.log(message);
   mainWindow.webContents.send('articleRefreshRenderer', message);
 });
 
