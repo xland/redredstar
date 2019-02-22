@@ -43,14 +43,7 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        CKEDITOR.instances["body"].setData('');
-        var win = remote.BrowserWindow.fromId(this.winId);
-        win.focus();
-        setTimeout(function () {
-            CKEDITOR.instances["body"].focus();
-            clipboard.writeHTML(this.doc.body.innerHTML);
-            win.webContents.paste();
-        }.bind(this), 800);
+        CKEDITOR.instances["body"].setData(this.doc.body.innerHTML);
     },
     start() {
         this.imgs.forEach(v => {
@@ -95,12 +88,6 @@ ipcRenderer.on('message', (event, article) => {
     if(url.includes("/home/login")){
         return;
     }
-    if(article.type == "new"){
-        window.location.href = "https://my.oschina.net/u/" + userId + "/blog/write";
-        return;
-    }else if(!url.includes('/blog/write')){
-        window.location.href = article.url;
-    }
     if ($("h2.header").text().trim().includes(article.title)) {
         var id = $(".article-like")[0].dataset.id;
         ipcRenderer.send('articleRefreshMain', {
@@ -108,6 +95,15 @@ ipcRenderer.on('message', (event, article) => {
             url: 'https://my.oschina.net/u/' + userId + '/blog/write/' + id
         });
         return;
+    }
+    if(!url.includes('/blog/write')){
+        if(article.type == "new"){
+            window.location.href = "https://my.oschina.net/u/" + userId + "/blog/write";
+            return;
+        }else{
+            window.location.href = article.url;
+            return
+        }
     }
     if ($("input[name='title']")[0]) {
         article.userId = userId;
