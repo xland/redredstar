@@ -3,9 +3,9 @@
         <div class="tarSiteMaskClose" @click="$parent.showSites = false">
             <i class="iconfont icon-guanbi" style="font-size: 17px !important;"></i>
         </div>
-        <div class="z1">
+        <div @click='$parent.showSites = false' class="z1">
             <div v-show="!initWebview" class="tarSiteContainer">
-                <div @click="publish(item)" :class="['tarSiteItem',item.ready?'':'notReady']" v-for="(item,index) in sites">
+                <div @click.stop="publish(item)" :class="['tarSiteItem',item.ready?'':'notReady']" v-for="(item,index) in sites">
                     <div class="tarSiteIcon">
                         <img :src="'./static/sites/'+item.id+'/logo.png'" />
                     </div>
