@@ -1,4 +1,7 @@
 import { app, BrowserWindow,ipcMain } from 'electron'
+import { ebtMain } from 'electron-baidu-tongji'
+ebtMain(ipcMain)
+
 const curVersion = require('../../package.json').version;
 
 let winURL = ""

@@ -11,9 +11,7 @@
   import tabbar from "./components/tabbar";
   import bottombar from "./components/bottombar";
   import editor from "./components/editor";
-  const {
-        ipcRenderer,remote
-    } = require('electron');
+  const { ipcRenderer,remote } = require('electron');
   export default {
     components: {
       tabbar,
