@@ -78,19 +78,26 @@ ipcRenderer.on('message', (event, article) => {
     window.onbeforeunload = null;
     var url = window.location.href;
     var userId = $("#headerNavMenu").find(".osc-avatar").attr("data-user-id");
+    //如果没登录，那么就去登录
     if (!url.includes('/blog/write') && !userId && !url.includes("/home/login")) {
         window.location.href = 'https://www.oschina.net/home/login';
         return;
     }
+    //如果现在在登录页面，就不用跳转了
     if (url.includes("/home/login")) {
         return;
     }
     if ($("h2.header").text().trim().includes(article.title)) {
-        var id = $(".article-like")[0].dataset.id;
+        //todo: hook click
+        let id = $(".article-like")[0].dataset.id;
+        let editUrl = 'https://my.oschina.net/u/' + userId + '/blog/write/' + id;
+        let showUrl = 'https://my.oschina.net/u/' + userId + '/blog/' + id;
         ipcRenderer.send('articleRefreshMain', {
             siteId: 'oschina',
-            url: 'https://my.oschina.net/u/' + userId + '/blog/write/' + id
+            url: editUrl
         });
+        remote.shell.openExternal(showUrl);
+        remote.getCurrentWindow().close();
         return;
     }
     if (!url.includes('/blog/write')) {
