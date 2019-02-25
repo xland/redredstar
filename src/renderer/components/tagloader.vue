@@ -10,7 +10,7 @@
             </div>
         </div>
         <input autocomplete="off" @blur="tagInputBlur" @focus="tagInputFocus" v-model="tagInputText" type="text" id="tagInputBox"
-            placeholder="请输入知识的标签，Enter键保存" @keyup="tagInput($event)" class="textInput" />
+            placeholder="请输入知识的标签，Enter键创建" @keyup="tagInput($event)" class="textInput" />
     </div>
 </template>
 <script>

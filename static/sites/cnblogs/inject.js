@@ -13,26 +13,22 @@ let imgProcessor = {
     doc: null,
     guard: 0,
     uploadImg(dom, file) {
-        var formData = new FormData();
-        formData.append('imageFile', file);
-        formData.append("mimeType", file.type);
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", 'https://upload.cnblogs.com/imageuploader/CorsUpload', true);
-        xhr.withCredentials = true;
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 304)) {
-                var imgObj = JSON.parse(xhr.responseText);
-                dom.dataset[this.siteId] = imgObj.message;
-                this.guard -= 1;
-                if (this.guard < 1) {
-                    ipcRenderer.send('contentRefreshMain', {
-                        content: this.doc.body.innerHTML
-                    });
-                    this.end();
-                }
+        let fd = new FormData();
+        fd.append('imageFile', file);
+        fd.append("mimeType", file.type);
+        let url = 'https://upload.cnblogs.com/imageuploader/CorsUpload';
+        base.post(url, fd, (r) => {
+            var imgObj = JSON.parse(r);
+            dom.dataset[this.siteId] = imgObj.message;
+            this.guard -= 1;
+            if (this.guard < 1) {
+                var html = this.doc.body.innerHTML;
+                ipcRenderer.send('contentRefreshMain', {
+                    content: html
+                });
+                this.end();
             }
-        };
-        xhr.send(formData);
+        });
     },
     end() {
         this.imgs.forEach(v => {
@@ -47,7 +43,7 @@ let imgProcessor = {
         this.imgs.forEach(v => {
             if (!v.dataset[this.siteId]) {
                 this.guard += 1;
-                var pathIndex = remote.process.platform == "win32"?8:7
+                var pathIndex = remote.process.platform == "win32" ? 8 : 7
                 var filePath = decodeURI(v.src).substr(pathIndex);
                 var extname = path.extname(filePath).substr(1);
                 var buffer = fs.readFileSync(filePath);
@@ -80,7 +76,7 @@ ipcRenderer.on('message', (event, article) => {
     if (window.location.href.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
         var url = document.getElementById("TipsPanel_LinkEdit").href
         ipcRenderer.send('articleRefreshMain', {
-            siteId:'cnblogs',
+            siteId: 'cnblogs',
             url: url
         });
         alert("发布成功!");

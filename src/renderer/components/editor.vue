@@ -8,6 +8,10 @@
     //todo:公式插件base64 to file
     var fs = require('fs');
     var path = require('path');
+    var http = require('http');
+    var https = require('https');
+    var request = require('request');
+    var url = require("url");
     const {
         ipcRenderer
     } = require('electron');
@@ -86,10 +90,27 @@
                     records.forEach((item, index) => {
                         if (item.removedNodes.length > 0 && item.removedNodes[0].tagName ==
                             "IMG") {
-                            var path = decodeURI(item.removedNodes[0].src.substr(7));
-                            fs.unlink(path, err => {
+                            let filePath = decodeURI(item.removedNodes[0].src.substr(7));
+                            fs.unlink(filePath, err => {
                                 if (err) console.log(err);
                             });
+                        }
+                        if (item.addedNodes.length > 0 && item.addedNodes[0].tagName ==
+                            "IMG" && !item.addedNodes[0].src.startsWith("file")) {
+                            let dom = item.addedNodes[0];
+                            let basePath = path.join(self.$root.basePath, self.article.id.toString());
+                            let id = "img" + new Date().getTime();
+                            let parsed = url.parse(dom.src);
+                            var ext = dom.src.includes("webp") ? ".webp" : path.extname(
+                                parsed.pathname)
+                            let name = path.join(basePath, id + ext);
+                            request(dom.src)
+                                .pipe(fs.createWriteStream(name))
+                                .on('finish', function () {
+                                    editorDocument.getElementById(id).src = dom.src;
+                                });
+                            dom.src = 'file://' + name;
+                            dom.id = id;
                         }
                     });
                 });
@@ -103,7 +124,7 @@
                 window.editorImgInsert = function (file) {
                     var basePath = path.join(self.$root.basePath, self.article.id.toString());
                     var id = "img" + new Date().getTime();
-                    var name = path.join(basePath, id + '.' + file.name.split('.').last());
+                    var name = path.join(basePath, id + path.extname(file.name));
                     var fr = new FileReader();
                     fr.onload = () => {
                         if (fr.readyState == 2) {

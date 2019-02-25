@@ -14,36 +14,30 @@ let imgProcessor = {
     guard: 0,
     title: '',
     uploadImg(dom, file) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", 'https://www.jianshu.com/upload_images/token.json?filename=' + file.name, true);
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 304)) {
-                var r = JSON.parse(xhr.responseText);
-                var formData = new FormData();
-                formData.append("token", r.token);
-                formData.append("key", r.key);
-                formData.append("file", file);
-                formData.append("x:protocol", 'https');
-                var xhr2 = new XMLHttpRequest();
-                xhr2.open("POST", 'https://upload.qiniup.com/', true);
-                xhr2.setRequestHeader("Cache-Control", "no-cache");
-                xhr2.onreadystatechange = () => {
-                    if (xhr2.readyState == 4 && (xhr2.status == 200 || xhr2.status == 304)) {
-                        var imgObj = JSON.parse(xhr2.responseText);
-                        dom.dataset[this.siteId] = imgObj.url;
-                        this.guard -= 1;
-                        if (this.guard < 1) {
-                            ipcRenderer.send('contentRefreshMain', {
-                                content: this.doc.body.innerHTML
-                            });
-                            this.end();
-                        }
-                    }
-                };
-                xhr2.send(formData);
-            }
-        }
-        xhr.send();
+        let getUrl = 'https://www.jianshu.com/upload_images/token.json?filename=' + file.name;
+        let postUrl = 'https://upload.qiniup.com/';
+        base.get(getUrl, (rt) => {
+            let r = JSON.parse(rt);
+            let fd = new FormData();
+            fd.append("token", r.token);
+            fd.append("key", r.key);
+            fd.append("file", file);
+            fd.append("x:protocol", 'https');
+            base.post(postUrl, fd, (rt2) => {
+                var imgObj = JSON.parse(rt2);
+                dom.dataset[this.siteId] = imgObj.url;
+                this.guard -= 1;
+                if (this.guard < 1) {
+                    var html = this.doc.body.innerHTML;
+                    ipcRenderer.send('contentRefreshMain', {
+                        content: html
+                    });
+                    this.end();
+                }
+            }, {
+                'Cache-Control': 'no-cache'
+            },false)
+        });
     },
     end() {
         this.imgs.forEach(v => {
@@ -69,9 +63,9 @@ let imgProcessor = {
     },
     start() {
         this.imgs.forEach(v => {
-            if (!v.dataset[this.siteId]) {
+            if (!v.dataset[this.siteId] && v.src.startsWith("file")) {
                 this.guard += 1;
-                var pathIndex = remote.process.platform == "win32"?8:7
+                var pathIndex = remote.process.platform == "win32" ? 8 : 7
                 var filePath = decodeURI(v.src).substr(pathIndex);
                 var extname = path.extname(filePath).substr(1);
                 var buffer = fs.readFileSync(filePath);
@@ -126,10 +120,10 @@ var waitForSave = function () {
         var str = document.getElementsByClassName('_3-3KB')[0].innerHTML;
         if (str == "已保存") {
             ipcRenderer.send('articleRefreshMain', {
-                siteId:"jianshu",
+                siteId: "jianshu",
                 url: window.location.href
             });
-        }else{
+        } else {
             waitForSave();
         }
     }, 600);
@@ -150,7 +144,7 @@ ipcRenderer.on('message', (event, article) => {
             imgProcessor.init(article);
             waitForSave();
         });
-    }else{
+    } else {
         waitForEdit((titleTb) => {
             imgProcessor.init(article);
         });

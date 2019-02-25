@@ -12,29 +12,25 @@ let imgProcessor = {
     siteId: null,
     doc: null,
     guard: 0,
-    userId:'',
+    userId: '',
     uploadImg(dom, file) {
-        var token = CKEDITOR.tools.getCsrfToken();
-        var formData = new FormData();
-        formData.append('upload', file);
-        formData.append("ckCsrfToken", token);
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", 'https://my.oschina.net/u/'+this.userId+'/space/ckeditor_dialog_img_upload', true);
-        xhr.withCredentials = true;
-        xhr.onreadystatechange = () => {
-            if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 304)) {
-                var imgObj = JSON.parse(xhr.responseText);
-                dom.dataset[this.siteId] = imgObj.url;
-                this.guard -= 1;
-                if (this.guard < 1) {
-                    ipcRenderer.send('contentRefreshMain', {
-                        content: this.doc.body.innerHTML
-                    });
-                    this.end();
-                }
+        let token = CKEDITOR.tools.getCsrfToken();
+        let fd = new FormData();
+        fd.append('upload', file);
+        fd.append("ckCsrfToken", token);
+        let url = 'https://my.oschina.net/u/' + this.userId + '/space/ckeditor_dialog_img_upload';
+        base.post(url, fd, (r) => {
+            var imgObj = JSON.parse(r);
+            dom.dataset[this.siteId] = imgObj.url;
+            this.guard -= 1;
+            if (this.guard < 1) {
+                var html = this.doc.body.innerHTML;
+                ipcRenderer.send('contentRefreshMain', {
+                    content: html
+                });
+                this.end();
             }
-        };
-        xhr.send(formData);
+        })
     },
     end() {
         this.imgs.forEach(v => {
@@ -49,7 +45,7 @@ let imgProcessor = {
         this.imgs.forEach(v => {
             if (!v.dataset[this.siteId]) {
                 this.guard += 1;
-                var pathIndex = remote.process.platform == "win32"?8:7
+                var pathIndex = remote.process.platform == "win32" ? 8 : 7
                 var filePath = decodeURI(v.src).substr(pathIndex);
                 var extname = path.extname(filePath).substr(1);
                 var buffer = fs.readFileSync(filePath);
@@ -86,7 +82,7 @@ ipcRenderer.on('message', (event, article) => {
         window.location.href = 'https://www.oschina.net/home/login';
         return;
     }
-    if(url.includes("/home/login")){
+    if (url.includes("/home/login")) {
         return;
     }
     if ($("h2.header").text().trim().includes(article.title)) {
@@ -97,11 +93,11 @@ ipcRenderer.on('message', (event, article) => {
         });
         return;
     }
-    if(!url.includes('/blog/write')){
-        if(article.type == "new"){
+    if (!url.includes('/blog/write')) {
+        if (article.type == "new") {
             window.location.href = "https://my.oschina.net/u/" + userId + "/blog/write";
             return;
-        }else{
+        } else {
             window.location.href = article.url;
             return
         }
