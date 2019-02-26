@@ -36,7 +36,7 @@ let imgProcessor = {
                 }
             }, {
                 'Cache-Control': 'no-cache'
-            },false)
+            }, false)
         });
     },
     end() {
@@ -80,6 +80,11 @@ let imgProcessor = {
         }
     },
     init(article) {
+        var contentDom = document.getElementsByClassName("kalamu-area")[0];
+        if (!contentDom) {
+            alert("抱歉：目前还不支持简书的markdown编辑器!")
+            return;
+        }
         var parser = new DOMParser();
         this.doc = parser.parseFromString(article.content, "text/html");
         this.imgs = this.doc.querySelectorAll('img');
