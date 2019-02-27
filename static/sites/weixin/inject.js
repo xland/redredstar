@@ -37,7 +37,7 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        blogEditor.setContent(this.doc.body.innerHTML);
+        UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
     },
     start() {
         this.imgs.forEach(v => {
@@ -73,21 +73,58 @@ let imgProcessor = {
 
 ipcRenderer.on('message', (event, article) => {
     window.onbeforeunload = null;
-    if (window.location.href.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
-        var url = document.getElementById("TipsPanel_LinkEdit").href
-        ipcRenderer.send('articleRefreshMain', {
-            siteId: 'cnblogs',
-            url: url
-        });
-        alert("发布成功!");
-        remote.shell.openExternal(document.getElementById("TipsPanel_LinkViewPost").href);
-        remote.getCurrentWindow().close();
+    let url = window.location.href;
+    let token = base.getUrlParam(url, "token");
+    let type = base.getUrlParam(url, "type");
+    if (token && !type) {
+        //todo isnew
+        window.location.href = "https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit_v2&action=edit&isNew=1&type=10&lang=zh_CN&token=" + token;
+        return;
     }
-    //编辑文章的逻辑
-    var titleTb = document.getElementById("Editor_Edit_txbTitle");
-    if (!titleTb) {
-        return; //没有标题和内容区域，就认定不是文章编辑页面
+    if (token && type == "10") {
+        setTimeout(function () {
+            document.getElementById("title").value = article.title;
+            imgProcessor.init(article);
+        }, 860);
     }
-    titleTb.value = article.title;
-    imgProcessor.init(article);
+    return; 
+    ///https://mp.weixin.qq.com/cgi-bin/filetransfer?action=upload_material&f=json&writetype=doublewrite&groupid=3&ticket_id=gh_60653c52cd64&ticket=2d6e13e4acdb3bfe4099d7ae504a61c976686774&svr_time=1551272627&token=1429231721&lang=zh_CN
+// query string
+    // action: upload_material
+    // f: json
+    // writetype: doublewrite
+    // groupid: 3   文章配图
+    // ticket_id: gh_60653c52cd64  cookie
+    // ticket: 2d6e13e4acdb3bfe4099d7ae504a61c976686774  //wx.commonData.data.ticket
+    // svr_time: 1551268997  //wx.cgiData.svr_time
+    // token: 1429231721  //wx.commonData.data.param: "&token=1429231721&lang=zh_CN"
+    // lang: zh_CN     
+    // seq: 1
+//form data
+    // id: WU_FILE_0  //0,1,2,3,4...
+    // name: 1550411785681.jpg
+    // type: image/jpeg
+    // lastModifiedDate: Sun Feb 17 2019 21:56:29 GMT 0800 (中国标准时间)
+    // size: 277022
+    // file: (binary)
+
+
+    //https://mp.weixin.qq.com/cgi-bin/filetransfer?action=upload_material&f=json&writetype=doublewrite&groupid=3&ticket_id=gh_60653c52cd64&ticket=2d6e13e4acdb3bfe4099d7ae504a61c976686774&svr_time=1551268997&token=1429231721&lang=zh_CN&seq=1
+    // if (!token && url != 'https://mp.weixin.qq.com/') {
+    //     var url = document.getElementById("TipsPanel_LinkEdit").href
+    //     ipcRenderer.send('articleRefreshMain', {
+    //         siteId: 'cnblogs',
+    //         url: url
+    //     });
+    //     alert("发布成功!");
+    //     remote.shell.openExternal(document.getElementById("TipsPanel_LinkViewPost").href);
+    //     remote.getCurrentWindow().close();
+    // }
+    // //编辑文章的逻辑
+    // var titleTb = document.getElementById("Editor_Edit_txbTitle");
+    // if (!titleTb) {
+    //     return; //没有标题和内容区域，就认定不是文章编辑页面
+    // }
+    // titleTb.value = article.title;
+    // imgProcessor.init(article);
 })

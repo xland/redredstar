@@ -5,7 +5,7 @@ module.exports = {
         "png": "image/png",
         "gif": "image/gif",
         "bmp": 'image/bmp',
-        "webp":'image/webp'
+        "webp": 'image/webp'
     },
     ajaxInjector(cb) {
         var open = window.XMLHttpRequest.prototype.open;
@@ -19,7 +19,7 @@ module.exports = {
             open.apply(this, arguments);
         }
     },
-    post(url,form,cb,headers = {},withCredentials=true){
+    post(url, form, cb, headers = {}, withCredentials = true) {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
         xhr.withCredentials = withCredentials;
@@ -27,32 +27,42 @@ module.exports = {
             xhr.setRequestHeader(key, headers[key]);
         });
         xhr.onreadystatechange = () => {
-            if(xhr.readyState == 4){
-                if(xhr.status == 200 || xhr.status == 304){
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200 || xhr.status == 304) {
                     cb(xhr.responseText)
-                }else{
+                } else {
                     alert("错误：可能的原因是目标网站不支持您上传的图片");
                 }
-            }else{
+            } else {
                 //alert("错误：可能的原因是目标网站不支持您上传的图片");
             }
         }
         xhr.send(form);
     },
-    get(url,cb){
+    get(url, cb) {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);
         xhr.onreadystatechange = () => {
-            if(xhr.readyState == 4){
-                if(xhr.status == 200 || xhr.status == 304){
+            if (xhr.readyState == 4) {
+                if (xhr.status == 200 || xhr.status == 304) {
                     cb(xhr.responseText)
-                }else{
+                } else {
                     alert("错误：可能的原因是目标网站不支持您上传的图片");
                 }
-            }else{
+            } else {
                 //alert("错误：可能的原因是目标网站不支持您上传的图片");
             }
         }
         xhr.send();
+    },
+    getUrlParam(url,name) {
+        var paramStr = url.split('?')[1];
+        if(!paramStr){
+            return null;
+        }
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = paramStr.match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
     }
 }
