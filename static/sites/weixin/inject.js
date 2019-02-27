@@ -13,15 +13,13 @@ let imgProcessor = {
     doc: null,
     guard: 0,
     uploadImg(dom, file) {
-        let token = CKEDITOR.tools.getCsrfToken();
         let fd = new FormData();
-        fd.append('upload', file);
-        fd.append("ckCsrfToken", token);
-        let url = CKEDITOR.instances["body"].config.uploadUrl;
-        debugger;
+        fd.append('imageFile', file);
+        fd.append("mimeType", file.type);
+        let url = 'https://upload.cnblogs.com/imageuploader/CorsUpload';
         base.post(url, fd, (r) => {
             var imgObj = JSON.parse(r);
-            dom.dataset[this.siteId] = imgObj.url;
+            dom.dataset[this.siteId] = imgObj.message;
             this.guard -= 1;
             if (this.guard < 1) {
                 var html = this.doc.body.innerHTML;
@@ -30,7 +28,7 @@ let imgProcessor = {
                 });
                 this.end();
             }
-        })
+        });
     },
     end() {
         this.imgs.forEach(v => {
@@ -39,7 +37,7 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        CKEDITOR.instances["body"].setData(this.doc.body.innerHTML);
+        blogEditor.setContent(this.doc.body.innerHTML);
     },
     start() {
         this.imgs.forEach(v => {
@@ -68,58 +66,28 @@ let imgProcessor = {
         if (this.imgs.length > 0) {
             this.start();
         } else {
-            this.end();
+            blogEditor.setContent(this.doc.body.innerHTML);
         }
     }
 }
 
 ipcRenderer.on('message', (event, article) => {
     window.onbeforeunload = null;
-    var url = window.location.href;
-    var userId = $(".go-inbox").find("a").attr("href");
-    if(userId){
-        userId = userId.replace('https://my.oschina.net/u/','')
-        userId = userId.substr(0,userId.indexOf('/'));
-    }
-    //如果没登录，那么就去登录
-    if (!url.includes('/blog/write') && !userId && !url.includes("/home/login")) {
-        window.location.href = 'https://www.oschina.net/home/login';
-        return;
-    }
-    //如果现在在登录页面，就不用跳转了
-    if (url.includes("/home/login")) {
-        return;
-    }
-    if ($("h2.header").text().trim().includes(article.title)) {
-        let id = $(".article-like")[0].dataset.id;
-        let editUrl = 'https://my.oschina.net/u/' + userId + '/blog/write/' + id;
-        let showUrl = 'https://my.oschina.net/u/' + userId + '/blog/' + id;
+    if (window.location.href.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
+        var url = document.getElementById("TipsPanel_LinkEdit").href
         ipcRenderer.send('articleRefreshMain', {
-            siteId: 'oschina',
-            url: editUrl
+            siteId: 'cnblogs',
+            url: url
         });
-        remote.shell.openExternal(showUrl);
+        alert("发布成功!");
+        remote.shell.openExternal(document.getElementById("TipsPanel_LinkViewPost").href);
         remote.getCurrentWindow().close();
-        return;
     }
-    if (!url.includes('/blog/write')) {
-        if (article.type == "new") {
-            window.location.href = "https://my.oschina.net/u/" + userId + "/blog/write";
-            return;
-        } else {
-            window.location.href = article.url;
-            return
-        }
+    //编辑文章的逻辑
+    var titleTb = document.getElementById("Editor_Edit_txbTitle");
+    if (!titleTb) {
+        return; //没有标题和内容区域，就认定不是文章编辑页面
     }
-    if ($("input[name='title']")[0]) {
-        if(!CKEDITOR.instances["body"]){
-            alert("抱歉：目前暂不支持osc的markdown编辑器");
-            return;
-        }
-        setTimeout(function(){
-            imgProcessor.init(article);
-            $("input[name='title']").val(article.title);
-        },860);
-        return;
-    }
+    titleTb.value = article.title;
+    imgProcessor.init(article);
 })

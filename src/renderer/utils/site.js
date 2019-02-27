@@ -12,18 +12,20 @@ export default [{
     ready: true,
     id: 'oschina',
     title: '开源中国',
-    url:'https://www.oschina.net/blog'
+    url: 'https://www.oschina.net/blog'
 }, {
-    ready:'true',
+    ready: 'true',
     id: 'zhihu',
     title: '知乎',
-    url:'https://zhuanlan.zhihu.com/write'
-},{
-    id: 'baijiahao',
-    title: '百家号',
+    url: 'https://zhuanlan.zhihu.com/write'
 }, {
+    ready: 'false',
     id: 'weixin',
     title: '微信公众号',
+    url:'https://mp.weixin.qq.com/'
+}, {
+    id: 'baijiahao',
+    title: '百家号',
 }, {
     id: 'csdn',
     title: 'CSDN',
