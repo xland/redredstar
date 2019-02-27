@@ -39,7 +39,12 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        CKEDITOR.instances["body"].setData(this.doc.body.innerHTML);
+        // var editorBody = document.getElementsByClassName("cke_wysiwyg_frame")[0].contentWindow.document.body;
+        // editorBody.innerHTML = this.doc.body.innerHTML
+        let html = this.doc.body.innerHTML;
+        setTimeout(function () {
+            CKEDITOR.instances["body"].setData(html);
+        }, 860);
     },
     start() {
         this.imgs.forEach(v => {
@@ -110,6 +115,10 @@ ipcRenderer.on('message', (event, article) => {
         }
     }
     if ($("input[name='title']")[0]) {
+        if(!CKEDITOR.instances["body"]){
+            alert("抱歉：目前暂不支持osc的markdown编辑器");
+            return;
+        }
         article.userId = userId;
         imgProcessor.init(article);
         $("input[name='title']").val(article.title);
