@@ -30,7 +30,16 @@ var initData = function (name) {
     var dataStr = fs.readFileSync(path.join(basePath, name + ".data"), {
         encoding: 'utf8'
     });
-    return JSON.parse(dataStr);
+    let result = JSON.parse(dataStr);
+    //todo: bug fix for compatible
+    if(name == "a"){
+        result.forEach(item=>{
+            if(!item.update){
+                item.update = new Date().getTime();
+            }
+        })
+    }
+    return result;
 };
 const store = {
     basePath,
@@ -54,6 +63,8 @@ const store = {
     },
     saveContent() {
         this.needSave.c = false;
+        this.a[this.aIndex].update = new Date().getTime();
+        this.saveOneData("a");
         var cPath = path.join(this.basePath, this.a[this.aIndex].id + "/a.data");
         var str = window.UE.instants.ueditorInstant0.getContent();
         fs.writeFileSync(cPath, str, this.readFileConfig);

@@ -4,7 +4,7 @@
             <i class="iconfont icon-shanchu"></i>
         </div>
         <div class="timeBox" v-show="$parent.hoverIndex != index">
-            {{timeFormat(item.id)}}
+            {{timeFormat(item.update)}}
         </div>
         <div style="margin-right: 80px">
             {{item.title?item.title:"[未命名]"}}
