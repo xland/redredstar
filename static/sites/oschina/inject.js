@@ -78,8 +78,8 @@ ipcRenderer.on('message', (event, article) => {
     var url = window.location.href;
     var userId = $(".go-inbox").find("a").attr("href");
     if(userId){
-        userId = userId.replace('https://my.oschina.net/u/','')
-        userId = userId.substr(0,userId.indexOf('/'));
+        userId = userId.replace("/admin/inbox",'');
+        userId = userId.substr(userId.lastIndexOf('/')+1);
     }
     //如果没登录，那么就去登录
     if (!url.includes('/blog/write') && !userId && !url.includes("/home/login")) {
