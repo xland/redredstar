@@ -31,7 +31,7 @@
                 </div>
                 <div :class="searchFocus?'searchContainerFocus':'searchContainer'">
                     <div class="searchInput" style="background: transparent;">
-                        <input autocomplete="off" @keyup.enter="search" v-model="searchText" placeholder="请输入搜索内容"
+                        <input autocomplete="off" @keyup="search" v-model="searchText" placeholder="请输入搜索内容"
                             @focus="searchFocus = true" @blur="searchFocus = false" class="textInput" type="text" />
                     </div>
                     <div @click="search" class="searchBtn">
