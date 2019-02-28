@@ -1,5 +1,13 @@
-import { app, BrowserWindow,ipcMain } from 'electron'
-import { ebtMain } from 'electron-baidu-tongji'
+import {
+  app,
+  BrowserWindow,
+  ipcMain,
+  Menu
+} from 'electron'
+import {
+  ebtMain
+} from 'electron-baidu-tongji'
+import menuData from './menu.js';
 ebtMain(ipcMain)
 
 const curVersion = require('../../package.json').version;
@@ -9,31 +17,33 @@ let mainWindow
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
   winURL = `file://${__dirname}/index.html`;
-}else{
-  app.getVersion = ()=> curVersion;
+} else {
+  app.getVersion = () => curVersion;
   winURL = `http://localhost:9080`;
 }
 
-function createWindow () {
+function createWindow() {
   mainWindow = new BrowserWindow({
     "width": 1000,
     "height": 600,
     "minWidth": 1000,
     "minHeight": 600,
-    "autoHideMenuBar":false,
+    "autoHideMenuBar": false,
     "webPreferences": {
       "webSecurity": false
     }
   })
-  mainWindow.setMenu(null);
   mainWindow.loadURL(winURL);
   mainWindow.on('closed', () => {
     mainWindow = null
   })
   mainWindow.on('close', (event) => {
     event.preventDefault();
-    mainWindow.webContents.send('saveArticleRenderer',{});
+    mainWindow.webContents.send('saveArticleRenderer', {});
   })
+  if (process.platform == 'darwin') {
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menuData));
+  }
 }
 
 app.on('ready', createWindow)
