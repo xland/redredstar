@@ -18,7 +18,6 @@ let imgProcessor = {
         fd.append('upload', file);
         fd.append("ckCsrfToken", token);
         let url = CKEDITOR.instances["body"].config.uploadUrl;
-        debugger;
         base.post(url, fd, (r) => {
             var imgObj = JSON.parse(r);
             dom.dataset[this.siteId] = imgObj.url;
@@ -75,11 +74,12 @@ let imgProcessor = {
 
 ipcRenderer.on('message', (event, article) => {
     window.onbeforeunload = null;
-    var url = window.location.href;
-    var userId = $(".go-inbox").find("a").attr("href");
+    let url = window.location.href;
+    let userId = $(".go-inbox").find("a").attr("href");
+    let baseUrl = "";
     if(userId){
-        userId = userId.replace("/admin/inbox",'');
-        userId = userId.substr(userId.lastIndexOf('/')+1);
+        baseUrl = userId.replace("/admin/inbox",'');
+        userId = baseUrl.substr(baseUrl.lastIndexOf('/')+1);
     }
     //如果没登录，那么就去登录
     if (!url.includes('/blog/write') && !userId && !url.includes("/home/login")) {
@@ -92,8 +92,8 @@ ipcRenderer.on('message', (event, article) => {
     }
     if ($("h2.header").text().trim().includes(article.title)) {
         let id = $(".article-like")[0].dataset.id;
-        let editUrl = 'https://my.oschina.net/u/' + userId + '/blog/write/' + id;
-        let showUrl = 'https://my.oschina.net/u/' + userId + '/blog/' + id;
+        let editUrl = baseUrl + '/blog/write/' + id;
+        let showUrl = baseUrl + '/blog/' + id;
         ipcRenderer.send('articleRefreshMain', {
             siteId: 'oschina',
             url: editUrl
@@ -104,7 +104,7 @@ ipcRenderer.on('message', (event, article) => {
     }
     if (!url.includes('/blog/write')) {
         if (article.type == "new") {
-            window.location.href = "https://my.oschina.net/u/" + userId + "/blog/write";
+            window.location.href = baseUrl + "/blog/write";
         } else {
             window.location.href = article.url;
         }
