@@ -118,7 +118,7 @@ ipcRenderer.on('message', (event, article) => {
         setTimeout(function(){
             imgProcessor.init(article);
             $("input[name='title']").val(article.title);
-        },860);
+        },980);
         return;
     }
 })

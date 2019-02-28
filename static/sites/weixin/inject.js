@@ -12,6 +12,7 @@ let imgProcessor = {
     siteId: null,
     doc: null,
     guard: 0,
+    title:'',
     getUploadUrl(cb) {
         let urlParams = {
             action: 'upload_material',
@@ -62,6 +63,7 @@ let imgProcessor = {
             })
         });
         UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
+        document.getElementById("title").value = this.title;
         base.ajaxInjector(obj => {
             if (obj && obj.appMsgId) {
                 let url = 'https://mp.weixin.qq.com/?appmsgid=' + obj.appMsgId;
@@ -96,6 +98,7 @@ let imgProcessor = {
         this.imgs = this.doc.querySelectorAll('img');
         this.siteId = article.siteId;
         this.winId = article.winId;
+        this.title = article.title;
         if (this.imgs.length > 0) {
             this.start();
         } else {
@@ -124,9 +127,8 @@ ipcRenderer.on('message', (event, article) => {
     if (token && type == "10") {
         setTimeout(function () {
             window.onbeforeunload = null;
-            document.getElementById("title").value = article.title;
             imgProcessor.init(article);
-        }, 860);
+        }, 980);
     }
     return;
 })
