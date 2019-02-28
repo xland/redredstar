@@ -6,7 +6,7 @@
 
 ## 下载地址
 
-* 当前版本：6.0.9
+* 当前版本：6.0.10
 * mac64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
 * win64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.exe
 * linux64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.AppImage
