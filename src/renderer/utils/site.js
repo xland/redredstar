@@ -19,10 +19,10 @@ export default [{
     title: '知乎',
     url: 'https://zhuanlan.zhihu.com/write'
 }, {
-    ready: 'false',
+    ready: 'true',
     id: 'weixin',
     title: '微信公众号',
-    url:'https://mp.weixin.qq.com/'
+    url:'https://mp.weixin.qq.com'
 }, {
     id: 'baijiahao',
     title: '百家号',

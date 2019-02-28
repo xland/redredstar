@@ -12,22 +12,46 @@ let imgProcessor = {
     siteId: null,
     doc: null,
     guard: 0,
+    getUploadUrl(cb) {
+        let urlParams = {
+            action: 'upload_material',
+            f: 'json',
+            writetype: 'doublewrite',
+            groupid: 3,
+            ticket_id: '',
+            ticket: wx.commonData.data.ticket,
+            svr_time: wx.cgiData.svr_time
+        }
+        let postUrl = 'https://mp.weixin.qq.com/cgi-bin/filetransfer?'
+        remote.session.defaultSession.cookies.get({}, (error, cookies) => {
+            urlParams.ticket_id = cookies.find(v => v.name == "ticket_id").value;
+            Object.keys(urlParams).forEach(key => {
+                postUrl += key + '=' + urlParams[key] + "&";
+            });
+            postUrl += wx.commonData.data.param.substr(1); //"&token=1429231721&lang=zh_CN"
+            cb(postUrl);
+        })
+    },
     uploadImg(dom, file) {
         let fd = new FormData();
-        fd.append('imageFile', file);
-        fd.append("mimeType", file.type);
-        let url = 'https://upload.cnblogs.com/imageuploader/CorsUpload';
-        base.post(url, fd, (r) => {
-            var imgObj = JSON.parse(r);
-            dom.dataset[this.siteId] = imgObj.message;
-            this.guard -= 1;
-            if (this.guard < 1) {
-                var html = this.doc.body.innerHTML;
-                ipcRenderer.send('contentRefreshMain', {
-                    content: html
-                });
-                this.end();
-            }
+        fd.append('id', 'WU_FILE_' + this.guard);
+        fd.append("type", file.type);
+        fd.append("lastModifiedDate", new Date());
+        fd.append("size", file.length);
+        fd.append("file", file);
+        this.getUploadUrl((url) => {
+            base.post(url, fd, (r) => {
+                var imgObj = JSON.parse(r);
+                dom.dataset[this.siteId] = imgObj.cdn_url;
+                this.guard -= 1;
+                if (this.guard < 1) {
+                    var html = this.doc.body.innerHTML;
+                    ipcRenderer.send('contentRefreshMain', {
+                        content: html
+                    });
+                    this.end();
+                }
+            });
         });
     },
     end() {
@@ -38,6 +62,15 @@ let imgProcessor = {
             })
         });
         UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
+        base.ajaxInjector(obj => {
+            if (obj && obj.appMsgId) {
+                let url = 'https://mp.weixin.qq.com/?appmsgid=' + obj.appMsgId;
+                ipcRenderer.send('articleRefreshMain', {
+                    siteId: 'weixin',
+                    url
+                });
+            }
+        })
     },
     start() {
         this.imgs.forEach(v => {
@@ -66,65 +99,34 @@ let imgProcessor = {
         if (this.imgs.length > 0) {
             this.start();
         } else {
-            blogEditor.setContent(this.doc.body.innerHTML);
+            this.end();
         }
     }
 }
 
 ipcRenderer.on('message', (event, article) => {
-    window.onbeforeunload = null;
     let url = window.location.href;
     let token = base.getUrlParam(url, "token");
     let type = base.getUrlParam(url, "type");
     if (token && !type) {
-        //todo isnew
-        window.location.href = "https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit_v2&action=edit&isNew=1&type=10&lang=zh_CN&token=" + token;
+        if(article.type == "new"){
+            window.location.href = "https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit_v2&action=edit&isNew=1&type=10&lang=zh_CN&token=" + token;
+        }else{
+            let appmsgid = base.getUrlParam(article.url,"appmsgid")
+            window.location.href = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=10&isMul=1&appmsgid=' + appmsgid +wx.commonData.data.param;
+        }
+        return;
+    }
+    if(token && !type && article.type == "edit"){
+        window.location.href = article.url + wx.commonData.data.param;
         return;
     }
     if (token && type == "10") {
         setTimeout(function () {
+            window.onbeforeunload = null;
             document.getElementById("title").value = article.title;
             imgProcessor.init(article);
         }, 860);
     }
-    return; 
-    ///https://mp.weixin.qq.com/cgi-bin/filetransfer?action=upload_material&f=json&writetype=doublewrite&groupid=3&ticket_id=gh_60653c52cd64&ticket=2d6e13e4acdb3bfe4099d7ae504a61c976686774&svr_time=1551272627&token=1429231721&lang=zh_CN
-// query string
-    // action: upload_material
-    // f: json
-    // writetype: doublewrite
-    // groupid: 3   文章配图
-    // ticket_id: gh_60653c52cd64  cookie
-    // ticket: 2d6e13e4acdb3bfe4099d7ae504a61c976686774  //wx.commonData.data.ticket
-    // svr_time: 1551268997  //wx.cgiData.svr_time
-    // token: 1429231721  //wx.commonData.data.param: "&token=1429231721&lang=zh_CN"
-    // lang: zh_CN     
-    // seq: 1
-//form data
-    // id: WU_FILE_0  //0,1,2,3,4...
-    // name: 1550411785681.jpg
-    // type: image/jpeg
-    // lastModifiedDate: Sun Feb 17 2019 21:56:29 GMT 0800 (中国标准时间)
-    // size: 277022
-    // file: (binary)
-
-
-    //https://mp.weixin.qq.com/cgi-bin/filetransfer?action=upload_material&f=json&writetype=doublewrite&groupid=3&ticket_id=gh_60653c52cd64&ticket=2d6e13e4acdb3bfe4099d7ae504a61c976686774&svr_time=1551268997&token=1429231721&lang=zh_CN&seq=1
-    // if (!token && url != 'https://mp.weixin.qq.com/') {
-    //     var url = document.getElementById("TipsPanel_LinkEdit").href
-    //     ipcRenderer.send('articleRefreshMain', {
-    //         siteId: 'cnblogs',
-    //         url: url
-    //     });
-    //     alert("发布成功!");
-    //     remote.shell.openExternal(document.getElementById("TipsPanel_LinkViewPost").href);
-    //     remote.getCurrentWindow().close();
-    // }
-    // //编辑文章的逻辑
-    // var titleTb = document.getElementById("Editor_Edit_txbTitle");
-    // if (!titleTb) {
-    //     return; //没有标题和内容区域，就认定不是文章编辑页面
-    // }
-    // titleTb.value = article.title;
-    // imgProcessor.init(article);
+    return;
 })

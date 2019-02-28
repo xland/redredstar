@@ -105,11 +105,10 @@ ipcRenderer.on('message', (event, article) => {
     if (!url.includes('/blog/write')) {
         if (article.type == "new") {
             window.location.href = "https://my.oschina.net/u/" + userId + "/blog/write";
-            return;
         } else {
             window.location.href = article.url;
-            return
         }
+        return;
     }
     if ($("input[name='title']")[0]) {
         if(!CKEDITOR.instances["body"]){

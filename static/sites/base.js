@@ -12,8 +12,12 @@ module.exports = {
         window.XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
             this.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
-                    var obj = JSON.parse(this.responseText);
-                    cb(obj);
+                    try {
+                        var obj = JSON.parse(this.responseText);
+                        cb(obj);
+                    } catch(error) {
+                        cb(null);
+                    }
                 }
             }, false);
             open.apply(this, arguments);
@@ -55,14 +59,19 @@ module.exports = {
         }
         xhr.send();
     },
-    getUrlParam(url,name) {
-        var paramStr = url.split('?')[1];
-        if(!paramStr){
+    getUrlParam(url, name) {
+        let paramStr = url.split('?')[1];
+        if (!paramStr) {
             return null;
         }
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
         var r = paramStr.match(reg);
         if (r != null) return unescape(r[2]);
         return null;
+    },
+    getCookieParam(cookie, name) {
+        let filter = new RegExp(name + "=([^;]*)(;|$)");
+        let matches = cookie.match(filter);
+        return matches ? matches[1] : null;
     }
 }
