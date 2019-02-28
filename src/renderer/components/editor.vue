@@ -32,7 +32,7 @@
                 var self = this;
                 editor.addListener("ready", () => {
                     self.hookImgInsert();
-                    self.hookImgRemove();
+                    self.hookImgInOut();
                     self.hookSaveKeyEvent();
                     self.hookContentChange();
                     self.hookContentRefresh();
@@ -82,7 +82,7 @@
                     }
                 }
             },
-            hookImgRemove() {
+            hookImgInOut() {
                 var self = this;
                 var editorDocument = document.getElementById("ueditor_0").contentWindow.document;
                 var observer = new MutationObserver(records => {
@@ -101,15 +101,25 @@
                             let basePath = path.join(self.$root.basePath, self.article.id.toString());
                             let id = "img" + new Date().getTime();
                             let parsed = url.parse(dom.src);
-                            var ext = dom.src.includes("webp") ? ".webp" : path.extname(
-                                parsed.pathname)
-                            let name = path.join(basePath, id + ext);
-                            request(dom.src)
-                                .pipe(fs.createWriteStream(name))
-                                .on('finish', function () {
+                            let fullName = ""
+                            if (parsed.protocol == 'data:') {
+                                let base64Data = dom.src.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+                                fullName = path.join(basePath, id + ".png")
+                                fs.writeFile(fullName, base64Data, 'base64',err=>{
                                     editorDocument.getElementById(id).src = dom.src;
                                 });
-                            dom.src = 'file://' + name;
+                            } else {
+                                var ext = dom.src.includes("webp") ? ".webp" : path.extname(
+                                    parsed.pathname)
+                                fullName = path.join(basePath, id + ext);
+                                request(dom.src)
+                                    .pipe(fs.createWriteStream(fullName))
+                                    .on('finish', function () {
+                                        editorDocument.getElementById(id).src = dom.src;
+                                    });
+                            }
+                            dom.src = 'file://' + fullName;
+                            dom.removeAttribute("_src");
                             dom.id = id;
                         }
                     });
