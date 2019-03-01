@@ -1,6 +1,7 @@
 const electron = require('electron');
 const fs = require('fs');
 const path = require('path');
+import './compatible'
 const readFileConfig = {
     encoding: 'utf8'
 }
@@ -27,9 +28,7 @@ if (!fs.existsSync(basePath)) {
 }
 
 var initData = function (name) {
-    var dataStr = fs.readFileSync(path.join(basePath, name + ".data"), {
-        encoding: 'utf8'
-    });
+    var dataStr = fs.readFileSync(path.join(basePath, name + ".data"), readFileConfig);
     let result = JSON.parse(dataStr);
     //todo: bug fix for compatible
     //老版本的一些问题

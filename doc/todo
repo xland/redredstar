@@ -12,3 +12,5 @@ QQ空间
 视频宣传材料
 mark-down
 mac win linux分开升级,分开版本号
+
+//npm install sqlite3 --build-from-source --runtime=electron --target=2.0.17 --dist-url=https://atom.io/download/electron
