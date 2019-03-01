@@ -41,9 +41,10 @@ var initData = function (name) {
         })
     }
     if(name == "u"){
-        if(!result.compressHeight){
-            result.compressHeight = 768;
-            result.compressWidth = 1024;
+        if(!result.imgSize){
+            result.imgSize = {};
+            result.imgSize.h = 800;
+            result.imgSize.w = 1300;
         }
     }
     return result;

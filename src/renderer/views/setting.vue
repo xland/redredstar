@@ -12,13 +12,13 @@
         <div class="formItem">
             <div>文章内图片长超过</div>
             <div>
-                <input @change="compressHeight" v-model="$root.u.compressHeight" type="number" />
+                <input @change="compressHeight" v-model="$root.u.imgSize.h" type="number" />
             </div>
             <div>
                 px，且宽超过
             </div>
             <div>
-                <input @change="compressWidth" v-model="$root.u.compressWidth" type="number" />
+                <input @change="compressWidth" v-model="$root.u.imgSize.w" type="number" />
             </div>
             <div>
                 px，将启用图片等比例压缩（任一值设置为-1将禁用图片压缩）
@@ -56,20 +56,20 @@
                 }
             },
             compressWidth() {
-                if (this.$root.u.compressWidth < 800 && this.$root.u.compressWidth > 0) {
-                    this.$root.u.compressWidth = 800;
+                if (this.$root.u.imgSize.w < 500 && this.$root.u.imgSize.w > 0) {
+                    this.$root.u.imgSize.w = 500;
                     swal({
                         icon: "error",
-                        text: "压缩最小宽度不能小于800",
+                        text: "最小宽度不能小于500",
                     });
                 }
             },
             compressHeight() {
-                if (this.$root.u.compressHeight < 600 && this.$root.u.compressHeight > 0) {
-                    this.$root.u.compressHeight = 600;
+                if (this.$root.u.imgSize.h < 300 && this.$root.u.imgSize.h > 0) {
+                    this.$root.u.imgSize.h = 300;
                     swal({
                         icon: "error",
-                        text: "压缩最小宽度不能小于800",
+                        text: "最小高度不能小于300",
                     });
                 }
             }

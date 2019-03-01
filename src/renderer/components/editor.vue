@@ -21,12 +21,18 @@
 
             }
         },
+        watch: {
+            "$root.aIndex": function (val) {
+                if(val>=0){
+                    imageProcessor.init(this.$root.basePath, this.$root.a[this.$root.aIndex].id.toString(), this.$root.u.imgSize);
+                }
+            }
+        },
         methods: {
             initEditor() {
                 var editor = window.UE.getEditor('editorContainer');
                 var self = this;
                 editor.addListener("ready", () => {
-                    imageProcessor.init(self.$root.basePath, self.article.id.toString());
                     self.hookPasteImg();
                     self.hookImgDomChange();
                     self.hookSaveKeyEvent();
@@ -89,7 +95,9 @@
                             let pathIndex = remote.process.platform == "win32" ? 8 : 7
                             let filePath = decodeURI(item.removedNodes[0].src).substr(pathIndex);
                             fs.unlink(filePath, err => {
-                                console.log(err)
+                                if(err){
+                                    err && console.log(err);
+                                }
                             });
                         }
                         if (item.addedNodes.length > 0 && item.addedNodes[0].tagName ==
