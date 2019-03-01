@@ -112,6 +112,7 @@
                 });
                 if (index >= 0) {
                     this.searchTags.splice(index, 1);
+                    this.search();
                     return;
                 }
                 if (this.searchTags.length >= 3) {
