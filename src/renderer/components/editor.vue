@@ -6,14 +6,13 @@
 <script>
     //todo:图片放大缩小需要按比例
     //todo:公式插件base64 to file
+    import imageProcessor from '../utils/image.js'
     var fs = require('fs');
     var path = require('path');
-    var http = require('http');
-    var https = require('https');
     var request = require('request');
     var url = require("url");
     const {
-        ipcRenderer
+        ipcRenderer,remote
     } = require('electron');
     export default {
         data() {
@@ -21,18 +20,14 @@
 
             }
         },
-        computed: {
-            article() {
-                return this.$root.a[this.$root.aIndex];
-            }
-        },
         methods: {
             initEditor() {
                 var editor = window.UE.getEditor('editorContainer');
                 var self = this;
                 editor.addListener("ready", () => {
-                    self.hookImgInsert();
-                    self.hookImgInOut();
+                    imageProcessor.init(self.$root.basePath, self.article.id.toString());
+                    self.hookPasteImg();
+                    self.hookImgDomChange();
                     self.hookSaveKeyEvent();
                     self.hookContentChange();
                     self.hookContentRefresh();
@@ -82,7 +77,7 @@
                     }
                 }
             },
-            hookImgInOut() {
+            hookImgDomChange() {
                 var self = this;
                 var editorDocument = document.getElementById("ueditor_0").contentWindow.document;
                 var observer = new MutationObserver(records => {
@@ -90,7 +85,8 @@
                     records.forEach((item, index) => {
                         if (item.removedNodes.length > 0 && item.removedNodes[0].tagName ==
                             "IMG") {
-                            let filePath = decodeURI(item.removedNodes[0].src.substr(7));
+                            let pathIndex = remote.process.platform == "win32" ? 8 : 7
+                            let filePath = decodeURI(item.removedNodes[0].src).substr(pathIndex);
                             fs.unlink(filePath, err => {
                                 if (err) console.log(err);
                             });
@@ -105,7 +101,7 @@
                             if (parsed.protocol == 'data:') {
                                 let base64Data = dom.src.replace(/^data:([A-Za-z-+/]+);base64,/, '');
                                 fullName = path.join(basePath, id + ".png")
-                                fs.writeFile(fullName, base64Data, 'base64',err=>{
+                                fs.writeFile(fullName, base64Data, 'base64', err => {
                                     editorDocument.getElementById(id).src = dom.src;
                                 });
                             } else {
@@ -129,7 +125,7 @@
                     subtree: true
                 });
             },
-            hookImgInsert() {
+            hookPasteImg() {
                 var self = this;
                 window.editorImgInsert = function (file) {
                     var basePath = path.join(self.$root.basePath, self.article.id.toString());
@@ -147,6 +143,11 @@
                     };
                     fr.readAsArrayBuffer(file);
                 }
+            }
+        },
+        computed: {
+            article() {
+                return this.$root.a[this.$root.aIndex];
             }
         },
         created() {

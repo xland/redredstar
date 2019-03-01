@@ -1,7 +1,7 @@
 const electron = require('electron');
-var fs = require('fs');
-var path = require('path');
-var readFileConfig = {
+const fs = require('fs');
+const path = require('path');
+const readFileConfig = {
     encoding: 'utf8'
 }
 //数据存储目录，如果不存在就创建
