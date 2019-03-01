@@ -9,6 +9,21 @@
                 秒
             </div>
         </div>
+        <div class="formItem">
+            <div>文章内图片长超过</div>
+            <div>
+                <input @change="compressHeight" v-model="$root.u.compressHeight" type="number" />
+            </div>
+            <div>
+                px，且宽超过
+            </div>
+            <div>
+                <input @change="compressWidth" v-model="$root.u.compressWidth" type="number" />
+            </div>
+            <div>
+                px，将启用图片等比例压缩（任一值设置为-1将禁用图片压缩）
+            </div>
+        </div>
         <div style="color: #888;">
             <div style="line-height: 36px;font-size: 16px;margin-top: 12px;">系统说明</div>
             <div style="line-height: 26px;">
@@ -31,12 +46,30 @@
             }
         },
         methods: {
-            autoSaveIntervalSeconds: function () {
+            autoSaveIntervalSeconds() {
                 if (this.$root.u.autoSaveIntervalSeconds < 6) {
                     this.$root.u.autoSaveIntervalSeconds = 6;
                     swal({
                         icon: "error",
                         text: "自动保存时间间隔不能小于6秒",
+                    });
+                }
+            },
+            compressWidth() {
+                if (this.$root.u.compressWidth < 800 && this.$root.u.compressWidth > 0) {
+                    this.$root.u.compressWidth = 800;
+                    swal({
+                        icon: "error",
+                        text: "压缩最小宽度不能小于800",
+                    });
+                }
+            },
+            compressHeight() {
+                if (this.$root.u.compressHeight < 600 && this.$root.u.compressHeight > 0) {
+                    this.$root.u.compressHeight = 600;
+                    swal({
+                        icon: "error",
+                        text: "压缩最小宽度不能小于800",
                     });
                 }
             }
@@ -69,7 +102,8 @@
         height: 22px;
         outline: none;
         text-align: center;
-        width: 60px;
+        width: 50px;
+        font-size: 12px;
     }
 
     .formItem div {

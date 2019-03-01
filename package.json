@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "electron-baidu-tongji": "^1.0.2",
+    "sharp": "^0.21.3",
     "sweetalert": "^2.1.2",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",

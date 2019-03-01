@@ -32,12 +32,19 @@ var initData = function (name) {
     });
     let result = JSON.parse(dataStr);
     //todo: bug fix for compatible
+    //老版本的一些问题
     if(name == "a"){
         result.forEach(item=>{
             if(!item.update){
                 item.update = new Date().getTime();
             }
         })
+    }
+    if(name == "u"){
+        if(!result.compressHeight){
+            result.compressHeight = 768;
+            result.compressWidth = 1024;
+        }
     }
     return result;
 };

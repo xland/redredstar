@@ -61,28 +61,3 @@ window.getSimpleTime = function(timeStamp) {
     }
     return r;
 }
-//todo: 这两个方法没用到
-window.httpUtil = {
-    get : function (url, fn) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && xhr.status == 200 || xhr.status == 304) {
-                fn.call(this, xhr.responseText);
-            }
-        };
-        xhr.send();
-    },
-    postJson : function (url, data, fn) {
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader("Accept", "application/json");
-        xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState == 4 && (xhr.status == 200 || xhr.status == 304)) {
-                fn.call(this, xhr.responseText);
-            }
-        };
-        xhr.send(JSON.stringify(data));
-    }
-}
