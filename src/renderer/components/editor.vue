@@ -12,7 +12,8 @@
     var request = require('request');
     var url = require("url");
     const {
-        ipcRenderer,remote
+        ipcRenderer,
+        remote
     } = require('electron');
     export default {
         data() {
@@ -88,35 +89,16 @@
                             let pathIndex = remote.process.platform == "win32" ? 8 : 7
                             let filePath = decodeURI(item.removedNodes[0].src).substr(pathIndex);
                             fs.unlink(filePath, err => {
-                                if (err) console.log(err);
+                                console.log(err)
                             });
                         }
                         if (item.addedNodes.length > 0 && item.addedNodes[0].tagName ==
                             "IMG" && !item.addedNodes[0].src.startsWith("file")) {
-                            let dom = item.addedNodes[0];
-                            let basePath = path.join(self.$root.basePath, self.article.id.toString());
-                            let id = "img" + new Date().getTime();
-                            let parsed = url.parse(dom.src);
-                            let fullName = ""
-                            if (parsed.protocol == 'data:') {
-                                let base64Data = dom.src.replace(/^data:([A-Za-z-+/]+);base64,/, '');
-                                fullName = path.join(basePath, id + ".png")
-                                fs.writeFile(fullName, base64Data, 'base64', err => {
-                                    editorDocument.getElementById(id).src = dom.src;
-                                });
+                            if (item.addedNodes[0].src.startsWith("data:")) {
+                                imageProcessor.saveBase64Obj(item.addedNodes[0]);
                             } else {
-                                var ext = dom.src.includes("webp") ? ".webp" : path.extname(
-                                    parsed.pathname)
-                                fullName = path.join(basePath, id + ext);
-                                request(dom.src)
-                                    .pipe(fs.createWriteStream(fullName))
-                                    .on('finish', function () {
-                                        editorDocument.getElementById(id).src = dom.src;
-                                    });
+                                imageProcessor.saveInternetObj(item.addedNodes[0]);
                             }
-                            dom.src = 'file://' + fullName;
-                            dom.removeAttribute("_src");
-                            dom.id = id;
                         }
                     });
                 });
@@ -125,23 +107,17 @@
                     subtree: true
                 });
             },
+            setImgDom(dom, id, src) {
+                dom.removeAttribute("_src");
+                dom.src = src;
+                dom.id = id;
+            },
             hookPasteImg() {
                 var self = this;
                 window.editorImgInsert = function (file) {
-                    var basePath = path.join(self.$root.basePath, self.article.id.toString());
-                    var id = "img" + new Date().getTime();
-                    var name = path.join(basePath, id + path.extname(file.name));
-                    var fr = new FileReader();
-                    fr.onload = () => {
-                        if (fr.readyState == 2) {
-                            var buffer = new Buffer(fr.result);
-                            fs.writeFileSync(name, buffer);
-                            var imgDom = '<img id="' + id + '" src="file://' + name + '" />';
-                            window.UE.instants.ueditorInstant0.execCommand("inserthtml", imgDom);
-                            self.$root.needSave.c = true;
-                        }
-                    };
-                    fr.readAsArrayBuffer(file);
+                    imageProcessor.saveFileObj(file, (err) => {
+                        self.$root.needSave.c = true;
+                    })
                 }
             }
         },

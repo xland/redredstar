@@ -4,19 +4,22 @@ const request = require('request');
 const url = require("url");
 export default {
     savePath: null,
-    init(articleId, basePath) {
+    init(basePath, articleId) {
         this.savePath = path.join(basePath, articleId);
     },
     compress() {
 
     },
-    saveBase64Obj(urlData, cb) {
+    saveBase64Obj(dom) {
         let id = "img" + new Date().getTime();
-        let base64Data = urlData.replace(/^data:([A-Za-z-+/]+);base64,/, '');
+        let base64Data = dom.src.replace(/^data:([A-Za-z-+/]+);base64,/, '');
         let fullName = path.join(this.savePath, id + ".png");
         fs.writeFile(fullName, base64Data, 'base64', err => {
-            cb(err);
+            document.getElementById("ueditor_0").contentWindow.document.getElementById(id).src = 'file://' + fullName;
         });
+        dom.removeAttribute("_src");
+        dom.src = 'file://' + fullName;
+        dom.id = id;
     },
     saveFileObj(fileObj, cb) {
         let id = "img" + new Date().getTime();
@@ -25,22 +28,27 @@ export default {
         fr.onload = () => {
             if (fr.readyState == 2) {
                 var buffer = new Buffer(fr.result);
-                fs.writeFile(fullName, buffer,err=>{
+                fs.writeFile(fullName, buffer, err => {
+                    var imgDom = '<img id="' + id + '" src="file://' + fullName + '" />';
+                    window.UE.instants.ueditorInstant0.execCommand("inserthtml", imgDom);
                     cb(err);
                 });
             }
         };
         fr.readAsArrayBuffer(fileObj);
     },
-    saveInternetObj(httpUrl, cb) {
+    saveInternetObj(dom) {
         let id = "img" + new Date().getTime();
-        let parsedUrl = url.parse(httpUrl);
-        let ext = httpUrl.includes("webp") ? ".webp" : path.extname(parsedUrl.pathname)
+        let parsedUrl = url.parse(dom.src);
+        let ext = dom.src.includes("webp") ? ".webp" : path.extname(parsedUrl.pathname)
         let fullName = path.join(this.savePath, id + ext);
-        request(httpUrl)
+        request(dom.src)
             .pipe(fs.createWriteStream(fullName))
-            .on('finish', (err)=>{
-                cb(err);
+            .on('finish', (err) => {
+                document.getElementById("ueditor_0").contentWindow.document.getElementById(id).src = 'file://' + fullName;
             });
+        dom.removeAttribute("_src");
+        dom.src = 'file://' + fullName;
+        dom.id = id;
     }
 }
