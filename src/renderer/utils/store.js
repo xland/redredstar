@@ -1,14 +1,11 @@
 const electron = require('electron');
 const fs = require('fs');
 const path = require('path');
-import './compatible'
-const readFileConfig = {
-    encoding: 'utf8'
-}
+import db from './db';
+// db.init();
 //数据存储目录，如果不存在就创建
-var basePath = path.join(electron.remote.app.getPath('userData'), "/xxm");
-if (!fs.existsSync(basePath)) {
-    fs.mkdirSync(basePath);
+if (!fs.existsSync(db.basePath)) {
+    fs.mkdirSync(db.basePath);
     var userData = {
         autoSaveIntervalSeconds: 8,
         tabs: [{
@@ -22,13 +19,13 @@ if (!fs.existsSync(basePath)) {
         domain:[],
         createAt: new Date().getTime()
     };
-    fs.writeFileSync(path.join(basePath,"u.data"), JSON.stringify(userData));
-    fs.writeFileSync(path.join(basePath,"a.data"), '[]');
-    fs.writeFileSync(path.join(basePath,"t.data"), '[]');
+    fs.writeFileSync(path.join(db.basePath,"u.data"), JSON.stringify(userData));
+    fs.writeFileSync(path.join(db.basePath,"a.data"), '[]');
+    fs.writeFileSync(path.join(db.basePath,"t.data"), '[]');
 }
 
 var initData = function (name) {
-    var dataStr = fs.readFileSync(path.join(basePath, name + ".data"), readFileConfig);
+    var dataStr = fs.readFileSync(path.join(db.basePath, name + ".data"), db.readConfig);
     let result = JSON.parse(dataStr);
     //todo: bug fix for compatible
     //老版本的一些问题
@@ -49,8 +46,8 @@ var initData = function (name) {
     return result;
 };
 const store = {
-    basePath,
-    readFileConfig,
+    basePath:db.basePath,
+    readFileConfig:db.readConfig,
     u: initData("u"),
     a: initData("a"),
     t: initData("t"),
