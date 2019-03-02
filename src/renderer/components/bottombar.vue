@@ -52,8 +52,8 @@
         data() {
             return {
                 rotating: false,
-                articleCount:0,
-                tagCount:0,
+                articleCount: 0,
+                tagCount: 0,
                 donates: [{
                     pic: './static/imgs/zhifubao.png',
                     name: "支付宝"
@@ -65,7 +65,19 @@
             }
         },
         methods: {
-            setting(){
+            hookCountEvent() {
+                this.bus.$on('articleCount', () => {
+                    this.$root.db("articles").count('id as count').then(rows => {
+                        this.articleCount = rows[0].count;
+                    });
+                });
+                this.bus.$on('tagCount', () => {
+                    this.$root.db("tags").count('id as count').then(rows => {
+                        this.tagCount = rows[0].count;
+                    })
+                });
+            },
+            setting() {
                 this.bus.$emit('findOrAddTab', {
                     url: '/setting',
                     text: "系统设置",
@@ -85,13 +97,9 @@
             },
         },
         mounted() {
-            let db = this.$root.db;
-            db("articles").count('id as count').then(rows=>{
-                this.articleCount = rows[0].count;
-            });
-            db("tags").count('id as count').then(rows=>{
-                this.tagCount = rows[0].count;
-            })
+            this.hookCountEvent();
+            this.bus.$emit('articleCount');
+            this.bus.$emit('tagCount');
         }
     }
 </script>
@@ -139,7 +147,8 @@
     .bottombarRight div {
         cursor: pointer;
     }
-    .bottombarRight i{
+
+    .bottombarRight i {
         font-size: 12px !important;
     }
 
