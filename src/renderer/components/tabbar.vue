@@ -88,17 +88,17 @@
             }
         },
         mounted() {
-            let db = this.$root.db;
-            db("articles").where('tab_index', '>', -1).then(rows=>{
+            // let db = this.$root.db;
+            // db("articles").where('tab_index', '>', -1).then(rows=>{
 
-            })
-            this.hookXScroll();
-            this.scrollToSelectedItem();
-            this.hookEvent();
-            var startUrl = this.$root.u.tabs[this.$root.u.tabIndex].url;
-            if (startUrl != "/") {
-                this.$router.push(startUrl);
-            }
+            // })
+            // this.hookXScroll();
+            // this.scrollToSelectedItem();
+            // this.hookEvent();
+            // var startUrl = this.$root.u.tabs[this.$root.u.tabIndex].url;
+            // if (startUrl != "/") {
+            //     this.$router.push(startUrl);
+            // }
 
         }
     }

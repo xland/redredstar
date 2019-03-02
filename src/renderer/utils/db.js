@@ -20,8 +20,6 @@ export default {
         knex.schema.createTable('articles', function (table) {
             table.increments('id');
             table.string('title');
-            table.integer('tab_index');
-            table.integer('is_selected');
             table.bigInteger('temp_id');
             table.datetime('created_at').defaultTo(knex.fn.now());
             table.datetime('updated_at').defaultTo(knex.fn.now());
@@ -208,9 +206,13 @@ export default {
                         });
                         knex.schema.table("tags", t => {
                             t.dropColumn("temp_id");
+                        }).catch(function (e) {
+                            console.error(e);
                         });
                         knex.schema.table("articles", t => {
                             t.dropColumn("temp_id");
+                        }).catch(function (e) {
+                            console.error(e);
                         });
                     })
                 });

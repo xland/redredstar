@@ -1,14 +1,7 @@
 <template>
     <div id="index" class="view">
         <div class="rightContainer">
-            <div class="tagContainer box">
-                <div :title="item.text+'['+item.refer+']'" @click="tagClick(item)" class="tag tagIndex" v-for="(item,index) in $root.t">
-                    <div class="tagText">{{item.text}}</div>
-                </div>
-                <div class="noDataTip" v-if="$root.t.length<1" style="font-size: 22px;">
-                    还没有知识标签
-                </div>
-            </div>
+            <tags></tags>
             <!-- todo -->
             <div v-if="false" class="box" style="flex: 1;margin-bottom: 8px;">
             </div>
@@ -23,7 +16,7 @@
                 </div>
                 <div style="max-width: 386px;overflow-x: auto;padding-top: 4px;">
                     <div class="tag" v-for="(item,index) in searchTags">
-                        <div class="tagText">{{item.text}}</div>
+                        <div class="tagText">{{item.title}}</div>
                         <div @click.stop="closeTag(index)" class="tagClose">
                             <i class="iconfont icon-guanbi" style="font-size: 14px !important;"></i>
                         </div>
@@ -31,8 +24,8 @@
                 </div>
                 <div :class="searchFocus?'searchContainerFocus':'searchContainer'">
                     <div class="searchInput" style="background: transparent;">
-                        <input autocomplete="off" @keyup="search" v-model="searchText" placeholder="请输入搜索内容"
-                            @focus="searchFocus = true" @blur="searchFocus = false" class="textInput" type="text" />
+                        <input autocomplete="off" @keyup="search" v-model="searchText" placeholder="请输入搜索内容" @focus="searchFocus = true"
+                            @blur="searchFocus = false" class="textInput" type="text" />
                     </div>
                     <div @click="search" class="searchBtn">
                         <i class="iconfont icon-search"></i>
@@ -59,9 +52,11 @@
     var fs = require('fs');
     var path = require('path');
     import articleitem from "../components/articleitem";
+    import tags from "../components/tags";
     export default {
         components: {
-            articleitem
+            articleitem,
+            tags
         },
         data() {
             return {
@@ -86,44 +81,26 @@
                     return;
                 }
                 var titleSearchArr = this.searchText.replace(/\s+/gi, '^').split('^');
-                var self = this;
-
-                self.articles = this.$root.a.filter(item => {
-                    var result = self.searchTags.every(searchTag => {
-                        return item.tagIds.some(id => {
-                            return id == searchTag.id
-                        })
-                    });
-                    if (!result) {
-                        return false;
+                let rootQuery = this.$root.db
+                    .select("articles.*")
+                    .from("articles")
+                    .leftJoin("article_tag", "articles.id", "article_tag.article_id")
+                this.searchTags.forEach(v => {
+                    rootQuery.andWhere("article_tag.tag_id", v.id);
+                })
+                titleSearchArr.forEach((v, index) => {
+                    if (index == 0) {
+                        rootQuery.andWhere("articles.title", "like", "%" + v + "%");
+                    } else {
+                        rootQuery.orWhere("articles.title", "like", "%" + v + "%");
                     }
-                    result = titleSearchArr.some(subStr => {
-                        //搜索文本如果是空格隔开的关键字，搜索时用或关系；
-                        return item.title.includes(subStr);
-                    });
-                    return result;
-                }).sort((i1, i2) => {
-                    return i2.update - i1.update
                 });
-            },
-            tagClick(tag) {
-                var index = this.searchTags.findIndex(v => {
-                    return v.id == tag.id
-                });
-                if (index >= 0) {
-                    this.searchTags.splice(index, 1);
-                    this.search();
-                    return;
-                }
-                if (this.searchTags.length >= 3) {
-                    swal({
-                        icon: "error",
-                        text: "最多同时检索三个标签",
+                rootQuery.orderBy("articles.updated_at", "desc")
+                    .then(rows => {
+                        this.articles = rows;
+                    }).catch(function (e) {
+                        console.log(e);
                     });
-                    return;
-                }
-                this.searchTags.push(tag);
-                this.search();
             },
             newArticleBtnClick() {
                 var article = {
@@ -245,24 +222,6 @@
         margin-bottom: 8px;
         display: flex;
         align-items: center;
-    }
-
-    .noDataTip {
-        margin-top: 12%;
-        text-align: center;
-        font-size: 32px;
-        line-height: 66px;
-        color: #bbb;
-    }
-
-    .tagContainer {
-        overflow-y: auto;
-        margin-top: 0px;
-        margin-bottom: 8px;
-        padding-right: 8px;
-        flex: 1;
-        padding-top: 11px;
-        padding-bottom: 6px;
     }
 
     .rightContainer {
