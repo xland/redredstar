@@ -38,25 +38,21 @@
         showSites: false,
       };
     },
-    computed: {
-      article() {
-        return this.$root.a[this.$root.aIndex];
-      }
-    },
+
     beforeRouteUpdate(to, from, next) {
       //两篇文章切换，也要先保存一下上一篇文章；
-      this.$root.save();
-      this.getArticle(to.params.id);
-      next();
+      // this.$root.save();
+      // this.getArticle(to.params.id);
+      // next();
     },
     beforeRouteLeave(to, from, next) {
       //跳转到其他页面前，要先把当前的文章保存一下；
-      this.$root.save();
-      next();
-      this.$root.aIndex = -1;
+      // this.$root.save();
+      // next();
+      // this.$root.aIndex = -1;
     },
     mounted() {
-      this.getArticle(this.$route.params.id);
+      // this.getArticle(this.$route.params.id);
     },
     methods: {
       publishBtnClick() {

@@ -1,5 +1,5 @@
 <template>
-    <div id="tabbar" class="tabbar">
+    <div id="tabbar" class="tabbar" v-if="false">
         <div @click="tabClick(index)" :class="[index==$root.u.tabIndex?'selected':'','tabItem']" v-for="(tab,index) in $root.u.tabs">
             <div :title="tab.text" class="text">{{tab.text?tab.text:'[未命名]'}}</div>
             <div @click.stop="closeTab(index)" class="tabCloseBtn" v-if="index != 0">
@@ -88,6 +88,10 @@
             }
         },
         mounted() {
+            let db = this.$root.db;
+            db("articles").where('tab_index', '>', -1).then(rows=>{
+
+            })
             this.hookXScroll();
             this.scrollToSelectedItem();
             this.hookEvent();

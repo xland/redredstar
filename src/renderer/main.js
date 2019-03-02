@@ -12,7 +12,6 @@ ebtRenderer(ipcRenderer, BAIDU_SITE_ID, router)
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
 new Vue({
   data:store,
   components: { App },

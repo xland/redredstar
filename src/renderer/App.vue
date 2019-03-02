@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="$root.db.xxm_ready">
     <editor></editor>
     <tabbar></tabbar>
     <router-view />
@@ -18,44 +18,19 @@
       bottombar,
       editor
     },
-    watch: {
-      "$root.u": {
-        handler: function (val, oldVal) {
-          this.$root.needSave.u = true;
-        },
-        deep: true
-      },
-      "$root.t": {
-        handler: function (val, oldVal) {
-          this.$root.needSave.t = true;
-        },
-        deep: true
-      },
-      "$root.a": {
-        handler: function (val, oldVal) {
-          this.$root.needSave.a = true;
-        },
-        deep: true
-      },
-    },
     methods: {
-      autoSave() {
-        var self = this
-        setInterval(function () {
-          self.$root.save();
-        }, this.$root.u.autoSaveIntervalSeconds * 1000);
-      },
       hookSaveArticle() {
         var self = this;
         ipcRenderer.on('saveArticleRenderer', (e, message) => {
-          self.$root.save();
-          ipcRenderer.send('appQuit', {});
+          setTimeout(function(){
+            ipcRenderer.send('appQuit', {});
+          },800);//
+          //todo save cur data;
         });
       },
     },
     mounted: function () {
       this.hookSaveArticle();
-      this.autoSave();
     }
   }
 </script>

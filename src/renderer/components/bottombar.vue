@@ -17,11 +17,11 @@
         <div class="bottombarLeft">
             <div>
                 <i class="iconfont icon-wenzhang icon"></i>
-                {{$root.a.length}}
+                {{articleCount}}
             </div>
             <div>
                 <i class="iconfont icon-biaoqian icon"></i>
-                {{$root.t.length}}
+                {{tagCount}}
             </div>
             <!-- <div>
                 <i class="iconfont icon-zishu icon"></i>
@@ -52,6 +52,8 @@
         data() {
             return {
                 rotating: false,
+                articleCount:0,
+                tagCount:0,
                 donates: [{
                     pic: './static/imgs/zhifubao.png',
                     name: "支付宝"
@@ -61,20 +63,6 @@
                 }],
                 donateIndex: 1
             }
-        },
-        watch: {
-            "$root.needSave": {
-                handler: function (val, oldVal) {
-                    if (!val.a && !val.c && !val.t && !val.u) {
-                        this.rotating = true;
-                        var self = this;
-                        setTimeout(function () {
-                            self.rotating = false;
-                        }, 600);
-                    }
-                },
-                deep: true
-            },
         },
         methods: {
             setting(){
@@ -97,6 +85,13 @@
             },
         },
         mounted() {
+            let db = this.$root.db;
+            db("articles").count('id as count').then(rows=>{
+                this.articleCount = rows[0].count;
+            });
+            db("tags").count('id as count').then(rows=>{
+                this.tagCount = rows[0].count;
+            })
         }
     }
 </script>

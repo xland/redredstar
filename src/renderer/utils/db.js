@@ -1,21 +1,21 @@
 const electron = require('electron');
 const fs = require('fs');
 const path = require('path');
-const readConfig = {
-    encoding: 'utf8'
-}
 const basePath = path.join(electron.remote.app.getPath('userData'), "/xxm");
+if (!fs.existsSync(basePath)) {
+    fs.mkdirSync(db.basePath);
+}
 const knex = require('knex')({
     dialect: 'sqlite3',
     connection: {
         filename: path.join(basePath, "db")
     }
 });
+knex.xxm_ready = false;
 
 export default {
     basePath,
     knex,
-    readConfig,
     setArticleData(articles, cb) {
         knex.schema.createTable('articles', function (table) {
             table.increments('id');
@@ -73,7 +73,7 @@ export default {
         }).then(function () {
             return knex("article_tag").insert(refers);
         }).then(() => {
-            cb || cb();
+            cb();
         }).catch(function (e) {
             console.log(e);
         });
@@ -102,7 +102,7 @@ export default {
             })
         });
     },
-    setUserData(uObj) {
+    setUserData(uObj, cb) {
         knex.schema.createTable('settings', (table) => {
             table.increments('id');
             table.integer('autosave_interval');
@@ -117,9 +117,40 @@ export default {
                 created_at: uObj.createAt ? new Date(uObj.createAt) : new Date()
             }
             return knex('settings').insert(setting);
+        }).then(() => {
+            cb();
         }).catch(function (e) {
             console.error(e);
-        });;
+        });
+    },
+    setTabData(tabs, tabIndex, cb) {
+        knex.schema.createTable('tabs', (table) => {
+            table.increments('id');
+            table.string('title');
+            table.string('url');
+            table.integer('order_num');
+            table.integer('selected')
+            table.datetime('created_at').defaultTo(knex.fn.now());
+        }).then(function () {
+            let arr = tabs.map((v, index) => {
+                var obj = {
+                    title: v.text,
+                    url: v.url,
+                    order_num: index,
+                    selected: 0
+                }
+                if (index == tabIndex) {
+                    obj.selected = 1
+                }
+                return obj
+            });
+            debugger;
+            return knex('tabs').insert(arr);
+        }).next(() => {
+            cb();
+        }).catch(function (e) {
+            console.error(e);
+        });
     },
     backUp(src, dst) {
         let paths = fs.readdirSync(src);
@@ -142,16 +173,20 @@ export default {
         });
     },
     init() {
+        //todo: 在6.2.x的时候删掉此目录
         let bakDir = path.join(electron.remote.app.getPath('userData'), "/xxm_bak");
         if (fs.existsSync(bakDir)) {
             console.error("目录已存在");
+            this.knex.xxm_ready = true;
             return;
         }
         this.backUp(basePath, bakDir);
         let getObj = function (name) {
             let fullName = path.join(basePath, name + ".data");
             if (fs.existsSync(fullName)) {
-                let str = fs.readFileSync(fullName, readConfig);
+                let str = fs.readFileSync(fullName, {
+                    encoding: 'utf8'
+                });
                 let result = JSON.parse(str);
                 fs.unlink(fullName, (err) => {})
                 return result;
@@ -159,13 +194,18 @@ export default {
                 return null;
             }
         }
-        let a = getObj("a");
-        let t = getObj("t");
-        let u = getObj("u");
-        this.setArticleData(a || [], () => {
-            this.setTagData(t || [], () => {
-                this.getTagReferData(t || [], (refers) => {
+        let a = getObj("a") || [];
+        let t = getObj("t") || [];
+        let u = getObj("u") || {};
+        this.setArticleData(a, () => {
+            this.setTagData(t, () => {
+                this.getTagReferData(t, (refers) => {
                     this.setTagReferData(refers, () => {
+                        this.setUserData(u, () => {
+                            this.setTabData(u.tabs, u.tabIndex, () => {
+                                this.knex.xxm_ready = true;
+                            });
+                        });
                         knex.schema.table("tags", t => {
                             t.dropColumn("temp_id");
                         });
@@ -176,6 +216,5 @@ export default {
                 });
             })
         });
-        this.setUserData(u || {});
     }
 }

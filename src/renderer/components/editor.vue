@@ -1,12 +1,10 @@
 <template>
-    <div v-show="$root.aIndex>=0" id="editor">
+    <div v-show="$root.curArticleId>=0" id="editor">
         <div id="editorContainer"></div>
     </div>
 </template>
 <script>
     //todo:图片放大缩小需要按比例
-    //todo:公式插件base64 to file
-    import imageProcessor from '../utils/image.js'
     var fs = require('fs');
     var path = require('path');
     var request = require('request');
@@ -22,9 +20,10 @@
             }
         },
         watch: {
-            "$root.aIndex": function (val) {
+            "$root.curArticleId": function (val,oldVal) {
                 if(val>=0){
-                    imageProcessor.init(this.$root.basePath, this.$root.a[this.$root.aIndex].id.toString(), this.$root.u.imgSize);
+                    // this.$root.imageProcessor.init(this.$root.basePath,val.toString())
+                    // imageProcessor.init(this.$root.basePath, val.toString(), this.$root.u.imgSize);
                 }
             }
         },
@@ -129,17 +128,12 @@
                 }
             }
         },
-        computed: {
-            article() {
-                return this.$root.a[this.$root.aIndex];
-            }
-        },
-        created() {
-            this.hookContentReady();
-        },
-        mounted() {
-            this.initEditor();
-        }
+        // created() {
+        //     this.hookContentReady();
+        // },
+        // mounted() {
+        //     this.initEditor();
+        // }
     }
 </script>
 <style scoped lang="scss">
