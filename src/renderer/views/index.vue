@@ -242,10 +242,6 @@
         flex-flow: column;
     }
 
-    .tagIndex {
-        padding-right: 6px;
-    }
-
     .tagIndex:hover {
         background: #dcedfe;
     }

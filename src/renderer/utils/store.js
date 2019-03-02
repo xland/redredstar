@@ -7,7 +7,20 @@ db.init();
 const store = {
     basePath: db.basePath,
     db: db.knex,
-    imageProcessor:image,
+    batchUpdate(table, arr) {
+        return this.db.transaction(trx => {
+            let queries = arr.map(v =>
+                this.db(table)
+                .where('id', v.id)
+                .update(v)
+                .transacting(trx)
+            );
+            return Promise.all(queries)
+                .then(trx.commit)
+                .catch(trx.rollback);
+        });
+    },
+    imageProcessor: image,
     curArticleId: -1,
 }
 export default store

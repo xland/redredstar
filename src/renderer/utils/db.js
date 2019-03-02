@@ -37,7 +37,7 @@ export default {
             return knex("articles").insert(arr);
         }).then((rows) => {
             cb();
-        }).catch(function (e) {
+        }).catch(e=> {
             console.log(e);
         });;
     },
@@ -72,7 +72,7 @@ export default {
             return knex("article_tag").insert(refers);
         }).then(() => {
             cb();
-        }).catch(function (e) {
+        }).catch(e=> {
             console.log(e);
         });
     },
@@ -117,7 +117,7 @@ export default {
             return knex('settings').insert(setting);
         }).then(() => {
             cb();
-        }).catch(function (e) {
+        }).catch(e=>{
             console.error(e);
         });
     },
@@ -127,7 +127,7 @@ export default {
             table.string('title');
             table.string('url');
             table.integer('order_num');
-            table.integer('selected')
+            table.boolean('selected')
             table.datetime('created_at').defaultTo(knex.fn.now());
         }).then(function () {
             let arr = tabs.map((v, index) => {
@@ -135,10 +135,10 @@ export default {
                     title: v.text,
                     url: v.url,
                     order_num: index,
-                    selected: 0
+                    selected: false
                 }
                 if (index == tabIndex) {
-                    obj.selected = 1
+                    obj.selected = true
                 }
                 return obj
             });
@@ -146,7 +146,7 @@ export default {
             return knex('tabs').insert(arr);
         }).next(() => {
             cb();
-        }).catch(function (e) {
+        }).catch(e=> {
             console.error(e);
         });
     },
@@ -206,12 +206,12 @@ export default {
                         });
                         knex.schema.table("tags", t => {
                             t.dropColumn("temp_id");
-                        }).catch(function (e) {
+                        }).catch(e=>{
                             console.error(e);
                         });
                         knex.schema.table("articles", t => {
                             t.dropColumn("temp_id");
-                        }).catch(function (e) {
+                        }).catch(e=>{
                             console.error(e);
                         });
                     })

@@ -1,5 +1,5 @@
 <template>
-  <div id="article" class="view" v-if="$root.aIndex>=0">
+  <div id="article" class="view" v-if="false">
     <div class="blankLine">
       <div style="flex: 1;display: flex">
         <input autocomplete="off" id="articleTitleInput" @keydown.meta.83="savekeyUp" @keydown.tab="titleTab" @change="titleChange"

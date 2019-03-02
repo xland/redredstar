@@ -15,7 +15,7 @@
                 tags: []
             }
         },
-        methods:{
+        methods: {
             tagClick(tag) {
                 var index = this.$parent.searchTags.findIndex(v => {
                     return v.id == tag.id
@@ -37,7 +37,7 @@
             },
         },
         mounted() {
-            this.$root.db("tags").select("*").then(rows=>{
+            this.$root.db("tags").select("*").then(rows => {
                 this.tags = rows;
             })
         }
@@ -52,5 +52,9 @@
         flex: 1;
         padding-top: 11px;
         padding-bottom: 6px;
+    }
+
+    .tagIndex {
+        padding-right: 6px;
     }
 </style>

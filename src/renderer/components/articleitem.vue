@@ -4,7 +4,7 @@
             <i class="iconfont icon-shanchu"></i>
         </div>
         <div class="timeBox" v-show="$parent.hoverIndex != index">
-            {{timeFormat(item.update)}}
+            {{item.updated_at | getSimpleTime}}
         </div>
         <div style="margin-right: 80px">
             {{item.title?item.title:"[未命名]"}}
@@ -26,7 +26,7 @@
             articleClick() {
                 this.bus.$emit('findOrAddTab', {
                     url: '/article/' + this.item.id,
-                    text: this.item.title ? this.item.title : "[未命名]",
+                    title: this.item.title,
                 });
             },
             timeFormat(time) {

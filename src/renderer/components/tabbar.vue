@@ -1,8 +1,8 @@
 <template>
-    <div id="tabbar" class="tabbar" v-if="false">
-        <div @click="tabClick(index)" :class="[index==$root.u.tabIndex?'selected':'','tabItem']" v-for="(tab,index) in $root.u.tabs">
-            <div :title="tab.text" class="text">{{tab.text?tab.text:'[未命名]'}}</div>
-            <div @click.stop="closeTab(index)" class="tabCloseBtn" v-if="index != 0">
+    <div id="tabbar" class="tabbar">
+        <div @click="tabClick(tab)" :class="[tab.selected?'selected':'','tabItem']" v-for="(tab,index) in tabs">
+            <div :title="tab.title" class="text">{{tab.title || '[未命名]'}}</div>
+            <div @click.stop="removeTab(tab)" class="tabCloseBtn" v-if="index != 0">
                 <i class="iconfont icon-guanbi tabCloseIcon"></i>
             </div>
         </div>
@@ -13,7 +13,7 @@
     export default {
         data() {
             return {
-
+                tabs: []
             }
         },
         methods: {
@@ -23,27 +23,54 @@
                     tb.scrollIntoViewIfNeeded();
                 })
             },
-            closeTab(index) {
-                this.$root.u.tabs.splice(index, 1);
-                this.$root.u.tabIndex = 0;
-                this.$router.push('/');
-                this.scrollToSelectedItem();
-            },
-            tabClick(index) {
-                this.$root.u.tabIndex = index;
-                this.$router.push(this.$root.u.tabs[index].url);
-            },
-            findAndSelectTab(tab) {
-                var index = this.$root.u.tabs.findIndex(v => {
-                    return v.url == tab.url
-                })
-                if (index > 0) {
-                    this.$root.u.tabIndex = index;
-                    this.$router.push(tab.url);
-                    this.scrollToSelectedItem();
-                    return true;
+            tabClick(tab) {
+                if (tab.selected) {
+                    return;
                 }
-                return false;
+                var oldTab = this.tabs.find(v => v.selected);
+                oldTab.selected = false;
+                tab.selected = true;
+                this.$root.db('tabs').where("id", tab.id).update({
+                    selected: true
+                }).catch(e => {
+                    console.error(e);
+                });
+                this.$root.db('tabs').where("id", oldTab.id).update({
+                    selected: false
+                }).catch(e => {
+                    console.error(e);
+                });
+                this.$router.push(tab.url);
+            },
+            findOrAddTab(obj) {
+                var tab = this.tabs.find(v => {
+                    return v.url == obj.url
+                })
+                var oldTab = this.tabs.find(v => v.selected);
+                if (oldTab == tab) {
+                    return;
+                }
+                oldTab.selected = false;
+                if (!tab) {
+                    tab = obj;
+                    tab.order_num = this.tabs.length;
+                    tab.selected = true
+                    this.tabs.push(tab);
+                    this.$root.db('tabs').insert(tab).catch(e => {
+                        console.error(e);
+                    });
+                }
+                if (!tab.selected) {
+                    tab.selected = true;
+                    this.$root.db('tabs').where("id", tab.id).update(tab).catch(e => {
+                        console.error(e);
+                    });
+                }
+                this.$root.db('tabs').where("id", oldTab.id).update(oldTab).catch(e => {
+                    console.error(e);
+                });
+                this.$router.push(tab.url);
+                this.scrollToSelectedItem();
             },
 
             addAndSelectTab(tab) {
@@ -52,17 +79,31 @@
                 this.$router.push(tab.url);
                 this.scrollToSelectedItem();
             },
-            removeTab(tab) {
-                var index = this.$root.u.tabs.findIndex(v => {
-                    return v.url == tab.url
+            removeTab(obj) {
+                var index = this.tabs.findIndex(v => {
+                    return v.url == obj.url
                 });
-                if (index < 1) {
+                if (index < 0) {
                     return;
                 }
-                this.$root.u.tabs.splice(index, 1);
-                this.$root.u.tabIndex = 0;
+                this.tabs.splice(index, 1);
+                this.tabs[0].selected = true;
                 this.$router.push('/');
                 this.scrollToSelectedItem();
+                this.$root.db("tabs").where({
+                    id: obj.id
+                }).del().then(() => {
+                    this.tabs.forEach((v, i) => {
+                        v.order_num = i;
+                        this.$root.db('tabs').where("id", v.id).update({
+                            order_num: i
+                        }).catch(e => {
+                            console.error(e);
+                        });
+                    });
+                })
+
+                this.$root.batchUpdate("tabs", this.tabs);
             },
             hookXScroll() {
                 document.getElementById('tabbar').addEventListener("mousewheel", function (e) {
@@ -72,34 +113,23 @@
                 }, false);
             },
             hookEvent() {
-                var self = this;
-                self.bus.$on('addTab', function (tab) {
-                    self.addAndSelectTab(tab);
+                this.bus.$on('findOrAddTab', tab => {
+                    this.findOrAddTab(tab);
                 });
-                self.bus.$on('findOrAddTab', function (tab) {
-                    var flag = self.findAndSelectTab(tab);
-                    if (!flag) {
-                        self.addAndSelectTab(tab);
-                    }
-                });
-                self.bus.$on('removeTab', function (tab) {
-                    self.removeTab(tab);
+                this.bus.$on('removeTab', tab => {
+                    this.removeTab(tab);
                 });
             }
         },
         mounted() {
-            // let db = this.$root.db;
-            // db("articles").where('tab_index', '>', -1).then(rows=>{
-
-            // })
-            // this.hookXScroll();
-            // this.scrollToSelectedItem();
-            // this.hookEvent();
-            // var startUrl = this.$root.u.tabs[this.$root.u.tabIndex].url;
-            // if (startUrl != "/") {
-            //     this.$router.push(startUrl);
-            // }
-
+            this.$root.db("tabs").select("*").then(rows => {
+                this.tabs = rows;
+                var tab = rows.find(v => v.selected);
+                this.$router.push(tab.url);
+                this.hookXScroll();
+                this.scrollToSelectedItem();
+                this.hookEvent();
+            })
         }
     }
 </script>
