@@ -2,8 +2,8 @@
   <div id="article" class="view" v-if="article">
     <div class="blankLine">
       <div style="flex: 1;display: flex">
-        <input autocomplete="off" id="articleTitleInput" @keydown.meta.83="savekeyUp" @keydown.tab="titleTab" @change="titleChange"
-          class="textInput" v-model="article.title" placeholder="请输入文章标题">
+        <input autocomplete="off" id="articleTitleInput" @keydown.tab="titleTab" @input="titleChange" class="textInput"
+          v-model="article.title" placeholder="请输入文章标题">
       </div>
       <div class="publishBtn" @click="publishBtnClick">
         <i class="iconfont icon-fabu" style="font-size: 18px !important;"></i>
@@ -16,8 +16,6 @@
   </div>
 </template>
 <script>
-  var fs = require('fs');
-  var path = require('path');
   import articletag from "../components/articletag";
   import site from "../components/site";
   export default {
@@ -66,11 +64,11 @@
           document.getElementById("ueditor_0").contentWindow.document.body.focus();
         }, 80);
       },
-      savekeyUp(e) {
-        this.$root.save();
-      },
       titleChange() {
-        this.$root.u.tabs[this.$root.u.tabIndex].text = this.article.title;
+        this.db("articles").update({
+          title: this.article.title
+        }).where("id", this.article.id).then();
+        this.bus.$emit('changeTitle', this.article.title);
       }
     }
   };

@@ -51,13 +51,12 @@
                             .count('id as count')
                             .where("tag_id", item.id)
                             .then(rows => {
-                                debugger;
                                 if (rows[0].count < 1) {
                                     this.db("tags")
                                         .where({
                                             id:item.id
                                         })
-                                        .del();
+                                        .del().then();
                                 }
                             });
                     });

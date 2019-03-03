@@ -56,7 +56,7 @@
                     tab.order_num = this.tabs.length;
                     tab.selected = true
                     this.tabs.push(tab);
-                    this.db('tabs').insert(tab).then(rows=>{
+                    this.db('tabs').insert(tab).then(rows => {
                         tab.id = rows[0];
                     })
                 }
@@ -109,6 +109,9 @@
                 this.bus.$on('removeTab', tab => {
                     this.removeTab(tab);
                 });
+                this.bus.$on("changeTitle", title => {
+                    this.tabs.find(v => v.selected).title = title;
+                })
             }
         },
         mounted() {
