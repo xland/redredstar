@@ -34,12 +34,6 @@
       this.getArticle(to.params.id);
       next();
     },
-    // beforeRouteLeave(to, from, next) {
-    //   //跳转到其他页面前，要先把当前的文章保存一下；
-    //   // this.$root.save();
-    //   // next();
-    //   // this.$root.aIndex = -1;
-    // },
     mounted() {
       let articleId = this.$route.params.id;
       this.getArticle(articleId);

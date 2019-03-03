@@ -14,6 +14,7 @@
 <script>
     var fs = require('fs');
     var path = require('path');
+    const electron = require('electron');
     import swal from 'sweetalert';
     export default {
         props: ['item', 'index'],
@@ -29,11 +30,7 @@
                     title: this.item.title,
                 });
             },
-            timeFormat(time) {
-                return window.getSimpleTime(parseInt(time));
-            },
             delArticle() {
-                var self = this;
                 swal({
                     icon: "warning",
                     text: "确实要删除此项知识吗？",
@@ -43,34 +40,33 @@
                 }).then((value) => {
                     if (!value) return;
                     //删界面
-                    var article = self.$parent.articles.splice(self.index, 1)[0];
+                    var article = this.$parent.articles.splice(this.index, 1)[0];
                     //删标签库
-                    article.tagIds.forEach(id => {
-                        var parentIndex = self.$root.t.findIndex(tag => {
-                            return tag.id == id
-                        });
-                        var tag = this.$root.t[parentIndex];
-                        if (tag.refer <= 1) {
-                            this.$root.t.splice(parentIndex, 1);
-                        } else {
-                            var articleIdIndex = tag.articleIds.indexOf(article.id);
-                            if (articleIdIndex >= 0) {
-                                tag.articleIds.splice(articleIdIndex, 1);
-                            }
-                            tag.refer -= 1;
-                        }
-                    });
+                    this.db("article_tag")
+                        .where("article_id", article.id)
+                        .select("*").then(at_rows => {
+                            at_rows.forEach(v => {
+                                this.db("article_tag")
+                                    .count('id as count')
+                                    .where("tag_id", v.tag_id).then(tc_rows => {
+                                        if (tc_rows[0].count <= 1) {
+                                            this.bus.$emit('removeTag', v.tag_id);
+                                        }
+                                        this.db("article_tag").where({
+                                            id: v.id
+                                        }).del().then();
+                                    })
+                            })
+                        })
                     //删文章库
-                    var articleIndex = self.$root.a.findIndex(v => {
-                        return v.id == article.id;
-                    });
-                    self.$root.a.splice(articleIndex, 1);
+                    this.db("articles").where("id", article.id).del().then();
                     //删TAB页
-                    self.bus.$emit('removeTab', {
+                    this.bus.$emit('removeTab', {
                         url: '/article/' + article.id
                     })
                     //删文件
-                    var dir = path.join(self.$root.basePath, article.id.toString());
+                    let basePath = path.join(electron.remote.app.getPath('userData'), "/xxm");
+                    var dir = path.join(basePath, article.id.toString());
                     var files = fs.readdirSync(dir);
                     files.forEach(function (file, index) {
                         fs.unlinkSync(path.join(dir, file));

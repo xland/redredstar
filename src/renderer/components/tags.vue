@@ -40,6 +40,13 @@
             this.db("tags").select("*").then(rows => {
                 this.tags = rows;
             })
+            this.bus.$on('removeTag', tagId => {
+                let index = this.tags.findIndex(v => v.id == tagId);
+                this.tags.splice(index, 1);
+                this.db("tags").where({
+                    id: tagId
+                }).del().then();
+            });
         }
     }
 </script>

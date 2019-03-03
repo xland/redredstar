@@ -83,7 +83,9 @@
                 this.tabs[0].selected = true;
                 this.$router.push('/');
                 this.scrollToSelectedItem();
-                this.db("tabs").where("id", obj.id).del().then(() => {
+                this.db("tabs").where({
+                    id:obj.id
+                }).del().then(() => {
                     this.tabs.forEach((v, i) => {
                         v.order_num = i;
                         this.db('tabs').where("id", v.id).update({
@@ -92,7 +94,8 @@
                             console.error(e);
                         });
                     });
-                })
+                });
+                //todo
                 this.$root.batchUpdate("tabs", this.tabs);
             },
             hookXScroll() {
