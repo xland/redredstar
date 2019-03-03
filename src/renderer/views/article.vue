@@ -1,5 +1,5 @@
 <template>
-  <div id="article" class="view" v-if="false">
+  <div id="article" class="view" v-if="article">
     <div class="blankLine">
       <div style="flex: 1;display: flex">
         <input autocomplete="off" id="articleTitleInput" @keydown.meta.83="savekeyUp" @keydown.tab="titleTab" @change="titleChange"
@@ -12,7 +12,7 @@
     <div style="flex: 1;background: #fff;">
     </div>
     <div class="blankLine">
-      <div class="tag" v-for="(item,index) in getTags()">
+      <div class="tag" v-for="(item,index) in tags">
         <div class="tagText">{{item.text}}</div>
         <div @click.stop="removeTag(index)" class="tagClose">
           <i class="iconfont icon-guanbi" style="font-size: 10px !important;"></i>
@@ -36,45 +36,49 @@
     data() {
       return {
         showSites: false,
+        article: null,
+        tags: [],
       };
     },
 
-    beforeRouteUpdate(to, from, next) {
-      //两篇文章切换，也要先保存一下上一篇文章；
-      // this.$root.save();
-      // this.getArticle(to.params.id);
-      // next();
-    },
-    beforeRouteLeave(to, from, next) {
-      //跳转到其他页面前，要先把当前的文章保存一下；
-      // this.$root.save();
-      // next();
-      // this.$root.aIndex = -1;
-    },
+    // beforeRouteUpdate(to, from, next) {
+    //   //两篇文章切换，也要先保存一下上一篇文章；
+    //   // this.$root.save();
+    //   // this.getArticle(to.params.id);
+    //   // next();
+    // },
+    // beforeRouteLeave(to, from, next) {
+    //   //跳转到其他页面前，要先把当前的文章保存一下；
+    //   // this.$root.save();
+    //   // next();
+    //   // this.$root.aIndex = -1;
+    // },
     mounted() {
-      // this.getArticle(this.$route.params.id);
+      let articleId = this.$route.params.id;
+      this.getArticle(articleId);
+      this.getTags(articleId);
     },
     methods: {
       publishBtnClick() {
         this.$root.save();
         this.showSites = true;
       },
-      getTags() {
-        var arr = this.$root.t.filter(v => {
-          return this.article.tagIds.some(tagId => {
-            return tagId == v.id;
+      getTags(id) {
+        this.db
+          .select("tags.*")
+          .from("tags")
+          .leftJoin("article_tag", "tags.id", "article_tag.tag_id")
+          .where("article_tag.article_id", id).then(rows => {
+            this.tags = rows;
           })
-        })
-        return arr;
       },
       getArticle(id) {
-        this.$root.aIndex = this.$root.a.findIndex(item => {
-          return item.id == id;
-        });
-        var self = this;
-        this.$nextTick(function () {
-          window.document.getElementById("articleTitleInput").focus();
-          window.editorContentReady(self.article.id);
+        this.db("articles").where("id", id).select("*").then(rows => {
+          this.article = rows[0];
+          var self = this;
+          this.$nextTick(function () {
+            window.document.getElementById("articleTitleInput").focus();
+          })
         })
       },
       titleTab() {

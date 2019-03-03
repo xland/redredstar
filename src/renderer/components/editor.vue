@@ -1,5 +1,5 @@
 <template>
-    <div v-show="$root.curArticleId>=0" id="editor">
+    <div v-show="!hide" id="editor">
         <div id="editorContainer"></div>
     </div>
 </template>
@@ -7,8 +7,7 @@
     //todo:图片放大缩小需要按比例
     var fs = require('fs');
     var path = require('path');
-    var request = require('request');
-    var url = require("url");
+    const electron = require('electron');
     const {
         ipcRenderer,
         remote
@@ -16,14 +15,30 @@
     export default {
         data() {
             return {
-
+                hide: true,
+                content:null,
             }
         },
         watch: {
-            "$root.curArticleId": function (val,oldVal) {
-                if(val>=0){
+            "$route.params.id": function (val, oldVal) {
+                if (!val) {
+                    this.hide = true;
+                    return;
                     // this.$root.imageProcessor.init(this.$root.basePath,val.toString())
                     // imageProcessor.init(this.$root.basePath, val.toString(), this.$root.u.imgSize);
+                }
+                this.hide = false;
+                let aPath = path.join(remote.app.getPath('userData'), "/xxm/"+val+"/a.data");
+                var content = fs.readFileSync(aPath, {
+                    encoding: 'utf8'
+                });
+                this.content = content;
+                if (UE.instants.ueditorInstant0 && UE.instants.ueditorInstant0.isReady) {
+                    window.UE.instants.ueditorInstant0.setContent(content);
+                }else{
+                    UE.instants.ueditorInstant0.addListener("ready",()=>{
+                        window.UE.instants.ueditorInstant0.setContent(content);
+                    })
                 }
             }
         },
@@ -94,7 +109,7 @@
                             let pathIndex = remote.process.platform == "win32" ? 8 : 7
                             let filePath = decodeURI(item.removedNodes[0].src).substr(pathIndex);
                             fs.unlink(filePath, err => {
-                                if(err){
+                                if (err) {
                                     err && console.log(err);
                                 }
                             });
@@ -128,12 +143,9 @@
                 }
             }
         },
-        // created() {
-        //     this.hookContentReady();
-        // },
-        // mounted() {
-        //     this.initEditor();
-        // }
+        mounted() {
+            var editor = window.UE.getEditor('editorContainer');
+        }
     }
 </script>
 <style scoped lang="scss">

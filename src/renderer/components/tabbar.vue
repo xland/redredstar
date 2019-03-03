@@ -56,9 +56,9 @@
                     tab.order_num = this.tabs.length;
                     tab.selected = true
                     this.tabs.push(tab);
-                    this.db('tabs').insert(tab).catch(e => {
-                        console.error(e);
-                    });
+                    this.db('tabs').insert(tab).then(rows=>{
+                        tab.id = rows[0];
+                    })
                 }
                 if (!tab.selected) {
                     tab.selected = true;
@@ -76,7 +76,6 @@
                 var index = this.tabs.findIndex(v => {
                     return v.url == obj.url
                 });
-                debugger;
                 if (index < 0) {
                     return;
                 }

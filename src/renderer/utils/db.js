@@ -19,8 +19,22 @@ const knex = require('knex')({
         }
     }
 });
+const rwOption = {
+    encoding: 'utf8'
+}
 
 const initializer = {
+    processArticle(rows) {
+        rows.forEach(v => {
+            let oldPath = path.join(basePath, v.temp_id.toString());
+            let docPath = path.join(oldPath, "a.data");
+            let content = fs.readFileSync(docPath, rwOption);
+            content = content.replace(/\/xxm\/\d+\/img(?=\d+\.)/g, '/xxm/' + v.id + '/img');
+            fs.writeFileSync(docPath, content, rwOption)
+            let newPath = path.join(basePath, v.id.toString());
+            fs.renameSync(oldPath, newPath);
+        })
+    },
     setArticleData(articles, cb) {
         knex.schema.createTable('articles', function (table) {
             table.increments('id');
@@ -92,11 +106,7 @@ const initializer = {
         let result = [];
         knex('tags').select("id", "temp_id").then(tagRows => {
             knex('articles').select("id", "temp_id").then(articleRows => {
-                articleRows.forEach(v => {
-                    let oldPath = path.join(basePath, v.temp_id.toString());
-                    let newPath = path.join(basePath, v.id.toString());
-                    fs.renameSync(oldPath, newPath);
-                })
+                this.processArticle(articleRows);
                 tags.forEach(tag => {
                     var tagRow = tagRows.find(v => v.temp_id == tag.id);
                     tag.articleIds.forEach(articleId => {
@@ -170,9 +180,7 @@ const initializer = {
     getObj(name) {
         let fullName = path.join(basePath, name + ".data");
         if (fs.existsSync(fullName)) {
-            let str = fs.readFileSync(fullName, {
-                encoding: 'utf8'
-            });
+            let str = fs.readFileSync(fullName, rwOption);
             let result = JSON.parse(str);
             fs.unlink(fullName, (err) => {})
             return result;
