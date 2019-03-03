@@ -7,7 +7,7 @@
     //todo:图片放大缩小需要按比例
     var fs = require('fs');
     var path = require('path');
-    const electron = require('electron');
+    import imageProcessor from "../utils/image";
     const {
         ipcRenderer,
         remote
@@ -16,68 +16,80 @@
         data() {
             return {
                 hide: true,
-                content:null,
+                id: -1,
+                tick: null,
+                tickStep: 8,
+                content: null,
+                needSave: false,
+                docPath: null,
+                rwOption: {
+                    encoding: 'utf8'
+                }
             }
         },
         watch: {
             "$route.params.id": function (val, oldVal) {
                 if (!val) {
+                    this.id = -1;
+                    clearInterval(this.tick);
                     this.hide = true;
-                    return;
-                    // this.$root.imageProcessor.init(this.$root.basePath,val.toString())
-                    // imageProcessor.init(this.$root.basePath, val.toString(), this.$root.u.imgSize);
+                } else {
+                    this.id = val;
+                    this.hide = false;
+                    this.initContent();
                 }
-                this.hide = false;
-                let aPath = path.join(remote.app.getPath('userData'), "/xxm/"+val+"/a.data");
-                var content = fs.readFileSync(aPath, {
+            }
+        },
+        methods: {
+            initContent() {
+                this.docPath = path.join(remote.app.getPath('userData'), "/xxm/" + this.id + "/a.data");
+                var content = fs.readFileSync(this.docPath, {
                     encoding: 'utf8'
                 });
                 this.content = content;
                 if (UE.instants.ueditorInstant0 && UE.instants.ueditorInstant0.isReady) {
                     window.UE.instants.ueditorInstant0.setContent(content);
-                }else{
-                    UE.instants.ueditorInstant0.addListener("ready",()=>{
-                        window.UE.instants.ueditorInstant0.setContent(content);
-                    })
                 }
-            }
-        },
-        methods: {
-            initEditor() {
-                var editor = window.UE.getEditor('editorContainer');
-                var self = this;
-                editor.addListener("ready", () => {
-                    self.hookPasteImg();
-                    self.hookImgDomChange();
-                    self.hookSaveKeyEvent();
-                    self.hookContentChange();
-                    self.hookContentRefresh();
-                    self.hookArticleRefresh();
-                    if (self.article) {
-                        window.editorContentReady(self.article.id);
+                imageProcessor.setArticleId(this.id);
+                this.autoSave();
+            },
+            autoSave() {
+                self = this;
+                this.tick = setInterval(() => {
+                    if (!self.needSave) {
+                        return;
                     }
-                });
+                    self.content = window.UE.instants.ueditorInstant0.getContent();
+                    fs.writeFileSync(self.docPath, self.content, self.rwOption);
+                    self.needSave = false;
+                }, this.tickStep)
+            },
+            initEditor() {
+                this.hookPasteImg();
+                this.hookImgDomChange();
+                this.hookSaveKeyEvent();
+                this.hookContentChange();
+                this.hookContentRefresh();
+                this.hookArticleRefresh();
             },
             hookContentChange() {
                 var self = this;
                 var subContent = document.getElementById("ueditor_0").contentWindow.document;
                 subContent.oninput = function (e) {
-                    self.$root.needSave.c = true;
+                    self.needSave = true;
                 }
             },
             hookContentRefresh() {
-                var self = this;
                 ipcRenderer.on('contentRefreshRenderer', (e, message) => {
                     window.UE.instants.ueditorInstant0.setContent(message.content);
-                    self.$root.needSave.c = true;
+                    this.needSave = true;
                 });
             },
             hookArticleRefresh() {
-                var self = this;
                 ipcRenderer.on('articleRefreshRenderer', (e, message) => {
-                    self.$root.a[self.$root.aIndex][message.siteId] = {
-                        url: message.url
-                    }
+                    // self.$root.a[self.$root.aIndex][message.siteId] = {
+                    //     url: message.url
+                    // }
                 });
             },
             hookSaveKeyEvent() {
@@ -86,23 +98,10 @@
                     self.$root.saveContent();
                 };
             },
-            hookContentReady() {
-                var self = this;
-                window.editorContentReady = function (articleId) {
-                    var aPath = path.join(self.$root.basePath, articleId + "/a.data");
-                    var content = fs.readFileSync(aPath, {
-                        encoding: 'utf8'
-                    });
-                    if (UE.instants.ueditorInstant0 && UE.instants.ueditorInstant0.isReady) {
-                        window.UE.instants.ueditorInstant0.setContent(content);
-                    }
-                }
-            },
             hookImgDomChange() {
-                var self = this;
                 var editorDocument = document.getElementById("ueditor_0").contentWindow.document;
                 var observer = new MutationObserver(records => {
-                    self.$root.needSave.c = true;
+                    this.needSave = true;
                     records.forEach((item, index) => {
                         if (item.removedNodes.length > 0 && item.removedNodes[0].tagName ==
                             "IMG") {
@@ -129,22 +128,28 @@
                     subtree: true
                 });
             },
-            setImgDom(dom, id, src) {
-                dom.removeAttribute("_src");
-                dom.src = src;
-                dom.id = id;
-            },
             hookPasteImg() {
                 var self = this;
                 window.editorImgInsert = function (file) {
                     imageProcessor.saveFileObj(file, (err) => {
-                        self.$root.needSave.c = true;
+                        self.needSave = true;
                     })
                 }
             }
         },
         mounted() {
+            this.db("settings").select("*").then(rows => {
+                this.tickStep = rows[0].autosave_interval * 1000;
+                imageProcessor.setImageSize(rows[0].img_w, rows[0].img_h)
+            })
             var editor = window.UE.getEditor('editorContainer');
+            var self = this;
+            editor.addListener("ready", () => {
+                self.initEditor();
+                if (self.content) {
+                    editor.setContent(this.content);
+                }
+            })
         }
     }
 </script>

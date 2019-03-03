@@ -3,14 +3,19 @@ const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const url = require("url");
+const electron = require('electron');
 export default {
     savePath: null,
-    w: -1,
-    h: -1,
-    init(basePath, articleId, size) {
-        this.savePath = path.join(basePath, articleId);
-        this.w = size.w;
-        this.h = size.h;
+    w: 1300,
+    h: 800,
+    articleId:-1,
+    setArticleId(id){
+        this.articleId = id;
+        this.savePath = path.join(electron.remote.app.getPath('userData'), "/xxm/" + id);
+    },
+    setImageSize(w,h){
+        this.w = w;
+        this.h = h;
     },
     compress(fullName) {
         let w = parseInt(this.w);
