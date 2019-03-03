@@ -11,33 +11,24 @@
     </div>
     <div style="flex: 1;background: #fff;">
     </div>
-    <div class="blankLine">
-      <div class="tag" v-for="(item,index) in tags">
-        <div class="tagText">{{item.text}}</div>
-        <div @click.stop="removeTag(index)" class="tagClose">
-          <i class="iconfont icon-guanbi" style="font-size: 10px !important;"></i>
-        </div>
-      </div>
-      <tagloader></tagloader>
-    </div>
+    <articletag></articletag>
     <site v-if="showSites"></site>
   </div>
 </template>
 <script>
   var fs = require('fs');
   var path = require('path');
-  import tagloader from "../components/tagloader";
+  import articletag from "../components/articletag";
   import site from "../components/site";
   export default {
     components: {
       site,
-      tagloader
+      articletag
     },
     data() {
       return {
         showSites: false,
         article: null,
-        tags: [],
       };
     },
 
@@ -56,21 +47,11 @@
     mounted() {
       let articleId = this.$route.params.id;
       this.getArticle(articleId);
-      this.getTags(articleId);
     },
     methods: {
       publishBtnClick() {
         this.$root.save();
         this.showSites = true;
-      },
-      getTags(id) {
-        this.db
-          .select("tags.*")
-          .from("tags")
-          .leftJoin("article_tag", "tags.id", "article_tag.tag_id")
-          .where("article_tag.article_id", id).then(rows => {
-            this.tags = rows;
-          })
       },
       getArticle(id) {
         this.db("articles").where("id", id).select("*").then(rows => {
@@ -91,23 +72,7 @@
       },
       titleChange() {
         this.$root.u.tabs[this.$root.u.tabIndex].text = this.article.title;
-      },
-      removeTag(index) {
-        var tagId = this.article.tagIds.splice(index, 1)[0];
-        var parentIndex = this.$root.t.findIndex(v => {
-          return v.id == tagId;
-        });
-        var tag = this.$root.t[index];
-        if (tag.refer <= 1) {
-          this.$root.t.splice(parentIndex, 1);
-        } else {
-          var articleIdIndex = tag.articleIds.indexOf(this.article.id);
-          if (articleIdIndex >= 0) {
-            tag.articleIds.splice(articleIdIndex, 1);
-          }
-          tag.refer -= 1;
-        }
-      },
+      }
     }
   };
 </script>
