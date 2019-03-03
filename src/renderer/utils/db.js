@@ -177,6 +177,17 @@ const initializer = {
             console.error(e);
         });
     },
+    setArticleSite(cb) {
+        knex.schema.createTable('article_site', (table) => {
+            table.increments('id');
+            table.integer('article_id');
+            table.integer('site_id');
+            table.integer('edit_url');
+            table.datetime('created_at').defaultTo(knex.fn.now());
+        }).then(function () {
+            cb();
+        })
+    },
     getObj(name) {
         let fullName = path.join(basePath, name + ".data");
         if (fs.existsSync(fullName)) {
@@ -214,17 +225,19 @@ const initializer = {
                     this.setTagReferData(refers, () => {
                         this.setUserData(u, () => {
                             this.setTabData(u.tabs, u.tabIndex, () => {
-                                cb(knex);
-                                knex.schema.table("tags", t => {
-                                    t.dropColumn("temp_id");
-                                }).catch(e => {
-                                    console.error(e);
-                                });
-                                knex.schema.table("articles", t => {
-                                    t.dropColumn("temp_id");
-                                }).catch(e => {
-                                    console.error(e);
-                                });
+                                this.setArticleSite(() => {
+                                    cb(knex);
+                                    knex.schema.table("tags", t => {
+                                        t.dropColumn("temp_id");
+                                    }).catch(e => {
+                                        console.error(e);
+                                    });
+                                    knex.schema.table("articles", t => {
+                                        t.dropColumn("temp_id");
+                                    }).catch(e => {
+                                        console.error(e);
+                                    });
+                                })
                             });
                         });
                     })

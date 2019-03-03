@@ -87,9 +87,14 @@
             },
             hookArticleRefresh() {
                 ipcRenderer.on('articleRefreshRenderer', (e, message) => {
-                    // self.$root.a[self.$root.aIndex][message.siteId] = {
-                    //     url: message.url
-                    // }
+                    this.db('article_site')
+                        .where("article_id", this.id)
+                        .andWhere("site_id",message.siteId)
+                        .select("*").then(rows=>{
+                            console.log(rows);
+                            debugger;
+                            //todo:
+                        });
                 });
             },
             hookSaveKeyEvent() {
