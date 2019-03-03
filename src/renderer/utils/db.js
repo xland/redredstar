@@ -14,7 +14,7 @@ const knex = require('knex')({
         filename: path.join(basePath, "db")
     },
     log: {
-        error(message) {
+        info(message) {
             console.err(message);
         }
     }

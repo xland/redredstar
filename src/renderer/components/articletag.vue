@@ -60,6 +60,7 @@
             getTags(id) {
                 this.id = id;
                 this.db
+                    .distinct()
                     .select("tags.*")
                     .from("tags")
                     .leftJoin("article_tag", "tags.id", "article_tag.tag_id")
@@ -88,12 +89,12 @@
                         this.alert("标签太长了");
                         return;
                     }
-                    if (this.article.tagIds.length >= 6) {
+                    if (this.tags.length >= 6) {
                         this.alert("最多输入6个标签");
                         return;
                     }
                     let hasIt = this.tags.some(item => {
-                        return item.text == text;
+                        return item.title == text;
                     });
                     if (hasIt) {
                         this.alert("该文章已经存在该标签");
@@ -112,7 +113,7 @@
                                     this.addTagFinish(tag)
                                 })
                             } else {
-                                this.addTagFinish(row[0]);
+                                this.addTagFinish(rows[0]);
                             }
                         })
                 } else {
@@ -123,6 +124,8 @@
                 this.db("article_tag").insert({
                     article_id: this.id,
                     tag_id: tag.id
+                }).catch(e => {
+                    console.error(e);
                 });
                 this.tags.push(tag);
                 this.tagInputText = "";
@@ -134,14 +137,15 @@
                 if (text.length < 1) {
                     return;
                 }
-                this.db.select("tags.*")
-                    .from("tags")
-                    .leftJoin("article_tag", "tags.id", "article_tag.tag_id")
-                    .where("tags.title", "like", '%' + text + '%')
-                    .andWhereNot("article_tag.article_id", this.id)
+                let query = this.db("tags")
+                    .where("title", "like", '%' + text + '%')
                     .select("*")
                     .then(rows => {
-                        this.findTagResult = rows;
+                        rows.forEach(v=>{
+                            if(!this.tags.some(item=>item.id == v.id)){
+                                this.findTagResult.push(v);
+                            }
+                        })
                     });
             },
         }

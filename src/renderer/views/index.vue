@@ -82,6 +82,7 @@
                 }
                 var titleSearchArr = this.searchText.replace(/\s+/gi, '^').split('^');
                 let rootQuery = this.db
+                    .distinct()
                     .select("articles.*")
                     .from("articles")
                     .leftJoin("article_tag", "articles.id", "article_tag.article_id")
@@ -95,8 +96,8 @@
                         rootQuery.orWhere("articles.title", "like", "%" + v + "%");
                     }
                 });
-                rootQuery.orderBy("articles.updated_at", "desc")
-                    .then(rows => {
+                rootQuery.orderBy("articles.updated_at", "desc");
+                rootQuery.then(rows => {
                         this.articles = rows;
                     }).catch(function (e) {
                         console.log(e);
