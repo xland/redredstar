@@ -1,7 +1,7 @@
 <template>
     <div class="blankLine">
         <div class="tag" v-for="(item,index) in tags">
-            <div class="tagText">{{item.text}}</div>
+            <div class="tagText">{{item.title}}</div>
             <div @click.stop="removeTag(index)" class="tagClose">
                 <i class="iconfont icon-guanbi" style="font-size: 10px !important;"></i>
             </div>
@@ -9,8 +9,8 @@
         <div class="tagloader">
             <div v-show="findTagResult.length > 0" class="findTagResult" :style="'left:'+tagInputLeft">
                 <div class="tagTipContainer">
-                    <div @click="tagTipClick(index)" class="tag tagIndex" v-for="(item,index) in findTagResult">
-                        <div class="tagText">{{item.text}}</div>
+                    <div @click="addTagFinish(item)" class="tag tagIndex" v-for="(item,index) in findTagResult">
+                        <div class="tagText">{{item.title}}</div>
                     </div>
                 </div>
                 <div class="arrow-down">
@@ -33,17 +33,6 @@
                 tagInputLeft: '16px',
             };
         },
-        watch: {
-            "$route.params.id": function (val, oldVal) {
-                if (!val) {
-                    return;
-                } else {
-                    this.id = val;
-                    this.getTags(this.$route.params.id);
-                }
-            }
-        },
-        mounted() {},
         methods: {
             alert(str) {
                 swal({
@@ -68,7 +57,8 @@
                             });
                     });
             },
-            getTags() {
+            getTags(id) {
+                this.id = id;
                 this.db
                     .select("tags.*")
                     .from("tags")
@@ -102,51 +92,58 @@
                         this.alert("最多输入6个标签");
                         return;
                     }
-                    var tag = this.$root.t.find(item => {
+                    let hasIt = this.tags.some(item => {
                         return item.text == text;
-                    })
-                    if (tag && this.article.tagIds.includes(tag.id)) {
+                    });
+                    if (hasIt) {
                         this.alert("该文章已经存在该标签");
                         return;
                     }
-                    if (!tag) {
-                        tag = {
-                            id: new Date().getTime(),
-                            text,
-                            refer: 0,
-                            articleIds: []
-                        };
-                        this.$root.t.push(tag);
-                    }
-                    this.addTagRefer(tag);
+                    this.db("tags")
+                        .where("title", text)
+                        .select("*")
+                        .then(rows => {
+                            if (rows.length < 1) {
+                                let tag = {
+                                    title: text
+                                };
+                                this.db("tags").insert(tag).then(rows => {
+                                    tag.id = rows[0];
+                                    this.addTagFinish(tag)
+                                })
+                            } else {
+                                this.addTagFinish(row[0]);
+                            }
+                        })
                 } else {
-                    this.findTagResult = [];
-                    var text = this.tagInputText.trim();
-                    if (text.length > 0) {
-                        this.findTag(text);
-                    }
+                    this.findTag();
                 }
             },
-            findTag(text) {
-                var regExp = new RegExp('.*' + text + '.*', 'gi');
-                var arr = this.$root.t.filter(tag => {
-                    var matchFlag = regExp.test(tag.text);
-                    var notHaveFlag = !this.article.tagIds.includes(tag.id);
-                    return matchFlag && notHaveFlag;
-                })
-                this.findTagResult = arr;
-            },
-            tagTipClick(index) {
-                var tag = this.findTagResult[index];
-                this.addTagRefer(tag);
-            },
-            addTagRefer(tag) {
-                tag.refer += 1;
-                this.article.tagIds.push(tag.id);
-                tag.articleIds.push(this.article.id);
+            addTagFinish(tag) {
+                this.db("article_tag").insert({
+                    article_id: this.id,
+                    tag_id: tag.id
+                });
+                this.tags.push(tag);
                 this.tagInputText = "";
                 this.findTagResult = [];
-            }
+            },
+            findTag() {
+                this.findTagResult = [];
+                var text = this.tagInputText.trim();
+                if (text.length < 1) {
+                    return;
+                }
+                this.db.select("tags.*")
+                    .from("tags")
+                    .leftJoin("article_tag", "tags.id", "article_tag.tag_id")
+                    .where("tags.title", "like", '%' + text + '%')
+                    .andWhereNot("article_tag.article_id", this.id)
+                    .select("*")
+                    .then(rows => {
+                        this.findTagResult = rows;
+                    });
+            },
         }
     }
 </script>

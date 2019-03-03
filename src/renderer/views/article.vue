@@ -11,7 +11,7 @@
     </div>
     <div style="flex: 1;background: #fff;">
     </div>
-    <articletag></articletag>
+    <articletag ref="articleTag"></articletag>
     <site v-if="showSites"></site>
   </div>
 </template>
@@ -32,12 +32,10 @@
       };
     },
 
-    // beforeRouteUpdate(to, from, next) {
-    //   //两篇文章切换，也要先保存一下上一篇文章；
-    //   // this.$root.save();
-    //   // this.getArticle(to.params.id);
-    //   // next();
-    // },
+    beforeRouteUpdate(to, from, next) {
+      this.getArticle(to.params.id);
+      next();
+    },
     // beforeRouteLeave(to, from, next) {
     //   //跳转到其他页面前，要先把当前的文章保存一下；
     //   // this.$root.save();
@@ -58,6 +56,7 @@
           this.article = rows[0];
           var self = this;
           this.$nextTick(function () {
+            self.$refs.articleTag.getTags(id);
             window.document.getElementById("articleTitleInput").focus();
           })
         })
