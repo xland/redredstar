@@ -41,7 +41,7 @@
                 })
             },
             removeTag(index) {
-                let item = this.tags.splice(index, 1);
+                let item = this.tags.splice(index, 1)[0];
                 this.db("article_tag")
                     .where("tag_id", item.id)
                     .andWhere("article_id", this.id)
@@ -51,8 +51,13 @@
                             .count('id as count')
                             .where("tag_id", item.id)
                             .then(rows => {
+                                debugger;
                                 if (rows[0].count < 1) {
-                                    this.db("tags").where("id", item.id).del();
+                                    this.db("tags")
+                                        .where({
+                                            id:item.id
+                                        })
+                                        .del();
                                 }
                             });
                     });
@@ -141,8 +146,8 @@
                     .where("title", "like", '%' + text + '%')
                     .select("*")
                     .then(rows => {
-                        rows.forEach(v=>{
-                            if(!this.tags.some(item=>item.id == v.id)){
+                        rows.forEach(v => {
+                            if (!this.tags.some(item => item.id == v.id)) {
                                 this.findTagResult.push(v);
                             }
                         })
