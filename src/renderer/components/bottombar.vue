@@ -67,12 +67,12 @@
         methods: {
             hookCountEvent() {
                 this.bus.$on('articleCount', () => {
-                    this.$root.db("articles").count('id as count').then(rows => {
+                    this.db("articles").count('id as count').then(rows => {
                         this.articleCount = rows[0].count;
                     });
                 });
                 this.bus.$on('tagCount', () => {
-                    this.$root.db("tags").count('id as count').then(rows => {
+                    this.db("tags").count('id as count').then(rows => {
                         this.tagCount = rows[0].count;
                     })
                 });

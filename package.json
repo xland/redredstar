@@ -52,9 +52,10 @@
   },
   "dependencies": {
     "electron-baidu-tongji": "^1.0.2",
+    "fs-extra": "^7.0.1",
     "knex": "^0.16.3",
     "sharp": "^0.21.3",
-    "sqlite3": "^4.0.6", 
+    "sqlite3": "^4.0.6",
     "sweetalert": "^2.1.2",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",

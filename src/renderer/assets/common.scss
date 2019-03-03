@@ -90,7 +90,9 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
-
+.swal-text{
+    text-align: center !important;
+}
 .tagClose:hover {
     color: #ee4242;
 }

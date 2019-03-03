@@ -81,7 +81,7 @@
                     return;
                 }
                 var titleSearchArr = this.searchText.replace(/\s+/gi, '^').split('^');
-                let rootQuery = this.$root.db
+                let rootQuery = this.db
                     .select("articles.*")
                     .from("articles")
                     .leftJoin("article_tag", "articles.id", "article_tag.article_id")

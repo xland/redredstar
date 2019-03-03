@@ -1,12 +1,9 @@
 const electron = require('electron');
 const fs = require('fs');
 const path = require('path');
-import db from './db';
+
 import image from './image';
-db.init();
 const store = {
-    basePath: db.basePath,
-    db: db.knex,
     batchUpdate(table, arr) {
         return this.db.transaction(trx => {
             let queries = arr.map(v =>

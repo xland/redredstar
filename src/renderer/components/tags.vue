@@ -37,7 +37,7 @@
             },
         },
         mounted() {
-            this.$root.db("tags").select("*").then(rows => {
+            this.db("tags").select("*").then(rows => {
                 this.tags = rows;
             })
         }

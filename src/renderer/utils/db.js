@@ -1,21 +1,26 @@
 const electron = require('electron');
-const fs = require('fs');
+const fs = require('fs-extra')
 const path = require('path');
 const basePath = path.join(electron.remote.app.getPath('userData'), "/xxm");
+import swal from 'sweetalert';
+var alertText = "为了更好的兼容未来的新功能\n我得好好练练内功";
 if (!fs.existsSync(basePath)) {
-    fs.mkdirSync(db.basePath);
+    fs.mkdirSync(basePath);
+    alertText = "初次见面\n请容我稍事整理"
 }
 const knex = require('knex')({
-    dialect: 'sqlite3',
+    client: 'sqlite3',
     connection: {
         filename: path.join(basePath, "db")
+    },
+    log: {
+        error(message) {
+            console.err(message);
+        }
     }
 });
-knex.xxm_ready = false;
 
-export default {
-    basePath,
-    knex,
+const initializer = {
     setArticleData(articles, cb) {
         knex.schema.createTable('articles', function (table) {
             table.increments('id');
@@ -24,11 +29,12 @@ export default {
             table.datetime('created_at').defaultTo(knex.fn.now());
             table.datetime('updated_at').defaultTo(knex.fn.now());
         }).then(function () {
+            if (articles.length < 1) {
+                return;
+            }
             let arr = articles.map(v => {
                 return {
                     title: v.title,
-                    tab_index: -1,
-                    is_selected: 0,
                     temp_id: v.id,
                     created_at: new Date(v.id),
                     updated_at: new Date(v.update)
@@ -37,7 +43,7 @@ export default {
             return knex("articles").insert(arr);
         }).then((rows) => {
             cb();
-        }).catch(e=> {
+        }).catch(e => {
             console.log(e);
         });;
     },
@@ -48,6 +54,9 @@ export default {
             table.bigInteger('temp_id');
             table.datetime('created_at').defaultTo(knex.fn.now());
         }).then(function () {
+            if (tags.length < 1) {
+                return;
+            }
             let arr = tags.map(v => {
                 return {
                     title: v.text,
@@ -69,10 +78,13 @@ export default {
             table.integer('article_id');
             table.datetime('created_at').defaultTo(knex.fn.now());
         }).then(function () {
+            if (refers.length < 1) {
+                return;
+            }
             return knex("article_tag").insert(refers);
         }).then(() => {
             cb();
-        }).catch(e=> {
+        }).catch(e => {
             console.log(e);
         });
     },
@@ -95,7 +107,7 @@ export default {
                         }
                         result.push(obj);
                     })
-                })
+                });
                 cb(result);
             })
         });
@@ -117,7 +129,7 @@ export default {
             return knex('settings').insert(setting);
         }).then(() => {
             cb();
-        }).catch(e=>{
+        }).catch(e => {
             console.error(e);
         });
     },
@@ -130,6 +142,12 @@ export default {
             table.boolean('selected')
             table.datetime('created_at').defaultTo(knex.fn.now());
         }).then(function () {
+            if (!tabs) {
+                tabs = [{
+                    text: "我的知识",
+                    url: '/'
+                }]
+            }
             let arr = tabs.map((v, index) => {
                 var obj = {
                     title: v.text,
@@ -142,77 +160,64 @@ export default {
                 }
                 return obj
             });
-            debugger;
             return knex('tabs').insert(arr);
-        }).next(() => {
+        }).then(() => {
             cb();
-        }).catch(e=> {
+        }).catch(e => {
             console.error(e);
         });
     },
-    backUp(src, dst) {
-        let paths = fs.readdirSync(src);
-        if (!fs.existsSync(dst)) {
-            fs.mkdirSync(dst);
-        }
-        paths.forEach((dirName) => {
-            var _src = src + '/' + dirName;
-            var _dst = dst + '/' + dirName;
-            fs.stat(_src, (err, stats) => {
-                if (err) throw err;
-                if (stats.isFile()) {
-                    let readable = fs.createReadStream(_src); //创建读取流
-                    let writable = fs.createWriteStream(_dst); //创建写入流
-                    readable.pipe(writable);
-                } else if (stats.isDirectory()) {
-                    this.backUp(_src, _dst);
-                }
+    getObj(name) {
+        let fullName = path.join(basePath, name + ".data");
+        if (fs.existsSync(fullName)) {
+            let str = fs.readFileSync(fullName, {
+                encoding: 'utf8'
             });
-        });
+            let result = JSON.parse(str);
+            fs.unlink(fullName, (err) => {})
+            return result;
+        } else {
+            return null;
+        }
     },
-    init() {
+    init(cb) {
         //todo: 在6.2.x的时候删掉此目录
         let bakDir = path.join(electron.remote.app.getPath('userData'), "/xxm_bak");
         if (fs.existsSync(bakDir)) {
-            console.error("目录已存在");
-            this.knex.xxm_ready = true;
+            cb(knex);
             return;
         }
-        this.backUp(basePath, bakDir);
-        let getObj = function (name) {
-            let fullName = path.join(basePath, name + ".data");
-            if (fs.existsSync(fullName)) {
-                let str = fs.readFileSync(fullName, {
-                    encoding: 'utf8'
-                });
-                let result = JSON.parse(str);
-                fs.unlink(fullName, (err) => {})
-                return result;
-            } else {
-                return null;
-            }
-        }
-        let a = getObj("a") || [];
-        let t = getObj("t") || [];
-        let u = getObj("u") || {};
+        swal({
+            icon: "info",
+            title: '请稍后',
+            text: alertText,
+            closeOnClickOutside: false,
+            closeOnEsc: false,
+            timer: 8600,
+            buttons: false,
+        })
+        fs.copySync(basePath, bakDir)
+        let a = this.getObj("a") || [];
+        let t = this.getObj("t") || [];
+        let u = this.getObj("u") || {};
         this.setArticleData(a, () => {
             this.setTagData(t, () => {
                 this.getTagReferData(t, (refers) => {
                     this.setTagReferData(refers, () => {
                         this.setUserData(u, () => {
                             this.setTabData(u.tabs, u.tabIndex, () => {
-                                this.knex.xxm_ready = true;
+                                cb(knex);
+                                knex.schema.table("tags", t => {
+                                    t.dropColumn("temp_id");
+                                }).catch(e => {
+                                    console.error(e);
+                                });
+                                knex.schema.table("articles", t => {
+                                    t.dropColumn("temp_id");
+                                }).catch(e => {
+                                    console.error(e);
+                                });
                             });
-                        });
-                        knex.schema.table("tags", t => {
-                            t.dropColumn("temp_id");
-                        }).catch(e=>{
-                            console.error(e);
-                        });
-                        knex.schema.table("articles", t => {
-                            t.dropColumn("temp_id");
-                        }).catch(e=>{
-                            console.error(e);
                         });
                     })
                 });
@@ -220,3 +225,5 @@ export default {
         });
     }
 }
+
+export default initializer;

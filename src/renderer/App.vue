@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-if="$root.db.xxm_ready">
+  <div id="app" v-if="dbReady">
     <editor></editor>
     <tabbar></tabbar>
     <router-view />
@@ -11,26 +11,49 @@
   import tabbar from "./components/tabbar";
   import bottombar from "./components/bottombar";
   import editor from "./components/editor";
-  const { ipcRenderer,remote } = require('electron');
+  const path = require('path');
+  const electron = require('electron');
+  const fs = require('fs-extra')
+  const {
+    ipcRenderer,
+    remote
+  } = require('electron');
   export default {
     components: {
       tabbar,
       bottombar,
       editor
     },
+    data() {
+      return {
+        dbReady: false,
+      }
+    },
     methods: {
       hookSaveArticle() {
         var self = this;
         ipcRenderer.on('saveArticleRenderer', (e, message) => {
-          setTimeout(function(){
+          setTimeout(function () {
             ipcRenderer.send('appQuit', {});
-          },800);//
+          }, 360); //
           //todo save cur data;
         });
       },
+      checkDb() {
+        let bakDir = path.join(electron.remote.app.getPath('userData'), "/xxm_bak");
+        if (fs.existsSync(bakDir)) {
+          this.dbReady = true;
+        } else {
+          var self = this;
+          window.dbReady = function () {
+            self.dbReady = true;
+          }
+        }
+      }
     },
     mounted: function () {
       this.hookSaveArticle();
+      this.checkDb();
     }
   }
 </script>

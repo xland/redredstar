@@ -30,12 +30,12 @@
                 var oldTab = this.tabs.find(v => v.selected);
                 oldTab.selected = false;
                 tab.selected = true;
-                this.$root.db('tabs').where("id", tab.id).update({
+                this.db('tabs').where("id", tab.id).update({
                     selected: true
                 }).catch(e => {
                     console.error(e);
                 });
-                this.$root.db('tabs').where("id", oldTab.id).update({
+                this.db('tabs').where("id", oldTab.id).update({
                     selected: false
                 }).catch(e => {
                     console.error(e);
@@ -56,26 +56,19 @@
                     tab.order_num = this.tabs.length;
                     tab.selected = true
                     this.tabs.push(tab);
-                    this.$root.db('tabs').insert(tab).catch(e => {
+                    this.db('tabs').insert(tab).catch(e => {
                         console.error(e);
                     });
                 }
                 if (!tab.selected) {
                     tab.selected = true;
-                    this.$root.db('tabs').where("id", tab.id).update(tab).catch(e => {
+                    this.db('tabs').where("id", tab.id).update(tab).catch(e => {
                         console.error(e);
                     });
                 }
-                this.$root.db('tabs').where("id", oldTab.id).update(oldTab).catch(e => {
+                this.db('tabs').where("id", oldTab.id).update(oldTab).catch(e => {
                     console.error(e);
                 });
-                this.$router.push(tab.url);
-                this.scrollToSelectedItem();
-            },
-
-            addAndSelectTab(tab) {
-                this.$root.u.tabs.push(tab);
-                this.$root.u.tabIndex = this.$root.u.tabs.length - 1;
                 this.$router.push(tab.url);
                 this.scrollToSelectedItem();
             },
@@ -83,6 +76,7 @@
                 var index = this.tabs.findIndex(v => {
                     return v.url == obj.url
                 });
+                debugger;
                 if (index < 0) {
                     return;
                 }
@@ -90,19 +84,16 @@
                 this.tabs[0].selected = true;
                 this.$router.push('/');
                 this.scrollToSelectedItem();
-                this.$root.db("tabs").where({
-                    id: obj.id
-                }).del().then(() => {
+                this.db("tabs").where("id", obj.id).del().then(() => {
                     this.tabs.forEach((v, i) => {
                         v.order_num = i;
-                        this.$root.db('tabs').where("id", v.id).update({
+                        this.db('tabs').where("id", v.id).update({
                             order_num: i
                         }).catch(e => {
                             console.error(e);
                         });
                     });
                 })
-
                 this.$root.batchUpdate("tabs", this.tabs);
             },
             hookXScroll() {
@@ -122,7 +113,7 @@
             }
         },
         mounted() {
-            this.$root.db("tabs").select("*").then(rows => {
+            this.db("tabs").select("*").then(rows => {
                 this.tabs = rows;
                 var tab = rows.find(v => v.selected);
                 this.$router.push(tab.url);
