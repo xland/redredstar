@@ -79,20 +79,19 @@
                 if (index < 0) {
                     return;
                 }
-                this.tabs.splice(index, 1);
-                this.tabs[0].selected = true;
-                this.$router.push('/');
-                this.scrollToSelectedItem();
+                obj = this.tabs.splice(index, 1)[0];
                 this.db("tabs").where({
-                    id:obj.id
+                    id: obj.id
                 }).del().then(() => {
+                    if (!this.tabs.some(v => v.selected)) {
+                        this.tabs[0].selected = true;
+                        this.$router.push('/');
+                    }
+                    this.scrollToSelectedItem();
                     this.tabs.forEach((v, i) => {
-                        v.order_num = i;
                         this.db('tabs').where("id", v.id).update({
-                            order_num: i
-                        }).catch(e => {
-                            console.error(e);
-                        });
+                            order_num:i
+                        }).then();
                     });
                 });
                 //todo

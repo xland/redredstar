@@ -121,6 +121,14 @@
         },
         mounted: function () {
             this.search();
+            this.bus.$on('removeTag', tagId => {
+                let index = this.searchTags.findIndex(v => v.id == tagId);
+                if(index < 0){
+                    return;
+                }
+                this.searchTags.splice(index, 1);
+                this.search();
+            })
         }
     }
 </script>
