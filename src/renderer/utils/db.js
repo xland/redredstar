@@ -165,7 +165,7 @@ const initializer = {
                     order_num: index,
                     selected: false
                 }
-                if (index == tabIndex) {
+                if (obj.url == '/') {
                     obj.selected = true
                 }
                 return obj

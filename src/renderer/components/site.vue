@@ -30,10 +30,40 @@
             return {
                 initWebview: false,
                 sites: sites,
+                article,
             }
         },
-        mounted() {},
         methods: {
+            makeWin(item,url,type) {
+                let win = new BrowserWindow({
+                    width: 1056,
+                    height: 680,
+                    webPreferences: {
+                        nodeIntegration: false,
+                        preload: path.join(__static, 'sites/' + item.id + '/inject.js')
+                    }
+                });
+                item.winId = win.id;
+                win.on('closed', () => {
+                    item.winId = null;
+                    win = null
+                })
+                win.loadURL(url, {
+                    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+                });
+                let self = this;
+                win.webContents.on('dom-ready', () => {
+                    win.webContents.send('message', {
+                        title: self.$parent.article.title,
+                        content: window.UE.instants.ueditorInstant0.getContent(),
+                        id: self.$route.params.id,
+                        winId: item.winId,
+                        siteId: item.id,
+                        url,
+                        type
+                    });
+                });
+            },
             publish(item) {
                 if (!item.ready) {
                     swal({
@@ -47,48 +77,17 @@
                     win.focus();
                     return;
                 }
-                self = this;
-                var win = new BrowserWindow({
-                    width: 1056,
-                    height: 680,
-                    webPreferences: {
-                        nodeIntegration: false,
-                        preload: path.join(__static, 'sites/' + item.id + '/inject.js')
-                    }
-                });
-                item.winId = win.id;
-                win.on('closed', () => {
-                    item.winId = null;
-                    win = null
-                })
-                var url = item.url;
-                var type = "new"
-                if(self.$root.a[self.$root.aIndex][item.id]){
-                    url = self.$root.a[self.$root.aIndex][item.id].url;
-                    type = "edit";
-                }
-                win.loadURL(url, {
-                    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
-                });
-                win.webContents.on('dom-ready', () => {
-                    win.webContents.send('message', {
-                        title: self.$root.a[self.$root.aIndex].title,
-                        content: window.UE.instants.ueditorInstant0.getContent(),
-                        id: self.$root.a[self.$root.aIndex].id,
-                        winId: item.winId,
-                        siteId: item.id,
-                        url,
-                        type
+                let url = item.url;
+                let type = "new"
+                let articleId = this.$route.params.id;
+                this.db("article_site").where("article_id", articleId)
+                    .andWhere("site_id", item.id).then(rows => {
+                        if (rows.length > 0) {
+                            url = rows[0].edit_url;
+                            type = "edit";
+                        }
+                        this.makeWin(item, url, type);
                     });
-                });
-            },
-            prepareImgSrc(site) {
-                var content = UE.instants.ueditorInstant0.getContent();
-                content = content.replace(/src="file:.+?"/gi, '');
-                var re = new RegExp("data-img_" + site, "gi");
-                content = content.replace(re, 'src');
-                content = content.replace(/data-img_.+?=".+?"/gi, '');
-                return content;
             }
         }
     }

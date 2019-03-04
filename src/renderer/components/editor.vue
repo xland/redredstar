@@ -29,7 +29,7 @@
         },
         watch: {
             "$route.params.id": function (val, oldVal) {
-                if(oldVal){
+                if (oldVal) {
                     this.saveContent();
                 }
                 if (!val) {
@@ -106,9 +106,16 @@
                         .where("article_id", this.id)
                         .andWhere("site_id", message.siteId)
                         .select("*").then(rows => {
-                            console.log(rows);
-                            debugger;
-                            //todo:
+                            let asObj = {
+                                article_id: this.id,
+                                site_id: message.siteId,
+                                edit_url: message.url
+                            }
+                            if (rows.length < 1) {
+                                this.db("article_site").insert(asObj).then();
+                            } else {
+                                this.db("article_site").update(asObj).where("id", rows[0].id).then();
+                            }
                         });
                 });
             },
