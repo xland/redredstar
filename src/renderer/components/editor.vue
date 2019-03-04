@@ -5,8 +5,8 @@
 </template>
 <script>
     //todo:图片放大缩小需要按比例
-    var fs = require('fs');
-    var path = require('path');
+    const fs = require('fs');
+    const path = require('path');
     import imageProcessor from "../utils/image";
     const {
         ipcRenderer,
@@ -29,6 +29,9 @@
         },
         watch: {
             "$route.params.id": function (val, oldVal) {
+                if(oldVal){
+                    this.saveContent();
+                }
                 if (!val) {
                     this.id = -1;
                     clearInterval(this.tick);
@@ -41,7 +44,6 @@
             }
         },
         methods: {
-
             initContent() {
                 this.docPath = path.join(remote.app.getPath('userData'), "/xxm/" + this.id + "/a.data");
                 var content = fs.readFileSync(this.docPath, this.rwOption);

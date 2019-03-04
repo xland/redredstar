@@ -49,8 +49,9 @@
     </div>
 </template>
 <script>
-    var fs = require('fs');
-    var path = require('path');
+    const fs = require('fs');
+    const path = require('path');
+    const electron = require("electron")
     import articleitem from "../components/articleitem";
     import tags from "../components/tags";
     export default {
@@ -98,34 +99,35 @@
                 });
                 rootQuery.orderBy("articles.updated_at", "desc");
                 rootQuery.then(rows => {
-                        this.articles = rows;
-                    }).catch(function (e) {
-                        console.log(e);
-                    });
+                    this.articles = rows;
+                }).catch(function (e) {
+                    console.log(e);
+                });
             },
             newArticleBtnClick() {
-                var article = {
-                    id: new Date().getTime(),
+                let article = {
                     title: '',
-                    views: 1,
-                    tagIds: []
                 };
-                fs.mkdirSync(path.join(this.$root.basePath, article.id.toString()));
-                fs.writeFileSync(path.join(this.$root.basePath, article.id + "/a.data"), '');
-                this.$root.a.push(article);
-                
-                this.bus.$emit('addTab', {
-                    url: '/article/' + article.id,
-                    text: "[未命名]",
-                });
-                this.bus.$emit('articleCount');
+                this.db("articles").insert(article).then(rows => {
+                    article.id = rows[0];
+                    let aPath = path.join(electron.remote.app.getPath('userData'), "/xxm/" + article.id);
+                    fs.mkdirSync(aPath);
+                    fs.writeFileSync(path.join(aPath, "/a.data"), "", {
+                        encoding: 'utf8'
+                    });
+                    this.bus.$emit('findOrAddTab', {
+                        url: '/article/' + article.id
+                    });
+                    this.bus.$emit('articleCount');
+                })
+
             }
         },
         mounted: function () {
             this.search();
             this.bus.$on('removeTag', tagId => {
                 let index = this.searchTags.findIndex(v => v.id == tagId);
-                if(index < 0){
+                if (index < 0) {
                     return;
                 }
                 this.searchTags.splice(index, 1);

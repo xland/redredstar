@@ -94,8 +94,6 @@
                         }).then();
                     });
                 });
-                //todo
-                this.$root.batchUpdate("tabs", this.tabs);
             },
             hookXScroll() {
                 document.getElementById('tabbar').addEventListener("mousewheel", function (e) {
