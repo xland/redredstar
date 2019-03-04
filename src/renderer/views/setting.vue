@@ -1,9 +1,9 @@
 <template>
-    <div class="setting view">
+    <div v-if="setting" class="setting view">
         <div class="formItem">
             <div>自动保存文章的时间间隔：</div>
             <div>
-                <input @change="autoSaveIntervalSeconds" v-model="$root.u.autoSaveIntervalSeconds" type="number" />
+                <input @change="autoSaveIntervalSeconds" v-model="setting.autosave_interval" type="number" />
             </div>
             <div>
                 秒
@@ -12,17 +12,20 @@
         <div class="formItem">
             <div>文章内图片长超过</div>
             <div>
-                <input @change="compressHeight" v-model="$root.u.imgSize.h" type="number" />
+                <input @change="compressHeight" v-model="setting.img_h" type="number" />
             </div>
             <div>
                 px，且宽超过
             </div>
             <div>
-                <input @change="compressWidth" v-model="$root.u.imgSize.w" type="number" />
+                <input @change="compressWidth" v-model="setting.img_w" type="number" />
             </div>
             <div>
                 px，将启用图片等比例压缩（任一值设置为-1将禁用图片压缩）
             </div>
+        </div>
+        <div class="formItem">
+            <div @click="save" class="btn" style="margin-left: 0px;">保存</div>
         </div>
         <div style="color: #888;">
             <div style="line-height: 36px;font-size: 16px;margin-top: 12px;">系统说明</div>
@@ -42,35 +45,45 @@
     export default {
         data() {
             return {
-
+                setting: null
             }
         },
+        mounted() {
+            this.db("settings").select("*").then(rows => {
+                this.setting = rows[0];
+            })
+        },
         methods: {
-            autoSaveIntervalSeconds() {
-                if (this.$root.u.autoSaveIntervalSeconds < 6) {
-                    this.$root.u.autoSaveIntervalSeconds = 6;
-                    swal({
-                        icon: "error",
-                        text: "自动保存时间间隔不能小于6秒",
+            save() {
+                this.db("settings")
+                    .update(this.setting)
+                    .where("id", this.setting.id)
+                    .then(() => {
+                        this.alert("保存成功，重启后生效","success")
                     });
+            },
+            alert(str, iconType = 'error') {
+                swal({
+                    icon: iconType,
+                    text: str,
+                });
+            },
+            autoSaveIntervalSeconds() {
+                if (this.setting.autosave_interval < 3) {
+                    this.setting.autosave_interval = 3;
+                    this.alert("自动保存时间间隔不能小于3秒");
                 }
             },
             compressWidth() {
-                if (this.$root.u.imgSize.w < 500 && this.$root.u.imgSize.w > 0) {
-                    this.$root.u.imgSize.w = 500;
-                    swal({
-                        icon: "error",
-                        text: "最小宽度不能小于500",
-                    });
+                if (this.setting.img_w < 500 && this.setting.img_w > 0) {
+                    this.setting.img_w = 500;
+                    this.alert("最小宽度不能小于500");
                 }
             },
             compressHeight() {
-                if (this.$root.u.imgSize.h < 300 && this.$root.u.imgSize.h > 0) {
-                    this.$root.u.imgSize.h = 300;
-                    swal({
-                        icon: "error",
-                        text: "最小高度不能小于300",
-                    });
+                if (this.setting.img_h < 300 && this.setting.img_h > 0) {
+                    this.setting.img_h = 300;
+                    this.alert("最小高度不能小于300");
                 }
             }
         }
@@ -93,6 +106,7 @@
     .formItem {
         height: 36px;
         line-height: 36px;
+        margin-left: 12px;
     }
 
     .formItem input {

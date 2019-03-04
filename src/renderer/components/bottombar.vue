@@ -86,7 +86,7 @@
             setting() {
                 this.bus.$emit('findOrAddTab', {
                     url: '/setting',
-                    text: "系统设置",
+                    title: "系统设置",
                 });
             },
             addDonate() {
