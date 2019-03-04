@@ -12,7 +12,6 @@
   import bottombar from "./components/bottombar";
   import editor from "./components/editor";
   const path = require('path');
-  const electron = require('electron');
   const fs = require('fs-extra')
   const {
     ipcRenderer,
@@ -32,15 +31,16 @@
     methods: {
       hookSaveArticle() {
         var self = this;
-        ipcRenderer.on('saveArticleRenderer', (e, message) => {
+        remote.getCurrentWindow().on('close', (event) => {
+          event.preventDefault();
+          self.bus.$emit('saveContent');
           setTimeout(function () {
-            ipcRenderer.send('appQuit', {});
-          }, 360); //
-          //todo save cur data;
-        });
+            remote.app.quit();
+          }, 58);
+        })
       },
       checkDb() {
-        let bakDir = path.join(electron.remote.app.getPath('userData'), "/xxm_bak");
+        let bakDir = path.join(remote.app.getPath('userData'), "/xxm_bak");
         if (fs.existsSync(bakDir)) {
           this.dbReady = true;
         } else {

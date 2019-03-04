@@ -37,10 +37,6 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-  mainWindow.on('close', (event) => {
-    event.preventDefault();
-    mainWindow.webContents.send('saveArticleRenderer', {});
-  })
   if (process.platform == 'darwin') {
     Menu.setApplicationMenu(Menu.buildFromTemplate(menuData));
   }
@@ -66,10 +62,6 @@ ipcMain.on('contentRefreshMain', (event, message) => {
 ipcMain.on('articleRefreshMain', (event, message) => {
   mainWindow.webContents.send('articleRefreshRenderer', message);
 });
-ipcMain.on('appQuit', (e) => {
-  mainWindow.destroy();
-  app.quit();
-})
 
 /**
  * Auto Updater

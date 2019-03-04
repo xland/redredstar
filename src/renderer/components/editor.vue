@@ -43,9 +43,7 @@
         methods: {
             initContent() {
                 this.docPath = path.join(remote.app.getPath('userData'), "/xxm/" + this.id + "/a.data");
-                var content = fs.readFileSync(this.docPath, {
-                    encoding: 'utf8'
-                });
+                var content = fs.readFileSync(this.docPath, this.rwOption);
                 this.content = content;
                 if (UE.instants.ueditorInstant0 && UE.instants.ueditorInstant0.isReady) {
                     window.UE.instants.ueditorInstant0.setContent(content);
@@ -56,13 +54,17 @@
             autoSave() {
                 self = this;
                 this.tick = setInterval(() => {
-                    if (!self.needSave) {
-                        return;
-                    }
-                    self.content = window.UE.instants.ueditorInstant0.getContent();
-                    fs.writeFileSync(self.docPath, self.content, self.rwOption);
-                    self.needSave = false;
+                    self.saveContent();
                 }, this.tickStep)
+            },
+            saveContent() {
+                if (!this.needSave) {
+                    return;
+                }
+                this.content = window.UE.instants.ueditorInstant0.getContent();
+                fs.writeFileSync(this.docPath, this.content, this.rwOption);
+                this.needSave = false;
+                //todo roll icon
             },
             initEditor() {
                 this.hookPasteImg();
@@ -89,8 +91,8 @@
                 ipcRenderer.on('articleRefreshRenderer', (e, message) => {
                     this.db('article_site')
                         .where("article_id", this.id)
-                        .andWhere("site_id",message.siteId)
-                        .select("*").then(rows=>{
+                        .andWhere("site_id", message.siteId)
+                        .select("*").then(rows => {
                             console.log(rows);
                             debugger;
                             //todo:
@@ -152,8 +154,11 @@
             editor.addListener("ready", () => {
                 self.initEditor();
                 if (self.content) {
-                    editor.setContent(this.content);
+                    editor.setContent(self.content);
                 }
+            })
+            this.bus.$on("saveContent", () => {
+                this.saveContent();
             })
         }
     }

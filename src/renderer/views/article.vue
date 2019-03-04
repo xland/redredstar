@@ -5,7 +5,7 @@
         <input autocomplete="off" id="articleTitleInput" @keydown.tab="titleTab" @input="titleChange" class="textInput"
           v-model="article.title" placeholder="请输入文章标题">
       </div>
-      <div class="publishBtn" @click="publishBtnClick">
+      <div class="publishBtn" @click="showSites = true">
         <i class="iconfont icon-fabu" style="font-size: 18px !important;"></i>
       </div>
     </div>
@@ -39,10 +39,6 @@
       this.getArticle(articleId);
     },
     methods: {
-      publishBtnClick() {
-        this.$root.save();
-        this.showSites = true;
-      },
       getArticle(id) {
         this.db("articles").where("id", id).select("*").then(rows => {
           this.article = rows[0];
