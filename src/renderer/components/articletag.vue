@@ -116,6 +116,7 @@
                                     tag.id = rows[0];
                                     this.addTagFinish(tag)
                                 })
+                                this.bus.$emit('tagCount');
                             } else {
                                 this.addTagFinish(rows[0]);
                             }

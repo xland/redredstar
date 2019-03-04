@@ -1,5 +1,5 @@
 <template>
-  <div id="app" v-if="dbReady">
+  <div id="app">
     <editor></editor>
     <tabbar></tabbar>
     <router-view />
@@ -25,35 +25,11 @@
     },
     data() {
       return {
-        dbReady: false,
       }
     },
     methods: {
-      hookSaveArticle() {
-        var self = this;
-        remote.getCurrentWindow().on('close', (event) => {
-          event.preventDefault();
-          self.bus.$emit('saveContent');
-          setTimeout(function () {
-            remote.app.quit();
-          }, 58);
-        })
-      },
-      checkDb() {
-        let bakDir = path.join(remote.app.getPath('userData'), "/xxm_bak");
-        if (fs.existsSync(bakDir)) {
-          this.dbReady = true;
-        } else {
-          var self = this;
-          window.dbReady = function () {
-            self.dbReady = true;
-          }
-        }
-      }
     },
     mounted: function () {
-      this.hookSaveArticle();
-      this.checkDb();
     }
   }
 </script>

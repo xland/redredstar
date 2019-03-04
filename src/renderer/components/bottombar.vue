@@ -26,7 +26,7 @@
             <!-- <div>
                 <i class="iconfont icon-zishu icon"></i>
             </div> -->
-            <div :class="rotating&&$root.aIndex>=0?'rotating':''">
+            <div :class="rotating?'rotating':''">
                 <i class='iconfont icon-baocun icon'></i>
             </div>
         </div>
@@ -65,7 +65,7 @@
             }
         },
         methods: {
-            hookCountEvent() {
+            hookEvent() {
                 this.bus.$on('articleCount', () => {
                     this.db("articles").count('id as count').then(rows => {
                         this.articleCount = rows[0].count;
@@ -75,6 +75,12 @@
                     this.db("tags").count('id as count').then(rows => {
                         this.tagCount = rows[0].count;
                     })
+                });
+                this.bus.$on('saveContent', () => {
+                    this.rotating = true;
+                    setTimeout(()=>{
+                        this.rotating = false
+                    },600)
                 });
             },
             setting() {
@@ -97,7 +103,7 @@
             },
         },
         mounted() {
-            this.hookCountEvent();
+            this.hookEvent();
             this.bus.$emit('articleCount');
             this.bus.$emit('tagCount');
         }

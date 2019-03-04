@@ -113,10 +113,12 @@
                 fs.mkdirSync(path.join(this.$root.basePath, article.id.toString()));
                 fs.writeFileSync(path.join(this.$root.basePath, article.id + "/a.data"), '');
                 this.$root.a.push(article);
+                
                 this.bus.$emit('addTab', {
                     url: '/article/' + article.id,
                     text: "[未命名]",
                 });
+                this.bus.$emit('articleCount');
             }
         },
         mounted: function () {

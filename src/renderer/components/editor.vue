@@ -41,6 +41,7 @@
             }
         },
         methods: {
+
             initContent() {
                 this.docPath = path.join(remote.app.getPath('userData'), "/xxm/" + this.id + "/a.data");
                 var content = fs.readFileSync(this.docPath, this.rwOption);
@@ -61,18 +62,28 @@
                 if (!this.needSave) {
                     return;
                 }
+                this.bus.$emit('saveContent');
                 this.content = window.UE.instants.ueditorInstant0.getContent();
                 fs.writeFileSync(this.docPath, this.content, this.rwOption);
                 this.needSave = false;
                 //todo roll icon
             },
             initEditor() {
+                this.hookWinQuit();
                 this.hookPasteImg();
                 this.hookImgDomChange();
                 this.hookSaveKeyEvent();
                 this.hookContentChange();
                 this.hookContentRefresh();
                 this.hookArticleRefresh();
+            },
+            hookWinQuit() {
+                var self = this;
+                remote.getCurrentWindow().on('close', (event) => {
+                    event.preventDefault();
+                    self.saveContent();
+                    remote.app.quit();
+                })
             },
             hookContentChange() {
                 var self = this;
@@ -102,7 +113,7 @@
             hookSaveKeyEvent() {
                 var self = this;
                 window.saveArticleKeyEvent = function () {
-                    self.$root.saveContent();
+                    self.saveContent();
                 };
             },
             hookImgDomChange() {
@@ -156,9 +167,6 @@
                 if (self.content) {
                     editor.setContent(self.content);
                 }
-            })
-            this.bus.$on("saveContent", () => {
-                this.saveContent();
             })
         }
     }
