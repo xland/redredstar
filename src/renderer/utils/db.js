@@ -48,7 +48,7 @@ const initializer = {
             }
             let arr = articles.map(v => {
                 return {
-                    title: v.title,
+                    title: v.title?v.title:'[未命名]',
                     temp_id: v.id,
                     created_at: new Date(v.id),
                     updated_at: new Date(v.update)

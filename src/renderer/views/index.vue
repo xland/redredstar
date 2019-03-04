@@ -116,7 +116,8 @@
                         encoding: 'utf8'
                     });
                     this.bus.$emit('findOrAddTab', {
-                        url: '/article/' + article.id
+                        url: '/article/' + article.id,
+                        title: "",
                     });
                     this.bus.$emit('articleCount');
                 })

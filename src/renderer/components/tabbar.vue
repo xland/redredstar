@@ -1,7 +1,8 @@
 <template>
     <div id="tabbar" class="tabbar">
         <div @click="tabClick(tab)" :class="[tab.selected?'selected':'','tabItem']" v-for="(tab,index) in tabs">
-            <div :title="tab.title" class="text">{{tab.title || '[未命名]'}}</div>
+            <div v-if="tab.title" :title="tab.title" class="text">{{tab.title}}</div>
+            <div v-else :title="tab.title" class="text">[未命名]</div>
             <div @click.stop="removeTab(tab)" class="tabCloseBtn" v-if="index != 0">
                 <i class="iconfont icon-guanbi tabCloseIcon"></i>
             </div>
@@ -80,20 +81,17 @@
                     return;
                 }
                 obj = this.tabs.splice(index, 1)[0];
+                if (!this.tabs.some(v => v.selected)) {
+                    this.tabs[0].selected = true;
+                    this.$router.push('/');
+                }
+                this.scrollToSelectedItem();
+                this.tabs.forEach((v, i) => {
+                    this.db('tabs').where("id", v.id).update(v).then();
+                });
                 this.db("tabs").where({
                     id: obj.id
-                }).del().then(() => {
-                    if (!this.tabs.some(v => v.selected)) {
-                        this.tabs[0].selected = true;
-                        this.$router.push('/');
-                    }
-                    this.scrollToSelectedItem();
-                    this.tabs.forEach((v, i) => {
-                        this.db('tabs').where("id", v.id).update({
-                            order_num:i
-                        }).then();
-                    });
-                });
+                }).del().then();
             },
             hookXScroll() {
                 document.getElementById('tabbar').addEventListener("mousewheel", function (e) {
