@@ -1,23 +1,17 @@
-在mac和linux下，很简单:
+##For Mac And Linux
 
 下载源码
 
-npm install
+* npm install
+* npm install sqlite3 --build-from-source --runtime=electron --target=2.0.17 --dist-url=https://atom.io/download/electron
+* npm run dev
 
-npm install sqlite3 --build-from-source --runtime=electron --target=2.0.17 --dist-url=https://atom.io/download/electron
+## For win：
 
-npm run dev
-
-在win下：
-
-npm install --global --production windows-build-tools   （我不确定这句有没有用）
-
-安装vs2015（2017不行）
-
-安装python 2.7.*（注意设置path）
-
-npm install sqlite3 --build-from-source --runtime=electron --target=2.0.17 --dist-url=https://atom.io/download/electron
-
-npm install --save-dev electron-rebuild
-
-electron-rebuild -f -w sharp（最好设置到package.json中，以后可能还会用到）
+* npm install
+* npm install --global --production windows-build-tools   （我不确定这句有没有用）
+* 安装vs2015（2017不行）
+* 安装python 2.7.*（注意设置path）
+* npm install sqlite3 --build-from-source --runtime=electron --target=2.0.17 --dist-url=https://atom.io/download/electron
+* npm install --save-dev electron-rebuild
+* electron-rebuild -f -w sharp（最好设置到package.json中，以后可能还会用到）
