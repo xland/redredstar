@@ -107,6 +107,16 @@ let imgProcessor = {
     }
 }
 
+var waitForReady = function (cb) {
+    setTimeout(function () {
+        if (!UE.instants.ueditorInstant0) {
+            waitForReady(cb);
+            return;
+        }
+        cb();
+    }, 380);
+}
+
 ipcRenderer.on('message', (event, article) => {
     let url = window.location.href;
     let token = base.getUrlParam(url, "token");
@@ -125,10 +135,10 @@ ipcRenderer.on('message', (event, article) => {
         return;
     }
     if (token && type == "10") {
-        setTimeout(function () {
+        waitForReady(function () {
             window.onbeforeunload = null;
             imgProcessor.init(article);
-        }, 980);
+        });
     }
     return;
 })

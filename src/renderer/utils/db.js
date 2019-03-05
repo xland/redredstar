@@ -212,7 +212,7 @@ const initializer = {
             text: alertText,
             closeOnClickOutside: false,
             closeOnEsc: false,
-            timer: 8600,
+            timer: 6800,
             buttons: false,
         })
         fs.copySync(basePath, bakDir)

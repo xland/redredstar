@@ -14,11 +14,4 @@ QQ空间
 mark-down
 mac win linux分开升级,分开版本号
 
-//npm install sqlite3 --build-from-source --runtime=electron --target=2.0.17 --dist-url=https://atom.io/download/electron
-for windows:
-    install vs2015(C++)
-    install python(2.7.* and path set)
 
-npm install --save-dev electron-rebuild
- "buildsharp": "electron-rebuild -f -w sharp",
- npm run buildsharp
