@@ -62,8 +62,11 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
-        document.getElementById("title").value = this.title;
+        setTimeout(()=>{
+            window.onbeforeunload = null;
+            UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
+            document.getElementById("title").value = this.title;
+        },600);
         base.ajaxInjector(obj => {
             if (obj && obj.appMsgId) {
                 let url = 'https://mp.weixin.qq.com/?appmsgid=' + obj.appMsgId;
@@ -109,10 +112,12 @@ let imgProcessor = {
 
 var waitForReady = function (cb) {
     setTimeout(function () {
-        if (typeof UE == 'undefined' || !UE.instants || !UE.instants.ueditorInstant0) {
+        if (!document.getElementById("ueditor_0")) {
+            console.log('wait');
             waitForReady(cb);
             return;
         }
+        console.log('go');
         cb();
     }, 280);
 }
