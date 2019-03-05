@@ -109,12 +109,12 @@ let imgProcessor = {
 
 var waitForReady = function (cb) {
     setTimeout(function () {
-        if (!UE || !UE.instants || !UE.instants.ueditorInstant0) {
+        if (typeof UE == 'undefined' || !UE.instants || !UE.instants.ueditorInstant0) {
             waitForReady(cb);
             return;
         }
         cb();
-    }, 380);
+    }, 280);
 }
 
 ipcRenderer.on('message', (event, article) => {
