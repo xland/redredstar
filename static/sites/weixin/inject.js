@@ -12,7 +12,7 @@ let imgProcessor = {
     siteId: null,
     doc: null,
     guard: 0,
-    title:'',
+    title: '',
     getUploadUrl(cb) {
         let urlParams = {
             action: 'upload_material',
@@ -109,7 +109,7 @@ let imgProcessor = {
 
 var waitForReady = function (cb) {
     setTimeout(function () {
-        if (!UE.instants.ueditorInstant0) {
+        if (!UE || !UE.instants || !UE.instants.ueditorInstant0) {
             waitForReady(cb);
             return;
         }
@@ -122,15 +122,15 @@ ipcRenderer.on('message', (event, article) => {
     let token = base.getUrlParam(url, "token");
     let type = base.getUrlParam(url, "type");
     if (token && !type) {
-        if(article.type == "new"){
+        if (article.type == "new") {
             window.location.href = "https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit_v2&action=edit&isNew=1&type=10&lang=zh_CN&token=" + token;
-        }else{
-            let appmsgid = base.getUrlParam(article.url,"appmsgid")
-            window.location.href = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=10&isMul=1&appmsgid=' + appmsgid +wx.commonData.data.param;
+        } else {
+            let appmsgid = base.getUrlParam(article.url, "appmsgid")
+            window.location.href = 'https://mp.weixin.qq.com/cgi-bin/appmsg?t=media/appmsg_edit&action=edit&type=10&isMul=1&appmsgid=' + appmsgid + wx.commonData.data.param;
         }
         return;
     }
-    if(token && !type && article.type == "edit"){
+    if (token && !type && article.type == "edit") {
         window.location.href = article.url + wx.commonData.data.param;
         return;
     }
