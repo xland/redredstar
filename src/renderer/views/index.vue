@@ -62,6 +62,7 @@
         data() {
             return {
                 searchFocus: false,
+                allArticles: [],
                 articles: [],
                 searchTags: [],
                 searchText: '',
@@ -81,32 +82,15 @@
                     });
                     return;
                 }
-                var titleSearchArr = this.searchText.replace(/\s+/gi, '^').split('^');
-                let rootQuery = this.db
-                    .distinct()
-                    .select("articles.*")
-                    .from("articles")
-                    .leftJoin("article_tag", "articles.id", "article_tag.article_id")
-                this.searchTags.forEach(v => {
-                    rootQuery.andWhere("article_tag.tag_id", v.id);
-                })
-                titleSearchArr.forEach((v, index) => {
-                    if (index == 0) {
-                        rootQuery.andWhere("articles.title", "like", "%" + v + "%");
-                    } else {
-                        rootQuery.orWhere("articles.title", "like", "%" + v + "%");
-                    }
-                });
-                rootQuery.orderBy("articles.updated_at", "desc");
-                rootQuery.then(rows => {
-                    this.articles = rows;
-                }).catch(function (e) {
-                    console.log(e);
-                });
+                let titleSearchArr = this.searchText.replace(/\s+/gi, '^').split('^');
+                let result = this.allArticles.filter(v => titleSearchArr.some(str => v.title.includes(str)));
+                result = result.filter(v => this.searchTags.every(st => v.tagIds.includes(st.id)));
+                this.articles = result;
             },
             newArticleBtnClick() {
                 let article = {
                     title: '',
+                    updated_at:new Date()
                 };
                 this.db("articles").insert(article).then(rows => {
                     article.id = rows[0];
@@ -125,7 +109,19 @@
             }
         },
         mounted: function () {
-            this.search();
+            this.db("articles").orderBy("updated_at","desc").then(rows => {
+                this.allArticles = rows.map(v => {
+                    v.tagIds = [];
+                    return v;
+                })
+                this.articles = this.allArticles;
+                this.db("article_tag").select("*").then(ats => {
+                    ats.forEach(a_t => {
+                        let article = this.allArticles.find(a => a.id == a_t.article_id);
+                        article.tagIds.push(a_t.tag_id);
+                    })
+                })
+            });
             this.bus.$on('removeTag', tagId => {
                 let index = this.searchTags.findIndex(v => v.id == tagId);
                 if (index < 0) {

@@ -55,7 +55,7 @@
                 if (!tab) {
                     tab = obj;
                     tab.order_num = this.tabs.length;
-                    tab.selected = true
+                    tab.selected = true;
                     this.tabs.push(tab);
                     this.db('tabs').insert(tab).then(rows => {
                         tab.id = rows[0];

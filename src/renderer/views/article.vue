@@ -29,11 +29,11 @@
         article: null,
       };
     },
-
     beforeRouteUpdate(to, from, next) {
       this.getArticle(to.params.id);
       next();
     },
+    
     mounted() {
       let articleId = this.$route.params.id;
       this.getArticle(articleId);
