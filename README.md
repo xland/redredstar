@@ -18,9 +18,12 @@
 * 修改知识后，再次发布该知识，不会导致图片重复上传；
 * 到目前为止“想学吗”不会保存您的任何账号数据；
 * 文章发布到目标平台不夹带任何“尾巴”
-* 数据目录：（文章导出功能在计划中）
-    + MAC:  /Users/[your user name]/Library/Application Support/xiangxuema/xxm
-    + WIN:  C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm
+
+## 数据目录：
+
+* MAC:  /Users/[your user name]/Library/Application Support/xiangxuema/xxm
+* WIN:  C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm
+* （文章导出功能在计划中）
 
 ## 界面截图
 
