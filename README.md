@@ -22,12 +22,14 @@
 ## 其他说明：
 
 * **mac数据存放目录:**  
- /Users/[your user name]/Library/Application Support/xiangxuema/xxm
++ /Users/[your user name]/Library/Application Support/xiangxuema/xxm
 * **win数据存放目录:**  
- C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm
-* *文章导出功能在计划中*
++ C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm
++ *文章导出功能在计划中*
 * **本地编译说明：**
-https://github.com/xland/xiangxuema/blob/master/doc/build.md
++ https://github.com/xland/xiangxuema/blob/master/doc/build.md
+* **开发计划**
++ https://github.com/xland/xiangxuema/blob/master/doc/todo
 
 ## 界面截图
 
