@@ -21,9 +21,9 @@
 
 ## 数据目录：
 
-* MAC:  /Users/[your user name]/Library/Application Support/xiangxuema/xxm
-* WIN:  C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm
-* （文章导出功能在计划中）
+* **MAC:**  /Users/[your user name]/Library/Application Support/xiangxuema/xxm
+* **WIN:**  C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm
+* *文章导出功能在计划中*
 
 ## 界面截图
 
