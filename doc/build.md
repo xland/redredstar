@@ -1,6 +1,4 @@
-##For Mac And Linux
-
-下载源码
+## For Mac And Linux
 
 * npm install
 * npm install sqlite3 --build-from-source --runtime=electron --target=2.0.17 --dist-url=https://atom.io/download/electron
