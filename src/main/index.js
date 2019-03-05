@@ -40,7 +40,7 @@ function createWindow() {
   if (process.platform == 'darwin') {
     Menu.setApplicationMenu(Menu.buildFromTemplate(menuData));
   }else{
-    Menu.setApplicationMenu(Menu.buildFromTemplate(null));
+    Menu.setApplicationMenu(null);
   }
 }
 
