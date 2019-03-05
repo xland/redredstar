@@ -68,6 +68,7 @@
                 this.content = window.UE.instants.ueditorInstant0.getContent();
                 fs.writeFileSync(this.docPath, this.content, this.rwOption);
                 this.needSave = false;
+                
                 this.db("articles").update({
                     updated_at: new Date()
                 }).where("id", this.id).then();
