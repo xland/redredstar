@@ -22,9 +22,9 @@
 ## 其他说明：
 
 * **mac数据存放目录:**  
-<br />&emsp;&emsp; /Users/[your user name]/Library/Application Support/xiangxuema/xxm
+ &emsp;&emsp; /Users/[your user name]/Library/Application Support/xiangxuema/xxm
 * **win数据存放目录:**  
-<br />&emsp;&emsp; C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm
+ &emsp;&emsp; C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm
 * **本地编译说明：**
 <br />&emsp;&emsp; https://github.com/xland/xiangxuema/blob/master/doc/build.md
 * **开发计划**
