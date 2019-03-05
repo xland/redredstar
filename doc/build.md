@@ -15,6 +15,6 @@
 - npm run buildsharp
 - npm run dev
 
-##求助
+## 求助
 
 - 我在ubuntu下编译一直编译不成功，如果有网友愿意帮忙，请不吝赐教，我QQ：412588801
