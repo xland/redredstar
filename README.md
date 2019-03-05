@@ -6,8 +6,8 @@
 
 ## 下载地址
 
-* **mac64:** http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
-* **win64:** http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.exe
+* mac64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
+* win64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.exe
 * *当前版本：6.1.0*
 
 ## 功能说明
@@ -21,13 +21,13 @@
 
 ## 其他说明：
 
-* **mac数据存放目录:**  
+* mac数据存放目录： 
  &emsp;&emsp; /Users/[your user name]/Library/Application Support/xiangxuema/xxm
-* **win数据存放目录:**  
+* win数据存放目录：
  &emsp;&emsp; C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm
-* **本地编译说明：**
+* 本地编译说明：
 <br />&emsp;&emsp; https://github.com/xland/xiangxuema/blob/master/doc/build.md
-* **开发计划**
+* 开发计划：
 <br />&emsp;&emsp; https://github.com/xland/xiangxuema/blob/master/doc/todo
 
 ## 界面截图
