@@ -46,6 +46,9 @@
             },
             saveContent(cb) {
                 if (!this.needSave) {
+                    if (cb) {
+                        cb();
+                    }
                     return;
                 }
                 this.bus.$emit('saveContent');
@@ -119,7 +122,6 @@
             hookImgDomChange() {
                 var editorDocument = document.getElementById("ueditor_0").contentWindow.document;
                 var observer = new MutationObserver(records => {
-                    this.needSave = true;
                     records.forEach((item, index) => {
                         if (item.removedNodes.length > 0 && item.removedNodes[0].tagName ==
                             "IMG") {
@@ -130,6 +132,7 @@
                                     err && console.log(err);
                                 }
                             });
+                            this.needSave = true;
                         }
                         if (item.addedNodes.length > 0 && item.addedNodes[0].tagName ==
                             "IMG" && !item.addedNodes[0].src.startsWith("file")) {
@@ -138,6 +141,7 @@
                             } else {
                                 imageProcessor.saveInternetObj(item.addedNodes[0]);
                             }
+                            this.needSave = true;
                         }
                     });
                 });
