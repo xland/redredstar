@@ -27,22 +27,6 @@
                 }
             }
         },
-        watch: {
-            "$route.params.id": function (val, oldVal) {
-                if (oldVal) {
-                    this.saveContent();
-                }
-                if (!val) {
-                    this.id = -1;
-                    clearInterval(this.tick);
-                    this.hide = true;
-                } else {
-                    this.id = val;
-                    this.hide = false;
-                    this.initContent();
-                }
-            }
-        },
         methods: {
             initContent() {
                 this.docPath = path.join(remote.app.getPath('userData'), "/xxm/" + this.id + "/a.data");
@@ -60,7 +44,7 @@
                     self.saveContent();
                 }, this.tickStep)
             },
-            saveContent() {
+            saveContent(cb) {
                 if (!this.needSave) {
                     return;
                 }
@@ -68,11 +52,14 @@
                 this.content = window.UE.instants.ueditorInstant0.getContent();
                 fs.writeFileSync(this.docPath, this.content, this.rwOption);
                 this.needSave = false;
-                
+
                 this.db("articles").update({
                     updated_at: new Date()
-                }).where("id", this.id).then();
-                //todo roll icon
+                }).where("id", this.id).then(rows => {
+                    if (cb) {
+                        cb();
+                    }
+                });
             },
             initEditor() {
                 this.hookWinQuit();
@@ -179,6 +166,20 @@
                 self.initEditor();
                 if (self.content) {
                     editor.setContent(self.content);
+                }
+            })
+            this.bus.$on("changeView", obj => {
+                if (obj.fromId) {
+                    this.saveContent(obj.done);
+                }
+                if (!obj.toId) {
+                    this.id = -1;
+                    clearInterval(this.tick);
+                    this.hide = true;
+                } else {
+                    this.id = obj.toId;
+                    this.hide = false;
+                    this.initContent();
                 }
             })
         }

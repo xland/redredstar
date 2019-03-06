@@ -31,12 +31,29 @@
     },
     beforeRouteUpdate(to, from, next) {
       this.getArticle(to.params.id);
-      next();
+      this.bus.$emit('changeView', {
+        toId: to.params.id,
+        fromId: from.params.id,
+        done: () => {
+          next();
+        }
+      });
     },
-    
+    beforeRouteLeave(to, from, next) {
+      this.bus.$emit('changeView', {
+        toId: to.params.id,
+        fromId: from.params.id,
+        done: () => {
+          next();
+        }
+      });
+    },
     mounted() {
       let articleId = this.$route.params.id;
       this.getArticle(articleId);
+      this.bus.$emit('changeView', {
+        toId: this.$route.params.id
+      });
     },
     methods: {
       getArticle(id) {
@@ -56,7 +73,8 @@
       },
       titleChange() {
         this.db("articles").update({
-          title: this.article.title
+          title: this.article.title,
+          updated_at: new Date()
         }).where("id", this.article.id).then();
         this.bus.$emit('changeTitle', this.article.title);
       }

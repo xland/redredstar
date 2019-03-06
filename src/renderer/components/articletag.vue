@@ -129,9 +129,11 @@
                 this.db("article_tag").insert({
                     article_id: this.id,
                     tag_id: tag.id
-                }).catch(e => {
-                    console.error(e);
-                });
+                }).then();
+                this.db("articles")
+                    .update({"updated_at":new Date()})
+                    .where("id",this.id)
+                    .then();
                 this.tags.push(tag);
                 this.tagInputText = "";
                 this.findTagResult = [];
