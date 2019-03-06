@@ -34,6 +34,7 @@
                 this.content = content;
                 if (UE.instants.ueditorInstant0 && UE.instants.ueditorInstant0.isReady) {
                     window.UE.instants.ueditorInstant0.setContent(content);
+                    document.getElementById("ueditor_0").contentWindow.document.documentElement.scrollTop = 0;
                 }
                 imageProcessor.setArticleId(this.id);
                 this.autoSave();
