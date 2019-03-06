@@ -33,22 +33,6 @@
                 tagInputLeft: '16px',
             };
         },
-        created() {
-            this.bus.$on("changeView", obj => {
-                if (!obj.toId) {
-                    return;
-                }
-                this.id = obj.toId;
-                this.db
-                    .distinct()
-                    .select("tags.*")
-                    .from("tags")
-                    .leftJoin("article_tag", "tags.id", "article_tag.tag_id")
-                    .where("article_tag.article_id", this.id).then(rows => {
-                        this.tags = rows;
-                    })
-            })
-        },
         methods: {
             alert(str) {
                 swal({
@@ -70,12 +54,23 @@
                                 if (rows[0].count < 1) {
                                     this.db("tags")
                                         .where({
-                                            id: item.id
+                                            id:item.id
                                         })
                                         .del().then();
                                 }
                             });
                     });
+            },
+            getTags(id) {
+                this.id = id;
+                this.db
+                    .distinct()
+                    .select("tags.*")
+                    .from("tags")
+                    .leftJoin("article_tag", "tags.id", "article_tag.tag_id")
+                    .where("article_tag.article_id", this.id).then(rows => {
+                        this.tags = rows;
+                    })
             },
             tagInputBlur() {
                 var self = this;
@@ -136,10 +131,8 @@
                     tag_id: tag.id
                 }).then();
                 this.db("articles")
-                    .update({
-                        "updated_at": new Date()
-                    })
-                    .where("id", this.id)
+                    .update({"updated_at":new Date()})
+                    .where("id",this.id)
                     .then();
                 this.tags.push(tag);
                 this.tagInputText = "";

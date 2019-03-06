@@ -61,6 +61,7 @@
           this.article = rows[0];
           var self = this;
           this.$nextTick(function () {
+            self.$refs.articleTag.getTags(id);
             window.document.getElementById("articleTitleInput").focus();
           })
         })
