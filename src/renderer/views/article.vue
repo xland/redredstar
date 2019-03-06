@@ -30,6 +30,7 @@
       };
     },
     beforeRouteUpdate(to, from, next) {
+      this.showSites = false;
       this.getArticle(to.params.id);
       this.bus.$emit('changeView', {
         toId: to.params.id,
@@ -40,6 +41,7 @@
       });
     },
     beforeRouteLeave(to, from, next) {
+      this.showSites = false;
       this.bus.$emit('changeView', {
         toId: to.params.id,
         fromId: from.params.id,
