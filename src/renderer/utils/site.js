@@ -30,19 +30,43 @@ export default [{
     url: 'https://www.jianshu.com/writer#/',
 }, {
     ready: false,
-    id: 'qqzone',
-    title: 'QQ空间',
-    url: 'https://rc.qzone.qq.com/blog/add'
-}, {
     id: 'baijiahao',
     title: '百家号',
 }, {
+    ready: false,
+    id: 'toutiaohao',
+    title: '头条号',
+}, {
+    ready: false,
+    id: 'qiehao',
+    title: '企鹅号',
+}, {
+    ready: false,
+    id: 'wangyihao',
+    title: '网易号',
+}, {
+    ready: false,
+    id: 'yidianhao',
+    title: '一点号',
+}, {
+    ready: false,
+    id: 'dayuhao',
+    title: '大鱼号',
+}, {
+    ready: false,
     id: 'segmentfault',
     title: '思否',
 }, {
+    ready: false,
     id: 'douban',
     title: '豆瓣',
 }, {
+    ready: false,
     id: 'wordpress',
     title: 'wordpress',
+},{
+    ready: false,
+    id: 'qqzone',
+    title: 'QQ空间',
+    url: 'https://rc.qzone.qq.com/blog/add'
 }];

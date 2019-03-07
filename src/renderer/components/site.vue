@@ -128,7 +128,7 @@
 
     .tarSiteContainer {
         text-align: center;
-        margin-top: 80px;
+        margin-top: 60px;
         margin-left: 38px;
         margin-right: 38px;
         display: flex;
