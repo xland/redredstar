@@ -1,6 +1,11 @@
 <template>
     <div v-show="!hide" id="editor">
-        <div id="editorContainer"></div>
+        <div v-if="editor_type == 'html'" id="editorU"></div>
+        <div v-if="editor_type == 'markdown'" id="editorMD"></div>
+        <div class="mdSwitchBtn">
+            <div @click="mdSwitch('md')" :class="mdSwitchType=='md'?'mdSelected':''">Markdow</div>
+            <div @click="mdSwitch('wysiwyg')" :class="mdSwitchType=='wysiwyg'?'mdSelected':''">WYSIWYG</div>
+        </div>
     </div>
 </template>
 <script>
@@ -8,6 +13,11 @@
     const fs = require('fs');
     const path = require('path');
     import imageProcessor from "../utils/image";
+    require('codemirror/lib/codemirror.css'); // codemirror
+    require('tui-editor/dist/tui-editor.css'); // editor ui
+    require('tui-editor/dist/tui-editor-contents.css'); // editor content
+    require('highlight.js/styles/github.css'); // code block highlight
+    var Editor = require('tui-editor');
     const {
         ipcRenderer,
         remote
@@ -15,6 +25,9 @@
     export default {
         data() {
             return {
+                mdEditor:null,
+                mdSwitchType:'md',
+                editor_type: 'html',
                 hide: true,
                 id: -1,
                 tick: null,
@@ -28,6 +41,14 @@
             }
         },
         methods: {
+            mdSwitch(type){
+                this.mdSwitchType = type;
+                if(type == "md"){
+                    this.mdEditor.layout.switchToMarkdown();
+                }else{
+                    this.mdEditor.layout.switchToWYSIWYG();
+                }
+            },
             initContent() {
                 this.docPath = path.join(remote.app.getPath('userData'), "/xxm/" + this.id + "/a.data");
                 var content = fs.readFileSync(this.docPath, this.rwOption);
@@ -64,15 +85,6 @@
                         cb();
                     }
                 });
-            },
-            initEditor() {
-                this.hookWinQuit();
-                this.hookPasteImg();
-                this.hookImgDomChange();
-                this.hookSaveKeyEvent();
-                this.hookContentChange();
-                this.hookContentRefresh();
-                this.hookArticleRefresh();
             },
             hookWinQuit() {
                 var self = this;
@@ -158,21 +170,48 @@
                         self.needSave = true;
                     })
                 }
+            },
+            initEditorU() {
+                var editor = window.UE.getEditor('editorU');
+                var self = this;
+                editor.addListener("ready", () => {
+                    self.hookWinQuit();
+                    self.hookPasteImg();
+                    self.hookImgDomChange();
+                    self.hookSaveKeyEvent();
+                    self.hookContentChange();
+                    self.hookContentRefresh();
+                    self.hookArticleRefresh();
+                    if (self.content) {
+                        editor.setContent(self.content);
+                    }
+                })
+            },
+            initEditorMD() {
+                this.mdEditor = new Editor({
+                    el: document.querySelector('#editorMD'),
+                    height:'100%',
+                    //language:'zh_CN', //todo:会显示台湾的语言
+                    hideModeSwitch:true,
+                    initialEditType: 'markdown',
+                    previewStyle: 'vertical',
+                    usageStatistics:false
+                });
             }
         },
         mounted() {
             this.db("settings").select("*").then(rows => {
                 this.tickStep = rows[0].autosave_interval * 1000;
-                imageProcessor.setImageSize(rows[0].img_w, rows[0].img_h)
-            })
-            var editor = window.UE.getEditor('editorContainer');
-            var self = this;
-            editor.addListener("ready", () => {
-                self.initEditor();
-                if (self.content) {
-                    editor.setContent(self.content);
-                }
-            })
+                imageProcessor.setImageSize(rows[0].img_w, rows[0].img_h);
+                this.editor_type = rows[0].editor_type;
+                this.$nextTick(function () {
+                    if (this.editor_type == "html") {
+                        this.initEditorU();
+                    } else {
+                        this.initEditorMD();
+                    }
+                })
+            });
             this.bus.$on("changeView", obj => {
                 if (obj.fromId) {
                     this.saveContent(obj.done);
@@ -201,8 +240,25 @@
         border-top: 1px solid #e5e5e5;
         border-bottom: 1px solid #e5e5e5;
     }
-
-    #editorContainer {
+    .mdSwitchBtn{
+        z-index: 10;
+        position: absolute;
+        top: 0px;
+        right: 0px;
+    }
+    .mdSwitchBtn div{
+        line-height: 31px;
+        height: 31px;
+        display: inline-block;
+        width: 80px;
+        text-align: center;
+        background: #eee;
+        cursor: pointer;
+    }
+    .mdSelected{
+        background: #fff !important;
+    }
+    #editorU {
         height: 100% !important;
     }
 

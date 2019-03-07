@@ -1,5 +1,5 @@
 <template>
-    <div id="editormd">
+    <div v-if="editor_type == 'markdown'" id="editor">
         <div id="editorContainer"></div>
     </div>
 </template>
@@ -20,6 +20,7 @@
     export default {
         data() {
             return {
+                editor_type:'html',
                 hide: true,
                 id: -1,
                 tick: null,
@@ -166,16 +167,11 @@
             }
         },
         mounted() {
-            var editor = new Editor({
-                el: document.querySelector('#editormd'),
-                initialEditType: 'markdown',
-                previewStyle: 'vertical',
-                height: '300px'
-            });
-            // this.db("settings").select("*").then(rows => {
-            //     this.tickStep = rows[0].autosave_interval * 1000;
-            //     imageProcessor.setImageSize(rows[0].img_w, rows[0].img_h)
-            // })
+            this.db("settings").select("*").then(rows => {
+                this.tickStep = rows[0].autosave_interval * 1000;
+                imageProcessor.setImageSize(rows[0].img_w, rows[0].img_h)
+                this.editor_type = rows[0].editor_type;
+            })
             // var editor = window.UE.getEditor('editorContainer');
             // var self = this;
             // editor.addListener("ready", () => {
@@ -211,14 +207,10 @@
         z-index: 9;
         border-top: 1px solid #e5e5e5;
         border-bottom: 1px solid #e5e5e5;
+        background: #fff;
     }
 
     #editorContainer {
         height: 100% !important;
-    }
-
-    #ta {
-        height: 100% !important;
-        width: 100% !important;
     }
 </style>

@@ -109,7 +109,21 @@
 .swal-button:focus {
     box-shadow: none;
 }
-
+.tui-editor-defaultUI{
+    border:none !important;
+}
+.CodeMirror-vscrollbar{
+    outline: none;
+    user-select: none;
+}
+.tui-editor-defaultUI-toolbar{
+    padding: 0 6px;
+    background: #eee;
+}
+.tui-editor-defaultUI-toolbar button{
+    background-color: #eee;
+    border-color: #eee;
+}
 .noDataTip {
     margin-top: 12%;
     text-align: center;
