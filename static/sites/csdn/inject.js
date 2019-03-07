@@ -13,47 +13,24 @@ let imgProcessor = {
     doc: null,
     guard: 0,
     title: '',
-    getUploadUrl(cb) {
-        let urlParams = {
-            action: 'upload_material',
-            f: 'json',
-            writetype: 'doublewrite',
-            groupid: 3,
-            ticket_id: '',
-            ticket: wx.commonData.data.ticket,
-            svr_time: wx.cgiData.svr_time
-        }
-        let postUrl = 'https://mp.weixin.qq.com/cgi-bin/filetransfer?'
-        remote.session.defaultSession.cookies.get({}, (error, cookies) => {
-            urlParams.ticket_id = cookies.find(v => v.name == "ticket_id").value;
-            Object.keys(urlParams).forEach(key => {
-                postUrl += key + '=' + urlParams[key] + "&";
-            });
-            postUrl += wx.commonData.data.param.substr(1); //"&token=1429231721&lang=zh_CN"
-            cb(postUrl);
-        })
-    },
     uploadImg(dom, file) {
+        let token = CKEDITOR.tools.getCsrfToken();
         let fd = new FormData();
-        fd.append('id', 'WU_FILE_' + this.guard);
-        fd.append("type", file.type);
-        fd.append("lastModifiedDate", new Date());
-        fd.append("size", file.length);
-        fd.append("file", file);
-        this.getUploadUrl((url) => {
-            base.post(url, fd, (r) => {
-                var imgObj = JSON.parse(r);
-                dom.dataset[this.siteId] = imgObj.cdn_url;
-                this.guard -= 1;
-                if (this.guard < 1) {
-                    var html = this.doc.body.innerHTML;
-                    ipcRenderer.send('contentRefreshMain', {
-                        content: html
-                    });
-                    this.end();
-                }
-            });
-        });
+        fd.append('upload', file);
+        fd.append("ckCsrfToken", token);
+        let url = "https://mp.csdn.net/" + CKEDITOR.instances["editor"].config.imageUploadUrl;
+        base.post(url, fd, (r) => {
+            var imgObj = JSON.parse(r);
+            dom.dataset[this.siteId] = imgObj.url;
+            this.guard -= 1;
+            if (this.guard < 1) {
+                var html = this.doc.body.innerHTML;
+                ipcRenderer.send('contentRefreshMain', {
+                    content: html
+                });
+                this.end();
+            }
+        })
     },
     end() {
         this.imgs.forEach(v => {
@@ -62,17 +39,18 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        setTimeout(()=>{
-            window.onbeforeunload = null;
-            CKEDITOR.instances["editor"].setData(this.doc.body.innerHTML)
-            document.getElementById("txtTitle").value = this.title;
-        },600);
+        window.onbeforeunload = null;
+        CKEDITOR.instances["editor"].setData(this.doc.body.innerHTML)
+        document.getElementById("txtTitle").value = this.title;
         base.ajaxInjector(obj => {
-            if (obj && obj.appMsgId) {
-                let url = 'https://mp.weixin.qq.com/?appmsgid=' + obj.appMsgId;
+            if (obj && obj.data) {
+                let id = obj.data.substr(obj.data.lastIndexOf('/') + 1);
+                if (!id) {
+                    return;
+                }
                 ipcRenderer.send('articleRefreshMain', {
-                    siteId: 'weixin',
-                    url
+                    siteId: 'csdn',
+                    url: 'https://mp.csdn.net/postedit/' + id
                 });
             }
         })
@@ -110,30 +88,16 @@ let imgProcessor = {
     }
 }
 
-var waitForReady = function (cb) {
-    setTimeout(function () {
-        if (!document.getElementById("ueditor_0")) {
-            console.log('wait');
-            waitForReady(cb);
-            return;
-        }
-        console.log('go');
-        cb();
-    }, 280);
-}
 
 ipcRenderer.on('message', (event, article) => {
+    window.onbeforeunload = null;
     let url = window.location.href;
-    if(url.startsWith('https://mp.csdn.net/postedit')){
-        if(article.type == "new"){
-            
-        }
-        else{
-            if(!window.VEDITOR_SIDEALBUM){
-                document.getElementById("tblog").contentWindow.document.getElementById("ModifyListAreaDesc")
-            }else{
-                //todo：上传图片居然是用webworker搞得
+    if (url.startsWith('https://mp.csdn.net/postedit')) {
+        setTimeout(()=>{
+            if(!document.getElementById("cke_editor")){
+                alert("抱歉：目前暂不支持csdn的markdown编辑器")
             }
-        }
+            imgProcessor.init(article);
+        },960)
     }
 })
