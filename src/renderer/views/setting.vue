@@ -25,6 +25,17 @@
             </div>
         </div>
         <div class="formItem">
+            默认编辑器：
+            <div @click="setting.editor_type='html'" class="rdBtn">
+                <i :class="['iconfont',setting.editor_type=='html'?'icon-xuanzhong':'icon-weixuanzhong']"></i>
+                HTML
+            </div>
+            <div @click="setting.editor_type='markdown'" class="rdBtn">
+                <i :class="['iconfont',setting.editor_type=='markdown'?'icon-xuanzhong':'icon-weixuanzhong']"></i>
+                MarkDown
+            </div>
+        </div>
+        <div class="formItem">
             <div @click="save" class="btn" style="margin-left: 0px;">保存</div>
         </div>
         <div style="color: #888;">
@@ -59,7 +70,7 @@
                     .update(this.setting)
                     .where("id", this.setting.id)
                     .then(() => {
-                        this.alert("保存成功，重启后生效","success")
+                        this.alert("保存成功，重启后生效", "success")
                     });
             },
             alert(str, iconType = 'error') {
@@ -107,6 +118,7 @@
         height: 36px;
         line-height: 36px;
         margin-left: 12px;
+        color: #363636;
     }
 
     .formItem input {
@@ -126,5 +138,13 @@
 
     .formItem div:last-child {
         padding-left: 8px;
+    }
+
+    .rdBtn {
+        cursor: pointer;
+    }
+
+    .icon-xuanzhong {
+        color: #1787fb !important;
     }
 </style>

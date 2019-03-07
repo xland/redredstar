@@ -48,7 +48,7 @@ const initializer = {
             }
             let arr = articles.map(v => {
                 return {
-                    title: v.title?v.title:'[未命名]',
+                    title: v.title ? v.title : '[未命名]',
                     temp_id: v.id,
                     created_at: new Date(v.id),
                     updated_at: new Date(v.update)
@@ -128,12 +128,14 @@ const initializer = {
             table.integer('autosave_interval');
             table.integer('img_w');
             table.integer('img_h');
+            table.string("editor_type");
             table.datetime('created_at').defaultTo(knex.fn.now());
         }).then(function () {
             let setting = {
                 autosave_interval: uObj.autoSaveIntervalSeconds || 8,
                 img_w: 1300,
                 img_h: 800,
+                editor_type: 'html',
                 created_at: uObj.createAt ? new Date(uObj.createAt) : new Date()
             }
             return knex('settings').insert(setting);
@@ -199,10 +201,23 @@ const initializer = {
             return null;
         }
     },
+
     init(cb) {
         //todo: 在6.2.x的时候删掉此目录
         let bakDir = path.join(electron.remote.app.getPath('userData'), "/xxm_bak");
         if (fs.existsSync(bakDir)) {
+            knex.schema.hasColumn("settings", "editor_type").then(flag => {
+                if (flag) {
+                    return;
+                }
+                knex.schema.alterTable('settings', table => {
+                    table.string('editor_type');
+                }).then(()=>{
+                    knex("settings").update({
+                        "editor_type": "html"
+                    }).then();
+                })
+            })
             cb(knex);
             return;
         }

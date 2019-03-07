@@ -1,6 +1,7 @@
 <template>
   <div id="app">
-    <editor></editor>
+    <editoru></editoru>
+    <editormd></editormd>
     <tabbar></tabbar>
     <router-view />
     <bottombar></bottombar>
@@ -10,7 +11,8 @@
 <script>
   import tabbar from "./components/tabbar";
   import bottombar from "./components/bottombar";
-  import editor from "./components/editor";
+  import editoru from "./components/editoru";
+  import editormd from "./components/editormd";
   const path = require('path');
   const fs = require('fs-extra')
   const {
@@ -21,7 +23,8 @@
     components: {
       tabbar,
       bottombar,
-      editor
+      editoru,
+      editormd
     },
     data() {
       return {
