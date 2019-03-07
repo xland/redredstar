@@ -5,30 +5,37 @@ export default [{
     url: 'https://i.cnblogs.com/EditPosts.aspx?opt=1',
 }, {
     ready: true,
-    id: 'jianshu',
-    title: '简书',
-    url: 'https://www.jianshu.com/writer#/',
-}, {
-    ready: true,
     id: 'oschina',
     title: '开源中国',
     url: 'https://www.oschina.net/blog'
 }, {
-    ready: 'true',
+    ready: true,
     id: 'zhihu',
     title: '知乎',
     url: 'https://zhuanlan.zhihu.com/write'
 }, {
-    ready: 'true',
+    ready: true,
     id: 'weixin',
     title: '微信公众号',
-    url:'https://mp.weixin.qq.com'
+    url: 'https://mp.weixin.qq.com'
+}, {
+    ready: true,
+    id: 'csdn',
+    title: 'CSDN',
+    url: 'https://mp.csdn.net/postedit',
+}, {
+    ready: true,
+    id: 'jianshu',
+    title: '简书',
+    url: 'https://www.jianshu.com/writer#/',
+}, {
+    ready: false,
+    id: 'qqzone',
+    title: 'QQ空间',
+    url: 'https://rc.qzone.qq.com/blog/add'
 }, {
     id: 'baijiahao',
     title: '百家号',
-}, {
-    id: 'csdn',
-    title: 'CSDN',
 }, {
     id: 'segmentfault',
     title: '思否',
@@ -38,7 +45,4 @@ export default [{
 }, {
     id: 'wordpress',
     title: 'wordpress',
-}, {
-    id: 'qqzone',
-    title: 'QQ空间',
 }];
