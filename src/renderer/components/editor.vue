@@ -1,7 +1,7 @@
 <template>
     <div v-show="!hide" id="editor">
-        <div v-if="editor_type == 'html'" id="editorU"></div>
-        <div v-if="editor_type == 'markdown'" id="editorMD"></div>
+        <div v-if="editorType == 'html'" id="editorU"></div>
+        <div v-if="editorType == 'markdown'" id="editorMD"></div>
         <div class="mdSwitchBtn">
             <div @click="mdSwitch('md')" :class="mdSwitchType=='md'?'mdSelected':''">Markdow</div>
             <div @click="mdSwitch('wysiwyg')" :class="mdSwitchType=='wysiwyg'?'mdSelected':''">WYSIWYG</div>
@@ -12,59 +12,38 @@
     //todo:图片放大缩小需要按比例
     const fs = require('fs');
     const path = require('path');
-    import imageProcessor from "../utils/image";
-    require('codemirror/lib/codemirror.css'); // codemirror
-    require('tui-editor/dist/tui-editor.css'); // editor ui
-    require('tui-editor/dist/tui-editor-contents.css'); // editor content
-    require('highlight.js/styles/github.css'); // code block highlight
-    var Editor = require('tui-editor');
+    import u from './editor_mixin/u';
+    import img from './editor_mixin/img';
+    import md from './editor_mixin/md';
     const {
         ipcRenderer,
         remote
     } = require('electron');
     export default {
+        mixins: [u, img, md],
         data() {
             return {
-                mdEditor:null,
-                mdSwitchType:'md',
-                editor_type: 'html',
+                articleId: null,
+                articleContent: null,
+                articlePath: null,
+                editorType: 'html',
                 hide: true,
-                id: -1,
                 tick: null,
-                tickStep: 8,
-                content: null,
-                needSave: false,
-                docPath: null,
+                tickStep: 8000,
                 rwOption: {
                     encoding: 'utf8'
-                }
+                },
+                needSave: false,
             }
         },
         methods: {
-            mdSwitch(type){
+            mdSwitch(type) {
                 this.mdSwitchType = type;
-                if(type == "md"){
+                if (type == "md") {
                     this.mdEditor.layout.switchToMarkdown();
-                }else{
+                } else {
                     this.mdEditor.layout.switchToWYSIWYG();
                 }
-            },
-            initContent() {
-                this.docPath = path.join(remote.app.getPath('userData'), "/xxm/" + this.id + "/a.data");
-                var content = fs.readFileSync(this.docPath, this.rwOption);
-                this.content = content;
-                if (UE.instants.ueditorInstant0 && UE.instants.ueditorInstant0.isReady) {
-                    window.UE.instants.ueditorInstant0.setContent(content);
-                    document.getElementById("ueditor_0").contentWindow.document.documentElement.scrollTop = 0;
-                }
-                imageProcessor.setArticleId(this.id);
-                this.autoSave();
-            },
-            autoSave() {
-                self = this;
-                this.tick = setInterval(() => {
-                    self.saveContent();
-                }, this.tickStep)
             },
             saveContent(cb) {
                 if (!this.needSave) {
@@ -74,10 +53,13 @@
                     return;
                 }
                 this.bus.$emit('saveContent');
-                this.content = window.UE.instants.ueditorInstant0.getContent();
-                fs.writeFileSync(this.docPath, this.content, this.rwOption);
+                if (this.editorType == "html") {
+                    this.articleContent = window.UE.instants.ueditorInstant0.getContent();
+                } else {
+                    this.articleContent = this.mdEditor.getValue();
+                }
+                fs.writeFileSync(this.articlePath, this.articleContent, this.rwOption);
                 this.needSave = false;
-
                 this.db("articles").update({
                     updated_at: new Date()
                 }).where("id", this.id).then(rows => {
@@ -86,126 +68,32 @@
                     }
                 });
             },
-            hookWinQuit() {
-                var self = this;
-                remote.getCurrentWindow().on('close', (event) => {
-                    event.preventDefault();
-                    self.saveContent();
-                    remote.app.quit();
-                })
-            },
-            hookContentChange() {
-                var self = this;
-                var subContent = document.getElementById("ueditor_0").contentWindow.document;
-                subContent.oninput = function (e) {
-                    self.needSave = true;
+            initContent() {
+                if (this.editorType == "html" && UE.instants.ueditorInstant0 && UE.instants.ueditorInstant0.isReady) {
+                    window.UE.instants.ueditorInstant0.setContent(this.articleContent);
+                    var editorDoc = document.getElementById("ueditor_0").contentWindow.document;
+                    editorDoc.documentElement.scrollTop = editorDoc.scrollHeight;
                 }
-            },
-            hookContentRefresh() {
-                ipcRenderer.on('contentRefreshRenderer', (e, message) => {
-                    window.UE.instants.ueditorInstant0.setContent(message.content);
-                    this.needSave = true;
-                });
-            },
-            hookArticleRefresh() {
-                ipcRenderer.on('articleRefreshRenderer', (e, message) => {
-                    this.db('article_site')
-                        .where("article_id", this.id)
-                        .andWhere("site_id", message.siteId)
-                        .select("*").then(rows => {
-                            let asObj = {
-                                article_id: this.id,
-                                site_id: message.siteId,
-                                edit_url: message.url
-                            }
-                            if (rows.length < 1) {
-                                this.db("article_site").insert(asObj).then();
-                            } else {
-                                this.db("article_site").update(asObj).where("id", rows[0].id).then();
-                            }
-                        });
-                });
-            },
-            hookSaveKeyEvent() {
-                var self = this;
-                window.saveArticleKeyEvent = function () {
-                    self.saveContent();
-                };
-            },
-            hookImgDomChange() {
-                var editorDocument = document.getElementById("ueditor_0").contentWindow.document;
-                var observer = new MutationObserver(records => {
-                    records.forEach((item, index) => {
-                        if (item.removedNodes.length > 0 && item.removedNodes[0].tagName ==
-                            "IMG") {
-                            let pathIndex = remote.process.platform == "win32" ? 8 : 7
-                            let filePath = decodeURI(item.removedNodes[0].src).substr(pathIndex);
-                            fs.unlink(filePath, err => {
-                                if (err) {
-                                    err && console.log(err);
-                                }
-                            });
-                            this.needSave = true;
-                        }
-                        if (item.addedNodes.length > 0 && item.addedNodes[0].tagName ==
-                            "IMG" && !item.addedNodes[0].src.startsWith("file")) {
-                            if (item.addedNodes[0].src.startsWith("data:")) {
-                                imageProcessor.saveBase64Obj(item.addedNodes[0]);
-                            } else {
-                                imageProcessor.saveInternetObj(item.addedNodes[0]);
-                            }
-                            this.needSave = true;
-                        }
-                    });
-                });
-                observer.observe(editorDocument, {
-                    childList: true,
-                    subtree: true
-                });
-            },
-            hookPasteImg() {
-                var self = this;
-                window.editorImgInsert = function (file) {
-                    imageProcessor.saveFileObj(file, (err) => {
-                        self.needSave = true;
+                if (this.editorType == "markdown") {
+                    let self = this;
+                    this.$nextTick(function () {
+                        self.mdEditor.setValue(this.articleContent);
                     })
                 }
+                this.tick = setInterval(() => {
+                    this.saveContent()
+                }, this.tickStep)
             },
-            initEditorU() {
-                var editor = window.UE.getEditor('editorU');
-                var self = this;
-                editor.addListener("ready", () => {
-                    self.hookWinQuit();
-                    self.hookPasteImg();
-                    self.hookImgDomChange();
-                    self.hookSaveKeyEvent();
-                    self.hookContentChange();
-                    self.hookContentRefresh();
-                    self.hookArticleRefresh();
-                    if (self.content) {
-                        editor.setContent(self.content);
-                    }
-                })
-            },
-            initEditorMD() {
-                this.mdEditor = new Editor({
-                    el: document.querySelector('#editorMD'),
-                    height:'100%',
-                    //language:'zh_CN', //todo:会显示台湾的语言
-                    hideModeSwitch:true,
-                    initialEditType: 'markdown',
-                    previewStyle: 'vertical',
-                    usageStatistics:false
-                });
-            }
         },
         mounted() {
+            //todo:全局的setting
             this.db("settings").select("*").then(rows => {
                 this.tickStep = rows[0].autosave_interval * 1000;
-                imageProcessor.setImageSize(rows[0].img_w, rows[0].img_h);
-                this.editor_type = rows[0].editor_type;
+                this.imgHight = rows[0].img_h;
+                this.imgWidth = rows[0].img_w;
+                this.editorType = rows[0].editor_type;
                 this.$nextTick(function () {
-                    if (this.editor_type == "html") {
+                    if (this.editorType == "html") {
                         this.initEditorU();
                     } else {
                         this.initEditorMD();
@@ -217,11 +105,13 @@
                     this.saveContent(obj.done);
                 }
                 if (!obj.toId) {
-                    this.id = -1;
+                    this.articleId = null;
                     clearInterval(this.tick);
                     this.hide = true;
                 } else {
-                    this.id = obj.toId;
+                    this.articleId = obj.toId;
+                    this.articlePath = path.join(remote.app.getPath('userData'), "/xxm/" + this.articleId);
+                    this.articleContent = fs.readFileSync(path.join(this.articlePath, "a.data"), this.rwOption);
                     this.hide = false;
                     this.initContent();
                 }
@@ -240,13 +130,15 @@
         border-top: 1px solid #e5e5e5;
         border-bottom: 1px solid #e5e5e5;
     }
-    .mdSwitchBtn{
+
+    .mdSwitchBtn {
         z-index: 10;
         position: absolute;
         top: 0px;
         right: 0px;
     }
-    .mdSwitchBtn div{
+
+    .mdSwitchBtn div {
         line-height: 31px;
         height: 31px;
         display: inline-block;
@@ -255,9 +147,11 @@
         background: #eee;
         cursor: pointer;
     }
-    .mdSelected{
+
+    .mdSelected {
         background: #fff !important;
     }
+
     #editorU {
         height: 100% !important;
     }
