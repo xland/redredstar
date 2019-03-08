@@ -1,5 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+import sharp from 'sharp';
+const request = require('request');
+const url = require("url");
 export default{
     data(){
         return {
@@ -34,7 +37,7 @@ export default{
             let base64Data = dom.src.replace(/^data:([A-Za-z-+/]+);base64,/, '');
             let fullName = path.join(this.articlePath, id + ".png");
             fs.writeFile(fullName, base64Data, 'base64', err => {
-                this.compress(fullName);
+                this.imgCompress(fullName);
                 document.getElementById("ueditor_0").contentWindow.document.getElementById(id).src = 'file://' + fullName;
             });
             dom.removeAttribute("_src");
@@ -49,10 +52,8 @@ export default{
                 if (fr.readyState == 2) {
                     var buffer = new Buffer(fr.result);
                     fs.writeFile(fullName, buffer, err => {
-                        this.compress(fullName);
-                        var imgDom = '<img id="' + id + '" src="file://' + fullName + '" />';
-                        window.UE.instants.ueditorInstant0.execCommand("inserthtml", imgDom);
-                        cb(err);
+                        this.imgCompress(fullName);
+                        cb(id,fullName,err);
                     });
                 }
             };
@@ -66,7 +67,7 @@ export default{
             request(dom.src)
                 .pipe(fs.createWriteStream(fullName))
                 .on('finish', (err) => {
-                    this.compress(fullName);
+                    this.imgCompress(fullName);
                     document.getElementById("ueditor_0").contentWindow.document.getElementById(id).src = 'file://' + fullName;
                 });
             dom.removeAttribute("_src");

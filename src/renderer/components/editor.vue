@@ -58,11 +58,11 @@
                 } else {
                     this.articleContent = this.mdEditor.getValue();
                 }
-                fs.writeFileSync(this.articlePath, this.articleContent, this.rwOption);
+                fs.writeFileSync(path.join(this.articlePath, "a.data"), this.articleContent, this.rwOption);
                 this.needSave = false;
                 this.db("articles").update({
                     updated_at: new Date()
-                }).where("id", this.id).then(rows => {
+                }).where("id", this.articleId).then(rows => {
                     if (cb) {
                         cb();
                     }

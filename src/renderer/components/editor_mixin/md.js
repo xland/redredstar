@@ -1,8 +1,3 @@
-// import base from './base'
-
-// class md extends base {
-
-// }
 require('codemirror/lib/codemirror.css'); // codemirror
 require('tui-editor/dist/tui-editor.css'); // editor ui
 require('tui-editor/dist/tui-editor-contents.css'); // editor content
@@ -32,13 +27,20 @@ export default {
                     load: function (editor) {
                         self.mdEditor = editor;
                         //editor.setHtml(this.)
+                    },
+                    change:function(){
+                        self.needSave = true;
                     }
                 },
                 hooks: {
-                    addImageBlobHook: function (blob, cb, source) {
+                    addImageBlobHook: function (file, cb, source) {
                         //source of an event the item belongs to. 'paste', 'drop', 'ui'
-                        console.log(blob);
-                        callback(uploadedImageURL, 'alt text');
+                        self.imgSaveFileObj(file, (id, fullName, err) => {
+                            let imgDom = '<img id="' + id + '" src="file://' + fullName + '" />';
+                            self.mdEditor.insertText(imgDom);
+                            self.needSave = true;
+                        })
+                        
                     }
                 }
             });

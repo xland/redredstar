@@ -1,13 +1,12 @@
+//静态资源也用require的方式引入
 const fs = require('fs');
 const path = require('path');
 const {
     ipcRenderer,
     remote
 } = require('electron');
-import imageProcessor from "../../utils/image";
 export default {
-    methods:{
-
+    methods: {
         hookWinQuit() {
             var self = this;
             remote.getCurrentWindow().on('close', (event) => {
@@ -55,8 +54,9 @@ export default {
             };
         },
         hookImgDomChange() {
-            var editorDocument = document.getElementById("ueditor_0").contentWindow.document;
-            var observer = new MutationObserver(records => {
+            let self = this;
+            let editorDocument = document.getElementById("ueditor_0").contentWindow.document;
+            let observer = new MutationObserver(records => {
                 records.forEach((item, index) => {
                     if (item.removedNodes.length > 0 && item.removedNodes[0].tagName ==
                         "IMG") {
@@ -72,9 +72,9 @@ export default {
                     if (item.addedNodes.length > 0 && item.addedNodes[0].tagName ==
                         "IMG" && !item.addedNodes[0].src.startsWith("file")) {
                         if (item.addedNodes[0].src.startsWith("data:")) {
-                            imageProcessor.saveBase64Obj(item.addedNodes[0]);
+                            self.imgSaveBase64Obj(item.addedNodes[0]);
                         } else {
-                            imageProcessor.saveInternetObj(item.addedNodes[0]);
+                            self.imgSaveInternetObj(item.addedNodes[0]);
                         }
                         this.needSave = true;
                     }
@@ -88,7 +88,9 @@ export default {
         hookPasteImg() {
             var self = this;
             window.editorImgInsert = function (file) {
-                imageProcessor.saveFileObj(file, (err) => {
+                self.imgSaveFileObj(file, (id, fullName, err) => {
+                    var imgDom = '<img id="' + id + '" src="file://' + fullName + '" />';
+                    window.UE.instants.ueditorInstant0.execCommand("inserthtml", imgDom);
                     self.needSave = true;
                 })
             }
