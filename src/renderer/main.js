@@ -5,7 +5,7 @@ import './utils/version'
 import './utils/util'
 import store from './utils/store'
 import router from './utils/router'
-import App from './App'
+import app from './app'
 const {
   ipcRenderer
 } = require('electron');
@@ -22,13 +22,13 @@ dbInitializer.init(db => {
   new Vue({
     data: store,
     components: {
-      App
+      app
     },
     router,
     beforeCreate() {
       Vue.prototype.bus = this;
       Vue.prototype.db = db;
     },
-    template: '<App/>'
+    template: '<app/>'
   }).$mount('#app')
 })

@@ -202,23 +202,34 @@ const initializer = {
         }
     },
 
+    extraColumn(cb){
+        knex.schema.hasColumn("settings", "editor_type").then(flag => {
+            if (flag) {
+                return;
+            }
+            knex.schema.alterTable('settings', table => {
+                table.string('editor_type');
+            }).then(()=>{
+                knex("settings").update({
+                    "editor_type": "html"
+                }).then();
+            });
+            knex.schema.alterTable('articles', table => {
+                table.string('editor_type');
+            }).then(()=>{
+                knex("articles").update({
+                    "editor_type": "html"
+                }).then();
+            })
+        })
+        cb(knex);
+    },
+
     init(cb) {
         //todo: 在6.2.x的时候删掉此目录
         let bakDir = path.join(electron.remote.app.getPath('userData'), "/xxm_bak");
         if (fs.existsSync(bakDir)) {
-            knex.schema.hasColumn("settings", "editor_type").then(flag => {
-                if (flag) {
-                    return;
-                }
-                knex.schema.alterTable('settings', table => {
-                    table.string('editor_type');
-                }).then(()=>{
-                    knex("settings").update({
-                        "editor_type": "html"
-                    }).then();
-                })
-            })
-            cb(knex);
+            this.extraColumn(cb);
             return;
         }
         swal({

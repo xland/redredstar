@@ -71,11 +71,13 @@
                     .update(this.setting)
                     .where("id", this.setting.id)
                     .then(() => {
-                        this.alert("保存成功，重启后生效", "success")
+                        this.alert("保存成功，将刷新应用", "success").then(val=>{
+                            window.location.reload();
+                        })
                     });
             },
             alert(str, iconType = 'error') {
-                swal({
+                return swal({
                     icon: iconType,
                     text: str,
                 });

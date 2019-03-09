@@ -96,9 +96,7 @@
                     article.id = rows[0];
                     let aPath = path.join(electron.remote.app.getPath('userData'), "/xxm/" + article.id);
                     fs.mkdirSync(aPath);
-                    fs.writeFileSync(path.join(aPath, "/a.data"), "", {
-                        encoding: 'utf8'
-                    });
+                    fs.writeFileSync(path.join(aPath, "/a.data"), "", this.$root.rwOption);
                     this.bus.$emit('findOrAddTab', {
                         url: '/article/' + article.id,
                         title: "",

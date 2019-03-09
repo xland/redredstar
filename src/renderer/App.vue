@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <editor></editor>
     <tabbar></tabbar>
     <router-view />
     <bottombar></bottombar>
@@ -10,7 +9,7 @@
 <script>
   import tabbar from "./components/tabbar";
   import bottombar from "./components/bottombar";
-  import editor from "./components/editor";
+  
   const path = require('path');
   const fs = require('fs-extra')
   const {
@@ -21,15 +20,18 @@
     components: {
       tabbar,
       bottombar,
-      editor,
     },
     data() {
-      return {
-      }
+      return {}
     },
-    methods: {
-    },
-    mounted: function () {
+    methods: {},
+    mounted() {
+      this.db("settings").select("*").then(rows => {
+        this.$root.tickStep = rows[0].autosave_interval * 1000;
+        this.$root.imgHight = rows[0].img_h;
+        this.$root.imgWidth = rows[0].img_w;
+        this.$root.editorType = rows[0].editor_type;
+      });
     }
   }
 </script>

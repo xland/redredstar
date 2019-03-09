@@ -9,8 +9,7 @@
         <i class="iconfont icon-fabu" style="font-size: 18px !important;"></i>
       </div>
     </div>
-    <div style="flex: 1;background: #fff;">
-    </div>
+    <editor></editor>
     <articletag ref="articleTag"></articletag>
     <site v-if="showSites"></site>
   </div>
@@ -18,10 +17,12 @@
 <script>
   import articletag from "../components/articletag";
   import site from "../components/site";
+  import editor from "../components/editor";
   export default {
     components: {
       site,
-      articletag
+      articletag,
+      editor,
     },
     data() {
       return {

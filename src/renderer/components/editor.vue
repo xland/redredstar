@@ -1,5 +1,5 @@
 <template>
-    <div v-show="!hide" id="editor">
+    <div class="editor">
         <div v-if="editorType == 'html'" id="editorU"></div>
         <div v-if="editorType == 'markdown'" id="editorMD"></div>
     </div>
@@ -23,12 +23,7 @@
                 articleContent: null,
                 articlePath: null,
                 editorType: 'html',
-                hide: true,
                 tick: null,
-                tickStep: 8000,
-                rwOption: {
-                    encoding: 'utf8'
-                },
                 needSave: false,
             }
         },
@@ -47,7 +42,7 @@
                     let mdStr = window.mdEditor.getValue();
                     this.articleContent = window.mdEditor.convertor.toHTMLWithCodeHightlight(mdStr)
                 }
-                fs.writeFileSync(path.join(this.articlePath, "a.data"), this.articleContent, this.rwOption);
+                fs.writeFileSync(path.join(this.articlePath, "a.data"), this.articleContent, this.$root.rwOption);
                 this.needSave = false;
                 this.db("articles").update({
                     updated_at: new Date()
@@ -108,7 +103,7 @@
                 }
                 this.tick = setInterval(() => {
                     this.saveContent()
-                }, this.tickStep)
+                }, this.$root.tickStep)
             },
         },
         mounted() {
@@ -116,19 +111,6 @@
             this.hookArticleRefresh();
             this.hookWinQuit();
             //todo:全局的setting
-            this.db("settings").select("*").then(rows => {
-                this.tickStep = rows[0].autosave_interval * 1000;
-                this.imgHight = rows[0].img_h;
-                this.imgWidth = rows[0].img_w;
-                this.editorType = rows[0].editor_type;
-                this.$nextTick(function () {
-                    if (this.editorType == "html") {
-                        this.initEditorU();
-                    } else {
-                        this.initEditorMD();
-                    }
-                })
-            });
             this.bus.$on("changeView", obj => {
                 if (obj.fromId) {
                     this.saveContent(obj.done);
@@ -140,7 +122,7 @@
                 } else {
                     this.articleId = obj.toId;
                     this.articlePath = path.join(remote.app.getPath('userData'), "/xxm/" + this.articleId);
-                    this.articleContent = fs.readFileSync(path.join(this.articlePath, "a.data"), this.rwOption);
+                    this.articleContent = fs.readFileSync(path.join(this.articlePath, "a.data"), this.$root.rwOption);
                     this.hide = false;
                     this.initContent();
                     this.removeUselessImg();
@@ -150,13 +132,8 @@
     }
 </script>
 <style scoped lang="scss">
-    #editor {
-        position: absolute;
-        bottom: 72px;
-        left: 8px;
-        top: 76px;
-        right: 8px;
-        z-index: 9;
+    .editor {
+        flex: 1;background: #fff;
         border-top: 1px solid #e5e5e5;
         border-bottom: 1px solid #e5e5e5;
     }

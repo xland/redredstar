@@ -2,6 +2,13 @@ require('codemirror/lib/codemirror.css'); // codemirror
 require('tui-editor/dist/tui-editor.css'); // editor ui
 require('tui-editor/dist/tui-editor-contents.css'); // editor content
 require('highlight.js/styles/github.css'); // code block highlight
+const TurndownService = require('turndown');
+var turndownPluginGfm = require('turndown-plugin-gfm')
+var gfm = turndownPluginGfm.gfm
+var tables = turndownPluginGfm.tables
+var strikethrough = turndownPluginGfm.strikethrough
+const turndownService = new TurndownService();
+turndownService.use([gfm,tables, strikethrough])
 var Editor = require('tui-editor');
 
 export default {
@@ -12,8 +19,12 @@ export default {
     },
     methods: {
         htmlToMd() {
+            if(!this.articleContent){
+                return;
+            }
             let tempStr = this.articleContent.replace("<img", "^^^^");
-            let mdStr = window.mdEditor.convertor.toMarkdown(tempStr);
+            //let mdStr = window.mdEditor.convertor.toMarkdown(tempStr);
+            let mdStr = turndownService.turndown(tempStr);
             mdStr = mdStr.replace("^^^^", "<img");
             window.mdEditor.setValue(mdStr);
         },
