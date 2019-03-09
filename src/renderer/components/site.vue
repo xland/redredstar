@@ -28,39 +28,48 @@
     export default {
         data() {
             return {
+                winOption: {
+                    width: 1056,
+                    height: 680,
+                    webPreferences: {
+                        nodeIntegration: false,
+                        preload: null,
+                    }
+                },
+                urlOption: {
+                    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+                },
                 initWebview: false,
                 sites: sites,
                 article,
             }
         },
         methods: {
-            makeWin(item,url,type) {
-                let win = new BrowserWindow({
-                    width: 1056,
-                    height: 680,
-                    webPreferences: {
-                        nodeIntegration: false,
-                        preload: path.join(__static, 'sites/' + item.id + '/inject.js')
-                    }
-                });
+            makeWin(item, url, type) {
+                this.winOption.webPreferences.preload = path.join(__static, 'sites/' + item.id + '/inject.js');
+                let win = new BrowserWindow(this.winOption);
                 item.winId = win.id;
                 win.on('closed', () => {
                     item.winId = null;
                     win = null
                 })
-                win.loadURL(url, {
-                    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
-                });
+                win.loadURL(url, this.urlOption);
+                let content = "";
+                if(window.mdEditor){
+                    content = window.mdEditor.getHtml();
+                }else{
+                    content = window.UE.instants.ueditorInstant0.getContent();
+                }
                 let self = this;
                 win.webContents.on('dom-ready', () => {
                     win.webContents.send('message', {
                         title: self.$parent.article.title,
-                        content: window.UE.instants.ueditorInstant0.getContent(),
                         id: self.$route.params.id,
                         winId: item.winId,
                         siteId: item.id,
                         url,
-                        type
+                        type,
+                        content
                     });
                 });
             },

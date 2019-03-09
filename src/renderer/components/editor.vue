@@ -2,10 +2,6 @@
     <div v-show="!hide" id="editor">
         <div v-if="editorType == 'html'" id="editorU"></div>
         <div v-if="editorType == 'markdown'" id="editorMD"></div>
-        <div class="mdSwitchBtn">
-            <div @click="mdSwitch('md')" :class="mdSwitchType=='md'?'mdSelected':''">Markdow</div>
-            <div @click="mdSwitch('wysiwyg')" :class="mdSwitchType=='wysiwyg'?'mdSelected':''">WYSIWYG</div>
-        </div>
     </div>
 </template>
 <script>
@@ -37,14 +33,6 @@
             }
         },
         methods: {
-            mdSwitch(type) {
-                this.mdSwitchType = type;
-                if (type == "md") {
-                    this.mdEditor.layout.switchToMarkdown();
-                } else {
-                    this.mdEditor.layout.switchToWYSIWYG();
-                }
-            },
             saveContent(cb) {
                 if (!this.needSave) {
                     if (cb) {
@@ -56,7 +44,8 @@
                 if (this.editorType == "html") {
                     this.articleContent = window.UE.instants.ueditorInstant0.getContent();
                 } else {
-                    this.articleContent = this.mdEditor.getValue();
+                    let mdStr = window.mdEditor.getValue();
+                    this.articleContent = window.mdEditor.convertor.toHTMLWithCodeHightlight(mdStr)
                 }
                 fs.writeFileSync(path.join(this.articlePath, "a.data"), this.articleContent, this.rwOption);
                 this.needSave = false;
@@ -68,6 +57,44 @@
                     }
                 });
             },
+            hookContentRefresh() {
+                ipcRenderer.on('contentRefreshRenderer', (e, message) => {
+                    this.articleContent = message.content;
+                    if (this.editorType == "html") {
+                        window.UE.instants.ueditorInstant0.setContent(this.articleContent);
+                    } else {
+                        this.htmlToMd();
+                    }
+                    this.needSave = true;
+                });
+            },
+            hookWinQuit() {
+                var self = this;
+                remote.getCurrentWindow().on('close', (event) => {
+                    event.preventDefault();
+                    self.saveContent();
+                    remote.app.quit();
+                })
+            },
+            hookArticleRefresh() {
+                ipcRenderer.on('articleRefreshRenderer', (e, message) => {
+                    this.db('article_site')
+                        .where("article_id", this.articleId)
+                        .andWhere("site_id", message.siteId)
+                        .select("*").then(rows => {
+                            let asObj = {
+                                article_id: this.articleId,
+                                site_id: message.siteId,
+                                edit_url: message.url
+                            }
+                            if (rows.length < 1) {
+                                this.db("article_site").insert(asObj).then();
+                            } else {
+                                this.db("article_site").update(asObj).where("id", rows[0].id).then();
+                            }
+                        });
+                });
+            },
             initContent() {
                 if (this.editorType == "html" && UE.instants.ueditorInstant0 && UE.instants.ueditorInstant0.isReady) {
                     window.UE.instants.ueditorInstant0.setContent(this.articleContent);
@@ -75,9 +102,8 @@
                     editorDoc.documentElement.scrollTop = editorDoc.scrollHeight;
                 }
                 if (this.editorType == "markdown") {
-                    let self = this;
                     this.$nextTick(function () {
-                        self.mdEditor.setValue(this.articleContent);
+                        this.htmlToMd();
                     })
                 }
                 this.tick = setInterval(() => {
@@ -86,6 +112,9 @@
             },
         },
         mounted() {
+            this.hookContentRefresh();
+            this.hookArticleRefresh();
+            this.hookWinQuit();
             //todo:全局的setting
             this.db("settings").select("*").then(rows => {
                 this.tickStep = rows[0].autosave_interval * 1000;

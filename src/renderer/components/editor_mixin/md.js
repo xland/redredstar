@@ -7,11 +7,32 @@ var Editor = require('tui-editor');
 export default {
     data() {
         return {
-            mdEditor: null,
-            mdSwitchType: 'md',
+
         }
     },
-    methods:{
+    methods: {
+        htmlToMd() {
+            let tempStr = this.articleContent.replace("<img", "^^^^");
+            let mdStr = window.mdEditor.convertor.toMarkdown(tempStr);
+            mdStr = mdStr.replace("^^^^", "<img");
+            window.mdEditor.setValue(mdStr);
+        },
+        hookImgDomChangeMd() {
+            let dom = document.getElementsByClassName("te-preview")[0];
+            let observer = new MutationObserver(records => {
+                records.forEach((item, index) => {
+                    if (item.removedNodes.length > 0 && item.removedNodes[0].tagName ==
+                        "IMG") {
+                        this.delImgWhenDomChange(item.removedNodes[0]);
+                        this.needSave = true;
+                    }
+                });
+            });
+            observer.observe(dom, {
+                childList: true,
+                subtree: true
+            });
+        },
         initEditorMD() {
             let self = this;
             new Editor({
@@ -22,13 +43,12 @@ export default {
                 initialEditType: 'markdown',
                 previewStyle: 'vertical',
                 usageStatistics: false,
-                initialValue: this.articleContent,
                 events: {
                     load: function (editor) {
-                        self.mdEditor = editor;
-                        //editor.setHtml(this.)
+                        window.mdEditor = editor;
+                        self.htmlToMd();
                     },
-                    change:function(){
+                    change: function () {
                         self.needSave = true;
                     }
                 },
@@ -37,10 +57,9 @@ export default {
                         //source of an event the item belongs to. 'paste', 'drop', 'ui'
                         self.imgSaveFileObj(file, (id, fullName, err) => {
                             let imgDom = '<img id="' + id + '" src="file://' + fullName + '" />';
-                            self.mdEditor.insertText(imgDom);
+                            window.mdEditor.insertText(imgDom);
                             self.needSave = true;
                         })
-                        
                     }
                 }
             });
