@@ -19,13 +19,14 @@ let imgProcessor = {
         var url = 'https://zhuanlan.zhihu.com/api/uploaded_images';
         base.post(url, fd, (r) => {
             var imgObj = JSON.parse(r);
-            dom.dataset[this.siteId] = imgObj.src;
+            dom.src = imgObj.src;
+            ipcRenderer.send('imgUploadMain', {
+                id: dom.id,
+                siteId: this.siteId,
+                url: dom.src
+            });
             this.guard -= 1;
             if (this.guard < 1) {
-                var html = this.doc.body.innerHTML;
-                ipcRenderer.send('contentRefreshMain', {
-                    content: html
-                });
                 this.end();
             }
         }, {
@@ -35,7 +36,6 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
-            v.src = v.dataset[this.siteId]
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
@@ -50,7 +50,7 @@ let imgProcessor = {
                 document.getElementsByClassName("public-DraftEditor-content")[0].click();
                 clipboard.writeHTML(this.doc.body.innerHTML);
                 win.webContents.paste();
-                ipcRenderer.send('articleRefreshMain', {
+                ipcRenderer.send('articlePublishMain', {
                     siteId: 'zhihu',
                     url: window.location.href
                 });

@@ -44,7 +44,7 @@
                 let item = this.tags.splice(index, 1)[0];
                 this.db("article_tag")
                     .where("tag_id", item.id)
-                    .andWhere("article_id", this.id)
+                    .andWhere("article_id", this.$parent.article.id)
                     .del()
                     .then(() => {
                         this.db("article_tag")
@@ -61,14 +61,13 @@
                             });
                     });
             },
-            getTags(id) {
-                this.id = id;
+            getTags() {
                 this.db
                     .distinct()
                     .select("tags.*")
                     .from("tags")
                     .leftJoin("article_tag", "tags.id", "article_tag.tag_id")
-                    .where("article_tag.article_id", this.id).then(rows => {
+                    .where("article_tag.article_id", this.$parent.article.id).then(rows => {
                         this.tags = rows;
                     })
             },
@@ -127,12 +126,12 @@
             },
             addTagFinish(tag) {
                 this.db("article_tag").insert({
-                    article_id: this.id,
+                    article_id: this.$parent.article.id,
                     tag_id: tag.id
                 }).then();
                 this.db("articles")
                     .update({"updated_at":new Date()})
-                    .where("id",this.id)
+                    .where("id",this.$parent.article.id)
                     .then();
                 this.tags.push(tag);
                 this.tagInputText = "";

@@ -19,7 +19,6 @@
         mixins: [u, img, md],
         data() {
             return {
-                articleId: null,
                 articleContent: null,
                 articlePath: null,
                 editorType: 'html',
@@ -46,7 +45,7 @@
                 this.needSave = false;
                 this.db("articles").update({
                     updated_at: new Date()
-                }).where("id", this.articleId).then(rows => {
+                }).where("id", this.$parent.article.id).then(rows => {
                     if (cb) {
                         cb();
                     }
@@ -71,25 +70,6 @@
                     remote.app.quit();
                 })
             },
-            hookArticleRefresh() {
-                ipcRenderer.on('articleRefreshRenderer', (e, message) => {
-                    this.db('article_site')
-                        .where("article_id", this.articleId)
-                        .andWhere("site_id", message.siteId)
-                        .select("*").then(rows => {
-                            let asObj = {
-                                article_id: this.articleId,
-                                site_id: message.siteId,
-                                edit_url: message.url
-                            }
-                            if (rows.length < 1) {
-                                this.db("article_site").insert(asObj).then();
-                            } else {
-                                this.db("article_site").update(asObj).where("id", rows[0].id).then();
-                            }
-                        });
-                });
-            },
             initContent() {
                 if (this.editorType == "html" && UE.instants.ueditorInstant0 && UE.instants.ueditorInstant0.isReady) {
                     window.UE.instants.ueditorInstant0.setContent(this.articleContent);
@@ -105,35 +85,25 @@
                     this.saveContent()
                 }, this.$root.tickStep)
             },
+            getContent(id) {
+                this.articlePath = path.join(remote.app.getPath('userData'), "/xxm/" + this.$parent.article.id);
+                this.articleContent = fs.readFileSync(path.join(this.articlePath, "a.data"), this.$root.rwOption);
+                this.hide = false;
+                this.initContent();
+                this.removeUselessImg();
+            }
         },
         mounted() {
             this.hookContentRefresh();
             this.hookArticleRefresh();
             this.hookWinQuit();
-            //todo:全局的setting
-            this.bus.$on("changeView", obj => {
-                if (obj.fromId) {
-                    this.saveContent(obj.done);
-                }
-                if (!obj.toId) {
-                    this.articleId = null;
-                    clearInterval(this.tick);
-                    this.hide = true;
-                } else {
-                    this.articleId = obj.toId;
-                    this.articlePath = path.join(remote.app.getPath('userData'), "/xxm/" + this.articleId);
-                    this.articleContent = fs.readFileSync(path.join(this.articlePath, "a.data"), this.$root.rwOption);
-                    this.hide = false;
-                    this.initContent();
-                    this.removeUselessImg();
-                }
-            })
         }
     }
 </script>
 <style scoped lang="scss">
     .editor {
-        flex: 1;background: #fff;
+        flex: 1;
+        background: #fff;
         border-top: 1px solid #e5e5e5;
         border-bottom: 1px solid #e5e5e5;
     }

@@ -19,20 +19,20 @@ let imgProcessor = {
         let url = 'https://upload.cnblogs.com/imageuploader/CorsUpload';
         base.post(url, fd, (r) => {
             var imgObj = JSON.parse(r);
-            dom.dataset[this.siteId] = imgObj.message;
+            dom.src = imgObj.message;
+            ipcRenderer.send('imgUploadMain', {
+                id: dom.id,
+                siteId: this.siteId,
+                url: dom.src
+            });
             this.guard -= 1;
             if (this.guard < 1) {
-                var html = this.doc.body.innerHTML;
-                ipcRenderer.send('contentRefreshMain', {
-                    content: html
-                });
                 this.end();
             }
         });
     },
     end() {
         this.imgs.forEach(v => {
-            v.src = v.dataset[this.siteId]
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
@@ -75,7 +75,7 @@ ipcRenderer.on('message', (event, article) => {
     window.onbeforeunload = null;
     if (window.location.href.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
         var url = document.getElementById("TipsPanel_LinkEdit").href
-        ipcRenderer.send('articleRefreshMain', {
+        ipcRenderer.send('articlePublishMain', {
             siteId: 'cnblogs',
             url: url
         });

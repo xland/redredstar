@@ -43,13 +43,14 @@ let imgProcessor = {
         this.getUploadUrl((url) => {
             base.post(url, fd, (r) => {
                 var imgObj = JSON.parse(r);
-                dom.dataset[this.siteId] = imgObj.cdn_url;
+                dom.src = imgObj.cdn_url;
+                ipcRenderer.send('imgUploadMain', {
+                    id: dom.id,
+                    siteId: this.siteId,
+                    url: dom.src
+                });
                 this.guard -= 1;
                 if (this.guard < 1) {
-                    var html = this.doc.body.innerHTML;
-                    ipcRenderer.send('contentRefreshMain', {
-                        content: html
-                    });
                     this.end();
                 }
             });
@@ -57,7 +58,6 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
-            v.src = v.dataset[this.siteId]
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
@@ -70,7 +70,7 @@ let imgProcessor = {
         base.ajaxInjector(obj => {
             if (obj && obj.appMsgId) {
                 let url = 'https://mp.weixin.qq.com/?appmsgid=' + obj.appMsgId;
-                ipcRenderer.send('articleRefreshMain', {
+                ipcRenderer.send('articlePublishMain', {
                     siteId: 'weixin',
                     url
                 });

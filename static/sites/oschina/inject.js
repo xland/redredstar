@@ -20,20 +20,20 @@ let imgProcessor = {
         let url = CKEDITOR.instances["body"].config.uploadUrl;
         base.post(url, fd, (r) => {
             var imgObj = JSON.parse(r);
-            dom.dataset[this.siteId] = imgObj.url;
+            dom.src = imgObj.url;
+            ipcRenderer.send('imgUploadMain', {
+                id: dom.id,
+                siteId: this.siteId,
+                url: dom.src
+            });
             this.guard -= 1;
             if (this.guard < 1) {
-                var html = this.doc.body.innerHTML;
-                ipcRenderer.send('contentRefreshMain', {
-                    content: html
-                });
                 this.end();
             }
         })
     },
     end() {
         this.imgs.forEach(v => {
-            v.src = v.dataset[this.siteId]
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
@@ -94,7 +94,7 @@ ipcRenderer.on('message', (event, article) => {
         let id = $(".article-like")[0].dataset.id;
         let editUrl = baseUrl + '/blog/write/' + id;
         let showUrl = baseUrl + '/blog/' + id;
-        ipcRenderer.send('articleRefreshMain', {
+        ipcRenderer.send('articlePublishMain', {
             siteId: 'oschina',
             url: editUrl
         });

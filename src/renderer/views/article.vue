@@ -9,7 +9,7 @@
         <i class="iconfont icon-fabu" style="font-size: 18px !important;"></i>
       </div>
     </div>
-    <editor></editor>
+    <editor ref="articleEditor"></editor>
     <articletag ref="articleTag"></articletag>
     <site v-if="showSites"></site>
   </div>
@@ -18,6 +18,7 @@
   import articletag from "../components/articletag";
   import site from "../components/site";
   import editor from "../components/editor";
+  const ipcRenderer = require('electron').ipcRenderer;
   export default {
     components: {
       site,
@@ -33,44 +34,55 @@
     beforeRouteUpdate(to, from, next) {
       this.showSites = false;
       this.getArticle(to.params.id);
-      this.bus.$emit('changeView', {
-        toId: to.params.id,
-        fromId: from.params.id,
-        done: () => {
-          next();
-        }
+      this.$refs.articleEditor.saveContent(() => {
+        next();
       });
+
     },
     beforeRouteLeave(to, from, next) {
       this.showSites = false;
-      this.bus.$emit('changeView', {
-        toId: to.params.id,
-        fromId: from.params.id,
-        done: () => {
-          next();
-        }
+      this.$refs.articleEditor.saveContent(() => {
+        next();
       });
     },
     mounted() {
       let articleId = this.$route.params.id;
       this.getArticle(articleId);
-      this.bus.$emit('changeView', {
-        toId: this.$route.params.id
-      });
     },
     methods: {
+      hookArticleRefresh() {
+        ipcRenderer.on('articleRefreshRenderer', (e, message) => {
+          this.db('article_site')
+            .where("article_id", this.article.id)
+            .andWhere("site_id", message.siteId)
+            .select("*").then(rows => {
+              let asObj = {
+                article_id: this.article.id,
+                site_id: message.siteId,
+                edit_url: message.url
+              }
+              if (rows.length < 1) {
+                this.db("article_site").insert(asObj).then();
+              } else {
+                this.db("article_site").update(asObj).where("id", rows[0].id).then();
+              }
+            });
+        });
+      },
       getArticle(id) {
         this.db("articles").where("id", id).select("*").then(rows => {
           this.article = rows[0];
-          var self = this;
-          this.$nextTick(function () {
-            self.$refs.articleTag.getTags(id);
+          this.$nextTick(() => {
+            this.$refs.articleTag.getTags();
+            this.$refs.articleEditor.getContent();
+            this.hookArticleRefresh();
             window.document.getElementById("articleTitleInput").focus();
           })
         })
       },
       titleTab() {
         setTimeout(function () {
+          //todo:  to markdown
           document.getElementById("ueditor_0").contentWindow.document.body.focus();
         }, 80);
       },

@@ -25,13 +25,14 @@ let imgProcessor = {
             fd.append("x:protocol", 'https');
             base.post(postUrl, fd, (rt2) => {
                 var imgObj = JSON.parse(rt2);
-                dom.dataset[this.siteId] = imgObj.url;
+                dom.src = imgObj.url;
+                ipcRenderer.send('imgUploadMain', {
+                    id: dom.id,
+                    siteId: this.siteId,
+                    url: dom.src
+                });
                 this.guard -= 1;
                 if (this.guard < 1) {
-                    var html = this.doc.body.innerHTML;
-                    ipcRenderer.send('contentRefreshMain', {
-                        content: html
-                    });
                     this.end();
                 }
             }, {
@@ -41,7 +42,6 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
-            v.src = v.dataset[this.siteId]
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
@@ -124,7 +124,7 @@ var waitForSave = function () {
     setTimeout(function () {
         var str = document.getElementsByClassName('_3-3KB')[0].innerHTML;
         if (str == "已保存") {
-            ipcRenderer.send('articleRefreshMain', {
+            ipcRenderer.send('articlePublishMain', {
                 siteId: "jianshu",
                 url: window.location.href
             });
