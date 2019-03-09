@@ -143,6 +143,7 @@
                     this.articleContent = fs.readFileSync(path.join(this.articlePath, "a.data"), this.rwOption);
                     this.hide = false;
                     this.initContent();
+                    this.removeUselessImg();
                 }
             })
         }

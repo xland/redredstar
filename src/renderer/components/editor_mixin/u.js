@@ -25,11 +25,6 @@ export default {
             let editorDocument = document.getElementById("ueditor_0").contentWindow.document;
             let observer = new MutationObserver(records => {
                 records.forEach((item, index) => {
-                    if (item.removedNodes.length > 0 && item.removedNodes[0].tagName ==
-                        "IMG") {
-                        this.delImgWhenDomChange(item.removedNodes[0]);
-                        this.needSave = true;
-                    }
                     if (item.addedNodes.length > 0 && item.addedNodes[0].tagName ==
                         "IMG" && !item.addedNodes[0].src.startsWith("file")) {
                         if (item.addedNodes[0].src.startsWith("data:")) {

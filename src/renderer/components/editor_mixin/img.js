@@ -3,14 +3,14 @@ const path = require('path');
 import sharp from 'sharp';
 const request = require('request');
 const url = require("url");
-export default{
-    data(){
+export default {
+    data() {
         return {
-            imgWidth:1300,
-            imgHight:800,
+            imgWidth: 1300,
+            imgHight: 800,
         }
     },
-    methods:{
+    methods: {
         imgCompress(fullName) {
             let extIndex = fullName.lastIndexOf('.');
             let tempName = fullName.substring(0, extIndex) + "_temp" + fullName.substring(extIndex);
@@ -53,7 +53,7 @@ export default{
                     var buffer = new Buffer(fr.result);
                     fs.writeFile(fullName, buffer, err => {
                         this.imgCompress(fullName);
-                        cb(id,fullName,err);
+                        cb(id, fullName, err);
                     });
                 }
             };
@@ -73,6 +73,33 @@ export default{
             dom.removeAttribute("_src");
             dom.src = 'file://' + fullName;
             dom.id = id;
+        },
+        delImgWhenDomChange(dom) {
+            let pathIndex = electron.remote.process.platform == "win32" ? 8 : 7;
+            let filePath = decodeURI(dom.src).substr(pathIndex);
+            fs.unlink(filePath, err => {
+                if (err) {
+                    err && console.log(err);
+                }
+            });
+        },
+        removeUselessImg() {
+            fs.readdir(this.articlePath, (err, files) => {
+                files.forEach(v => {
+                    if (!v.startsWith("img")) {
+                        return;
+                    }
+                    let tempStr = '<img id="' + v.substring(0, v.lastIndexOf('.')) + '"';
+                    if(this.articleContent.includes(tempStr)){
+                        return;
+                    }
+                    fs.unlink(path.join(this.articlePath,v), err => {
+                        if (err) {
+                            err && console.log(err);
+                        }
+                    });
+                })
+            });
         }
     }
 }

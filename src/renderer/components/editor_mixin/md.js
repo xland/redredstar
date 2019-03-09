@@ -17,22 +17,6 @@ export default {
             mdStr = mdStr.replace("^^^^", "<img");
             window.mdEditor.setValue(mdStr);
         },
-        hookImgDomChangeMd() {
-            let dom = document.getElementsByClassName("te-preview")[0];
-            let observer = new MutationObserver(records => {
-                records.forEach((item, index) => {
-                    if (item.removedNodes.length > 0 && item.removedNodes[0].tagName ==
-                        "IMG") {
-                        this.delImgWhenDomChange(item.removedNodes[0]);
-                        this.needSave = true;
-                    }
-                });
-            });
-            observer.observe(dom, {
-                childList: true,
-                subtree: true
-            });
-        },
         initEditorMD() {
             let self = this;
             new Editor({

@@ -83,14 +83,5 @@ export default {
         dom.removeAttribute("_src");
         dom.src = 'file://' + fullName;
         dom.id = id;
-    },
-    delImgWhenDomChange(dom){
-        let pathIndex = electron.remote.process.platform == "win32" ? 8 : 7;
-        let filePath = decodeURI(dom.src).substr(pathIndex);
-        fs.unlink(filePath, err => {
-            if (err) {
-                err && console.log(err);
-            }
-        });
     }
 }
