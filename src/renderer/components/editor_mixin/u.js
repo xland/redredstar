@@ -33,14 +33,17 @@ export default {
                         } else {
                             self.imgSaveInternetObj(item.addedNodes[0]);
                         }
-                        this.needSave = true;
                     }
                 });
+                this.needSave = true;
             });
             observer.observe(self.editorDoc, {
                 childList: true,
                 subtree: true
             });
+            setTimeout(()=>{
+                this.needSave = false;
+            },580)
         },
         hookPasteImgU() {
             var self = this;

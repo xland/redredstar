@@ -1,5 +1,8 @@
 <template>
     <div class="editor">
+        <div v-show="$parent.article.editor_type == 'markdown'" class="tip">
+            请不要改变img标签的格式（会影响文章发布）
+        </div>
         <div v-show="$parent.article.editor_type == 'html'" id="editorU"></div>
         <div v-show="$parent.article.editor_type == 'markdown'" id="editorMd"></div>
     </div>
@@ -49,10 +52,10 @@
                     }
                 });
             },
-            focus(){
+            focus() {
                 if (this.$parent.article.editor_type == "html") {
                     this.editorDoc.focus();
-                }else{
+                } else {
                     window.editorMd.focus();
                 }
             },
@@ -60,7 +63,7 @@
                 clearInterval(this.tick);
                 if (this.$parent.article.editor_type == "html") {
                     window.editorU.destroy();
-                }else{
+                } else {
                     window.editorMd.remove();
                 }
             },
@@ -139,5 +142,29 @@
     #ta {
         height: 100% !important;
         width: 100% !important;
+    }
+
+    @keyframes flash {
+        0% {
+            color: #ccc;
+        }
+        30%{
+            color: red;
+        }
+        60%{
+            color: red;
+        }
+        100% {
+            color: #ccc;
+        }
+    }
+
+    .tip {
+        animation: flash 5.8s linear;
+        position: absolute;
+        z-index: 9;
+        line-height: 32px;
+        right: 12px;
+        color: #ccc;
     }
 </style>

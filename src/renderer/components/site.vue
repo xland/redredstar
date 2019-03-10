@@ -55,10 +55,10 @@
                 })
                 win.loadURL(url, this.urlOption);
                 let content = "";
-                if(window.mdEditor){
-                    content = window.mdEditor.getHtml();
+                if(this.$parent.article.editor_type == "html"){
+                    content = window.editorU.getContent(); 
                 }else{
-                    content = window.UE.instants.ueditorInstant0.getContent();
+                    content = window.editorMd.getHtml();
                 }
                 let self = this;
                 win.webContents.on('dom-ready', () => {

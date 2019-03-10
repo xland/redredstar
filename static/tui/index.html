@@ -1,20 +1,21 @@
-export default {
-    data() {
-        return {
-        }
-    },
-    methods: {
-        imageUploadMd(obj) {
-            let preStr = '<img id="' + obj.id + '"';
-            let str = '<img id="' + obj.id + '" data-' + obj.siteId + '="' + obj.url + '"';
-            this.articleContent = this.articleContent.replace(preStr, str);
-            window.editorMd.setValue(this.articleContent);
-            this.needSave = true;
-        },
-        initEditorMd() {
-            let self = this;
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="./res/tui-editor.css">
+    </link>
+    <link rel="stylesheet" href="./res/tui-editor-contents.css">
+    </link>
+    <link rel="stylesheet" href="./res/codemirror.css">
+    </link>
+    <link rel="stylesheet" href="./res/github.min.css">
+    </link>
+    <script src="./res/tui-editor-Editor-full.js"></script>
+    <script>
+        window.onload = function(){
             new tui.Editor({
-                el: document.querySelector('#editorMd'),
+                el: document.body,
                 height: '100%',
                 //language:'zh_CN', //todo:会显示台湾的语言
                 hideModeSwitch: true,
@@ -44,5 +45,10 @@ export default {
                 }
             });
         }
-    }
-}
+    </script>
+</head>
+
+<body>
+</body>
+
+</html>
