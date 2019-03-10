@@ -7683,7 +7683,7 @@
       destroy: function () {
         var me = this;
         me.fireEvent("destroy");
-        //todo: by allen
+        // by liulun
         // var container = me.container.parentNode;
         // var textarea = me.textarea;
         // if (!textarea) {
@@ -7770,7 +7770,7 @@
             //设置四周的留边
             ".view{padding:0;word-wrap:break-word;cursor:text;height:90%;}\n" +
             //设置默认字体和字号
-            //font-family不能呢随便改，在safari下fillchar会有解析问题 //todo allen
+            //font-family不能呢随便改，在safari下fillchar会有解析问题 // liulun
             "body{margin:8px;font-family: 'Avenir', 'Helvetica', 'Arial', 'sans-serif','Microsoft YaHei';font-size:14px;}" +
             //设置placeholder
             "body.empty:before{content:attr(placeholder);position:absolute;color:#999;}" +
@@ -15690,7 +15690,7 @@
         }
       },
       inputRule: function (root) {
-        return; //by allen
+        return; //by liulun
         utils.each(root.getNodesByTagName("img"), function (img) {
           var attrs = img.attrs,
             flag = parseInt(attrs.width) < 128 || parseInt(attrs.height) < 43,
@@ -16127,7 +16127,7 @@
 
   // plugins/copy.js
   UE.plugin.register("copy", function () {
-    return false; //edit by allen
+    return false; //edit by liulun
     var me = this;
 
     function initZeroClipboard() {
@@ -18471,6 +18471,8 @@
               }
             }
           );
+          return;
+          // by liulun
           utils.loadFile(document, {
             tag: "link",
             rel: "stylesheet",
@@ -18878,7 +18880,7 @@
       /* 修复在编辑区域快捷键 (Mac:meta+alt+I; Win:ctrl+shift+I) 打不开 chrome 控制台的问题 */
       browser.chrome &&
         me.on("keydown", function (type, e) {
-          //allen
+          //liulun
           if ((e.metaKey || e.ctrlKey) && e.keyCode == 83) {
             window.parent.saveArticleKeyEvent();
           }
@@ -19229,13 +19231,13 @@
               imgPos.x -
               (doc.documentElement.scrollLeft || doc.body.scrollLeft || 0) -
               editorPos.x -
-              parseInt(resizer.style.borderLeftWidth) + 8 + //todo: by allen 8
+              parseInt(resizer.style.borderLeftWidth) + 8 + // by liulun 8
               "px",
             top: iframePos.y +
               imgPos.y -
               (doc.documentElement.scrollTop || doc.body.scrollTop || 0) -
               editorPos.y -
-              parseInt(resizer.style.borderTopWidth) + 78 + //todo: by allen 78
+              parseInt(resizer.style.borderTopWidth) + 78 + // by liulun 78
               "px"
           });
         }
@@ -26857,7 +26859,7 @@
    */
   UE.plugin.register("autoupload", function () {
     function sendAndInsertFile(file, editor) {
-      //edit by allen;
+      //edit by liulun;
       var filetype = /image\/\w+/i.test(file.type) ? "image" : "file";
       if (filetype != "image") {
         return;
@@ -33371,7 +33373,7 @@
             }
             //编辑器最外容器设置了高度，会导致，编辑器不占位
             //todo 先去掉，没有找到原因  
-            // edit by allen
+            // edit by liulun
             // if (holder.style.height) {
             //   holder.style.height = "";
             // }

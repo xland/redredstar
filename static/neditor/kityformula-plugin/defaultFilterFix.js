@@ -117,7 +117,7 @@ UE.plugins['defaultfilter'] = function () {
                         }
                         var tmpNode, p = UE.uNode.createElement('p');
                         while (tmpNode = node.firstChild()) {
-                            //edit by allen    || !UE.dom.UE.dom.dtd.$block[tmpNode.tagName]
+                            //edit by liulun    || !UE.dom.UE.dom.dtd.$block[tmpNode.tagName]
                             if (tmpNode.type == 'text' ) {
                                 p.appendChild(tmpNode);
                             } else {

@@ -10,7 +10,7 @@ UE.registerUI('kityformula', function(editor, uiname){
         // dialog 名称
         name: uiname,
         // dialog 标题
-        title: '插入公式',  //edit by allen
+        title: '插入公式',  //edit by liulun
 
         // dialog 外围 css
         cssRules: 'width:783px; height: 386px;',
@@ -44,8 +44,8 @@ UE.registerUI('kityformula', function(editor, uiname){
     iconUrl = tmpLink.href;
 
     var kfBtn = new UE.ui.Button({
-        name:'插入', //edit by allen
-        title:'插入公式',  //edit by allen
+        name:'插入', //edit by liulun
+        title:'插入公式',  //edit by liulun
         //需要添加的额外样式，指定icon图标
         cssRules :'background: url("' + iconUrl + '") !important',
         onclick:function () {

@@ -35,6 +35,7 @@
       this.showSites = false;
       this.getArticle(to.params.id);
       this.$refs.articleEditor.saveContent(() => {
+        this.$refs.articleEditor.destroy();
         next();
       });
 

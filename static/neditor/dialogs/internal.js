@@ -30,12 +30,12 @@
             }
         }, 0 )
     };
-    //edit by allen
+    //edit by liulun
     var __href = "../themes/" + editor.options.theme + "/dialogbase.css?cache="+Math.random()
     if(window.location.href.search('kityFormulaDialog')< 0){
         __href = "../"+__href;
     }
-    //edit by allen end  
+    //edit by liulun end  
     utils.loadFile(document,{
         href:__href,
         tag:"link",

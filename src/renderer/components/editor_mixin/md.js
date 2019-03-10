@@ -34,12 +34,10 @@ export default {
                         window.editorMd.setValue(self.articleContent);
                         setTimeout(() => {
                             self.needSave = false;
-                            console.log("2")
                         }, 86);
                     },
                     change: function () {
                         self.needSave = true;
-                        console.log("1")
                     }
                 },
                 hooks: {
