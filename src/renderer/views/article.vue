@@ -52,15 +52,15 @@
     },
     methods: {
       hookArticleRefresh() {
-        ipcRenderer.on('articlePublishRenderer', (e, message) => {
+        this.$root.articlePublushCb = (obj) => {
           this.db('article_site')
             .where("article_id", this.article.id)
-            .andWhere("site_id", message.siteId)
+            .andWhere("site_id", obj.siteId)
             .select("*").then(rows => {
               let asObj = {
                 article_id: this.article.id,
-                site_id: message.siteId,
-                edit_url: message.url
+                site_id: obj.siteId,
+                edit_url: obj.url
               }
               if (rows.length < 1) {
                 this.db("article_site").insert(asObj).then();
@@ -68,7 +68,7 @@
                 this.db("article_site").update(asObj).where("id", rows[0].id).then();
               }
             });
-        });
+        };
       },
       getArticle(id) {
         this.db("articles").where("id", id).select("*").then(rows => {
@@ -83,8 +83,7 @@
       },
       titleTab() {
         setTimeout(function () {
-          //todo:  to markdown
-          document.getElementById("ueditor_0").contentWindow.document.body.focus();
+          this.$refs.articleEditor.focus();
         }, 80);
       },
       titleChange() {

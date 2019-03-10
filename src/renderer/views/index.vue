@@ -90,7 +90,9 @@
             newArticleBtnClick() {
                 let article = {
                     title: '',
-                    updated_at:new Date()
+                    created_at: new Date(),
+                    updated_at: new Date(),
+                    editor_type: this.$root.editorType,
                 };
                 this.db("articles").insert(article).then(rows => {
                     article.id = rows[0];
@@ -107,7 +109,7 @@
             }
         },
         mounted: function () {
-            this.db("articles").orderBy("updated_at","desc").then(rows => {
+            this.db("articles").orderBy("updated_at", "desc").then(rows => {
                 this.allArticles = rows.map(v => {
                     v.tagIds = [];
                     return v;

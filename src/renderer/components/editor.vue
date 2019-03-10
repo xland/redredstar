@@ -1,7 +1,7 @@
 <template>
     <div class="editor">
-        <div v-if="$parent.article.editor_type == 'html'" id="editorU"></div>
-        <div v-if="$parent.article.editor_type == 'markdown'" id="editorMD"></div>
+        <div v-show="$parent.article.editor_type == 'html'" id="editorU"></div>
+        <div v-show="$parent.article.editor_type == 'markdown'" id="editorMd"></div>
     </div>
 </template>
 <script>
@@ -35,10 +35,9 @@
                 }
                 this.bus.$emit('saveContent');
                 if (this.$parent.article.editor_type == "html") {
-                    this.articleContent = window.UE.instants.ueditorInstant0.getContent();
+                    this.articleContent = window.editorU.getContent();
                 } else {
-                    let mdStr = window.mdEditor.getValue();
-                    this.articleContent = window.mdEditor.convertor.toHTMLWithCodeHightlight(mdStr)
+                    this.articleContent = window.editorMd.getValue();
                 }
                 fs.writeFileSync(path.join(this.articlePath, "a.data"), this.articleContent, this.$root.rwOption);
                 this.needSave = false;
@@ -50,21 +49,30 @@
                     }
                 });
             },
+            focus(){
+                if (this.$parent.article.editor_type == "html") {
+                    this.editorDoc.focus();
+                }else{
+                    window.editorMd.focus();
+                }
+            },
             destroy() {
                 clearInterval(this.tick);
-                UE.getEditor('editorU').destroy();
-                console.log(123);
+                if (this.$parent.article.editor_type == "html") {
+                    window.editorU.destroy();
+                }else{
+                    window.editorMd.remove();
+                }
             },
             hookImgUpload() {
-                ipcRenderer.on('imgUploadRenderer', (e, message) => {
-                    this.articleContent = message.content;
+                this.$root.imgUploadCb = (obj) => {
                     if (this.$parent.article.editor_type == "html") {
-                        this.imageUploadU(message);
+                        this.imageUploadU(obj);
                     } else {
-                        this.imageUploadMd(message);
+                        this.imageUploadMd(obj);
                     }
                     this.needSave = true;
-                });
+                };
             },
             hookWinQuit() {
                 var self = this;
@@ -80,7 +88,7 @@
                 if (this.$parent.article.editor_type == "html") {
                     this.initEditorU();
                 } else {
-                    this.initEditorMD();
+                    this.initEditorMd();
                 }
                 this.tick = setInterval(() => {
                     this.saveContent()

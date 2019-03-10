@@ -47,7 +47,7 @@ export default {
             window.editorImgInsert = function (file) {
                 self.imgSaveFileObj(file, (id, fullName, err) => {
                     var imgDom = '<img id="' + id + '" src="file://' + fullName + '" />';
-                    window.UE.instants.ueditorInstant0.execCommand("inserthtml", imgDom);
+                    window.editorU.execCommand("inserthtml", imgDom);
                     self.needSave = true;
                 })
             }
@@ -56,6 +56,7 @@ export default {
             var editor = window.UE.getEditor('editorU');
             var self = this;
             editor.addListener("ready", () => {
+                window.editorU = editor;
                 self.editorDoc = document.querySelectorAll("#editorU iframe")[0].contentWindow.document;
                 editor.setContent(self.articleContent);
                 self.hookPasteImgU();

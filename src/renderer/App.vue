@@ -9,7 +9,7 @@
 <script>
   import tabbar from "./components/tabbar";
   import bottombar from "./components/bottombar";
-  
+
   const path = require('path');
   const fs = require('fs-extra')
   const {
@@ -32,6 +32,12 @@
         this.$root.imgWidth = rows[0].img_w;
         this.$root.editorType = rows[0].editor_type;
       });
+      ipcRenderer.on('articlePublishRenderer', (e, message) => {
+        this.$root.articlePublushCb(message);
+      })
+      ipcRenderer.on('imgUploadRenderer', (e, message) => {
+        this.$root.imgUploadCb(message);
+      })
     }
   }
 </script>
