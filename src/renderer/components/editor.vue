@@ -1,7 +1,7 @@
 <template>
     <div class="editor">
-        <div v-if="editorType == 'html'" id="editorU"></div>
-        <div v-if="editorType == 'markdown'" id="editorMD"></div>
+        <div v-if="$parent.article.editor_type == 'html'" id="editorU"></div>
+        <div v-if="$parent.article.editor_type == 'markdown'" id="editorMD"></div>
     </div>
 </template>
 <script>
@@ -21,7 +21,6 @@
             return {
                 articleContent: null,
                 articlePath: null,
-                editorType: 'html',
                 tick: null,
                 needSave: false,
             }
@@ -35,7 +34,7 @@
                     return;
                 }
                 this.bus.$emit('saveContent');
-                if (this.editorType == "html") {
+                if (this.$parent.article.editor_type == "html") {
                     this.articleContent = window.UE.instants.ueditorInstant0.getContent();
                 } else {
                     let mdStr = window.mdEditor.getValue();
@@ -51,13 +50,18 @@
                     }
                 });
             },
-            hookContentRefresh() {
-                ipcRenderer.on('contentRefreshRenderer', (e, message) => {
+            destroy() {
+                clearInterval(this.tick);
+                UE.getEditor('editorU').destroy();
+                console.log(123);
+            },
+            hookImgUpload() {
+                ipcRenderer.on('imgUploadRenderer', (e, message) => {
                     this.articleContent = message.content;
-                    if (this.editorType == "html") {
-                        window.UE.instants.ueditorInstant0.setContent(this.articleContent);
+                    if (this.$parent.article.editor_type == "html") {
+                        this.imageUploadU(message);
                     } else {
-                        this.htmlToMd();
+                        this.imageUploadMd(message);
                     }
                     this.needSave = true;
                 });
@@ -70,38 +74,29 @@
                     remote.app.quit();
                 })
             },
-            initContent() {
-                if (this.editorType == "html" && UE.instants.ueditorInstant0 && UE.instants.ueditorInstant0.isReady) {
-                    window.UE.instants.ueditorInstant0.setContent(this.articleContent);
-                    var editorDoc = document.getElementById("ueditor_0").contentWindow.document;
-                    editorDoc.documentElement.scrollTop = editorDoc.scrollHeight;
-                }
-                if (this.editorType == "markdown") {
-                    this.$nextTick(function () {
-                        this.htmlToMd();
-                    })
+            getContent() {
+                this.articlePath = path.join(remote.app.getPath('userData'), "/xxm/" + this.$parent.article.id);
+                this.articleContent = fs.readFileSync(path.join(this.articlePath, "a.data"), this.$root.rwOption);
+                if (this.$parent.article.editor_type == "html") {
+                    this.initEditorU();
+                } else {
+                    this.initEditorMD();
                 }
                 this.tick = setInterval(() => {
                     this.saveContent()
-                }, this.$root.tickStep)
-            },
-            getContent(id) {
-                this.articlePath = path.join(remote.app.getPath('userData'), "/xxm/" + this.$parent.article.id);
-                this.articleContent = fs.readFileSync(path.join(this.articlePath, "a.data"), this.$root.rwOption);
-                this.hide = false;
-                this.initContent();
+                }, this.$root.tickStep);
                 this.removeUselessImg();
             }
         },
         mounted() {
-            this.hookContentRefresh();
-            this.hookArticleRefresh();
+            this.hookImgUpload();
             this.hookWinQuit();
         }
     }
 </script>
 <style scoped lang="scss">
     .editor {
+        overflow: hidden;
         flex: 1;
         background: #fff;
         border-top: 1px solid #e5e5e5;

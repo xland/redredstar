@@ -6,13 +6,15 @@ const {
     remote
 } = require('electron');
 export default {
+    data(){
+        return {
+            editorDoc:null,
+        }
+    },
     methods: {
-        hookContentChangeU() {
-            var self = this;
-            var subContent = document.getElementById("ueditor_0").contentWindow.document;
-            subContent.oninput = function (e) {
-                self.needSave = true;
-            }
+        imageUploadU(obj) {
+            let dom = this.editorDoc.getElementById(obj.id);
+            dom.dataset[obj.siteId] = obj.url;
         },
         hookSaveKeyEventU() {
             var self = this;
@@ -22,7 +24,6 @@ export default {
         },
         hookImgDomChangeU() {
             let self = this;
-            let editorDocument = document.getElementById("ueditor_0").contentWindow.document;
             let observer = new MutationObserver(records => {
                 records.forEach((item, index) => {
                     if (item.addedNodes.length > 0 && item.addedNodes[0].tagName ==
@@ -36,7 +37,7 @@ export default {
                     }
                 });
             });
-            observer.observe(editorDocument, {
+            observer.observe(self.editorDoc, {
                 childList: true,
                 subtree: true
             });
@@ -55,12 +56,14 @@ export default {
             var editor = window.UE.getEditor('editorU');
             var self = this;
             editor.addListener("ready", () => {
+                self.editorDoc = document.querySelectorAll("#editorU iframe")[0].contentWindow.document;
+                editor.setContent(self.articleContent);
                 self.hookPasteImgU();
                 self.hookImgDomChangeU();
                 self.hookSaveKeyEventU();
-                self.hookContentChangeU();
-                if (self.articleContent) {
-                    editor.setContent(self.articleContent);
+                self.editorDoc.documentElement.scrollTop = self.editorDoc.scrollHeight;
+                self.editorDoc.oninput = function (e) {
+                    self.needSave = true;
                 }
             })
         },

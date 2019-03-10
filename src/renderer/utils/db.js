@@ -42,6 +42,7 @@ const initializer = {
             table.bigInteger('temp_id');
             table.datetime('created_at').defaultTo(knex.fn.now());
             table.datetime('updated_at').defaultTo(knex.fn.now());
+            table.string('editor_type').defaultTo("html");
         }).then(function () {
             if (articles.length < 1) {
                 return;

@@ -42,6 +42,7 @@
     beforeRouteLeave(to, from, next) {
       this.showSites = false;
       this.$refs.articleEditor.saveContent(() => {
+        this.$refs.articleEditor.destroy();
         next();
       });
     },
@@ -51,7 +52,7 @@
     },
     methods: {
       hookArticleRefresh() {
-        ipcRenderer.on('articleRefreshRenderer', (e, message) => {
+        ipcRenderer.on('articlePublishRenderer', (e, message) => {
           this.db('article_site')
             .where("article_id", this.article.id)
             .andWhere("site_id", message.siteId)

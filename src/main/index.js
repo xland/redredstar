@@ -59,10 +59,10 @@ app.on('activate', () => {
 })
 
 ipcMain.on('imgUploadMain', (event, message) => {
-  mainWindow.webContents.send('contentRefreshRenderer', message);
+  mainWindow.webContents.send('imgUploadRenderer', message);
 });
 ipcMain.on('articlePublishMain', (event, message) => {
-  mainWindow.webContents.send('articleRefreshRenderer', message);
+  mainWindow.webContents.send('articlePublishRenderer', message);
 });
 
 /**
