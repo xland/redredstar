@@ -29,9 +29,10 @@ export default [{
     title: '简书',
     url: 'https://www.jianshu.com/writer#/',
 }, {
-    ready: false,
+    ready: true,
     id: 'baijiahao',
     title: '百家号',
+    url:'https://baijiahao.baidu.com/builder/rc/edit?type=news',
 }, {
     ready: false,
     id: 'toutiaohao',

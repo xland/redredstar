@@ -42,6 +42,9 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
+            if(v.dataset[this.siteId]){
+                v.src = v.dataset[this.siteId];
+            }
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
