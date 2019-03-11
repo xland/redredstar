@@ -18471,6 +18471,8 @@
               }
             }
           );
+          return;
+          //by liulun
           utils.loadFile(document, {
             tag: "link",
             rel: "stylesheet",

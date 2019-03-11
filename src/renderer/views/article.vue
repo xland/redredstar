@@ -74,22 +74,22 @@
       getArticle(id) {
         this.db("articles").where("id", id).select("*").then(rows => {
           this.article = rows[0];
-          if (this.article.editor_type != this.$root.editorType) {
-            swal({
-              icon: "info",
-              text: "该文章格式与默认编辑器不一致\n将为你切换默认编辑器,再打开文章",
-              closeOnClickOutside: false,
-              closeOnEsc: false,
-            }).then(() => {
-              this.db("settings")
-                .update({
-                  editor_type: this.article.editor_type
-                }).then(() => {
-                  window.location.reload();
-                })
-            })
-            return;
-          }
+          // if (this.article.editor_type != this.$root.editorType) {
+          //   swal({
+          //     icon: "info",
+          //     text: "该文章格式与默认编辑器不一致\n将为你切换默认编辑器,再打开文章",
+          //     closeOnClickOutside: false,
+          //     closeOnEsc: false,
+          //   }).then(() => {
+          //     this.db("settings")
+          //       .update({
+          //         editor_type: this.article.editor_type
+          //       }).then(() => {
+          //         window.location.reload();
+          //       })
+          //   })
+          //   return;
+          // }
           this.$nextTick(() => {
             this.$refs.articleTag.getTags();
             this.$refs.articleEditor.getContent();

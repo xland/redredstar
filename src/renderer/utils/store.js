@@ -6,5 +6,6 @@ const store = {
     rwOption: {
         encoding: 'utf8'
     },
+    curArticleMd:false,
 }
 export default store

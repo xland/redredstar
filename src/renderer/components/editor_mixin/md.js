@@ -12,6 +12,7 @@ export default {
             this.needSave = true;
         },
         initEditorMd() {
+            this.$root.curArticleMd = true;
             let self = this;
             new tui.Editor({
                 el: document.querySelector('#editorMd'),

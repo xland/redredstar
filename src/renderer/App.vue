@@ -3,6 +3,7 @@
     <tabbar></tabbar>
     <router-view />
     <bottombar></bottombar>
+    <div v-show="$route.params.id && !$root.curArticleMd" id="editorU"></div>
   </div>
 </template>
 
@@ -57,4 +58,14 @@
     flex-flow: column;
     background: #f6f6f6;
   }
+
+  #editorU {
+    position: absolute;
+    z-index: 10;
+    left: 8px;
+    right: 8px;
+    top: 78px;
+    bottom: 72px;
+  }
+  
 </style>

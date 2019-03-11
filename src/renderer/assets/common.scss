@@ -90,9 +90,11 @@
     text-overflow: ellipsis;
     overflow: hidden;
 }
-.swal-text{
+
+.swal-text {
     text-align: center !important;
 }
+
 .tagClose:hover {
     color: #ee4242;
 }
@@ -109,18 +111,22 @@
 .swal-button:focus {
     box-shadow: none;
 }
-.tui-editor-defaultUI{
-    border:none !important;
+
+.tui-editor-defaultUI {
+    border: none !important;
 }
-.CodeMirror-vscrollbar{
+
+.CodeMirror-vscrollbar {
     outline: none;
     user-select: none;
 }
-.tui-editor-defaultUI-toolbar{
+
+.tui-editor-defaultUI-toolbar {
     padding: 0 6px;
     background: #eee;
 }
-.tui-editor-defaultUI-toolbar button{
+
+.tui-editor-defaultUI-toolbar button {
     background-color: #eee;
     border-color: #eee;
 }
@@ -131,4 +137,31 @@
     font-size: 32px;
     line-height: 66px;
     color: #bbb;
+}
+
+#edui1 {
+    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+}
+
+#edui1_iframeholder {
+    flex: 1;
+}
+
+.edui-notadd .edui-editor {
+    border: none !important;
+}
+
+.edui-editor-bottomContainer .edui-notadd {
+    display: none !important;
+}
+
+.edui-notadd .edui-editor-toolbarbox {
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+
+.edui-notadd .edui-editor-bottomContainer {
+    display: none !important;
 }

@@ -129,7 +129,7 @@ const initializer = {
             table.integer('autosave_interval');
             table.integer('img_w');
             table.integer('img_h');
-            table.string("editor_type");
+            table.string("editor_type").defaultTo("html");
             table.datetime('created_at').defaultTo(knex.fn.now());
         }).then(function () {
             let setting = {
@@ -209,14 +209,14 @@ const initializer = {
                 return;
             }
             knex.schema.alterTable('settings', table => {
-                table.string('editor_type');
+                table.string('editor_type').defaultTo("html");
             }).then(()=>{
                 knex("settings").update({
                     "editor_type": "html"
                 }).then();
             });
             knex.schema.alterTable('articles', table => {
-                table.string('editor_type');
+                table.string('editor_type').defaultTo("html");
             }).then(()=>{
                 knex("articles").update({
                     "editor_type": "html"

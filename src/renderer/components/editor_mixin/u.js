@@ -1,14 +1,8 @@
 //静态资源也用require的方式引入
-const fs = require('fs');
-const path = require('path');
-const {
-    ipcRenderer,
-    remote
-} = require('electron');
 export default {
-    data(){
+    data() {
         return {
-            editorDoc:null,
+            editorDoc: null,
         }
     },
     methods: {
@@ -41,9 +35,9 @@ export default {
                 childList: true,
                 subtree: true
             });
-            setTimeout(()=>{
+            setTimeout(() => {
                 this.needSave = false;
-            },580)
+            }, 580)
         },
         hookPasteImgU() {
             var self = this;
@@ -56,9 +50,10 @@ export default {
             }
         },
         initEditorU() {
-            var editor = window.UE.getEditor('editorU');
-            var self = this;
-            editor.addListener("ready", () => {
+            this.$root.curArticleMd = false;
+            let self = this;
+            let editor = window.UE.getEditor('editorU');
+            let cb = () => {
                 window.editorU = editor;
                 self.editorDoc = document.querySelectorAll("#editorU iframe")[0].contentWindow.document;
                 editor.setContent(self.articleContent);
@@ -69,7 +64,11 @@ export default {
                 self.editorDoc.oninput = function (e) {
                     self.needSave = true;
                 }
-            })
+            }
+            if (editor.isReady) {
+                cb();
+            }
+            editor.addListener("ready", cb)
         },
     }
 }

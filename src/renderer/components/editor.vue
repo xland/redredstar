@@ -3,7 +3,6 @@
         <div v-show="$parent.article.editor_type == 'markdown'" class="tip">
             请不要改变img标签的格式（会影响文章发布）
         </div>
-        <div v-show="$parent.article.editor_type == 'html'" id="editorU"></div>
         <div v-show="$parent.article.editor_type == 'markdown'" id="editorMd"></div>
     </div>
 </template>
@@ -61,11 +60,6 @@
             },
             destroy() {
                 clearInterval(this.tick);
-                if (this.$parent.article.editor_type == "html") {
-                    window.editorU.destroy();
-                } else {
-                    window.editorMd.remove();
-                }
             },
             hookImgUpload() {
                 this.$root.imgUploadCb = (obj) => {
@@ -146,12 +140,18 @@
 
     @keyframes flash {
         0% {
+            color: red;
+        }
+        20%{
             color: #ccc;
         }
-        30%{
+        40%{
             color: red;
         }
         60%{
+            color:#ccc;
+        }
+        80% {
             color: red;
         }
         100% {
@@ -160,7 +160,7 @@
     }
 
     .tip {
-        animation: flash 5.8s linear;
+        animation: flash 5.6s linear;
         position: absolute;
         z-index: 9;
         line-height: 32px;
