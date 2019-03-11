@@ -6,7 +6,7 @@
 
 ## 下载地址
 
-* 当前版本：6.1.2
+* 当前版本：6.2.1
 * mac64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
 * win64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.exe
 
@@ -35,10 +35,11 @@
 
 ## 界面截图
 
-> <img width="680" src="/doc/imgs/mac_index.png" >
-> <img width="680" src="/doc/imgs/mac_edit.png" >
-> <img width="680" src="/doc/imgs/sites.png" >
-> <img width="680" src="/doc/imgs/formula.png" >
+> <img width="680" src="/doc/imgs/mac_index.jpg" >
+> <img width="680" src="/doc/imgs/mac_edit.jpg" >
+> <img width="680" src="/doc/imgs/sites.jpg" >
+> <img width="680" src="/doc/imgs/formula.jpg" >
+> <img width="680" src="/doc/imgs/md.jpg" >
 
 ## 联系方式
 
