@@ -18146,7 +18146,7 @@
       textarea: function (editor, holder) {
         var textarea = holder.ownerDocument.createElement("textarea");
         textarea.style.cssText =  //by liulun outline padding h w;
-          "position:absolute;resize:none;padding:6px;outline:none;width:calc(100% - 18px);height:calc(100% - 250px);border:0;margin:0;overflow-y:auto;";
+          "position:absolute;resize:none;padding:6px;outline:none;width:100%;height:100%;border:0;margin:0;overflow-y:auto;";
         // todo: IE下只有onresize属性可用... 很纠结
         if (browser.ie && browser.version < 8) {
           textarea.style.width = holder.offsetWidth + "px";
