@@ -55,9 +55,9 @@
                 })
                 win.loadURL(url, this.urlOption);
                 let content = "";
-                if(this.$parent.article.editor_type == "html"){
-                    content = window.editorU.getContent(); 
-                }else{
+                if (this.$parent.article.editor_type == "html") {
+                    content = window.editorU.getContent();
+                } else {
                     content = window.editorMd.getHtml();
                 }
                 let self = this;

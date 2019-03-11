@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const {
-    clipboard,
     ipcRenderer,
     remote
 } = require('electron');
@@ -94,6 +93,7 @@ ipcRenderer.on('message', (event, article) => {
     let url = window.location.href;
     if (url.startsWith('https://mp.csdn.net/postedit')) {
         setTimeout(()=>{
+            //window.onbeforeunload = null;
             if(!document.getElementById("cke_editor")){
                 alert("抱歉：目前暂不支持csdn的markdown编辑器")
             }
