@@ -26,6 +26,12 @@
     "files": [
       "dist/electron/**/*"
     ],
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "http://xiangxuema.com/"
+      }
+    ],
     "dmg": {
       "contents": [
         {
@@ -53,6 +59,7 @@
   },
   "dependencies": {
     "electron-baidu-tongji": "^1.0.2",
+    "electron-updater": "^4.0.6",
     "fs-extra": "^7.0.1",
     "knex": "^0.16.3",
     "sharp": "^0.21.3",

@@ -7,7 +7,7 @@
 ## 下载地址
 
 * 当前版本：6.2.3
-* mac64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
+* osx64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
 * win64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.exe
 
 ## 功能说明
@@ -22,7 +22,7 @@
 
 ## 其他说明：
 
-* mac数据存放目录： 
+* osx数据存放目录： 
 <br />&emsp;&emsp; /Users/[your user name]/Library/Application Support/xiangxuema/xxm
 * win数据存放目录：
 <br />&emsp;&emsp; C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm

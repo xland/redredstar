@@ -7,6 +7,9 @@ import {
 import {
   ebtMain
 } from 'electron-baidu-tongji'
+import {
+  autoUpdater
+} from 'electron-updater'
 import menuData from './menu.js';
 ebtMain(ipcMain)
 
@@ -39,7 +42,7 @@ function createWindow() {
   })
   if (process.platform == 'darwin') {
     Menu.setApplicationMenu(Menu.buildFromTemplate(menuData));
-  }else{
+  } else {
     Menu.setApplicationMenu(null);
   }
 }
@@ -65,22 +68,16 @@ ipcMain.on('articlePublishMain', (event, message) => {
   mainWindow.webContents.send('articlePublishRenderer', message);
 });
 
-/**
- * Auto Updater
- *
- * Uncomment the following code below and install `electron-updater` to
- * support auto updating. Code Signing with a valid certificate is required.
- * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-electron-builder.html#auto-updating
- */
-
-/*
-import { autoUpdater } from 'electron-updater'
-
-autoUpdater.on('update-downloaded', () => {
+ipcMain.on('updateMain', (event, message) => {
   autoUpdater.quitAndInstall()
 })
 
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') autoUpdater.checkForUpdates()
+autoUpdater.on('update-downloaded', () => {
+  mainWindow.webContents.send('updateRenderer');
 })
- */
+
+app.on('ready', () => {
+  if (process.env.NODE_ENV === 'production') {
+    autoUpdater.checkForUpdates();
+  }
+})

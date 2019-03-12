@@ -53,7 +53,7 @@
             },
             focus() {
                 if (this.$parent.article.editor_type == "html") {
-                    this.editorDoc.focus();
+                    this.editorDoc.body.focus();
                 } else {
                     window.editorMd.focus();
                 }
