@@ -1,3 +1,8 @@
+const fs = require('fs');
+const path = require('path');
+const {
+    remote
+} = require('electron');
 module.exports = {
     mime: {
         "jpeg": "image/jpeg",
@@ -15,7 +20,7 @@ module.exports = {
                     try {
                         var obj = JSON.parse(this.responseText);
                         cb(obj);
-                    } catch(error) {
+                    } catch (error) {
                         cb(null);
                     }
                 }
@@ -73,5 +78,15 @@ module.exports = {
         let filter = new RegExp(name + "=([^;]*)(;|$)");
         let matches = cookie.match(filter);
         return matches ? matches[1] : null;
+    },
+    getFileObjByLocalUrl(url) {
+        let pathIndex = remote.process.platform == "win32" ? 8 : 7
+        let filePath = decodeURI(url).substr(pathIndex);
+        let extname = path.extname(filePath).substr(1);
+        let buffer = fs.readFileSync(filePath);
+        let file = new window.File([Uint8Array.from(buffer)], path.basename(filePath), {
+            type: this.mime[extname]
+        });
+        return file;
     }
 }

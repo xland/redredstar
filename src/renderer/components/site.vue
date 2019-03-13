@@ -5,7 +5,8 @@
         </div>
         <div @click='$parent.showSites = false' class="z1">
             <div v-show="!initWebview" class="tarSiteContainer">
-                <div @click.stop @mouseover="overIndex = index" @mouseout="overIndex = -1" :class="['tarSiteItem',item.ready?'':'notReady']" v-for="(item,index) in sites">
+                <div @click.stop @mouseenter="overOneSite(index,item)" @mouseleave="overIndex = -1" :class="['tarSiteItem',item.ready?'':'notReady']"
+                    v-for="(item,index) in sites">
                     <div class="tarSiteIcon">
                         <img :src="'./static/sites/'+item.id+'/logo.png'" />
                     </div>
@@ -13,8 +14,8 @@
                         <div v-show="overIndex != index || !item.ready" class="toolText">
                             {{item.title}}
                         </div>
-                        <div @click.stop="publish(item)" v-show="showEditBtn(index) && item.ready" class="toolBtn">修改</div>
-                        <div @click.stop="publish(item)" v-show="overIndex == index && item.ready" class="toolBtn">新增</div>
+                        <div @click.stop="publish(item,'edit')" v-show="editUrl && overIndex == index && item.ready" class="toolBtn">修改</div>
+                        <div @click.stop="publish(item,'new')" v-show="overIndex == index && item.ready" class="toolBtn">新增</div>
                     </div>
                 </div>
             </div>
@@ -32,7 +33,8 @@
     export default {
         data() {
             return {
-                overIndex:-1,
+                overIndex: -1,
+                editUrl: null,
                 winOption: {
                     width: 1056,
                     height: 680,
@@ -50,63 +52,55 @@
             }
         },
         methods: {
-            showEditBtn(index){
-                if(index == this.overIndex){
-                    return true;
-                }
+            overOneSite(index, item) {
+                this.overIndex = index;
+                this.editUrl = null;
+                this.db("article_site").where({
+                    "article_id": this.$parent.article.id,
+                    "site_id": item.id
+                }).then(rows => {
+                    if (rows.length > 0) {
+                        this.editUrl = rows[0].edit_url;
+                    }
+                });
+                return false;
             },
-            makeWin(item, url, type) {
-                this.winOption.webPreferences.preload = path.join(__static, 'sites/' + item.id + '/inject.js');
+            makeWin(item, articleMsg) {
                 let win = new BrowserWindow(this.winOption);
                 item.winId = win.id;
                 win.on('closed', () => {
                     item.winId = null;
                     win = null
-                })
-                win.loadURL(url, this.urlOption);
+                });
+                win.loadURL(articleMsg.url, this.urlOption);
+                let self = this;
+                win.webContents.on('dom-ready', () => {
+                    win.webContents.send('message', articleMsg);
+                });
+            },
+            publish(item, type) {
+                if (item.winId) {
+                    var win = BrowserWindow.fromId(item.winId);
+                    win.focus();
+                    return;
+                }
                 let content = "";
                 if (this.$parent.article.editor_type == "html") {
                     content = window.editorU.getContent();
                 } else {
                     content = window.editorMd.getHtml();
                 }
-                let self = this;
-                win.webContents.on('dom-ready', () => {
-                    win.webContents.send('message', {
-                        title: self.$parent.article.title,
-                        id: self.$route.params.id,
-                        winId: item.winId,
-                        siteId: item.id,
-                        url,
-                        type,
-                        content
-                    });
-                });
-            },
-            publish(item) {
-                if (!item.ready) {
-                    swal({
-                        icon: "error",
-                        text: "暂时还不支持发布至" + item.title,
-                    });
-                    return;
-                }
-                if (item.winId) {
-                    var win = BrowserWindow.fromId(item.winId);
-                    win.focus();
-                    return;
-                }
-                let url = item.url;
-                let type = "new"
-                let articleId = this.$route.params.id;
-                this.db("article_site").where("article_id", articleId)
-                    .andWhere("site_id", item.id).then(rows => {
-                        if (rows.length > 0) {
-                            url = rows[0].edit_url;
-                            type = "edit";
-                        }
-                        this.makeWin(item, url, type);
-                    });
+                let articleMsg = {
+                    title: this.$parent.article.title,
+                    id: this.$parent.article.id,
+                    winId: item.winId,
+                    siteId: item.id,
+                    url: type == "new" ? item.url : this.editUrl,
+                    type,
+                    content
+                };
+                this.winOption.webPreferences.preload = path.join(__static, 'sites/' + item.id + '/inject.js');
+                this.makeWin(item, articleMsg);
             }
         }
     }
@@ -164,7 +158,6 @@
         overflow: hidden;
         border-radius: 3px;
         margin: 12px;
-        cursor: pointer;
     }
 
     .tarSiteMaskClose {
@@ -228,16 +221,20 @@
         color: #555;
         display: flex;
     }
-    .toolText{
+
+    .toolText {
         flex: 1;
         text-align: center;
     }
-    .toolBtn{
+
+    .toolBtn {
         flex: 1;
     }
-    .toolBtn:hover{
+
+    .toolBtn:hover {
         border-radius: 3px;
         background: #e7f3ff;
         color: #007acc;
+        cursor: pointer;
     }
 </style>

@@ -68,13 +68,7 @@ let imgProcessor = {
         this.imgs.forEach(v => {
             if (!v.dataset[this.siteId] && v.src.startsWith("file")) {
                 this.guard += 1;
-                var pathIndex = remote.process.platform == "win32" ? 8 : 7
-                var filePath = decodeURI(v.src).substr(pathIndex);
-                var extname = path.extname(filePath).substr(1);
-                var buffer = fs.readFileSync(filePath);
-                var file = new window.File([new Uint8Array(buffer)], path.basename(filePath), {
-                    type: base.mime[extname]
-                });
+                let file = base.getFileObjByLocalUrl(v.src);
                 this.uploadImg(v, file);
             }
         });

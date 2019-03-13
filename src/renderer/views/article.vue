@@ -11,7 +11,7 @@
     </div>
     <editor ref="articleEditor"></editor>
     <articletag ref="articleTag"></articletag>
-    <site v-if="showSites"></site>
+    <site v-show="showSites"></site>
   </div>
 </template>
 <script>
