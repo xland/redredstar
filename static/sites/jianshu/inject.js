@@ -9,10 +9,8 @@ const base = require('../base');
 
 let imgProcessor = {
     imgs: null,
-    siteId: null,
     doc: null,
     guard: 0,
-    title: '',
     uploadImg(dom, file) {
         let getUrl = 'https://www.jianshu.com/upload_images/token.json?filename=' + file.name;
         let postUrl = 'https://upload.qiniup.com/';
@@ -85,9 +83,7 @@ let imgProcessor = {
         var parser = new DOMParser();
         this.doc = parser.parseFromString(article.content, "text/html");
         this.imgs = this.doc.querySelectorAll('img');
-        this.title = article.title;
-        this.siteId = article.siteId;
-        this.winId = article.winId;
+        Object.assign(this, article);
         this.start();
     }
 }

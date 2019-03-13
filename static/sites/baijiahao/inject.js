@@ -9,10 +9,8 @@ const base = require('../base');
 
 let imgProcessor = {
     imgs: null,
-    siteId: null,
     doc: null,
     guard: 0,
-    title: '',
     uploadImg(dom, file) {
         let fd = new FormData();
         fd.append("type", "image");
@@ -82,9 +80,7 @@ let imgProcessor = {
         var parser = new DOMParser();
         this.doc = parser.parseFromString(article.content, "text/html");
         this.imgs = this.doc.querySelectorAll('img');
-        this.siteId = article.siteId;
-        this.winId = article.winId;
-        this.title = article.title;
+        Object.assign(this, article);
         this.start();
     }
 }

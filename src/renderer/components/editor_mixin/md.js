@@ -1,13 +1,14 @@
 export default {
     data() {
-        return {
-        }
+        return {}
     },
     methods: {
         imageUploadMd(obj) {
-            let preStr = '<img id="' + obj.id + '"';
-            let str = '<img id="' + obj.id + '" data-' + obj.siteId + '="' + obj.url + '"';
-            this.articleContent = this.articleContent.replace(preStr, str);
+            let parser = new DOMParser();
+            let doc = parser.parseFromString(this.articleContent, "text/html");
+            let img = doc.getElementById(obj.id);
+            img.dataset[obj.siteId] = obj.url;
+            this.articleContent = doc.body.innerHTML;
             window.editorMd.setValue(this.articleContent);
             this.needSave = true;
         },

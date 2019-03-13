@@ -7,7 +7,6 @@ const base = require('../base');
 
 let imgProcessor = {
     imgs: null,
-    siteId: null,
     doc: null,
     guard: 0,
     uploadImg(dom, file) {
@@ -60,6 +59,7 @@ let imgProcessor = {
     },
     start() {
         this.imgs.forEach(v => {
+            //todo: if new del dataset[siteId]
             if (!v.dataset[this.siteId]) {
                 this.guard += 1;
                 let file = base.getFileObjByLocalUrl(v.src);
@@ -74,9 +74,7 @@ let imgProcessor = {
         var parser = new DOMParser();
         this.doc = parser.parseFromString(article.content, "text/html");
         this.imgs = this.doc.querySelectorAll('img');
-        this.siteId = article.siteId;
-        this.winId = article.winId;
-        this.title = article.title;
+        Object.assign(this, article);
         this.start();
     }
 }
