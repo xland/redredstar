@@ -81,7 +81,6 @@ const initializer = {
         });
     },
     init(cb) {
-        //todo: 在6.2.x的时候删掉此目录
         if (!firstTime) {
             cb(knex);
             let bakDir = path.join(electron.remote.app.getPath('userData'), "/xxm_bak");
