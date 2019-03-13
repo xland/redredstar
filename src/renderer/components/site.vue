@@ -5,12 +5,16 @@
         </div>
         <div @click='$parent.showSites = false' class="z1">
             <div v-show="!initWebview" class="tarSiteContainer">
-                <div @click.stop="publish(item)" :class="['tarSiteItem',item.ready?'':'notReady']" v-for="(item,index) in sites">
+                <div @click.stop @mouseover="overIndex = index" @mouseout="overIndex = -1" :class="['tarSiteItem',item.ready?'':'notReady']" v-for="(item,index) in sites">
                     <div class="tarSiteIcon">
                         <img :src="'./static/sites/'+item.id+'/logo.png'" />
                     </div>
                     <div class="tarSiteName">
-                        {{item.title}}
+                        <div v-show="overIndex != index || !item.ready" class="toolText">
+                            {{item.title}}
+                        </div>
+                        <div @click.stop="publish(item)" v-show="showEditBtn(index) && item.ready" class="toolBtn">修改</div>
+                        <div @click.stop="publish(item)" v-show="overIndex == index && item.ready" class="toolBtn">新增</div>
                     </div>
                 </div>
             </div>
@@ -28,6 +32,7 @@
     export default {
         data() {
             return {
+                overIndex:-1,
                 winOption: {
                     width: 1056,
                     height: 680,
@@ -45,6 +50,11 @@
             }
         },
         methods: {
+            showEditBtn(index){
+                if(index == this.overIndex){
+                    return true;
+                }
+            },
             makeWin(item, url, type) {
                 this.winOption.webPreferences.preload = path.join(__static, 'sites/' + item.id + '/inject.js');
                 let win = new BrowserWindow(this.winOption);
@@ -147,9 +157,9 @@
     }
 
     .tarSiteItem {
-        width: 106px;
-        min-width: 106px;
-        height: 98px;
+        width: 96px;
+        min-width: 96px;
+        height: 88px;
         background: #fff;
         overflow: hidden;
         border-radius: 3px;
@@ -190,6 +200,8 @@
     }
 
     .tarSiteIcon {
+        height: 56px;
+        line-height: 56px;
         text-align: center;
     }
 
@@ -203,15 +215,29 @@
     }
 
     .tarSiteIcon img {
-        height: 32px;
-        width: 32px;
-        margin-top: 22px;
+        margin-top: 6px;
+        height: 30px;
+        width: 30px;
+        vertical-align: middle;
     }
 
     .tarSiteName {
-        height: 36px;
-        line-height: 36px;
+        height: 32px;
+        line-height: 32px;
         text-align: center;
-        color: #666;
+        color: #555;
+        display: flex;
+    }
+    .toolText{
+        flex: 1;
+        text-align: center;
+    }
+    .toolBtn{
+        flex: 1;
+    }
+    .toolBtn:hover{
+        border-radius: 3px;
+        background: #e7f3ff;
+        color: #007acc;
     }
 </style>
