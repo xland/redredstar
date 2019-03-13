@@ -48,7 +48,6 @@
                 },
                 initWebview: false,
                 sites: sites,
-                article,
             }
         },
         methods: {

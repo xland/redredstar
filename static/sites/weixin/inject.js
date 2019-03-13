@@ -99,11 +99,7 @@ let imgProcessor = {
         this.siteId = article.siteId;
         this.winId = article.winId;
         this.title = article.title;
-        if (this.imgs.length > 0) {
-            this.start();
-        } else {
-            this.end();
-        }
+        this.start();
     }
 }
 

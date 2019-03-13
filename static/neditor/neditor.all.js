@@ -19231,13 +19231,13 @@
               imgPos.x -
               (doc.documentElement.scrollLeft || doc.body.scrollLeft || 0) -
               editorPos.x -
-              parseInt(resizer.style.borderLeftWidth) + 8 + // by liulun 8
+              parseInt(resizer.style.borderLeftWidth) + 
               "px",
             top: iframePos.y +
               imgPos.y -
               (doc.documentElement.scrollTop || doc.body.scrollTop || 0) -
               editorPos.y -
-              parseInt(resizer.style.borderTopWidth) + 78 + // by liulun 78
+              parseInt(resizer.style.borderTopWidth) + 
               "px"
           });
         }

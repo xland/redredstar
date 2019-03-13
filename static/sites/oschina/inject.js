@@ -61,11 +61,7 @@ let imgProcessor = {
         this.imgs = this.doc.querySelectorAll('img');
         this.siteId = article.siteId;
         this.winId = article.winId;
-        if (this.imgs.length > 0) {
-            this.start();
-        } else {
-            this.end();
-        }
+        this.start();
     }
 }
 
