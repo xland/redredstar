@@ -59,7 +59,9 @@ let imgProcessor = {
     },
     start() {
         this.imgs.forEach(v => {
-            //todo: if new del dataset[siteId]
+            if(this.type == 'new'){
+                delete v.dataset[this.siteId];
+            }
             if (!v.dataset[this.siteId]) {
                 this.guard += 1;
                 let file = base.getFileObjByLocalUrl(v.src);
