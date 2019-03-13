@@ -65,7 +65,14 @@
                 return false;
             },
             makeWin(item, articleMsg) {
-                let win = new BrowserWindow(this.winOption);
+                let win = null;
+                if (item.winId) {
+                    win = BrowserWindow.fromId(item.winId);
+                    win.focus();
+                    win.webContents.send('message', articleMsg);
+                    return;
+                }
+                win = new BrowserWindow(this.winOption);
                 item.winId = win.id;
                 win.on('closed', () => {
                     item.winId = null;
@@ -78,11 +85,6 @@
                 });
             },
             publish(item, type) {
-                if (item.winId) {
-                    var win = BrowserWindow.fromId(item.winId);
-                    win.focus();
-                    return;
-                }
                 let content = "";
                 if (this.$parent.article.editor_type == "html") {
                     content = window.editorU.getContent();
