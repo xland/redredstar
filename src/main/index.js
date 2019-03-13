@@ -45,6 +45,11 @@ function createWindow() {
   } else {
     Menu.setApplicationMenu(null);
   }
+  setTimeout(() => {
+    if(process.env.NODE_ENV === 'production') {
+      autoUpdater.checkForUpdates();
+    }
+  }, 6000);
 }
 
 app.on('ready', createWindow)
@@ -74,10 +79,4 @@ ipcMain.on('updateMain', (event, message) => {
 
 autoUpdater.on('update-downloaded', () => {
   mainWindow.webContents.send('updateRenderer');
-})
-
-app.on('ready', () => {
-  if (process.env.NODE_ENV === 'production') {
-    autoUpdater.checkForUpdates();
-  }
 })

@@ -1,6 +1,6 @@
 {
   "name": "xiangxuema",
-  "version": "6.2.3",
+  "version": "6.2.4",
   "author": "liulun <412588801@qq.com>",
   "description": "xiangxuema",
   "license": "MIT",
@@ -18,6 +18,14 @@
     "postinstall": ""
   },
   "build": {
+    "npmRebuild": "false",
+    "electronDownload": {
+      "version": "4.0.8",
+      "cache": "/project/xiangxuema/cache",
+      "mirror": "https://npm.taobao.org/mirrors/electron/",
+      "arch": "x64"
+    },
+    "electronVersion": "4.0.8",
     "productName": "想学吗",
     "appId": "com.xiangxuema",
     "directories": {
@@ -29,7 +37,7 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "http://xiangxuema.com/"
+        "url": "http://xiangxuema.com/download"
       }
     ],
     "dmg": {
@@ -85,7 +93,7 @@
     "css-loader": "^0.28.11",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^2.0.4",
+    "electron": "^4.0.8",
     "electron-builder": "^20.19.2",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",

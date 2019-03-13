@@ -8,6 +8,8 @@ npm-debug.log
 npm-debug.log.*
 thumbs.db
 doc/sign/*
+cache/*
 !.gitkeep
 bak
 *.mine
+*.bak
