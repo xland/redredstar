@@ -83,11 +83,19 @@ let imgProcessor = {
 ipcRenderer.on('message', (event, article) => {
     window.onbeforeunload = null;
     let url = window.location.href;
+    if(url.startsWith("https://mp.csdn.net/mdeditor")){
+        alert("抱歉：目前暂不支持csdn的markdown编辑器,请修改默认编辑器");
+        setTimeout(()=>{
+            window.onbeforeunload = null;
+        },960);
+        return;
+    }
     if (url.startsWith('https://mp.csdn.net/postedit')) {
         setTimeout(()=>{
-            //window.onbeforeunload = null;
+            window.onbeforeunload = null;
             if(!document.getElementById("cke_editor")){
-                alert("抱歉：目前暂不支持csdn的markdown编辑器")
+                alert("抱歉：目前暂不支持csdn的markdown编辑器");
+                window.onbeforeunload = null;
             }
             imgProcessor.init(article);
         },960)
