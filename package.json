@@ -44,8 +44,8 @@
       "oneClick": false,
       "perMachine": true,
       "allowElevation": true,
-      "allowToChangeInstallationDirectory": false,
-      "createDesktopShortcut": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": "always",
       "runAfterFinish": true
     },
     "dmg": {

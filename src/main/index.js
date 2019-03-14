@@ -10,7 +10,7 @@ import {
 import {
   autoUpdater
 } from 'electron-updater'
-autoUpdater.autoInstallOnAppQuit = false;
+//autoUpdater.autoInstallOnAppQuit = false;
 import menuData from './menu.js';
 ebtMain(ipcMain)
 
