@@ -14,7 +14,8 @@
                         <div v-show="overIndex != index || !item.ready" class="toolText">
                             {{item.title}}
                         </div>
-                        <div @click.stop="publish(item,'edit')" v-show="editUrl && overIndex == index && item.ready" class="toolBtn">修改</div>
+                        <div @click.stop="publish(item,'edit')" v-show="editUrl && overIndex == index && item.ready"
+                            class="toolBtn">修改</div>
                         <div @click.stop="publish(item,'new')" v-show="overIndex == index && item.ready" class="toolBtn">新增</div>
                     </div>
                 </div>
@@ -74,6 +75,7 @@
                 }
                 win = new BrowserWindow(this.winOption);
                 item.winId = win.id;
+                articleMsg.winId = win.id;
                 win.on('closed', () => {
                     item.winId = null;
                     win = null
