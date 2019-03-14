@@ -14,6 +14,7 @@
 - npm run buildsharp
 - npm install sqlite3 --build-from-source --runtime=electron --target=4.0.8 --dist-url=https://atom.io/download/electron
 - npm run dev
+- 如果编译不成功，你可能要尝试删掉package-lock.json；尝试npm cache clean -f;
 
 ## 求助
 
