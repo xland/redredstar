@@ -62,7 +62,9 @@ export default {
         imgSaveInternetObj(dom) {
             let id = "img" + new Date().getTime();
             let parsedUrl = url.parse(dom.src);
-            let ext = dom.src.includes("webp") ? ".webp" : path.extname(parsedUrl.pathname)
+            let ext = dom.src.includes("webp") ? ".webp" : path.extname(parsedUrl.pathname);
+            debugger;
+            if (!ext) ext = ".png";
             let fullName = path.join(this.articlePath, id + ext);
             request(dom.src)
                 .pipe(fs.createWriteStream(fullName))
@@ -80,11 +82,11 @@ export default {
                     if (!v.startsWith("img")) {
                         return;
                     }
-                    let tempStr = '<img id="' + v.substring(0, v.lastIndexOf('.')) + '"';
-                    if(this.articleContent.includes(tempStr)){
+                    let tempStr = 'id="' + v.substring(0, v.lastIndexOf('.')) + '"';
+                    if (this.articleContent.includes(tempStr)) {
                         return;
                     }
-                    fs.unlink(path.join(this.articlePath,v), err => {
+                    fs.unlink(path.join(this.articlePath, v), err => {
                         if (err) {
                             err && console.log(err);
                         }
