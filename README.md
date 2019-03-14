@@ -6,9 +6,10 @@
 
 ## 下载地址
 
-* 当前版本：6.2.3
-* osx64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
-* win64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.exe
+* 当前版本：6.2.5
+* osx64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.2.5.dmg
+* win64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.2.5.exe
+
 
 ## 功能说明
 
