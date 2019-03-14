@@ -10,6 +10,7 @@ import {
 import {
   autoUpdater
 } from 'electron-updater'
+autoUpdater.autoInstallOnAppQuit = false;
 import menuData from './menu.js';
 ebtMain(ipcMain)
 
@@ -46,7 +47,7 @@ function createWindow() {
     Menu.setApplicationMenu(null);
   }
   setTimeout(() => {
-    if(process.env.NODE_ENV === 'production') {
+    if (process.env.NODE_ENV === 'production') {
       autoUpdater.checkForUpdates();
     }
   }, 6000);
