@@ -20,12 +20,12 @@
   "build": {
     "npmRebuild": "false",
     "electronDownload": {
-      "version": "4.0.8",
-      "cache": "/project/xiangxuema/cache",
+      "version": "3.1.6",
+      "cache": "./cache",
       "mirror": "https://npm.taobao.org/mirrors/electron/",
       "arch": "x64"
     },
-    "electronVersion": "4.0.8",
+    "electronVersion": "3.1.6",
     "productName": "想学吗",
     "appId": "com.xiangxuema",
     "directories": {
@@ -93,7 +93,7 @@
     "css-loader": "^0.28.11",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "^4.0.8",
+    "electron": "^3.1.6",
     "electron-builder": "^20.19.2",
     "electron-debug": "^1.5.0",
     "electron-devtools-installer": "^2.2.4",
