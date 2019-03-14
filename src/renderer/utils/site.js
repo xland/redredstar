@@ -32,15 +32,16 @@ export default [{
     ready: true,
     id: 'baijiahao',
     title: '百家号',
-    url:'https://baijiahao.baidu.com/builder/rc/edit?type=news',
+    url: 'https://baijiahao.baidu.com/builder/rc/edit?type=news',
+}, {
+    ready: true,
+    id: 'qiehao',
+    title: '企鹅号',
+    url: 'https://om.qq.com/article/articlePublish',
 }, {
     ready: false,
     id: 'toutiaohao',
     title: '头条号',
-}, {
-    ready: false,
-    id: 'qiehao',
-    title: '企鹅号',
 }, {
     ready: false,
     id: 'wangyihao',
@@ -65,7 +66,7 @@ export default [{
     ready: false,
     id: 'wordpress',
     title: 'wordpress',
-},{
+}, {
     ready: false,
     id: 'qqzone',
     title: 'QQ空间',

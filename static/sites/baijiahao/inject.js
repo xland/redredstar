@@ -23,7 +23,6 @@ let imgProcessor = {
         base.post(url, fd, (r) => {
             var imgObj = JSON.parse(r);
             dom.src = imgObj.ret.bos_url;
-            console.log(dom.src);
             ipcRenderer.send('imgUploadMain', {
                 id: dom.id,
                 siteId: this.siteId,

@@ -12,14 +12,18 @@ let imgProcessor = {
     doc: null,
     guard: 0,
     uploadImg(dom, file) {
-        let token = CKEDITOR.tools.getCsrfToken();
         let fd = new FormData();
-        fd.append('upload', file);
-        fd.append("ckCsrfToken", token);
-        let url = "https://mp.csdn.net/" + CKEDITOR.instances["editor"].config.imageUploadUrl;
+        fd.append("subModule", "normal_zhengwen");
+        fd.append("id", "WU_FILE_" + this.guard);
+        fd.append("name", file.name);
+        fd.append("type", file.type);
+        fd.append('lastModifiedDate', new Date());
+        fd.append('Filename', file.name);
+        fd.append("Filedata", file);
+        let url = "https://om.qq.com/image/archscaleupload?isRetImgAttr=1&relogin=1";
         base.post(url, fd, (r) => {
             var imgObj = JSON.parse(r);
-            dom.src = imgObj.url;
+            dom.src = imgObj.data.url.size['641'].imgurl;
             ipcRenderer.send('imgUploadMain', {
                 id: dom.id,
                 siteId: this.siteId,
@@ -33,7 +37,7 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
-            if(v.dataset[this.siteId]){
+            if (v.dataset[this.siteId]) {
                 v.src = v.dataset[this.siteId];
             }
             Object.keys(v.dataset).forEach(ds => {
@@ -41,24 +45,28 @@ let imgProcessor = {
             })
         });
         window.onbeforeunload = null;
-        CKEDITOR.instances["editor"].setData(this.doc.body.innerHTML)
-        document.getElementById("txtTitle").value = this.title;
+        let iframe = document.getElementById("ueditor_0").contentWindow
+        iframe.editor.setContent(this.doc.body.innerHTML);
+        var win = remote.BrowserWindow.fromId(this.winId);
+        win.focus();
+        let titleTb = document.querySelector("label.input-control-title").children[0];
+        titleTb.focus();
+        titleTb.value = "";
+        clipboard.writeText(this.title);
+        win.webContents.paste();
         base.ajaxInjector(obj => {
-            if (obj && obj.data) {
-                let id = obj.data.substr(obj.data.lastIndexOf('/') + 1);
-                if (!id) {
-                    return;
-                }
+            if (obj && obj.response && obj.response.msg == "Save success" && obj.data) {
+                let id = obj.data.articleId;
                 ipcRenderer.send('articlePublishMain', {
-                    siteId: 'csdn',
-                    url: 'https://mp.csdn.net/postedit/' + id
+                    siteId: this.siteId,
+                    url: 'https://om.qq.com/article/articlePublish?articleId=' + id + '&atype=0'
                 });
             }
         })
     },
     start() {
         this.imgs.forEach(v => {
-            if(this.type == 'new'){
+            if (this.type == 'new') {
                 delete v.dataset[this.siteId];
             }
             if (!v.dataset[this.siteId]) {
@@ -80,18 +88,32 @@ let imgProcessor = {
     }
 }
 
-//UE.instants.ueditorInstant0.setContent("allen");
-//https://om.qq.com/image/archscaleupload?isRetImgAttr=1&relogin=1
-//img up response {"response":{"code":0,"msg":"success!","cost":"290ms"},"data":{"url":{"url":"http:\/\/inews.gtimg.com\/newsapp_bt\/0\/80214
+var waitForReady = function (cb) {
+    setTimeout(function () {
+        if (!document.getElementById("ueditor_0")) {
+            waitForReady(cb);
+            return;
+        }
+        let win = document.getElementById("ueditor_0").contentWindow;
+        if (!win.editor) {
+            waitForReady(cb);
+            return;
+        }
+        cb();
+    }, 280);
+}
 ipcRenderer.on('message', (event, article) => {
     window.onbeforeunload = null;
     let url = window.location.href;
-    if (url.startsWith('https://mp.csdn.net/postedit')) {
-        setTimeout(()=>{
-            if(!document.getElementById("cke_editor")){
-                alert("抱歉：目前暂不支持csdn的markdown编辑器")
-            }
-            imgProcessor.init(article);
-        },960)
+    if (url == "https://om.qq.com/userAuth/index") {
+        return;
     }
+    if (!url.startsWith('https://om.qq.com/article/articlePublish')) {
+        window.location.href = article.url
+        return;
+    }
+    waitForReady(() => {
+        window.onbeforeunload = null;
+        imgProcessor.init(article);
+    })
 })
