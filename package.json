@@ -40,6 +40,14 @@
         "url": "http://xiangxuema.com/download"
       }
     ],
+    "nsis": {
+      "oneClick": true,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "runAfterFinish": true
+    },
     "dmg": {
       "contents": [
         {

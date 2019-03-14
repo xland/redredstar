@@ -13,3 +13,4 @@ cache/*
 bak
 *.mine
 *.bak
+package-lock.json
