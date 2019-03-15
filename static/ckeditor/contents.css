@@ -2,7 +2,21 @@
 Copyright (c) 2003-2019, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background-color: #f6f6f6;
+}
 
+::-webkit-scrollbar-track {
+    border-radius: 0px;
+    background-color: #f6f6f6;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 0px;
+    background-color: #eee;
+}
 body
 {
 	/* Font */

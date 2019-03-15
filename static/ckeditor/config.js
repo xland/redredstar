@@ -38,6 +38,7 @@ CKEDITOR.editorConfig = function (config) {
 	config.mathJaxLib = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML';
 	//config.allowedContent = true; 
 	config.extraAllowedContent = 'dl dt dd img[id,data-*]';
+	config.imageUploadUrl = '/useless/url'
 	config.resize_enabled = false;
 	config.height = "auto";
 };

@@ -43,6 +43,7 @@
                 fs.writeFileSync(path.join(this.articlePath, "a.data"), this.articleContent, this.$root.rwOption);
                 this.needSave = false;
                 this.db("articles").update({
+                    title: this.$parent.article.title,
                     updated_at: new Date()
                 }).where("id", this.$parent.article.id).then(rows => {
                     if (cb) cb();
