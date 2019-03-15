@@ -59,11 +59,17 @@ export default {
             };
             fr.readAsArrayBuffer(fileObj);
         },
+        imgSaveDropObj(fullName, cb) {
+            let id = "img" + new Date().getTime();
+            let tarName = path.join(this.articlePath, id + path.extname(fullName));
+            fs.copyFile(fullName, tarName, err => {
+                cb(id, tarName, err);
+            });
+        },
         imgSaveInternetObj(dom) {
             let id = "img" + new Date().getTime();
             let parsedUrl = url.parse(dom.src);
             let ext = dom.src.includes("webp") ? ".webp" : path.extname(parsedUrl.pathname);
-            debugger;
             if (!ext) ext = ".png";
             let fullName = path.join(this.articlePath, id + ext);
             request(dom.src)

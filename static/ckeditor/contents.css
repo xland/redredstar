@@ -16,7 +16,7 @@ body
 	/* Remove the background color to make it transparent. */
 	background-color: #fff;
 
-	margin: 20px;
+	/* margin: 20px; by liulun */
 }
 
 .cke_editable
@@ -76,7 +76,7 @@ hr
 	border: 0px;
 	border-top: 1px solid #ccc;
 }
-
+img {max-width:760px;max-height: 280px;}
 img.right
 {
 	border: 1px solid #ccc;
