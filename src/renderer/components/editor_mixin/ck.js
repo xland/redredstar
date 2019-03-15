@@ -30,25 +30,30 @@ export default {
             });
             instans.keystrokeHandler.keystrokes[CKEDITOR.CTRL + 83] = 'saveContent';
         },
+        hook(){
+            let self = this;
+            self.saveKeyEventHook();
+            CKEDITOR.instances.editorCk.on("change",function () {
+                self.needSave = true;
+            });
+            CKEDITOR.instances.editorCk.on("fileUploadRequest",function (evt) {
+                evt.stop();
+                self.saveImg(evt.data.fileLoader.file);
+            });
+        },
         initEditorCk() {
             this.$root.curArticleMd = false;
             let self = this;
+            let cbObj = {
+                callback: function () {
+                    self.needSave = false;
+                }
+            };
             window.CKEDITOR.replace('editorCk', {
                 on: {
-                    change: function () {
-                        self.needSave = true;
-                    },
-                    fileUploadRequest: function (evt) {
-                        evt.stop();
-                        self.saveImg(evt.data.fileLoader.file);
-                    },
                     instanceReady: function () {
-                        self.saveKeyEventHook();
-                        window.CKEDITOR.instances.editorCk.setData(self.articleContent, {
-                            callback: function () {
-                                self.needSave = false;
-                            }
-                        });
+                        self.hook();
+                        window.CKEDITOR.instances.editorCk.setData(self.articleContent, cbObj);
                     },
                 }
             });

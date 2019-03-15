@@ -58,6 +58,9 @@
             },
             destroy() {
                 clearInterval(this.tick);
+                if (this.$parent.article.editor_type == "html" && CKEDITOR.instances.editorCk) {
+                    CKEDITOR.instances.editorCk.destroy();
+                }
             },
             hookImgUpload() {
                 this.$root.imgUploadCb = (obj) => {
