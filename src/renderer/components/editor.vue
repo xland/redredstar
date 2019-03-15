@@ -11,7 +11,6 @@
     //todo:图片放大缩小需要按比例
     const fs = require('fs');
     const path = require('path');
-    import u from './editor_mixin/u';
     import img from './editor_mixin/img';
     import md from './editor_mixin/md';
     import ck from './editor_mixin/ck';
@@ -20,7 +19,7 @@
         remote
     } = require('electron');
     export default {
-        mixins: [u, img, md, ck],
+        mixins: [img, md, ck],
         data() {
             return {
                 articleContent: null,
@@ -62,7 +61,7 @@
             hookImgUpload() {
                 this.$root.imgUploadCb = (obj) => {
                     if (this.$parent.article.editor_type == "html") {
-                        this.imageUploadU(obj);
+                        this.imageUploadCk(obj);
                     } else {
                         this.imageUploadMd(obj);
                     }
@@ -88,11 +87,11 @@
                 this.tick = setInterval(() => {
                     this.saveContent()
                 }, this.$root.tickStep);
+                this.hookImgUpload();
                 this.removeUselessImg();
             }
         },
         mounted() {
-            this.hookImgUpload();
             this.hookWinQuit();
         }
     }

@@ -5,6 +5,10 @@ export default {
         }
     },
     methods: {
+        imageUploadCk(obj) {
+            let dom = this.ckEditorWin.document.getElementById(obj.id);
+            dom.dataset[obj.siteId] = obj.url;
+        },
         pasteImgHook() {
             let self = this;
             this.ckEditorWin.addEventListener("paste", (event) => {
