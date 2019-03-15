@@ -3,7 +3,10 @@
     <tabbar></tabbar>
     <router-view />
     <bottombar></bottombar>
-    <div v-show="$route.params.id && !$root.curArticleMd" id="editorU"></div>
+    <div v-if="false" v-show="$route.params.id && !$root.curArticleMd" id="editorU"></div>
+    <div id="ckEditorContainer">
+      <textarea id="ckEditor"></textarea>
+    </div>
   </div>
 </template>
 
@@ -73,12 +76,20 @@
     background: #f6f6f6;
   }
 
-  #editorU {
+  #editorU,#ckEditorContainer {
     position: absolute;
     z-index: 10;
     left: 8px;
     right: 8px;
     top: 78px;
     bottom: 72px;
+  }
+  #ckEditor{
+    width: 100%;height: 100%;
+    margin: 0px;
+    padding: 0px;
+    border:none;
+    outline: none;
+    resize: none;
   }
 </style>

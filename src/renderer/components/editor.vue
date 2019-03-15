@@ -13,12 +13,13 @@
     import u from './editor_mixin/u';
     import img from './editor_mixin/img';
     import md from './editor_mixin/md';
+    import ck from './editor_mixin/ck';
     const {
         ipcRenderer,
         remote
     } = require('electron');
     export default {
-        mixins: [u, img, md],
+        mixins: [u, img, md,ck],
         data() {
             return {
                 articleContent: null,
@@ -83,7 +84,8 @@
                 this.articlePath = path.join(remote.app.getPath('userData'), "/xxm/" + this.$parent.article.id);
                 this.articleContent = fs.readFileSync(path.join(this.articlePath, "a.data"), this.$root.rwOption);
                 if (this.$parent.article.editor_type == "html") {
-                    this.initEditorU();
+                    //this.initEditorU();
+                    this.initEditorCk();
                 } else {
                     this.initEditorMd();
                 }
