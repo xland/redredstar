@@ -11,7 +11,7 @@ CKEDITOR.editorConfig = function (config) {
 		},
 		{
 			name: 'paragraph',
-			items: ['NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl']
+			items: ['NumberedList', 'BulletedList', 'Outdent', 'Indent', 'Blockquote', 'RemoveFormat','-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl']
 		},
 		{
 			name: 'links',
@@ -24,11 +24,11 @@ CKEDITOR.editorConfig = function (config) {
 		'/',
 		{
 			name: 'styles',
-			items: ['Styles', 'Format', 'Font', 'FontSize', 'RemoveFormat', 'PasteFromWord', 'PasteText']
+			items: ['Styles', 'Format', 'Font', 'FontSize']
 		},
 		{
 			name: 'document',
-			items: ['Print', 'PageBreak', 'Templates', '-', 'CreateDiv', 'ShowBlocks', 'Source', ]
+			items: ['Print', '-','Templates', '-', 'CreateDiv', 'ShowBlocks', 'Source', ]
 		},
 	];
 	config.enterMode = CKEDITOR.ENTER_BR;

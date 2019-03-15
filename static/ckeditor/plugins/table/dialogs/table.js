@@ -465,70 +465,72 @@
 					align: 'right',
 					html: ''
 				},
-				{
-					type: 'vbox',
-					padding: 0,
-					children: [ {
-						type: 'text',
-						id: 'txtCaption',
-						requiredContent: 'caption',
-						label: editor.lang.table.caption,
-						setup: function( selectedTable ) {
-							this.enable();
+				// edit by liulun
+				// {
+				// 	type: 'vbox',
+				// 	padding: 0,
+				// 	children: [ {
+				// 		type: 'text',
+				// 		id: 'txtCaption',
+				// 		requiredContent: 'caption',
+				// 		label: editor.lang.table.caption,
+				// 		setup: function( selectedTable ) {
+				// 			this.enable();
 
-							var nodeList = selectedTable.getElementsByTag( 'caption' );
-							if ( nodeList.count() > 0 ) {
-								var caption = nodeList.getItem( 0 );
-								var firstElementChild = caption.getFirst( CKEDITOR.dom.walker.nodeType( CKEDITOR.NODE_ELEMENT ) );
+				// 			var nodeList = selectedTable.getElementsByTag( 'caption' );
+				// 			if ( nodeList.count() > 0 ) {
+				// 				var caption = nodeList.getItem( 0 );
+				// 				var firstElementChild = caption.getFirst( CKEDITOR.dom.walker.nodeType( CKEDITOR.NODE_ELEMENT ) );
 
-								if ( firstElementChild && !firstElementChild.equals( caption.getBogus() ) ) {
-									this.disable();
-									this.setValue( caption.getText() );
-									return;
-								}
+				// 				if ( firstElementChild && !firstElementChild.equals( caption.getBogus() ) ) {
+				// 					this.disable();
+				// 					this.setValue( caption.getText() );
+				// 					return;
+				// 				}
 
-								caption = CKEDITOR.tools.trim( caption.getText() );
-								this.setValue( caption );
-							}
-						},
-						commit: function( data, table ) {
-							if ( !this.isEnabled() )
-								return;
+				// 				caption = CKEDITOR.tools.trim( caption.getText() );
+				// 				this.setValue( caption );
+				// 			}
+				// 		},
+				// 		commit: function( data, table ) {
+				// 			if ( !this.isEnabled() )
+				// 				return;
 
-							var caption = this.getValue(),
-								captionElement = table.getElementsByTag( 'caption' );
-							if ( caption ) {
-								if ( captionElement.count() > 0 ) {
-									captionElement = captionElement.getItem( 0 );
-									captionElement.setHtml( '' );
-								} else {
-									captionElement = new CKEDITOR.dom.element( 'caption', editor.document );
-									table.append( captionElement, true );
-								}
-								captionElement.append( new CKEDITOR.dom.text( caption, editor.document ) );
-							} else if ( captionElement.count() > 0 ) {
-								for ( var i = captionElement.count() - 1; i >= 0; i-- )
-									captionElement.getItem( i ).remove();
-							}
-						}
-					},
-					{
-						type: 'text',
-						id: 'txtSummary',
-						bidi: true,
-						requiredContent: 'table[summary]',
-						label: editor.lang.table.summary,
-						setup: function( selectedTable ) {
-							this.setValue( selectedTable.getAttribute( 'summary' ) || '' );
-						},
-						commit: function( data, selectedTable ) {
-							if ( this.getValue() )
-								selectedTable.setAttribute( 'summary', this.getValue() );
-							else
-								selectedTable.removeAttribute( 'summary' );
-						}
-					} ]
-				} ]
+				// 			var caption = this.getValue(),
+				// 				captionElement = table.getElementsByTag( 'caption' );
+				// 			if ( caption ) {
+				// 				if ( captionElement.count() > 0 ) {
+				// 					captionElement = captionElement.getItem( 0 );
+				// 					captionElement.setHtml( '' );
+				// 				} else {
+				// 					captionElement = new CKEDITOR.dom.element( 'caption', editor.document );
+				// 					table.append( captionElement, true );
+				// 				}
+				// 				captionElement.append( new CKEDITOR.dom.text( caption, editor.document ) );
+				// 			} else if ( captionElement.count() > 0 ) {
+				// 				for ( var i = captionElement.count() - 1; i >= 0; i-- )
+				// 					captionElement.getItem( i ).remove();
+				// 			}
+				// 		}
+				// 	},
+				// 	{
+				// 		type: 'text',
+				// 		id: 'txtSummary',
+				// 		bidi: true,
+				// 		requiredContent: 'table[summary]',
+				// 		label: editor.lang.table.summary,
+				// 		setup: function( selectedTable ) {
+				// 			this.setValue( selectedTable.getAttribute( 'summary' ) || '' );
+				// 		},
+				// 		commit: function( data, selectedTable ) {
+				// 			if ( this.getValue() )
+				// 				selectedTable.setAttribute( 'summary', this.getValue() );
+				// 			else
+				// 				selectedTable.removeAttribute( 'summary' );
+				// 		}
+				// 	} ]
+				// } 
+			]
 			},
 			dialogadvtab && dialogadvtab.createAdvancedTab( editor, null, 'table' )
 		] };
