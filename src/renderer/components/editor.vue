@@ -4,6 +4,7 @@
             请不要改变img标签的格式（会影响文章发布）
         </div>
         <div v-show="$parent.article.editor_type == 'markdown'" id="editorMd"></div>
+        <div v-show="$parent.article.editor_type == 'html'" id="editorCk"></div>
     </div>
 </template>
 <script>
@@ -19,7 +20,7 @@
         remote
     } = require('electron');
     export default {
-        mixins: [u, img, md,ck],
+        mixins: [u, img, md, ck],
         data() {
             return {
                 articleContent: null,
@@ -31,14 +32,12 @@
         methods: {
             saveContent(cb) {
                 if (!this.needSave) {
-                    if (cb) {
-                        cb();
-                    }
+                    if (cb) cb();
                     return;
                 }
                 this.bus.$emit('saveContent');
                 if (this.$parent.article.editor_type == "html") {
-                    this.articleContent = window.editorU.getContent();
+                    this.articleContent = window.CKEDITOR.instances.editorCk.getData();
                 } else {
                     this.articleContent = window.editorMd.getValue();
                 }
@@ -47,14 +46,12 @@
                 this.db("articles").update({
                     updated_at: new Date()
                 }).where("id", this.$parent.article.id).then(rows => {
-                    if (cb) {
-                        cb();
-                    }
+                    if (cb) cb();
                 });
             },
             focus() {
                 if (this.$parent.article.editor_type == "html") {
-                    this.editorDoc.body.focus();
+                    window.CKEDITOR.instances.editorCk.focus();
                 } else {
                     window.editorMd.focus();
                 }
@@ -84,7 +81,6 @@
                 this.articlePath = path.join(remote.app.getPath('userData'), "/xxm/" + this.$parent.article.id);
                 this.articleContent = fs.readFileSync(path.join(this.articlePath, "a.data"), this.$root.rwOption);
                 if (this.$parent.article.editor_type == "html") {
-                    //this.initEditorU();
                     this.initEditorCk();
                 } else {
                     this.initEditorMd();
@@ -110,52 +106,31 @@
         border-bottom: 1px solid #e5e5e5;
     }
 
-    .mdSwitchBtn {
-        z-index: 10;
-        position: absolute;
-        top: 0px;
-        right: 0px;
-    }
-
-    .mdSwitchBtn div {
-        line-height: 31px;
-        height: 31px;
-        display: inline-block;
-        width: 80px;
-        text-align: center;
-        background: #eee;
-        cursor: pointer;
-    }
-
     .mdSelected {
         background: #fff !important;
-    }
-
-    #editorU {
-        height: 100% !important;
-    }
-
-    #ta {
-        height: 100% !important;
-        width: 100% !important;
     }
 
     @keyframes flash {
         0% {
             color: red;
         }
-        20%{
+
+        20% {
             color: #ccc;
         }
-        40%{
+
+        40% {
             color: red;
         }
-        60%{
-            color:#ccc;
+
+        60% {
+            color: #ccc;
         }
+
         80% {
             color: red;
         }
+
         100% {
             color: #ccc;
         }

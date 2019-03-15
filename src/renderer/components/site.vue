@@ -89,7 +89,7 @@
             publish(item, type) {
                 let content = "";
                 if (this.$parent.article.editor_type == "html") {
-                    content = window.editorU.getContent();
+                    content = window.CKEDITOR.instances.editorCk.getData();
                 } else {
                     content = window.editorMd.getHtml();
                 }

@@ -3,9 +3,6 @@
     <tabbar></tabbar>
     <router-view />
     <bottombar></bottombar>
-    <div v-show="$route.params.id && !$root.curArticleMd" id="ckEditorContainer">
-      <textarea id="ckEditor"></textarea>
-    </div>
   </div>
 </template>
 
