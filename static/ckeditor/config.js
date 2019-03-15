@@ -30,7 +30,9 @@ CKEDITOR.editorConfig = function (config) {
 			name: 'document',
 			items: ['Print', 'PageBreak', 'Templates', '-', 'CreateDiv', 'ShowBlocks', 'Source', ]
 		},
-	]
+	];
+	config.enterMode = CKEDITOR.ENTER_BR;
+	config.shiftEnterMode = CKEDITOR.ENTER_BR;
 	config.removePlugins = 'elementspath,maximize,newpage,language,about,iframe,save,flash,image,scayt';
 	config.extraPlugins = 'codesnippet,mathjax,image2,table,tabletools,tableresize,tableselection';
 	config.mathJaxLib = 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML';
