@@ -30,7 +30,6 @@
         },
         methods: {
             saveContent(cb) {
-                return;
                 if (!this.needSave) {
                     if (cb) {
                         cb();

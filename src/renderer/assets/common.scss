@@ -91,77 +91,13 @@
     overflow: hidden;
 }
 
-.swal-text {
-    text-align: center !important;
-}
-
 .tagClose:hover {
     color: #ee4242;
 }
-
-.swal-button--confirm {
-    background: #e7f3ff;
-    color: #1787fb;
-}
-
-.swal-footer {
-    text-align: center;
-}
-
-.swal-button:focus {
-    box-shadow: none;
-}
-
-.tui-editor-defaultUI {
-    border: none !important;
-}
-
-.CodeMirror-vscrollbar {
-    outline: none;
-    user-select: none;
-}
-
-.tui-editor-defaultUI-toolbar {
-    padding: 0 6px;
-    background: #eee;
-}
-
-.tui-editor-defaultUI-toolbar button {
-    background-color: #eee;
-    border-color: #eee;
-}
-
 .noDataTip {
     margin-top: 12%;
     text-align: center;
     font-size: 32px;
     line-height: 66px;
     color: #bbb;
-}
-
-#edui1 {
-    height: 100% !important;
-    display: flex;
-    flex-direction: column;
-}
-
-#edui1_iframeholder {
-    flex: 1;
-}
-
-.edui-notadd .edui-editor {
-    border: none !important;
-}
-
-.edui-editor-bottomContainer .edui-notadd {
-    display: none !important;
-}
-
-.edui-notadd .edui-editor-toolbarbox {
-    border-top-left-radius: 0px !important;
-    border-top-right-radius: 0px !important;
-}
-
-.edui-notadd .edui-editor-bottomContainer {
-    display: none !important;
 }

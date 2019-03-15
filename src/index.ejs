@@ -5,7 +5,6 @@
   <meta charset="utf-8">
   <title>想学吗-个人知识管理工具</title>
   <% if (htmlWebpackPlugin.options.nodeModules) { %>
-  <!-- Add `node_modules/` to global paths so `require` works properly in development -->
   <script>
     require('module').globalPaths.push('<%= htmlWebpackPlugin.options.nodeModules.replace(/\\/g, '\\\\') %>')
       </script>
@@ -16,23 +15,11 @@
   <link href="./static/tui/codemirror.css" rel="stylesheet" type="text/css" />
   <link href="./static/tui/github.min.css" rel="stylesheet" type="text/css" />
   <script src="./static/tui/tui-editor-Editor-full.js"></script>
-  <script charset="utf-8" src="./static/neditor/neditor.config.js"></script>
-  <script charset="utf-8" src="./static/neditor/neditor.all.js"></script>
-  <script charset="utf-8" src="./static/neditor/i18n/zh-cn/zh-cn.js"></script>
-  <script charset="utf-8" src="./static/neditor/kityformula-plugin/addKityFormulaDialog.js"></script>
-  <script charset="utf-8" src="./static/neditor/kityformula-plugin/getKfContent.js"></script>
-  <script charset="utf-8" src="./static/neditor/kityformula-plugin/defaultFilterFix.js"></script>
   <script charset="utf-8" src="./static/ckeditor/ckeditor.js"></script>
-  <style>
-    #edui152_body {
-      background: url('./static/neditor/kityformula-plugin/kf-icon.png') no-repeat center center !important;
-    }
-  </style>
 </head>
 
 <body>
   <div id="app"></div>
-  <!-- Set `__static` path to static files in production -->
   <% if (!process.browser) { %>
   <script>
     if (process.env.NODE_ENV !== 'development') window.__static = require('path').join(__dirname, '/static').replace(

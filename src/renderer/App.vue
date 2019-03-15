@@ -3,8 +3,7 @@
     <tabbar></tabbar>
     <router-view />
     <bottombar></bottombar>
-    <div v-if="false" v-show="$route.params.id && !$root.curArticleMd" id="editorU"></div>
-    <div id="ckEditorContainer">
+    <div v-show="$route.params.id && !$root.curArticleMd" id="ckEditorContainer">
       <textarea id="ckEditor"></textarea>
     </div>
   </div>
@@ -76,7 +75,7 @@
     background: #f6f6f6;
   }
 
-  #editorU,#ckEditorContainer {
+  #ckEditorContainer {
     position: absolute;
     z-index: 10;
     left: 8px;
