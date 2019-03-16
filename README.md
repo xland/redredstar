@@ -37,9 +37,8 @@
 ## 界面截图
 
 > <img width="680" src="/doc/imgs/mac_index.jpg" >
-> <img width="680" src="/doc/imgs/mac_edit.jpg" >
+> <img width="680" src="/doc/imgs/editor.jpg" >
 > <img width="680" src="/doc/imgs/sites.jpg" >
-> <img width="680" src="/doc/imgs/formula.jpg" >
 > <img width="680" src="/doc/imgs/md.jpg" >
 
 ## 联系方式
