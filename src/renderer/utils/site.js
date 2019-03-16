@@ -39,9 +39,10 @@ export default [{
     title: '企鹅号',
     url: 'https://om.qq.com/article/articlePublish',
 }, {
-    ready: false,
+    ready: true,
     id: 'toutiaohao',
     title: '头条号',
+    url:'https://mp.toutiao.com'
 }, {
     ready: false,
     id: 'wangyihao',

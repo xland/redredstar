@@ -88,5 +88,10 @@ module.exports = {
             type: this.mime[extname]
         });
         return file;
+    },
+    removeBeforUnload() {
+        setInterval(() => {
+            window.onbeforeunload = null;
+        }, 380);
     }
 }
