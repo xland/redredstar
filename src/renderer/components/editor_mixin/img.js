@@ -4,19 +4,14 @@ import sharp from 'sharp';
 const request = require('request');
 const url = require("url");
 export default {
-    data() {
-        return {
-            imgWidth: 1300,
-            imgHight: 800,
-        }
-    },
+
     methods: {
         imgCompress(fullName) {
             let extIndex = fullName.lastIndexOf('.');
             let tempName = fullName.substring(0, extIndex) + "_temp" + fullName.substring(extIndex);
-            if (this.imgWidth > 0 && this.imgHight > 0) {
+            if (this.$root.imgWidth > 0 && this.$root.imgHight > 0) {
                 sharp(fullName)
-                    .resize(this.imgWidth, this.imgHight, {
+                    .resize(this.$root.imgWidth, this.$root.imgHight, {
                         withoutEnlargement: true,
                         fit: "inside"
                     })
@@ -29,8 +24,15 @@ export default {
                                 });
                             }
                         })
-                    });;
+                    });
             }
+            // attention('input.jpg')
+            //     .swatches(1)
+            //     .palette(function (err, palette) {
+            //         palette.swatches.forEach(function (swatch) {
+            //             console.dir(swatch);
+            //         });
+            //     });
         },
         imgSaveBase64Obj(dom) {
             let id = "img" + new Date().getTime();
