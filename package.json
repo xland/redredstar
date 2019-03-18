@@ -1,11 +1,12 @@
 {
   "name": "xiangxuema",
-  "version": "6.2.9",
+  "version": "6.2.10",
   "author": "liulun <412588801@qq.com>",
   "description": "xiangxuema",
   "license": "MIT",
   "main": "./dist/electron/main.js",
   "scripts": {
+    "rebuild":"electron-rebuild",
     "build": "node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
