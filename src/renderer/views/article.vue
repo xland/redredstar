@@ -5,7 +5,7 @@
         <input autocomplete="off" id="articleTitleInput" @keydown.tab="titleTab" @input="titleChange" class="textInput"
           v-model="article.title" placeholder="请输入文章标题">
       </div>
-      <div class="publishBtn" @click="showSites = true">
+      <div class="publishBtn" @click="showSitesClick">
         <i class="iconfont icon-fabu" style="font-size: 18px !important;"></i>
       </div>
     </div>
@@ -52,6 +52,12 @@
       this.getArticle(articleId);
     },
     methods: {
+      showSitesClick() {
+        this.showSites = true;
+        if (this.article.editor_type == "html") {
+          this.$refs.articleEditor.downloadInternetImg();
+        }
+      },
       hookArticleRefresh() {
         this.$root.articlePublushCb = (obj) => {
           this.db('article_site')
@@ -83,7 +89,7 @@
         })
       },
       titleTab() {
-        setTimeout(()=>{
+        setTimeout(() => {
           this.$refs.articleEditor.focus();
         }, 80);
       },

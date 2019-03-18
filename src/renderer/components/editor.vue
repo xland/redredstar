@@ -6,6 +6,7 @@
         <div v-show="$parent.article.editor_type == 'markdown'" id="editorMd"></div>
         <div v-show="$parent.article.editor_type == 'html'" id="editorCk"></div>
     </div>
+    
 </template>
 <script>
     //todo:图片放大缩小需要按比例
