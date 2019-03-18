@@ -68,22 +68,6 @@ export default {
                 cb(id, tarName, err);
             });
         },
-        imgSaveInternetObj(dom) {
-            let id = "img" + new Date().getTime();
-            let parsedUrl = url.parse(dom.src);
-            let ext = dom.src.includes("webp") ? ".webp" : path.extname(parsedUrl.pathname);
-            if (!ext) ext = ".png";
-            let fullName = path.join(this.articlePath, id + ext);
-            request(dom.src)
-                .pipe(fs.createWriteStream(fullName))
-                .on('finish', (err) => {
-                    this.imgCompress(fullName);
-                    document.getElementById("ueditor_0").contentWindow.document.getElementById(id).src = 'file://' + fullName;
-                });
-            dom.removeAttribute("_src");
-            dom.src = 'file://' + fullName;
-            dom.id = id;
-        },
         removeUselessImg() {
             fs.readdir(this.articlePath, (err, files) => {
                 files.forEach(v => {
@@ -100,6 +84,27 @@ export default {
                         }
                     });
                 })
+            });
+        },
+        downloadInternetImg() {
+            var editor = CKEDITOR.instances.editorCk;
+            editor.document.$.querySelectorAll("img").forEach((dom, index) => {
+                if (dom.src.startsWith("http")) {
+                    let id = "img" + new Date().getTime() + index;
+                    let parsedUrl = url.parse(dom.src);
+                    let ext = dom.src.includes("webp") ? ".webp" : path.extname(parsedUrl.pathname);
+                    if (!ext) ext = ".png";
+                    let fullName = path.join(this.articlePath, id + ext);
+                    request(dom.src)
+                        .pipe(fs.createWriteStream(fullName))
+                        .on('finish', (err) => {
+                            this.imgCompress(fullName);
+                            dom.src = 'file://' + fullName;
+                            dom.dataset["ckeSavedSrc"] = dom.src;
+                            dom.id = id;
+                            editor.updateElement();
+                        });
+                }
             });
         }
     }

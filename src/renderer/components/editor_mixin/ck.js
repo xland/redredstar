@@ -47,6 +47,7 @@ export default {
             let cbObj = {
                 callback: function () {
                     self.needSave = false;
+                    self.downloadInternetImg();
                 }
             };
             window.CKEDITOR.replace('editorCk', {
