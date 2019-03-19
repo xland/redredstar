@@ -30,6 +30,11 @@ export default [{
     url: 'https://www.jianshu.com/writer#/',
 }, {
     ready: true,
+    id: 'douban',
+    title: '豆瓣',
+    url: 'https://www.douban.com/note/create'
+}, {
+    ready: true,
     id: 'baijiahao',
     title: '百家号',
     url: 'https://baijiahao.baidu.com/builder/rc/edit?type=news',
@@ -42,7 +47,7 @@ export default [{
     ready: true,
     id: 'toutiaohao',
     title: '头条号',
-    url:'https://mp.toutiao.com'
+    url: 'https://mp.toutiao.com'
 }, {
     ready: false,
     id: 'wangyihao',
@@ -59,10 +64,6 @@ export default [{
     ready: false,
     id: 'segmentfault',
     title: '思否',
-}, {
-    ready: false,
-    id: 'douban',
-    title: '豆瓣',
 }, {
     ready: false,
     id: 'wordpress',

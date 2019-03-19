@@ -33,7 +33,7 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
-            if(v.dataset[this.siteId]){
+            if (v.dataset[this.siteId]) {
                 v.src = v.dataset[this.siteId];
             }
             Object.keys(v.dataset).forEach(ds => {
@@ -42,24 +42,31 @@ let imgProcessor = {
         });
         var win = remote.BrowserWindow.fromId(this.winId);
         win.focus();
+        setTimeout(()=>{
+            let titleDoc = document.getElementsByClassName("WriteIndex-titleInput")[0].children[0];
+            titleDoc.value = this.title
+        },1600)
         setTimeout(function () {
-            document.getElementsByClassName("WriteIndex-titleInput")[0].children[0].focus();
-            clipboard.writeText(this.title);
-            win.webContents.paste();
+            let editorDoc = document.getElementsByClassName("public-DraftEditor-content")[0];
+            editorDoc.click();
+            var selection = window.getSelection();
+            var range = document.createRange();
+            range.selectNode(editorDoc)
+            selection.removeAllRanges();
+            selection.addRange(range);
             setTimeout(function () {
-                document.getElementsByClassName("public-DraftEditor-content")[0].click();
                 clipboard.writeHTML(this.doc.body.innerHTML);
                 win.webContents.paste();
                 ipcRenderer.send('articlePublishMain', {
                     siteId: 'zhihu',
                     url: window.location.href
                 });
-            }.bind(this), 800)
-        }.bind(this), 800)
+            }.bind(this), 580)
+        }.bind(this), 580)
     },
     start() {
         this.imgs.forEach(v => {
-            if(this.type == 'new'){
+            if (this.type == 'new') {
                 delete v.dataset[this.siteId];
             }
             if (!v.dataset[this.siteId]) {

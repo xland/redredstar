@@ -92,6 +92,6 @@ module.exports = {
     removeBeforUnload() {
         setInterval(() => {
             window.onbeforeunload = null;
-        }, 380);
+        }, 560);
     }
 }
