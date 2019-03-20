@@ -13,7 +13,7 @@
 ## 功能说明
 
 * 您通过“想学吗”编辑的知识，以及知识内部的图片、个人设置等数据均保存在本地；
-* 您的知识，可以自由的发布到“微信公众号”、“简书”、“博客园”、“开源中国”等知名网站（需拥有相应网站的账号）；
+* 您的知识，可以自由的发布到“微信公众号”、“博客园”、“开源中国”等知名网站（需拥有相应网站的账号）；
 * 发布知识时，知识内部的图片也会上传到对应的网站上；
 * 修改知识后，再次发布该知识，不会导致图片重复上传；
 * 在文章中删除图片，本地目录中的图片也会被删除，不会留有垃圾数据；
@@ -23,9 +23,9 @@
 ## 其他说明：
 
 * osx数据存放目录： 
-<br />&emsp;&emsp; /Users/[your user name]/Library/Application Support/xiangxuema/xxm
+<br />&emsp;&emsp; /Users/[name]/Library/Application Support/xiangxuema/xxm
 * win数据存放目录：
-<br />&emsp;&emsp; C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm
+<br />&emsp;&emsp; C:\Users\[name]\AppData\Roaming\xiangxuema\xxm
 * 本地编译说明：
 <br />&emsp;&emsp; https://github.com/xland/xiangxuema/blob/master/doc/build.md
 * 开发计划：
