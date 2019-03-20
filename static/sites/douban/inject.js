@@ -44,29 +44,25 @@ let imgProcessor = {
         });
         var win = remote.BrowserWindow.fromId(this.winId);
         win.focus();
-        let editorDoc = document.querySelector(".public-DraftEditor-content");
-        editorDoc.click();
-        var selection = window.getSelection();
-        var range = document.createRange();
-        range.selectNode(editorDoc.children[0])
-        selection.removeAllRanges();
-        selection.addRange(range);
+        let titleTb = document.querySelector(".note-editor-input");
+        titleTb.click();
+        titleTb.focus();
+        titleTb.value = "";
+        clipboard.writeText(this.title);
+        win.webContents.paste();
         setTimeout(() => {
-            clipboard.writeHTML(this.doc.body.innerHTML);
-            win.webContents.paste();
-            let titleTb = document.querySelector(".note-editor-input");
-            titleTb.click();
-            titleTb.focus();
-            titleTb.value = "";
+            let editorDoc = document.querySelector(".public-DraftEditor-content");
+            editorDoc.click();
+            var selection = window.getSelection();
+            var range = document.createRange();
+            range.selectNode(editorDoc.children[0])
+            selection.removeAllRanges();
+            selection.addRange(range);
             setTimeout(() => {
-                clipboard.writeText(this.title);
+                clipboard.writeHTML(this.doc.body.innerHTML);
                 win.webContents.paste();
-            }, 580)
-        }, 580)
-        ipcRenderer.send('articlePublishMain', {
-            siteId: this.siteId,
-            url: 'https://www.douban.com/note/' + window._NOTE_ID + '/edit'
-        });
+            }, 680)
+        }, 680);
     },
     start() {
         this.imgs.forEach(v => {
@@ -105,6 +101,15 @@ ipcRenderer.on('message', (event, article) => {
     base.removeBeforUnload();
     let url = window.location.href;
     if (url.endsWith("login")) {
+        return;
+    }
+    if (!url.endsWith("edit") && !url.endsWith("create") && url.includes("/note/")) {
+        setTimeout(() => {
+            ipcRenderer.send('articlePublishMain', {
+                siteId: article.siteId,
+                url: document.querySelector(".note-footer-stat-modify").children[0].href
+            });
+        }, 560)
         return;
     }
     if (url != article.url) {
