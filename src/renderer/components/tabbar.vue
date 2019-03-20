@@ -108,7 +108,9 @@
                     this.removeTab(tab);
                 });
                 this.bus.$on("changeTitle", title => {
-                    this.tabs.find(v => v.selected).title = title;
+                    let tab = this.tabs.find(v => v.selected);
+                    tab.title = title;
+                    this.db('tabs').where("id", tab.id).update(tab).then();
                 })
             }
         },
