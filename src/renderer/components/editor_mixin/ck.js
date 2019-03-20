@@ -28,7 +28,13 @@ export default {
                     self.saveContent();
                 }
             });
+            instans.addCommand('FindAndReplace', {
+                exec: function (editor, data) {
+                    CKEDITOR.tools.callFunction(105,editor);
+                }
+            });
             instans.keystrokeHandler.keystrokes[CKEDITOR.CTRL + 83] = 'saveContent';
+            instans.keystrokeHandler.keystrokes[CKEDITOR.CTRL + 70] = 'FindAndReplace';
         },
         hook(){
             let self = this;
