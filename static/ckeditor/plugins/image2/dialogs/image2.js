@@ -380,6 +380,7 @@ CKEDITOR.dialog.add( 'image2', function( editor ) {
 		title: lang.title,
 		minWidth: 250,
 		minHeight: 100,
+		resizable: CKEDITOR.DIALOG_RESIZE_NONE,
 		onLoad: function() {
 			// Create a "global" reference to the document for this dialog instance.
 			doc = this._.element.getDocument();

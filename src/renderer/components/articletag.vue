@@ -54,7 +54,7 @@
                                 if (rows[0].count < 1) {
                                     this.db("tags")
                                         .where({
-                                            id:item.id
+                                            id: item.id
                                         })
                                         .del().then();
                                 }
@@ -130,12 +130,17 @@
                     tag_id: tag.id
                 }).then();
                 this.db("articles")
-                    .update({"updated_at":new Date()})
-                    .where("id",this.$parent.article.id)
+                    .update({
+                        "updated_at": new Date()
+                    })
+                    .where("id", this.$parent.article.id)
                     .then();
                 this.tags.push(tag);
                 this.tagInputText = "";
                 this.findTagResult = [];
+                this.$nextTick(() => {
+                    this.tagInputFocus();
+                })
             },
             findTag() {
                 this.findTagResult = [];

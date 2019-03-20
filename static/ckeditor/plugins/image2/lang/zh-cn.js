@@ -5,7 +5,7 @@ For licensing, see LICENSE.md or https://ckeditor.com/legal/ckeditor-oss-license
 CKEDITOR.plugins.setLang( 'image2', 'zh-cn', {
 	alt: '替换文本',
 	btnUpload: '上传到服务器',
-	captioned: '带标题图像',
+	captioned: '带标题图像（本地图片可以直接复制、剪切、黏贴、拖拽到编辑器中）',
 	captionPlaceholder: '标题',
 	infoTab: '图像信息',
 	lockRatio: '锁定比例',
