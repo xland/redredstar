@@ -150,4 +150,7 @@
     .icon-xuanzhong {
         color: #1787fb !important;
     }
+    .icon-weixuanzhong{
+        color: #aaa !important;
+    }
 </style>
