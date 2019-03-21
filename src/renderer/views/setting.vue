@@ -1,54 +1,63 @@
 <template>
     <div v-if="setting" class="setting view">
-        <div class="formItem">
-            <div>自动保存文章的时间间隔：</div>
-            <div>
-                <input @change="autoSaveIntervalSeconds" v-model="setting.autosave_interval" type="number" />
+        <div class="leftMenu">
+            <div @click="menuIndex = index" :class="['item',index == menuIndex?'selected':'']"
+                v-for="(item,index) in menuItems">
+                {{item}}
             </div>
-            <div>
-                秒
+            <div class="other"></div>
+        </div>
+        <div v-show="menuIndex == 0" class="content">
+            <div class="formItem">
+                <div>自动保存文章的时间间隔：</div>
+                <div>
+                    <input @change="autoSaveIntervalSeconds" v-model="setting.autosave_interval" type="number" />
+                </div>
+                <div>
+                    秒
+                </div>
+            </div>
+            <div class="formItem">
+                <div>文章内图片长超过</div>
+                <div>
+                    <input @change="compressHeight" v-model="setting.img_h" type="number" />
+                </div>
+                <div>
+                    px，且宽超过
+                </div>
+                <div>
+                    <input @change="compressWidth" v-model="setting.img_w" type="number" />
+                </div>
+                <div>
+                    px，将启用图片等比例压缩（任一值设置为-1将禁用图片压缩）
+                </div>
+            </div>
+            <div class="formItem">
+                默认编辑器：
+                <div @click="setting.editor_type='html'" class="rdBtn">
+                    <i :class="['iconfont',setting.editor_type=='html'?'icon-xuanzhong':'icon-weixuanzhong']"></i>
+                    HTML
+                </div>
+                <div @click="setting.editor_type='markdown'" class="rdBtn">
+                    <i :class="['iconfont',setting.editor_type=='markdown'?'icon-xuanzhong':'icon-weixuanzhong']"></i>
+                    MarkDown
+                </div>
+            </div>
+            <div class="formItem">
+                <div @click="save" class="btn" style="margin-left: 0px;">保存系统设置</div>
             </div>
         </div>
-        <div class="formItem">
-            <div>文章内图片长超过</div>
-            <div>
-                <input @change="compressHeight" v-model="setting.img_h" type="number" />
-            </div>
-            <div>
-                px，且宽超过
-            </div>
-            <div>
-                <input @change="compressWidth" v-model="setting.img_w" type="number" />
-            </div>
-            <div>
-                px，将启用图片等比例压缩（任一值设置为-1将禁用图片压缩）
-            </div>
+        <div v-show="menuIndex == 1" class="content">
+            此处内容尚未开发
         </div>
-        <div class="formItem">
-            默认编辑器：
-            <div @click="setting.editor_type='html'" class="rdBtn">
-                <i :class="['iconfont',setting.editor_type=='html'?'icon-xuanzhong':'icon-weixuanzhong']"></i>
-                HTML
-            </div>
-            <div @click="setting.editor_type='markdown'" class="rdBtn">
-                <i :class="['iconfont',setting.editor_type=='markdown'?'icon-xuanzhong':'icon-weixuanzhong']"></i>
-                MarkDown
-            </div>
-        </div>
-        <div class="formItem">
-            <div @click="save" class="btn" style="margin-left: 0px;">保存</div>
-        </div>
-        <div style="color: #888;">
-            <div style="line-height: 36px;font-size: 16px;margin-top: 12px;">系统说明</div>
-            <div style="line-height: 26px;">
-                 您通过“想学吗”编辑的知识，以及知识内部的图片、个人设置等数据均保存在本地；
-                <br /> 您的知识，可以自由的发布到“微信公众号”、“简书”、“博客园”、“开源中国”等知名网站（需拥有相应网站的账号）；
-                <br /> 发布知识时，知识内部的图片也会上传到对应的网站上；
-                <br /> 修改知识后，再次发布该知识，不会导致图片重复上传；
-                <br /> 在文章中删除图片，本地目录中的图片也会被删除，不会留有垃圾数据；
-                <br /> 到目前为止“想学吗”不会保存您的任何账号数据；
-                <br /> 文章发布到目标平台不夹带任何“尾巴”
-            </div>
+        <div v-show="menuIndex == 2" class="content">
+            您通过“想学吗”编辑的知识，以及知识内部的图片、个人设置等数据均保存在本地；
+            <br /> 您的知识，可以自由的发布到“微信公众号”、“简书”、“博客园”、“开源中国”等知名网站（需拥有相应网站的账号）；
+            <br /> 发布知识时，知识内部的图片也会上传到对应的网站上；
+            <br /> 修改知识后，再次发布该知识，不会导致图片重复上传；
+            <br /> 在文章中删除图片，本地目录中的图片也会被删除，不会留有垃圾数据；
+            <br /> 到目前为止“想学吗”不会保存您的任何账号数据；
+            <br /> 文章发布到目标平台不夹带任何“尾巴”
         </div>
     </div>
 </template>
@@ -57,7 +66,9 @@
     export default {
         data() {
             return {
-                setting: null
+                setting: null,
+                menuIndex: 0,
+                menuItems: ['系统设置', '用户信息', '系统说明']
             }
         },
         mounted() {
@@ -71,7 +82,7 @@
                     .update(this.setting)
                     .where("id", this.setting.id)
                     .then(() => {
-                        this.alert("保存成功，将刷新应用", "success").then(val=>{
+                        this.alert("保存成功，将刷新应用", "success").then(val => {
                             window.location.reload();
                         })
                     });
@@ -105,22 +116,52 @@
 </script>
 <style>
     .setting {
-        overflow: hidden;
-        margin: 8px;
-        margin-top: 0px;
-        box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
-        height: calc(100% - 24px);
-        border-radius: 3px;
         display: flex;
-        flex-flow: column;
         background: #fff;
-        padding: 8px;
+        height: calc(100% - 32px);
+        margin: 4px 12px 12px 12px;
+        box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
+        border-radius: 3px;
+        overflow: hidden;
+    }
+
+    .content {
+        flex: 1;
+        padding: 8px 18px 8px 18px;
+        color: #666;line-height: 32px;
+    }
+
+    .leftMenu {
+        width: 130px;
+        line-height: 46px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .leftMenu .item {
+        height: 46px;
+        cursor: pointer;
+        border-right: 2px solid #eee;
+    }
+
+    .leftMenu .item:hover {
+        background: #f9f9f9;
+    }
+
+    .leftMenu .selected {
+        background: #f0faff;
+        border-right: 2px solid #1787fb;
+    }
+
+    .leftMenu .other {
+        flex: 1;
+        border-right: 2px solid #eee;
     }
 
     .formItem {
-        height: 36px;
-        line-height: 36px;
-        margin-left: 12px;
+        height: 42px;
+        line-height: 42px;
         color: #363636;
     }
 
@@ -150,7 +191,8 @@
     .icon-xuanzhong {
         color: #1787fb !important;
     }
-    .icon-weixuanzhong{
+
+    .icon-weixuanzhong {
         color: #aaa !important;
     }
 </style>
