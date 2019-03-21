@@ -59,6 +59,9 @@
             <br /> 到目前为止“想学吗”不会保存您的任何账号数据；
             <br /> 文章发布到目标平台不夹带任何“尾巴”
         </div>
+        <div v-show="menuIndex == 3" class="content">
+            此处内容尚未开发
+        </div>
     </div>
 </template>
 <script>
@@ -68,7 +71,7 @@
             return {
                 setting: null,
                 menuIndex: 0,
-                menuItems: ['系统设置', '用户信息', '系统说明']
+                menuItems: ['系统设置', '用户信息', '系统说明', '更新说明']
             }
         },
         mounted() {
@@ -128,7 +131,8 @@
     .content {
         flex: 1;
         padding: 8px 18px 8px 18px;
-        color: #666;line-height: 32px;
+        color: #666;
+        line-height: 32px;
     }
 
     .leftMenu {
@@ -150,7 +154,7 @@
     }
 
     .leftMenu .selected {
-        background: #f0faff;
+        background: #f0faff !important;
         border-right: 2px solid #1787fb;
     }
 
