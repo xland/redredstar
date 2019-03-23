@@ -44,6 +44,13 @@
                 </div>
             </div>
             <div class="formItem">
+                发布文章时，同时发布到 “<div @click="gotoJna()" class="link">教你啊</div>”
+                <div @click="setting.editor_type='html'" class="rdBtn">
+                    <i :class="['iconfont',setting.editor_type=='html'?'icon-xuanzhong':'icon-weixuanzhong']"></i>
+                </div>
+                （未来多端同步的基础）
+            </div>
+            <div class="formItem">
                 <div @click="save" class="btn" style="margin-left: 0px;">保存系统设置</div>
             </div>
         </div>
@@ -66,6 +73,7 @@
 </template>
 <script>
     import swal from 'sweetalert';
+    var electron = require('electron');
     export default {
         data() {
             return {
@@ -80,6 +88,9 @@
             })
         },
         methods: {
+            gotoJna(){
+                electron.remote.shell.openExternal("https://jiaonia.com");
+            },
             save() {
                 this.db("settings")
                     .update(this.setting)
@@ -168,7 +179,11 @@
         line-height: 42px;
         color: #363636;
     }
-
+    .link{
+        color: #1787fb;
+        text-decoration: underline;
+        cursor: pointer;
+    }
     .formItem input {
         border: 1px solid #eee;
         border-radius: 3px;
