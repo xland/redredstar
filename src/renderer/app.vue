@@ -26,12 +26,7 @@
     },
     methods: {},
     mounted() {
-      this.db("settings").select("*").then(rows => {
-        this.$root.tickStep = rows[0].autosave_interval * 1000;
-        this.$root.imgHight = rows[0].img_h;
-        this.$root.imgWidth = rows[0].img_w;
-        this.$root.editorType = rows[0].editor_type;
-      });
+      this.db("settings").select("*").then(rows => this.$root.init(rows[0]));
       ipcRenderer.on('articlePublishRenderer', (e, message) => {
         this.$root.articlePublushCb(message);
       })

@@ -29,14 +29,14 @@
                     <input @change="compressWidth" v-model="setting.img_w" type="number" />
                 </div>
                 <div>
-                    px，将启用图片等比例压缩（任一值设置为-1将禁用图片压缩）
+                    px，将启用图片压缩（任一值设置为-1将禁用图片压缩）
                 </div>
             </div>
             <div class="formItem">
                 默认编辑器：
                 <div @click="setting.editor_type='html'" class="rdBtn">
                     <i :class="['iconfont',setting.editor_type=='html'?'icon-xuanzhong':'icon-weixuanzhong']"></i>
-                    HTML
+                    Html
                 </div>
                 <div @click="setting.editor_type='markdown'" class="rdBtn">
                     <i :class="['iconfont',setting.editor_type=='markdown'?'icon-xuanzhong':'icon-weixuanzhong']"></i>
@@ -45,8 +45,8 @@
             </div>
             <div class="formItem">
                 发布文章时，同时发布到 “<div @click="gotoJna()" class="link">教你啊</div>”
-                <div @click="setting.editor_type='html'" class="rdBtn">
-                    <i :class="['iconfont',setting.editor_type=='html'?'icon-xuanzhong':'icon-weixuanzhong']"></i>
+                <div @click="setting.sync_jna=!setting.sync_jna" class="rdBtn">
+                    <i :class="['iconfont',setting.sync_jna?'icon-xuanzhong':'icon-weixuanzhong']"></i>
                 </div>
                 （未来PC端与移动端同步的基础）
             </div>
