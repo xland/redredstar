@@ -12,5 +12,18 @@
         "default_icon": "img/48.png",
         "default_title": "想学吗知识收集工具",
         "default_popup": "popup.html"
-    }
+    },
+    "content_scripts": 
+    [
+        {
+            "matches": [
+              "http://*/*",
+              "https://*/*"
+            ],
+            "js": ["js/content.js"],
+            "css": ["css/xxm.css"],
+            "run_at": "document_start",
+            "all_frames": false
+          }
+    ]
   }

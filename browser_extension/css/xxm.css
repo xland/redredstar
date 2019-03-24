@@ -1,0 +1,24 @@
+.ex__xxm__border{
+    box-shadow:inset 0px 0px 0px 1px red !important;
+}
+.ex__xxm__title{
+    box-shadow:inset 0px 0px 0px 1px red !important;
+}
+.ex__xxm__content{
+    box-shadow:inset 0px 0px 0px 1px red !important;
+}
+.ex__xxm__float__div{
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    padding-left: 8px;
+    padding-right: 8px;
+    height: 28px;
+    line-height: 28px;
+    z-index: 99999999;
+    background: red;
+    opacity: 0.8;
+    color: #fff;
+    border-bottom-right-radius: 6px;
+    display: none;
+}
