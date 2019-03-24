@@ -20,9 +20,6 @@ const knex = require('knex')({
         }
     }
 });
-const rwOption = {
-    encoding: 'utf8'
-}
 
 const initializer = {
     initTable() {
@@ -47,6 +44,7 @@ const initializer = {
             table.integer('img_w');
             table.integer('img_h');
             table.string("editor_type").defaultTo("html");
+            table.boolean("sync_jna").defaultTo(true);
             table.datetime('created_at').defaultTo(knex.fn.now());
         }).createTable('tabs', (table) => {
             table.increments('id');
@@ -69,6 +67,7 @@ const initializer = {
             img_w: 1300,
             img_h: 800,
             editor_type: 'html',
+            sync_jna:true,
         };
         let defaultTab = {
             title: "我的知识",
@@ -80,18 +79,20 @@ const initializer = {
             return knex.insert(defaultTab).into("tabs");
         });
     },
+    extarColumns(){
+        knex.schema.hasColumn("settings", "sync_jna").then(flag => {
+            if (flag) {
+                return;
+            }
+            knex.schema.alterTable('settings', table => {
+                table.boolean('sync_jna').defaultTo(true);
+            }).then();
+        })
+    },
     init(cb) {
         if (!firstTime) {
             cb(knex);
-            let bakDir = path.join(electron.remote.app.getPath('userData'), "/xxm_bak");
-            fs.exists(bakDir, flag => {
-                if (!flag) {
-                    return;
-                }
-                fs.remove(bakDir, err => {
-                    if (err) return console.error(err)
-                })
-            })
+            this.extarColumns();
             return;
         }
         swal({
@@ -100,7 +101,7 @@ const initializer = {
             text: "初次见面\n请容我稍事整理",
             closeOnClickOutside: false,
             closeOnEsc: false,
-            timer: 6000,
+            timer: 5600,
             buttons: false,
         });
         this.initTable().then(() => {

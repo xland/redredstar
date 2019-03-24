@@ -48,7 +48,7 @@
                 <div @click="setting.editor_type='html'" class="rdBtn">
                     <i :class="['iconfont',setting.editor_type=='html'?'icon-xuanzhong':'icon-weixuanzhong']"></i>
                 </div>
-                （未来多端同步的基础）
+                （未来PC端与移动端同步的基础）
             </div>
             <div class="formItem">
                 <div @click="save" class="btn" style="margin-left: 0px;">保存系统设置</div>
