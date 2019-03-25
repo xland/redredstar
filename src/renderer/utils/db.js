@@ -80,12 +80,13 @@ const initializer = {
         });
     },
     extarColumns(){
-        knex.schema.hasColumn("settings", "sync_jna").then(flag => {
+        knex.schema.hasColumn("settings", "jna_sync").then(flag => {
             if (flag) {
                 return;
             }
             knex.schema.alterTable('settings', table => {
-                table.boolean('sync_jna').defaultTo(true);
+                table.boolean('jna_sync').defaultTo(true);
+                table.string('jna_token');
             }).then();
         })
     },

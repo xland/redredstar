@@ -21,7 +21,7 @@ let imgProcessor = {
             fd.append("key", r.key);
             fd.append("file", file);
             fd.append("x:protocol", 'https');
-            base.post(postUrl, fd, (rt2) => {
+            base.post(postUrl, fd, rt2 => {
                 var imgObj = JSON.parse(rt2);
                 dom.src = imgObj.url;
                 ipcRenderer.send('imgUploadMain', {

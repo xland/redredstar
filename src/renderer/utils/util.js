@@ -39,25 +39,22 @@ String.prototype.getParamVal = function(name) {
     var r = paramStr.match(reg); 
     if (r != null) return unescape(r[2]); 
     return null; 
-} 
-//todo:改成过滤器
-window.getSimpleTime = function(timeStamp) {
-    var dateTime = new Date(timeStamp);
-    var now = new Date();
-    var milliseconds = now - dateTime;
-    var r = null;
-    if (milliseconds < 60000) {
-        r = '刚刚';
-    } else if (60000 <= milliseconds && milliseconds <= 3600000) {
-        r = Math.round((milliseconds / 60000)) + '分钟前';
-    } else if (3600000 < milliseconds && milliseconds <= 3600000 * 24) {
-        r = Math.round(milliseconds / (3600000)) + '小时前';
-    } else if (3600000 * 24 < milliseconds && milliseconds <= 3600000 * 24 * 26) {
-        r = Math.round(milliseconds / (3600000 * 24)) + '天前';
-    } else if (3600000 * 24 * 26 < milliseconds && dateTime.getFullYear() == now.getFullYear()) {
-        r = dateTime.format("MM-dd hh:mm:ss");
-    }else{
-        r = dateTime.format("yyyy-MM-dd hh:mm:ss");
+}
+
+window.xxmPost = function(url, form, cb) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.withCredentials = true;
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState == 4) {
+            if (xhr.status == 200 || xhr.status == 304) {
+                cb(xhr.responseText)
+            } else {
+                alert("错误：可能的原因是目标网站不支持您上传的图片");
+            }
+        } else {
+            //alert("错误：可能的原因是目标网站不支持您上传的图片");
+        }
     }
-    return r;
+    xhr.send(form);
 }

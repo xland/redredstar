@@ -44,7 +44,7 @@
                 </div>
             </div>
             <div class="formItem">
-                发布文章时，同时发布到 “<div @click="gotoJna()" class="link">教你啊</div>”
+                发布文章时，同时发布到 “<div @click="gotoJna('https://jiaonia.com')" class="link">教你啊</div>”
                 <div @click="setting.sync_jna=!setting.sync_jna" class="rdBtn">
                     <i :class="['iconfont',setting.sync_jna?'icon-xuanzhong':'icon-weixuanzhong']"></i>
                 </div>
@@ -55,7 +55,27 @@
             </div>
         </div>
         <div v-show="menuIndex == 1" class="content">
-            <iframe src="https://jiaonia.com/Xxm/Login" />
+            <iframe v-if="!setting.jna_token" src="https://jiaonia.com/Xxm/Login" />
+            <div v-if="userInfo != null">
+                <div style="color: #888">以下信息是您在“教你啊”网站的用户信息：</div>
+                <div style="display: flex">
+                    <div style="width: 260px">
+                        <div class="formItem">昵称：{{userInfo.nick_name}}</div>
+                        <div class="formItem">邮箱：{{userInfo.email}}</div>
+                        <div class="formItem">电话：{{userInfo.phone}}</div>
+                        <div class="formItem">提问数量：{{userInfo.question_num}}</div>
+                        <div class="formItem">回答数量：{{userInfo.answer_num}}</div>
+                        <div class="formItem">积分：{{userInfo.score}}</div>
+                        <div class="formItem">总金额：{{userInfo.total_money}}元</div>
+                        <div class="formItem">
+                            <div @click="gotoJna('https://jiaonia.com/My/Info/')" class="btn" style="margin-left: 0px;">去“教你啊”修改信息</div>
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <img :src="userInfo.avatar" />
+                    </div>
+                </div>
+            </div>
         </div>
         <div v-show="menuIndex == 2" class="content">
             您通过“想学吗”编辑的知识，以及知识内部的图片、个人设置等数据均保存在本地；
@@ -78,6 +98,7 @@
         data() {
             return {
                 setting: null,
+                userInfo: null,
                 menuIndex: 0,
                 menuItems: ['系统设置', '用户信息', '系统说明', '更新说明']
             }
@@ -85,22 +106,42 @@
         mounted() {
             this.db("settings").select("*").then(rows => {
                 this.setting = rows[0];
+                if (this.setting.jna_token) {
+                    this.getUserInfo();
+                }
             })
+            let self = this;
             window.addEventListener('message', function (e) {
+                if (!e.data.refuse) {
+                    return;
+                }
                 if (e.data.refuse == "True") {
                     return;
                 } else {
-                    $.post("/User/LoginFinish", {
-                        "sid": e.data.sid
-                    }, function (data) {
-                        window.location.href = "@ViewBag.ReturnUrl ";
-                    })
+                    self.$root.jnaToken = e.data.sid;
+                    self.setting.jna_token = e.data.sid;
+                    self.db("settings")
+                        .update({
+                            "jna_token": e.data.sid
+                        })
+                        .where("id", self.setting.id)
+                        .then();
+                    self.getUserInfo();
                 }
             }, false);
         },
         methods: {
-            gotoJna() {
-                electron.remote.shell.openExternal("https://jiaonia.com");
+            getUserInfo() {
+                let self = this;
+                let fd = new FormData();
+                fd.append("token", this.setting.jna_token);
+                window.xxmPost("https://jiaonia.com/Xxm/GetUserInfoByToken", fd, rt => {
+                    self.userInfo = JSON.parse(rt).data;
+                    console.log(self.userInfo);
+                })
+            },
+            gotoJna(url) {
+                electron.remote.shell.openExternal(url);
             },
             save() {
                 this.db("settings")

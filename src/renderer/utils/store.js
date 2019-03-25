@@ -13,7 +13,8 @@ const store = {
         this.imgHight = setting.img_h;
         this.imgWidth = setting.img_w;
         this.editorType = setting.editor_type;
-        this.syncJna = setting.sync_jna;
+        this.jnaSync = setting.jna_sync;
+        this.jnaToken = setting.jna_token;
     }
 }
 export default store
