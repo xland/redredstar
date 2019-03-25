@@ -5,6 +5,9 @@ const contentJs = {
     content: null,
     mouseMove(e) {
         var dom = document.elementFromPoint(e.clientX, e.clientY);
+        this.floatDom.style.left = e.pageX + "px";
+        this.floatDom.style.top = e.pageY + "px";
+        this.floatDom.style.display = "inline-block";
         if (this.curDom == dom || dom.classList.contains("ex__xxm__float__div")) {
             return;
         }
@@ -13,9 +16,6 @@ const contentJs = {
             lastDom.classList.remove("ex__xxm__border");
             this.floatDom.style.display = "none";
         }
-        this.floatDom.style.left = dom.offsetLeft + "px";
-        this.floatDom.style.top = dom.offsetTop + "px";
-        this.floatDom.style.display = "inline-block";
         this.curDom = dom;
         dom.classList.add("ex__xxm__border");
     },

@@ -9,16 +9,15 @@
 }
 .ex__xxm__float__div{
     position: absolute;
-    left: 0px;
-    top: 0px;
-    padding-left: 8px;
-    padding-right: 8px;
-    height: 28px;
-    line-height: 28px;
+    padding-left: 16px;
+    padding-right: 16px;
+    height: 26px;
+    line-height: 26px;
     z-index: 99999999;
     background: red;
     opacity: 0.8;
     color: #fff;
-    border-bottom-right-radius: 6px;
+    border-radius: 6px;
     display: none;
+    font-size: 12px;
 }

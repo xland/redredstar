@@ -60,7 +60,7 @@ let imgProcessor = {
             titleTb.value = "";
             clipboard.writeText(this.title);
             win.webContents.paste();
-        }.bind(this), 1200)
+        }.bind(this), 960)
     },
     start() {
         this.imgs.forEach(v => {
@@ -100,7 +100,7 @@ var waitForReady = function (cb) {
             return;
         }
         cb(titleTb);
-    }, 600);
+    }, 380);
 }
 var waitForEdit = function (cb) {
     setTimeout(function () {
@@ -110,7 +110,7 @@ var waitForEdit = function (cb) {
             return;
         }
         cb(titleTb);
-    }, 600);
+    }, 380);
 }
 var waitForSave = function () {
     setTimeout(function () {
@@ -123,7 +123,7 @@ var waitForSave = function () {
         } else {
             waitForSave();
         }
-    }, 600);
+    }, 380);
 }
 
 ipcRenderer.on('message', (event, article) => {
