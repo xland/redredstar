@@ -55,7 +55,7 @@
             </div>
         </div>
         <div v-show="menuIndex == 1" class="content">
-            此处内容尚未开发
+            <iframe src="https://jiaonia.com/Xxm/Login" />
         </div>
         <div v-show="menuIndex == 2" class="content">
             您通过“想学吗”编辑的知识，以及知识内部的图片、个人设置等数据均保存在本地；
@@ -86,9 +86,20 @@
             this.db("settings").select("*").then(rows => {
                 this.setting = rows[0];
             })
+            window.addEventListener('message', function (e) {
+                if (e.data.refuse == "True") {
+                    return;
+                } else {
+                    $.post("/User/LoginFinish", {
+                        "sid": e.data.sid
+                    }, function (data) {
+                        window.location.href = "@ViewBag.ReturnUrl ";
+                    })
+                }
+            }, false);
         },
         methods: {
-            gotoJna(){
+            gotoJna() {
                 electron.remote.shell.openExternal("https://jiaonia.com");
             },
             save() {
@@ -179,11 +190,13 @@
         line-height: 42px;
         color: #363636;
     }
-    .link{
+
+    .link {
         color: #1787fb;
         text-decoration: underline;
         cursor: pointer;
     }
+
     .formItem input {
         border: 1px solid #eee;
         border-radius: 3px;
