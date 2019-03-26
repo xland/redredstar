@@ -60,22 +60,26 @@
       },
       hookArticleRefresh() {
         this.$root.articlePublushCb = (obj) => {
-          this.db('article_site')
-            .where("article_id", this.article.id)
-            .andWhere("site_id", obj.siteId)
-            .select("*").then(rows => {
-              let asObj = {
-                article_id: this.article.id,
-                site_id: obj.siteId,
-                edit_url: obj.url
-              }
-              if (rows.length < 1) {
-                this.db("article_site").insert(asObj).then();
-              } else {
-                this.db("article_site").update(asObj).where("id", rows[0].id).then();
-              }
-            });
+          this.updateArticleSite(obj);
+          this.publishToJna()
         };
+      },
+      updateArticleSite(obj) {
+        this.db('article_site')
+          .where("article_id", this.article.id)
+          .andWhere("site_id", obj.siteId)
+          .select("*").then(rows => {
+            let asObj = {
+              article_id: this.article.id,
+              site_id: obj.siteId,
+              edit_url: obj.url
+            }
+            if (rows.length < 1) {
+              this.db("article_site").insert(asObj).then();
+            } else {
+              this.db("article_site").update(asObj).where("id", rows[0].id).then();
+            }
+          });
       },
       getArticle(id) {
         this.db("articles").where("id", id).select("*").then(rows => {

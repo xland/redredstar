@@ -1,5 +1,6 @@
 .DS_Store
 dist/electron/*
+browser_extension/hui/*
 dist/web/*
 build/*
 !build/icons

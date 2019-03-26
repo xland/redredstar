@@ -87,7 +87,7 @@
             <br /> 文章发布到目标平台不夹带任何“尾巴”
         </div>
         <div v-show="menuIndex == 3" class="content">
-            此处内容尚未开发
+            暂未提供版本升级相关说明
         </div>
     </div>
 </template>
@@ -137,7 +137,6 @@
                 fd.append("token", this.setting.jna_token);
                 window.xxmPost("https://jiaonia.com/Xxm/GetUserInfoByToken", fd, rt => {
                     self.userInfo = JSON.parse(rt).data;
-                    console.log(self.userInfo);
                 })
             },
             gotoJna(url) {
