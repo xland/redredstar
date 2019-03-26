@@ -64,6 +64,14 @@
           this.publishToJna()
         };
       },
+      publishToJna(){
+        if(!this.$root.jnaSync){
+          return;
+        }
+        if(!this.$root.jnaToken){
+          
+        }
+      },
       updateArticleSite(obj) {
         this.db('article_site')
           .where("article_id", this.article.id)

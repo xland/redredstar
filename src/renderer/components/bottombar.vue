@@ -7,7 +7,7 @@
             <div @click="addBug">
                 <i class="iconfont icon-bug icon"></i> Bug
             </div>
-            <div @click="addDonate">
+            <div @click="showQrCode('donateQrCode')">
                 <i class="iconfont icon-juanzeng icon"></i> Donate
             </div>
             <div>
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div style="display: none">
-            <div id="donatePics">
+            <div id="donateQrCode">
                 <div>
                     <img @click="donateIndex = donateIndex==0?1:0" :src="donates[donateIndex].pic" />
                 </div>
@@ -41,6 +41,9 @@
                 <div class="tip">
                     点击二维码切换为{{donates[donateIndex==0?1:0].name}}赞助
                 </div>
+            </div>
+            <div id="loginQrCode">
+                <iframe src="https://jiaonia.com/Xxm/Login" />
             </div>
         </div>
     </div>
@@ -78,10 +81,30 @@
                 });
                 this.bus.$on('saveContent', () => {
                     this.rotating = true;
-                    setTimeout(()=>{
+                    setTimeout(() => {
                         this.rotating = false
-                    },600)
+                    }, 600)
                 });
+                this.bus.$on('login', () => this.showQrCode('loginQrCode'));
+                this.bindOnLogin();
+            },
+            bindOnLogin(){
+                let self = this;
+                window.addEventListener('message', function (e) {
+                    if (!e.data.refuse) {
+                        return;
+                    }
+                    if (e.data.refuse == "True") {
+                        return;
+                    } else {
+                        self.$root.jnaToken = e.data.sid;
+                        self.db("settings")
+                            .update({
+                                "jna_token": e.data.sid
+                            }).then();
+                        swal.close()
+                    }
+                }, false);
             },
             setting() {
                 this.bus.$emit('findOrAddTab', {
@@ -89,9 +112,10 @@
                     title: "系统设置",
                 });
             },
-            addDonate() {
+            showQrCode(id) {
                 swal({
-                    content: document.getElementById("donatePics"),
+                    width: 580,
+                    content: document.getElementById(id),
                     buttons: false
                 });
             },
@@ -168,19 +192,24 @@
         font-size: 10px !important;
     }
 
-    #donatePics {
+    #donateQrCode {
         color: #555;
     }
 
-    #donatePics .tip {
+    #donateQrCode .tip {
         color: #888;
         font-size: 12px;
         line-height: 28px;
     }
 
-    #donatePics img {
+    #donateQrCode img {
         width: 198px;
         height: 198px;
         cursor: pointer;
+    }
+
+    #loginQrCode {
+        height: 460px;
+        width: 456px;
     }
 </style>

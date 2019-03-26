@@ -3,7 +3,8 @@ const store = {
     imgHight: 800,
     imgWidth: 1300,
     editorType: 'html',
-    syncJna:true,
+    jnaSync:true,
+    jnaToken:null,
     rwOption: {
         encoding: 'utf8'
     },

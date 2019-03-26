@@ -1,7 +1,7 @@
 <template>
     <div v-if="setting" class="setting view">
         <div class="leftMenu">
-            <div @click="menuIndex = index" :class="['item',index == menuIndex?'selected':'']"
+            <div @click="menuSelect(index)" :class="['item',index == menuIndex?'selected':'']"
                 v-for="(item,index) in menuItems">
                 {{item}}
             </div>
@@ -55,7 +55,6 @@
             </div>
         </div>
         <div v-show="menuIndex == 1" class="content">
-            <iframe v-if="!setting.jna_token" src="https://jiaonia.com/Xxm/Login" />
             <div v-if="userInfo != null">
                 <div style="color: #888">以下信息是您在“教你啊”网站的用户信息：</div>
                 <div style="display: flex">
@@ -68,7 +67,12 @@
                         <div class="formItem">积分：{{userInfo.score}}</div>
                         <div class="formItem">总金额：{{userInfo.total_money}}元</div>
                         <div class="formItem">
-                            <div @click="gotoJna('https://jiaonia.com/My/Info/')" class="btn" style="margin-left: 0px;">去“教你啊”修改信息</div>
+                            <div @click="gotoJna('https://jiaonia.com/My/Info/')" class="btn" style="margin-left: 0px;">
+                                去“教你啊”修改信息
+                            </div>
+                            <div @click="logout()" class="btn" style="background: #ccc;">
+                                退出登录
+                            </div>
                         </div>
                     </div>
                     <div style="flex: 1;">
@@ -104,40 +108,33 @@
             }
         },
         mounted() {
-            this.db("settings").select("*").then(rows => {
-                this.setting = rows[0];
-                if (this.setting.jna_token) {
-                    this.getUserInfo();
-                }
-            })
-            let self = this;
-            window.addEventListener('message', function (e) {
-                if (!e.data.refuse) {
-                    return;
-                }
-                if (e.data.refuse == "True") {
-                    return;
-                } else {
-                    self.$root.jnaToken = e.data.sid;
-                    self.setting.jna_token = e.data.sid;
-                    self.db("settings")
-                        .update({
-                            "jna_token": e.data.sid
-                        })
-                        .where("id", self.setting.id)
-                        .then();
-                    self.getUserInfo();
-                }
-            }, false);
+            this.db("settings").select("*").then(rows => this.setting = rows[0]);
         },
         methods: {
-            getUserInfo() {
-                let self = this;
-                let fd = new FormData();
-                fd.append("token", this.setting.jna_token);
-                window.xxmPost("https://jiaonia.com/Xxm/GetUserInfoByToken", fd, rt => {
-                    self.userInfo = JSON.parse(rt).data;
-                })
+            menuSelect(index) {
+                this.menuIndex = index;
+                if (index == 1) {
+                    if (!this.$root.jnaToken) {
+                        this.bus.$emit('login');
+                        this.menuIndex = 0;
+                    } else {
+                        let self = this;
+                        let fd = new FormData();
+                        fd.append("token", this.$root.jnaToken);
+                        window.xxmPost("https://jiaonia.com/Xxm/GetUserInfoByToken", fd, rt => {
+                            self.userInfo = JSON.parse(rt).data;
+                        })
+                    }
+                }
+            },
+            logout(){
+                this.$root.jnaToken = null;
+                this.$root.userInfo = null;
+                this.setting.jna_token = null;
+                this.db("settings").update({
+                                "jna_token": null
+                            }).then();
+                this.menuIndex = 0;
             },
             gotoJna(url) {
                 electron.remote.shell.openExternal(url);
