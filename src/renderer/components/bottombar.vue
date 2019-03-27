@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div id="loginQrCode">
-                <iframe src="https://jiaonia.com/Xxm/Login" />
+                <iframe v-if="qrCodeId == 'loginQrCode'" src="https://jiaonia.com/Xxm/Login" />
             </div>
         </div>
     </div>
@@ -64,7 +64,8 @@
                     pic: './static/imgs/weixin.png',
                     name: "微信"
                 }],
-                donateIndex: 1
+                donateIndex: 1,
+                qrCodeId:null
             }
         },
         methods: {
@@ -102,7 +103,7 @@
                             .update({
                                 "jna_token": e.data.sid
                             }).then();
-                        swal.close()
+                        swal.close();
                     }
                 }, false);
             },
@@ -113,10 +114,13 @@
                 });
             },
             showQrCode(id) {
+                this.qrCodeId = id;
                 swal({
                     width: 580,
                     content: document.getElementById(id),
                     buttons: false
+                }).then(()=>{
+                    this.qrCodeId = null;
                 });
             },
             addBug() {

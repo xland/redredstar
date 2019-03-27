@@ -87,6 +87,7 @@ const initializer = {
             knex.schema.alterTable('settings', table => {
                 table.boolean('jna_sync').defaultTo(true);
                 table.string('jna_token');
+                table.boolean('jna_login_show').defaultTo(false);
             }).then();
         })
     },
@@ -96,15 +97,6 @@ const initializer = {
             this.extarColumns();
             return;
         }
-        swal({
-            icon: "info",
-            title: "请稍后",
-            text: "初次见面\n请容我稍事整理",
-            closeOnClickOutside: false,
-            closeOnEsc: false,
-            timer: 5600,
-            buttons: false,
-        });
         this.initTable().then(() => {
             this.initDefaultData().then(() => {
                 cb(knex)

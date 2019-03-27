@@ -4,7 +4,18 @@ import sharp from 'sharp';
 const request = require('request');
 const url = require("url");
 export default {
-
+    data() {
+        return {
+            fileTypeMap: {
+                "jpeg": "image/jpeg",
+                "jpg": "image/jpeg",
+                "png": "image/png",
+                "gif": "image/gif",
+                "bmp": 'image/bmp',
+                "webp": 'image/webp'
+            }
+        }
+    },
     methods: {
         imgCompress(fullName) {
             let extIndex = fullName.lastIndexOf('.');

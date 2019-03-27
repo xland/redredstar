@@ -18,12 +18,16 @@
   import articletag from "../components/articletag";
   import site from "../components/site";
   import editor from "../components/editor";
-  const ipcRenderer = require('electron').ipcRenderer;
+  const fs = require('fs');
+  const path = require('path');
+  const {
+    remote
+  } = require('electron');
   export default {
     components: {
       site,
       articletag,
-      editor,
+      editor
     },
     data() {
       return {
@@ -60,34 +64,23 @@
       },
       hookArticleRefresh() {
         this.$root.articlePublushCb = (obj) => {
-          this.updateArticleSite(obj);
-          this.publishToJna()
+          this.db('article_site')
+            .where("article_id", this.article.id)
+            .andWhere("site_id", obj.siteId)
+            .select("*").then(rows => {
+              let asObj = {
+                article_id: this.article.id,
+                site_id: obj.siteId,
+                edit_url: obj.url
+              }
+              if (rows.length < 1) {
+                this.db("article_site").insert(asObj).then();
+              } else {
+                this.db("article_site").update(asObj).where("id", rows[0].id).then();
+              }
+            });
+          this.$refs.articleEditor.jnaPublish()
         };
-      },
-      publishToJna(){
-        if(!this.$root.jnaSync){
-          return;
-        }
-        if(!this.$root.jnaToken){
-          
-        }
-      },
-      updateArticleSite(obj) {
-        this.db('article_site')
-          .where("article_id", this.article.id)
-          .andWhere("site_id", obj.siteId)
-          .select("*").then(rows => {
-            let asObj = {
-              article_id: this.article.id,
-              site_id: obj.siteId,
-              edit_url: obj.url
-            }
-            if (rows.length < 1) {
-              this.db("article_site").insert(asObj).then();
-            } else {
-              this.db("article_site").update(asObj).where("id", rows[0].id).then();
-            }
-          });
       },
       getArticle(id) {
         this.db("articles").where("id", id).select("*").then(rows => {

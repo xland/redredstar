@@ -6,7 +6,7 @@
         <div v-show="$parent.article.editor_type == 'markdown'" id="editorMd"></div>
         <div v-show="$parent.article.editor_type == 'html'" id="editorCk"></div>
     </div>
-    
+
 </template>
 <script>
     //todo:图片放大缩小需要按比例
@@ -15,12 +15,13 @@
     import img from './editor_mixin/img';
     import md from './editor_mixin/md';
     import ck from './editor_mixin/ck';
+    import jna from './editor_mixin/jna';
     const {
         ipcRenderer,
         remote
     } = require('electron');
     export default {
-        mixins: [img, md, ck],
+        mixins: [img, md, ck, jna],
         data() {
             return {
                 articleContent: null,
