@@ -6,8 +6,8 @@
 
 ## 下载地址
 
-* osx64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.2.14.dmg
-* win64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.2.14.exe
+* osx64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.3.0.dmg
+* win64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.3.0.exe
 
 
 ## 功能说明
