@@ -50,7 +50,7 @@ window.xxmPost = function(url, form, cb) {
             if (xhr.status == 200 || xhr.status == 304) {
                 cb(xhr.responseText)
             } else {
-                alert("错误：可能的原因是目标网站不支持您上传的图片");
+                console.log("post to jna error");
             }
         } else {
             //alert("错误：可能的原因是目标网站不支持您上传的图片");

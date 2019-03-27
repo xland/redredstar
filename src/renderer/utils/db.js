@@ -44,7 +44,9 @@ const initializer = {
             table.integer('img_w');
             table.integer('img_h');
             table.string("editor_type").defaultTo("html");
-            table.boolean("sync_jna").defaultTo(true);
+            table.boolean('jna_sync').defaultTo(true);
+            table.string('jna_token');
+            table.boolean('jna_login_show').defaultTo(false);
             table.datetime('created_at').defaultTo(knex.fn.now());
         }).createTable('tabs', (table) => {
             table.increments('id');
@@ -67,7 +69,7 @@ const initializer = {
             img_w: 1300,
             img_h: 800,
             editor_type: 'html',
-            sync_jna:true,
+            jna_sync: true,
         };
         let defaultTab = {
             title: "我的知识",
@@ -79,7 +81,7 @@ const initializer = {
             return knex.insert(defaultTab).into("tabs");
         });
     },
-    extarColumns(){
+    extarColumns() {
         knex.schema.hasColumn("settings", "jna_sync").then(flag => {
             if (flag) {
                 return;

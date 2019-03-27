@@ -45,8 +45,8 @@
             </div>
             <div class="formItem">
                 发布文章时，同时发布到 “<div @click="gotoJna('https://jiaonia.com')" class="link">教你啊</div>”
-                <div @click="setting.sync_jna=!setting.sync_jna" class="rdBtn">
-                    <i :class="['iconfont',setting.sync_jna?'icon-xuanzhong':'icon-weixuanzhong']"></i>
+                <div @click="setting.jna_sync=!setting.jna_sync" class="rdBtn">
+                    <i :class="['iconfont',setting.jna_sync?'icon-xuanzhong':'icon-weixuanzhong']"></i>
                 </div>
                 （未来PC端与移动端同步的基础）
             </div>
