@@ -72,7 +72,6 @@ export default {
                     if (rows.length > 0) {
                         let eurlObj = JSON.parse(rows[0].edit_url);
                         fd.append("qId", eurlObj.qId);
-                        fd.append("aId", eurlObj.aId);
                         window.xxmPost("https://jiaonia.com/Xxm/EditArticle", fd, rt => {
                             this.db("article_site").update({
                                 edit_url: rt
