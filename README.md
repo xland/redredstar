@@ -28,8 +28,6 @@
 <br />&emsp;&emsp; C:\Users\[name]\AppData\Roaming\xiangxuema\xxm
 * 本地编译说明：
 <br />&emsp;&emsp; https://github.com/xland/xiangxuema/blob/master/doc/build.md
-* 开发计划：
-<br />&emsp;&emsp; https://github.com/xland/xiangxuema/blob/master/doc/todo
 * 责权声明：
 <br />&emsp;&emsp; 本软件为非盈利、开源软件，任何责任与义务均由使用者承担，与开发者无关；
 

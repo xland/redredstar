@@ -55,7 +55,7 @@
             </div>
         </div>
         <div v-show="menuIndex == 1" class="content">
-            <div v-if="userInfo != null">
+            <div style="padding: 8px 18px 8px 18px;" v-if="userInfo != null">
                 <div style="color: #888">以下信息是您在“教你啊”网站的用户信息：</div>
                 <div style="display: flex">
                     <div style="width: 260px">
@@ -81,7 +81,7 @@
                 </div>
             </div>
         </div>
-        <div v-show="menuIndex == 2" class="content">
+        <div v-show="menuIndex == 2" class="content" style="padding: 8px 18px 8px 18px;">
             您通过“想学吗”编辑的知识，以及知识内部的图片、个人设置等数据均保存在本地；
             <br /> 您的知识，可以自由的发布到“微信公众号”、“简书”、“博客园”、“开源中国”等知名网站（需拥有相应网站的账号）；
             <br /> 发布知识时，知识内部的图片也会上传到对应的网站上；
@@ -91,7 +91,7 @@
             <br /> 文章发布到目标平台不夹带任何“尾巴”
         </div>
         <div v-show="menuIndex == 3" class="content">
-            暂未提供版本升级相关说明
+            <iframe src="http://localhost:52081/Xxm/Version"></iframe>
         </div>
     </div>
 </template>
@@ -104,7 +104,7 @@
                 setting: null,
                 userInfo: null,
                 menuIndex: 0,
-                menuItems: ['系统设置', '用户信息', '系统说明', '更新说明']
+                menuItems: ['系统设置', '用户信息', '系统说明', '版本更新']
             }
         },
         mounted() {
@@ -189,7 +189,6 @@
 
     .content {
         flex: 1;
-        padding: 8px 18px 8px 18px;
         color: #666;
         line-height: 32px;
     }
@@ -223,6 +222,7 @@
     }
 
     .formItem {
+        padding: 0px 18px 0px 18px;
         height: 42px;
         line-height: 42px;
         color: #363636;
