@@ -1,23 +1,18 @@
 <template>
-    <div :class="initWebview?'tarSiteMask_ing':'tarSiteMask'">
-        <div class="tarSiteMaskClose" @click="$parent.showSites = false">
-            <i class="iconfont icon-guanbi" style="font-size: 17px !important;"></i>
-        </div>
-        <div @click='$parent.showSites = false' class="z1">
-            <div v-show="!initWebview" class="tarSiteContainer">
-                <div @click.stop @mouseenter="overOneSite(index,item)" @mouseleave="overIndex = -1" :class="['tarSiteItem',item.ready?'':'notReady']"
-                    v-for="(item,index) in sites">
-                    <div class="tarSiteIcon">
-                        <img :src="'./static/sites/'+item.id+'/logo.png'" />
+    <div @click='$parent.showSites = false' class="tarSiteMask">
+        <div class="tarSiteContainer">
+            <div @click.stop @mouseenter="overOneSite(index,item)" @mouseleave="overIndex = -1" :class="['tarSiteItem',item.ready?'':'notReady']"
+                v-for="(item,index) in sites">
+                <div class="tarSiteIcon">
+                    <img :src="'./static/sites/'+item.id+'/logo.png'" />
+                </div>
+                <div class="tarSiteName">
+                    <div v-show="overIndex != index || !item.ready" class="toolText">
+                        {{item.title}}
                     </div>
-                    <div class="tarSiteName">
-                        <div v-show="overIndex != index || !item.ready" class="toolText">
-                            {{item.title}}
-                        </div>
-                        <div @click.stop="publish(item,'edit')" v-show="editUrl && overIndex == index && item.ready"
-                            class="toolBtn">修改</div>
-                        <div @click.stop="publish(item,'new')" v-show="overIndex == index && item.ready" class="toolBtn">新增</div>
-                    </div>
+                    <div @click.stop="publish(item,'edit')" v-show="editUrl && overIndex == index && item.ready"
+                        class="toolBtn">修改</div>
+                    <div @click.stop="publish(item,'new')" v-show="overIndex == index && item.ready" class="toolBtn">新增</div>
                 </div>
             </div>
         </div>
@@ -109,17 +104,6 @@
     }
 </script>
 <style lang="scss" scoped>
-    .tarSiteMask_ing {
-        position: absolute;
-        top: 34px;
-        left: 0px;
-        right: 0px;
-        bottom: 26px;
-        background: #ccc;
-        z-index: 99;
-        display: flex;
-        flex-direction: column;
-    }
 
     .green {
         color: green;
@@ -163,34 +147,6 @@
         margin: 12px;
     }
 
-    .tarSiteMaskClose {
-        z-index: 999;
-        border-radius: 13px;
-        cursor: pointer;
-        position: absolute;
-        color: #ee4242;
-        right: 0px;
-        width: 26px;
-        height: 26px;
-        text-align: center;
-        line-height: 26px;
-    }
-
-    .z1 {
-        position: absolute;
-        background: #ccc;
-        top: 0px;
-        left: 0px;
-        bottom: 0px;
-        right: 0px;
-        z-index: 9;
-        border-radius: 3px;
-    }
-
-    .tarSiteMaskClose:hover {
-        color: red;
-    }
-
     .tarSiteItem:hover {
         box-shadow: 0 3px 6px rgba(16, 16, 16, 0.6);
     }
@@ -202,7 +158,7 @@
     }
 
     .notReady {
-        filter: blur(2px);
+        filter: blur(1px);
         cursor: default;
     }
 

@@ -49,11 +49,11 @@ export default [{
     title: '头条号',
     url: 'https://mp.toutiao.com'
 }, 
-// {
-//     ready: true,
-//     id: 'jiaonia',
-//     title: '教你啊',
-// },
+{
+    ready: false,
+    id: 'iqiyi',
+    title: '爱奇艺',
+},
 {
     ready: false,
     id: 'wangyihao',

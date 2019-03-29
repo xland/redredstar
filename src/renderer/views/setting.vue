@@ -66,17 +66,17 @@
                         <div class="formItem">回答数量：{{userInfo.answer_num}}</div>
                         <div class="formItem">积分：{{userInfo.score}}</div>
                         <div class="formItem">总金额：{{userInfo.total_money}}元</div>
-                        <div class="formItem">
-                            <div @click="gotoJna('https://jiaonia.com/My/Info/')" class="btn" style="margin-left: 0px;">
-                                去“教你啊”修改信息
-                            </div>
-                            <div @click="logout()" class="btn" style="background: #ccc;">
-                                退出登录
-                            </div>
-                        </div>
                     </div>
                     <div style="flex: 1;">
                         <img :src="userInfo.avatar" />
+                    </div>
+                </div>
+                <div class="formItem" style="padding-left: 0px">
+                    <div @click="gotoJna('https://jiaonia.com/My/Info/')" class="btn" style="margin-left: 0px;">
+                        去“教你啊”修改信息
+                    </div>
+                    <div @click="logout()" class="btn" style="background: #ccc;">
+                        退出登录
                     </div>
                 </div>
             </div>
