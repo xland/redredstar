@@ -3,6 +3,7 @@
     "description" : "想学吗知识收集工具",
     "version": "1.0.0",
     "manifest_version": 2,
+    "default_locale": "zh_CN",
     "icons":{
         "16": "img/16.png",
         "48": "img/48.png",
@@ -13,8 +14,7 @@
         "default_title": "想学吗知识收集工具",
         "default_popup": "popup.html"
     },
-    "content_scripts": 
-    [
+    "content_scripts": [
         {
             "matches": [
               "http://*/*",
@@ -25,5 +25,8 @@
             "run_at": "document_start",
             "all_frames": false
           }
+    ],
+    "permissions": [
+      "nativeMessaging"
     ]
   }
