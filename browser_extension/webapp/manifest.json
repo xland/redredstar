@@ -1,32 +1,32 @@
 {
-    "name": "想学吗",
-    "description" : "想学吗知识收集工具",
-    "version": "1.0.0",
-    "manifest_version": 2,
-    "default_locale": "zh_CN",
-    "icons":{
-        "16": "img/16.png",
-        "48": "img/48.png",
-        "128": "img/128.png"
-    },
-    "browser_action": {
-        "default_icon": "img/48.png",
-        "default_title": "想学吗知识收集工具",
-        "default_popup": "popup.html"
-    },
-    "content_scripts": [
-        {
-            "matches": [
-              "http://*/*",
-              "https://*/*"
-            ],
-            "js": ["js/content.js"],
-            "css": ["css/xxm.css"],
-            "run_at": "document_start",
-            "all_frames": false
-          }
+  "name": "想学吗",
+  "description": "想学吗知识收集工具",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "icons": {
+    "16": "img/16.png",
+    "48": "img/48.png",
+    "128": "img/128.png"
+  },
+  "browser_action": {
+    "default_icon": "img/48.png",
+    "default_title": "想学吗知识收集工具",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "scripts": []
+  },
+  "content_scripts": [{
+    "matches": [
+      "http://*/*",
+      "https://*/*"
     ],
-    "permissions": [
-      "nativeMessaging"
-    ]
-  }
+    "js": ["js/content.js"],
+    "css": ["css/xxm.css"],
+    "run_at": "document_start",
+    "all_frames": false
+  }],
+  "permissions": [
+    "nativeMessaging"
+  ]
+}

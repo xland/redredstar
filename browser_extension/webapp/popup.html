@@ -2,6 +2,7 @@
 
 <head>
     <meta charset="utf-8">
+    <script src='./js/popup.js'></script>
 </head>
 
 <body style="width: 380px;text-align: center;color: #666;">
@@ -17,23 +18,6 @@
             <button id="send">connect & send</button>
         </div>
     </div>
-    <script>
-        document.getElementById("send").addEventListener('click', function () {
-            var hostName = "com.xiangxuema.webapp";
-            var port = chrome.runtime.connectNative(hostName);
-            port.onMessage.addListener(function (message) {
-                message = JSON.stringify(message);
-                alert(message);
-            });
-            port.onDisconnect.addListener(function () {
-                alert("已断开")
-            });
-            var message = {
-                "text": "这是我的数据";
-            };
-            port.postMessage(message);
-        });
-    </script>
 </body>
 
 </html>
