@@ -1,0 +1,39 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body style="width: 380px;text-align: center;color: #666;">
+    <div style="font-size: 18px;line-height: 38px;color: #333;">“想学吗”知识收集工具</div>
+    <div style="line-height: 32px;font-size: 14px;color: #666;">
+        <div>
+            按Ctrl(⌘)+Alt+x开始点选知识标题和知识正文
+        </div>
+        <div>
+            本插件会把知识（包括图片）下载到您的“想学吗”客户端中
+        </div>
+        <div>
+            <button id="send">connect & send</button>
+        </div>
+    </div>
+    <script>
+        document.getElementById("send").addEventListener('click', function () {
+            var hostName = "com.xiangxuema.webapp";
+            var port = chrome.runtime.connectNative(hostName);
+            port.onMessage.addListener(function (message) {
+                message = JSON.stringify(message);
+                alert(message);
+            });
+            port.onDisconnect.addListener(function () {
+                alert("已断开")
+            });
+            var message = {
+                "text": "这是我的数据";
+            };
+            port.postMessage(message);
+        });
+    </script>
+</body>
+
+</html>
