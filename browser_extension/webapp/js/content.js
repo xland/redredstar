@@ -28,7 +28,12 @@ const contentJs = {
             this.content = this.curDom.innerHTML;
             window.onmousemove = null;
             window.onmousedown = null;
-            alert("正在帮您提取知识到“想学吗”");
+            chrome.runtime.sendMessage({
+                title:this.title,
+                content:this.content
+            }, function (response) {
+                console.log('收到来自后台的回复：' + response);
+            });
         }
     },
     createFloatDom(str) {

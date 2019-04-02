@@ -14,7 +14,7 @@
     "default_popup": "popup.html"
   },
   "background": {
-    "scripts": []
+    "scripts": ["js/bg.js"]
   },
   "content_scripts": [{
     "matches": [
