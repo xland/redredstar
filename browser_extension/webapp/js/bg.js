@@ -14,3 +14,4 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 // "background": {
 //     "scripts": ["js/bg.js"]
 //   },
+//  "update_url": "http://xiangxuema.com/chrome_extension/updates.xml",

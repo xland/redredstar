@@ -91,7 +91,7 @@
             <br /> 文章发布到目标平台不夹带任何“尾巴”
         </div>
         <div v-show="menuIndex == 3" class="content">
-            <iframe src="http://localhost:52081/Xxm/Version"></iframe>
+            <iframe src="https://jiaonia.com/Xxm/Version"></iframe>
         </div>
     </div>
 </template>

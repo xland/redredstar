@@ -3,7 +3,6 @@
   "description": "想学吗知识收集工具",
   "version": "1.0.0",
   "manifest_version": 2,
-  "update_url": "http://xiangxuema.com/chrome_extension/updates.xml",
   "icons": {
     "16": "img/16.png",
     "48": "img/48.png",
