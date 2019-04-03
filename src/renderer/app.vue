@@ -32,6 +32,22 @@
       })
       ipcRenderer.on('imgUploadRenderer', (e, message) => {
         this.$root.imgUploadCb(message);
+      });
+      ipcRenderer.on('articleFromWebApp', (e, message) => {
+        let article = {
+          title: message.title,
+          created_at: new Date(),
+          updated_at: new Date(),
+          editor_type: "html",
+        };
+        this.db("articles").insert(article).then(rows => {
+          article.id = rows[0];
+          let aPath = path.join(remote.app.getPath('userData'), "/xxm/" + article.id);
+          fs.mkdirSync(aPath);
+          fs.writeFileSync(path.join(aPath, "/a.data"), message.content, this.$root.rwOption);
+          this.bus.$emit('articleCount');
+          this.bus.$emit('articleFromWebApp');
+        })
       })
       ipcRenderer.on('updateRenderer', (e, message) => {
         swal({
@@ -75,11 +91,13 @@
     top: 78px;
     bottom: 72px;
   }
-  #ckEditor{
-    width: 100%;height: 100%;
+
+  #ckEditor {
+    width: 100%;
+    height: 100%;
     margin: 0px;
     padding: 0px;
-    border:none;
+    border: none;
     outline: none;
     resize: none;
   }

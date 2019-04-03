@@ -24,8 +24,8 @@
                 </div>
                 <div :class="searchFocus?'searchContainerFocus':'searchContainer'">
                     <div class="searchInput" style="background: transparent;">
-                        <input autocomplete="off" @keyup="search" v-model="searchText" placeholder="请输入搜索内容" @focus="searchFocus = true"
-                            @blur="searchFocus = false" class="textInput" type="text" />
+                        <input autocomplete="off" @keyup="search" v-model="searchText" placeholder="请输入搜索内容"
+                            @focus="searchFocus = true" @blur="searchFocus = false" class="textInput" type="text" />
                     </div>
                     <div @click="search" class="searchBtn">
                         <i class="iconfont icon-search"></i>
@@ -105,23 +105,31 @@
                     });
                     this.bus.$emit('articleCount');
                 })
-
+            },
+            initData(needSearch) {
+                this.db("articles").orderBy("updated_at", "desc").then(rows => {
+                    this.allArticles = rows.map(v => {
+                        if (!v.title) {
+                            v.title = "";
+                        }
+                        v.tagIds = [];
+                        return v;
+                    })
+                    if (needSearch) {
+                        this.search();
+                    }
+                    this.articles = this.allArticles;
+                    this.db("article_tag").select("*").then(ats => {
+                        ats.forEach(a_t => {
+                            let article = this.allArticles.find(a => a.id == a_t.article_id);
+                            article.tagIds.push(a_t.tag_id);
+                        })
+                    })
+                });
             }
         },
         mounted: function () {
-            this.db("articles").orderBy("updated_at", "desc").then(rows => {
-                this.allArticles = rows.map(v => {
-                    v.tagIds = [];
-                    return v;
-                })
-                this.articles = this.allArticles;
-                this.db("article_tag").select("*").then(ats => {
-                    ats.forEach(a_t => {
-                        let article = this.allArticles.find(a => a.id == a_t.article_id);
-                        article.tagIds.push(a_t.tag_id);
-                    })
-                })
-            });
+            this.initData(false);
             this.bus.$on('removeTag', tagId => {
                 let index = this.searchTags.findIndex(v => v.id == tagId);
                 if (index < 0) {
@@ -129,6 +137,9 @@
                 }
                 this.searchTags.splice(index, 1);
                 this.search();
+            });
+            this.bus.$on('articleFromWebApp', () => {
+                this.initData(true);
             })
         }
     }

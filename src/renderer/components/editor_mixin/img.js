@@ -101,9 +101,6 @@ export default {
             var editor = CKEDITOR.instances.editorCk;
             editor.document.$.querySelectorAll("img").forEach((dom, index) => {
                 if (dom.src.startsWith("http")) {
-                    Object.keys(dom.dataset).forEach(ds => {
-                        delete dom.dataset[ds];
-                    });
                     let id = "img" + new Date().getTime() + index;
                     let parsedUrl = url.parse(dom.src);
                     let ext = dom.src.includes("webp") ? ".webp" : path.extname(parsedUrl.pathname);

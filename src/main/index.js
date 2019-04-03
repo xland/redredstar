@@ -2,7 +2,6 @@ import {
   app,
   BrowserWindow,
   ipcMain,
-  Menu
 } from 'electron'
 import {
   ebtMain
@@ -11,7 +10,8 @@ import {
   autoUpdater
 } from 'electron-updater'
 //autoUpdater.autoInstallOnAppQuit = false;
-import menuData from './menu.js';
+import './menu';
+import host from './host';
 ebtMain(ipcMain)
 
 const curVersion = require('../../package.json').version;
@@ -36,16 +36,13 @@ function createWindow() {
     "webPreferences": {
       "webSecurity": false
     }
-  })
+  });
+
   mainWindow.loadURL(winURL);
   mainWindow.on('closed', () => {
     mainWindow = null
   })
-  if (process.platform == 'darwin') {
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menuData));
-  } else {
-    Menu.setApplicationMenu(null);
-  }
+  host.mainWindow = mainWindow;
   setTimeout(() => {
     if (process.env.NODE_ENV === 'production') {
       autoUpdater.checkForUpdates();
@@ -60,7 +57,6 @@ app.on('window-all-closed', () => {
     app.quit()
   }
 })
-
 app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()

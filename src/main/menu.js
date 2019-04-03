@@ -1,3 +1,6 @@
+import {
+    Menu
+} from 'electron'
 const application = {
     label: 'Application',
     submenu: [{
@@ -55,4 +58,8 @@ const edit = {
     ],
 };
 
-export default [application, edit];
+if (process.platform == 'darwin') {
+    Menu.setApplicationMenu(Menu.buildFromTemplate([application, edit]));
+} else {
+    Menu.setApplicationMenu(null);
+}

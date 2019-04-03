@@ -1,11 +1,16 @@
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    console.log(request, sender, sendResponse);
+    console.log("event in bg:")
     var hostName = "com.xiangxuema.xxm";
-    var port = chrome.runtime.connectNative(hostName);
-    port.postMessage(request);
-    port.onMessage.addListener(function (message) {
-        message = JSON.stringify(message);
-        alert(message);
+    chrome.runtime.sendNativeMessage(hostName, request, function (response) {
+        console.log("Received " + response);
     });
-    sendResponse('我是后台，我已收到你的消息：' + JSON.stringify(request));
+    sendResponse('bg log end');
 });
+
+// "permissions": [
+//     "nativeMessaging"
+//   ]
+
+// "background": {
+//     "scripts": ["js/bg.js"]
+//   },

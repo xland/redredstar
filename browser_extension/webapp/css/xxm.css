@@ -21,3 +21,17 @@
     display: none;
     font-size: 12px;
 }
+.ex__xxm__msg__div{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 58px;
+    line-height: 58px;
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
+    z-index: 99999999;
+    background: #137ae3;
+}
