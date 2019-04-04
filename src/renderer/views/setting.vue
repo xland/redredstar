@@ -180,11 +180,10 @@
     .setting {
         display: flex;
         background: #fff;
-        height: calc(100% - 32px);
-        margin: 4px 12px 12px 12px;
+        height: calc(100% - 8px);
+        margin: 0px 8px 0px 8px;
         box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
         border-radius: 3px;
-        overflow: hidden;
     }
 
     .content {

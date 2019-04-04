@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <tabbar></tabbar>
-    <router-view />
+    <div class="viewAndMenuContainer">
+      <menubar></menubar>
+      <router-view />
+    </div>
     <bottombar></bottombar>
   </div>
 </template>
@@ -9,6 +12,7 @@
 <script>
   import tabbar from "./components/tabbar";
   import bottombar from "./components/bottombar";
+  import menubar from "./components/menubar";
 
   const path = require('path');
   const fs = require('fs-extra')
@@ -20,6 +24,7 @@
     components: {
       tabbar,
       bottombar,
+      menubar,
     },
     data() {
       return {}
@@ -100,5 +105,11 @@
     border: none;
     outline: none;
     resize: none;
+  }
+
+  .viewAndMenuContainer {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
   }
 </style>

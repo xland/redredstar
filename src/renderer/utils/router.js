@@ -7,12 +7,13 @@ const router = new Router({
     routes: [{
             path: '/',
             component: () => import( /* webpackChunkName: "base" */ '../views/index.vue'),
-        },
-        {
+        },{
             path: '/article/:id',
             component: () => import( /* webpackChunkName: "base" */ '../views/article.vue'),
-        },
-        {
+        },{
+            path: '/flower',
+            component: () => import( /* webpackChunkName: "base" */ '../views/flower.vue'),
+        },{
             path: '/setting',
             component: () => import( /* webpackChunkName: "base" */ '../views/setting.vue'),
         }
