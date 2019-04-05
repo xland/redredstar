@@ -1,9 +1,6 @@
 <template>
     <div class="bottombar">
         <div class="bottombarRight">
-            <div @click="setting">
-                <i class="iconfont icon-shezhi"></i> Setting
-            </div>
             <div @click="addBug">
                 <i class="iconfont icon-bug icon"></i> Bug
             </div>
@@ -17,6 +14,10 @@
         <div class="bottombarLeft">
             <div>
                 <i class="iconfont icon-wenzhang icon"></i>
+                {{articleCount}}
+            </div>
+            <div>
+                <i class="iconfont icon-huohua icon"></i>
                 {{articleCount}}
             </div>
             <div>
@@ -65,7 +66,7 @@
                     name: "微信"
                 }],
                 donateIndex: 1,
-                qrCodeId:null
+                qrCodeId: null
             }
         },
         methods: {
@@ -89,7 +90,7 @@
                 this.bus.$on('login', () => this.showQrCode('loginQrCode'));
                 this.bindOnLogin();
             },
-            bindOnLogin(){
+            bindOnLogin() {
                 let self = this;
                 window.addEventListener('message', function (e) {
                     if (!e.data.refuse) {
@@ -107,19 +108,13 @@
                     }
                 }, false);
             },
-            setting() {
-                this.bus.$emit('findOrAddTab', {
-                    url: '/setting',
-                    title: "系统设置",
-                });
-            },
             showQrCode(id) {
                 this.qrCodeId = id;
                 swal({
                     width: 580,
                     content: document.getElementById(id),
                     buttons: false
-                }).then(()=>{
+                }).then(() => {
                     this.qrCodeId = null;
                 });
             },
@@ -142,6 +137,7 @@
         from {
             transform: rotate(0deg);
         }
+
         to {
             transform: rotate(360deg);
         }

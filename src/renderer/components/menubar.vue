@@ -1,23 +1,31 @@
 <template>
     <div class="container">
-        <div class="item selected">
+        <div @click="goto('/')" class="item selected">
             知识
         </div>
-        <div class="item">
+        <div @click="goto('/flower')" class="item">
             火花
         </div>
-        <div class="item">
+        <div @click="goto('/setting')" class="item">
             设置
         </div>
     </div>
 </template>
 <script>
+    export default {
+        methods: {
+            goto(url) {
+                this.$router.push(url);
+            }
+        }
+    }
 </script>
 <style scoped>
-    .container{
+    .container {
         width: 28px;
     }
-    .item{
+
+    .item {
         width: 18px;
         padding-left: 3px;
         padding-right: 5px;
@@ -33,7 +41,8 @@
         cursor: pointer;
         box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
     }
-    .item:hover{
+
+    .item:hover {
         box-shadow: 1px 1px 4px rgba(26, 26, 26, 0.3);
     }
 </style>

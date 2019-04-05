@@ -4,7 +4,7 @@
             <div class="tagText">{{item.title}}</div>
         </div>
         <div class="noDataTip" v-if="tags.length<1" style="font-size: 22px;">
-            还没有知识标签
+            标签库空空如也...
         </div>
     </div>
 </template>

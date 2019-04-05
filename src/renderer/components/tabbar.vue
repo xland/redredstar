@@ -1,9 +1,9 @@
 <template>
-    <div id="tabbar" class="tabbar">
+    <div v-show="tabs.length>1" class="tabbar">
         <div @click="tabClick(tab)" :class="[tab.selected?'selected':'','tabItem']" v-for="(tab,index) in tabs">
             <div v-if="tab.title" :title="tab.title" class="text">{{tab.title}}</div>
             <div v-else :title="tab.title" class="text">[未命名]</div>
-            <div @click.stop="removeTab(tab)" class="tabCloseBtn" v-if="index != 0">
+            <div @click.stop="removeTab(tab)" class="tabCloseBtn">
                 <i class="iconfont icon-guanbi tabCloseIcon"></i>
             </div>
         </div>
@@ -20,8 +20,10 @@
         methods: {
             scrollToSelectedItem() {
                 this.$nextTick(function () {
-                    var tb = document.getElementById("tabbar").getElementsByClassName("selected")[0];
-                    tb.scrollIntoViewIfNeeded();
+                    var tb = document.querySelector(".tabbar").getElementsByClassName("selected")[0];
+                    if (tb) {
+                        tb.scrollIntoViewIfNeeded();
+                    }
                 })
             },
             tabClick(tab) {
@@ -33,25 +35,16 @@
                 tab.selected = true;
                 this.db('tabs').where("id", tab.id).update({
                     selected: true
-                }).catch(e => {
-                    console.error(e);
-                });
+                }).then();
                 this.db('tabs').where("id", oldTab.id).update({
                     selected: false
-                }).catch(e => {
-                    console.error(e);
-                });
+                }).then();
                 this.$router.push(tab.url);
             },
             findOrAddTab(obj) {
                 var tab = this.tabs.find(v => {
                     return v.url == obj.url
-                })
-                var oldTab = this.tabs.find(v => v.selected);
-                if (oldTab == tab) {
-                    return;
-                }
-                oldTab.selected = false;
+                });
                 if (!tab) {
                     tab = obj;
                     tab.order_num = this.tabs.length;
@@ -60,16 +53,20 @@
                     this.db('tabs').insert(tab).then(rows => {
                         tab.id = rows[0];
                     })
+                } else {
+                    var curSelectedTab = this.tabs.find(v => v.selected);
+                    if (curSelectedTab == tab) {
+                        return;
+                    }
+                    if (curSelectedTab) {
+                        curSelectedTab.selected = false;
+                        this.db('tabs').where("id", curSelectedTab.id).update(curSelectedTab).then();
+                    }
                 }
                 if (!tab.selected) {
                     tab.selected = true;
-                    this.db('tabs').where("id", tab.id).update(tab).catch(e => {
-                        console.error(e);
-                    });
+                    this.db('tabs').where("id", tab.id).update(tab).then();
                 }
-                this.db('tabs').where("id", oldTab.id).update(oldTab).catch(e => {
-                    console.error(e);
-                });
                 this.$router.push(tab.url);
                 this.scrollToSelectedItem();
             },
@@ -82,7 +79,6 @@
                 }
                 obj = this.tabs.splice(index, 1)[0];
                 if (!this.tabs.some(v => v.selected)) {
-                    this.tabs[0].selected = true;
                     this.$router.push('/');
                 }
                 this.scrollToSelectedItem();
@@ -94,9 +90,9 @@
                 }).del().then();
             },
             hookXScroll() {
-                document.getElementById('tabbar').addEventListener("mousewheel", function (e) {
+                document.querySelector('.tabbar').addEventListener("mousewheel", function (e) {
                     var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-                    document.getElementById('tabbar').scrollLeft -= (delta * 40);
+                    document.querySelector('.tabbar').scrollLeft -= (delta * 40);
                     e.preventDefault();
                 }, false);
             },
@@ -112,17 +108,32 @@
                     tab.title = title;
                     this.db('tabs').where("id", tab.id).update(tab).then();
                 })
+                this.bus.$on("deselectTab", () => {
+                    let tab = this.tabs.find(v => v.selected);
+                    if (!tab) {
+                        return;
+                    }
+                    tab.selected = false;
+                    this.db('tabs').where("id", tab.id).update(tab).then();
+                })
+            },
+            init() {
+                this.db("tabs").select("*").then(rows => {
+                    this.tabs = rows;
+                    var tab = rows.find(v => v.selected);
+                    if (tab) {
+                        this.$router.push(tab.url);
+                        this.scrollToSelectedItem();
+                    } else {
+                        this.$router.push("/");
+                    }
+                })
             }
         },
         mounted() {
-            this.db("tabs").select("*").then(rows => {
-                this.tabs = rows;
-                var tab = rows.find(v => v.selected);
-                this.$router.push(tab.url);
-                this.hookXScroll();
-                this.scrollToSelectedItem();
-                this.hookEvent();
-            })
+            this.hookXScroll();
+            this.hookEvent();
+            this.init();
         }
     }
 </script>
@@ -146,7 +157,6 @@
         height: 32px;
         line-height: 32px;
         box-shadow: 0 1px 3px rgba(26, 26, 26, 0.1);
-        margin-bottom: 8px;
         width: 100%;
         overflow-y: hidden;
         display: -webkit-box;

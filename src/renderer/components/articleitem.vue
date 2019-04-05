@@ -25,10 +25,7 @@
         },
         methods: {
             articleClick() {
-                this.bus.$emit('findOrAddTab', {
-                    url: '/article/' + this.item.id,
-                    title: this.item.title,
-                });
+                this.$router.push('/article/' + this.item.id)
             },
             delArticle() {
                 swal({
@@ -60,10 +57,6 @@
                         })
                     //删文章库
                     this.db("articles").where("id", article.id).del().then();
-                    //删TAB页
-                    this.bus.$emit('removeTab', {
-                        url: '/article/' + article.id
-                    })
                     //删文件
                     let basePath = path.join(electron.remote.app.getPath('userData'), "/xxm");
                     var dir = path.join(basePath, article.id.toString());

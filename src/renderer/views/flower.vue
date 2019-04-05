@@ -32,15 +32,15 @@
                     </div>
                 </div>
                 <div style="flex: 1;"></div>
-                <div @click="newArticleBtnClick" class="btn">添加知识</div>
+                <div @click="newFlowerBtnClick" class="btn">思想火花</div>
             </div>
             <div class="articles box">
                 <div class="noDataTip" v-if="articles.length<1">
                     <div>
-                        向我自己的知识海洋进发
+                        思想火花空空如也...
                     </div>
-                    <div @click="newArticleBtnClick" class="btn center" style="width: 80px;">
-                        添加知识
+                    <div @click="newFlowerBtnClick" class="btn center" style="width: 80px;">
+                        添加思想火花
                     </div>
                 </div>
                 <articleitem :key="item.id" :item="item" :index="index" v-for="(item,index) in articles"></articleitem>
@@ -62,7 +62,7 @@
         data() {
             return {
                 searchFocus: false,
-                allArticles: [],
+                allFlowers: [],
                 articles: [],
                 searchTags: [],
                 searchText: '',
@@ -87,7 +87,7 @@
                 result = result.filter(v => this.searchTags.every(st => v.tagIds.includes(st.id)));
                 this.articles = result;
             },
-            newArticleBtnClick() {
+            newFlowerBtnClick() {
                 let article = {
                     title: '',
                     created_at: new Date(),
@@ -107,10 +107,10 @@
                 })
             },
             initData(needSearch) {
-                this.db("articles").orderBy("updated_at", "desc").then(rows => {
-                    this.allArticles = rows.map(v => {
-                        if (!v.title) {
-                            v.title = "";
+                this.db("flowers").orderBy("updated_at", "desc").then(rows => {
+                    this.allFlowers = rows.map(v => {
+                        if (!v.content) {
+                            v.content = "";
                         }
                         v.tagIds = [];
                         return v;
@@ -118,10 +118,10 @@
                     if (needSearch) {
                         this.search();
                     }
-                    this.articles = this.allArticles;
-                    this.db("article_tag").select("*").then(ats => {
-                        ats.forEach(a_t => {
-                            let article = this.allArticles.find(a => a.id == a_t.article_id);
+                    this.articles = this.allFlowers;
+                    this.db("flower_tag").select("*").then(fts => {
+                        fts.forEach(f_t => {
+                            let article = this.allFlowers.find(a => a.id == a_t.flower_id);
                             article.tagIds.push(a_t.tag_id);
                         })
                     })

@@ -1,17 +1,24 @@
 <template>
   <div id="article" class="view" v-if="article">
-    <div class="blankLine">
-      <div style="flex: 1;display: flex">
+    <div class="blankLine" style="border-top: 1px solid #e5e5e5;overflow: hidden;">
+      <div style="flex: 1;display: flex;overflow: hidden;">
         <input autocomplete="off" id="articleTitleInput" @keydown.tab="titleTab" @input="titleChange" class="textInput"
           v-model="article.title" placeholder="请输入文章标题">
       </div>
-      <div class="publishBtn" @click="showSitesClick">
+      <div class="barBtn" @mouseenter="showRecentArticle = true" @mouseleave="showRecentArticle = false">
+        <i class="iconfont icon-zuijin" style="font-size: 18px !important;"></i>
+      </div>
+      <div class="barBtn" @click="showSitesClick">
         <i class="iconfont icon-fabu" style="font-size: 18px !important;"></i>
       </div>
     </div>
     <editor ref="articleEditor"></editor>
     <articletag ref="articleTag"></articletag>
     <site v-show="showSites"></site>
+    <div v-show="showRecentArticle" class="recentArticle" @mouseenter="showRecentArticle = true"
+      @mouseleave="showRecentArticle = false">
+      <div @click="$router.push('/article/' + item.id)" v-for="item in recentArticles" class="item">{{item.title}}</div>
+    </div>
   </div>
 </template>
 <script>
@@ -33,6 +40,8 @@
       return {
         showSites: false,
         article: null,
+        showRecentArticle: false,
+        recentArticles: [],
       };
     },
     beforeRouteUpdate(to, from, next) {
@@ -42,7 +51,6 @@
         this.getArticle(to.params.id);
         next();
       });
-
     },
     beforeRouteLeave(to, from, next) {
       this.showSites = false;
@@ -85,6 +93,12 @@
       getArticle(id) {
         this.db("articles").where("id", id).select("*").then(rows => {
           this.article = rows[0];
+          this.article.visited_at = new Date();
+          this.db('articles').where("id", this.article.id).update(this.article).then(() => {
+            this.db("articles").orderBy("visited_at", "desc").limit(8).offset(1).then(recentRows => {
+              this.recentArticles = recentRows;
+            })
+          });
           this.$nextTick(() => {
             this.$refs.articleTag.getTags();
             this.$refs.articleEditor.getContent();
@@ -109,6 +123,36 @@
   };
 </script>
 <style lang="scss" scoped>
+  .recentArticle {
+    position: absolute;
+    border-top: 1px solid #e5e5e5;
+    line-height: 32px;
+    right: 45px;
+    top: 45px;
+    background: #fff;
+    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
+  .recentArticle .item {
+    padding-left: 8px;
+    padding-right: 8px;
+    max-width: 226px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #666;
+    cursor: pointer;
+  }
+
+  .recentArticle .item:hover {
+    background: #dcedfe;
+    color: #007acc;
+  }
+
   #article {
     overflow: hidden;
     margin: 8px;
@@ -120,7 +164,8 @@
     flex-flow: column;
   }
 
-  .publishBtn {
+  .barBtn {
+    border-left: 1px solid #e5e5e5;
     width: 36px;
     height: 36px;
     line-height: 36px;
@@ -131,7 +176,7 @@
     font-size: 14px;
   }
 
-  .publishBtn:hover {
+  .barBtn:hover {
     background: #dcedfe;
     color: #007acc;
   }

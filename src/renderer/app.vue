@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <tabbar></tabbar>
     <div class="viewAndMenuContainer">
       <menubar></menubar>
       <router-view />
@@ -10,10 +9,8 @@
 </template>
 
 <script>
-  import tabbar from "./components/tabbar";
   import bottombar from "./components/bottombar";
   import menubar from "./components/menubar";
-
   const path = require('path');
   const fs = require('fs-extra')
   const {
@@ -22,7 +19,6 @@
   } = require('electron');
   export default {
     components: {
-      tabbar,
       bottombar,
       menubar,
     },
@@ -111,5 +107,6 @@
     flex: 1;
     overflow: hidden;
     display: flex;
+    margin-top: 8px;
   }
 </style>

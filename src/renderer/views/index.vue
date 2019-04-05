@@ -37,7 +37,7 @@
             <div class="articles box">
                 <div class="noDataTip" v-if="articles.length<1">
                     <div>
-                        向我自己的知识海洋进发
+                        知识库空空如也
                     </div>
                     <div @click="newArticleBtnClick" class="btn center" style="width: 80px;">
                         添加知识
@@ -88,10 +88,12 @@
                 this.articles = result;
             },
             newArticleBtnClick() {
+                let now = new Date();
                 let article = {
                     title: '',
-                    created_at: new Date(),
-                    updated_at: new Date(),
+                    created_at: now,
+                    updated_at: now,
+                    visited_at: now,
                     editor_type: this.$root.editorType,
                 };
                 this.db("articles").insert(article).then(rows => {
@@ -99,10 +101,7 @@
                     let aPath = path.join(electron.remote.app.getPath('userData'), "/xxm/" + article.id);
                     fs.mkdirSync(aPath);
                     fs.writeFileSync(path.join(aPath, "/a.data"), "", this.$root.rwOption);
-                    this.bus.$emit('findOrAddTab', {
-                        url: '/article/' + article.id,
-                        title: "",
-                    });
+                    this.$router.push('/article/' + article.id)
                     this.bus.$emit('articleCount');
                 })
             },
