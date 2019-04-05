@@ -1,5 +1,5 @@
 <template>
-    <div @click='$parent.showSites = false' class="tarSiteMask">
+    <div @click='$parent.showSites = false' class="maskExceptMenu">
         <div class="tarSiteContainer">
             <div @click.stop @mouseenter="overOneSite(index,item)" @mouseleave="overIndex = -1" :class="['tarSiteItem',item.ready?'':'notReady']"
                 v-for="(item,index) in sites">
@@ -15,6 +15,9 @@
                     <div @click.stop="publish(item,'new')" v-show="overIndex == index && item.ready" class="toolBtn">新增</div>
                 </div>
             </div>
+        </div>
+        <div style="position: absolute;right: -30px;bottom: -50px;transform:rotate(45deg);">
+            <i style="font-size: 220px;color: #dadada;" class="iconfont icon-huashu"></i>
         </div>
     </div>
 </template>
@@ -104,28 +107,6 @@
     }
 </script>
 <style lang="scss" scoped>
-
-    .green {
-        color: green;
-    }
-
-    .gray {
-        color: #ccc;
-    }
-
-    .tarSiteMask {
-        position: absolute;
-        top: 8px;
-        left: 36px;
-        right: 8px;
-        border-radius: 3px;
-        bottom: 34px;
-        background: #ccc;
-        z-index: 99;
-        display: flex;
-        flex-direction: column;
-    }
-
     .tarSiteContainer {
         text-align: center;
         margin-top: 60px;
@@ -136,7 +117,6 @@
         align-content: center;
         justify-content: center;
     }
-
     .tarSiteItem {
         width: 96px;
         min-width: 96px;

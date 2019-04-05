@@ -2,6 +2,7 @@ import {
   app,
   BrowserWindow,
   ipcMain,
+  Menu
 } from 'electron'
 import {
   ebtMain
@@ -10,7 +11,6 @@ import {
   autoUpdater
 } from 'electron-updater'
 //autoUpdater.autoInstallOnAppQuit = false;
-// import './menu';
 import host from './host';
 ebtMain(ipcMain)
 
@@ -37,7 +37,9 @@ function createWindow() {
       "webSecurity": false
     }
   });
-
+  if (process.platform != 'darwin') {
+    Menu.setApplicationMenu(null);
+  }
   mainWindow.loadURL(winURL);
   mainWindow.on('closed', () => {
     mainWindow = null

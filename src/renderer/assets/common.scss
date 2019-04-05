@@ -102,3 +102,16 @@
     line-height: 66px;
     color: #bbb;
 }
+.maskExceptMenu {
+    position: absolute;
+    top: 8px;
+    left: 36px;
+    right: 8px;
+    border-radius: 3px;
+    bottom: 34px;
+    background: #ccc;
+    z-index: 99;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}

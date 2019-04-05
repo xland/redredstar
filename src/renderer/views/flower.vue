@@ -32,14 +32,32 @@
                     </div>
                 </div>
                 <div style="flex: 1;"></div>
-                <div @click="newFlowerBtnClick" class="btn">思想火花</div>
+                <div @click="showAddBox = true" class="btn">添加思想火花</div>
+                <div v-if="showAddBox" @click='showAddBox = false' class="maskExceptMenu" style="overflow: hidden;">
+                    <div @click.stop style="width: 360px;margin-left: auto;
+                    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
+                    margin-top: 60px;
+                    margin-right: auto;background: #fff;border-radius: 6px;">
+                        <textarea placeholder="记录我的思想火花..." class="textInput" style="height: 82px;padding-top: 8px;
+                        padding-bottom: 8px;
+                        line-height: 26px;
+                        width: calc(100% - 16px);"></textarea>
+                        <div class="btn" style="float: right;
+                        margin-bottom: 8px;width: 58px;text-align: center;">
+                            提交
+                        </div>
+                    </div>
+                    <div style="position: absolute;right: -30px;bottom: -30px;transform:rotate(45deg);">
+                        <i style="font-size: 220px;color: #dadada;" class="iconfont icon-yanhua"></i>
+                    </div>
+                </div>
             </div>
             <div class="articles box">
                 <div class="noDataTip" v-if="articles.length<1">
                     <div>
                         思想火花空空如也...
                     </div>
-                    <div @click="newFlowerBtnClick" class="btn center" style="width: 80px;">
+                    <div @click="showAddBox = true" class="btn center" style="width: 80px;">
                         添加思想火花
                     </div>
                 </div>
@@ -67,6 +85,7 @@
                 searchTags: [],
                 searchText: '',
                 hoverIndex: -1,
+                showAddBox: false,
             }
         },
         methods: {
@@ -88,12 +107,7 @@
                 result = result.filter(v => this.searchTags.every(st => v.tagIds.includes(st.id)));
                 this.articles = result;
             },
-            newFlowerBtnClick() {
-                swal({
-                    icon: "info",
-                    text: "此功能尚未开发完成",
-                });
-            },
+            newFlowerBtnClick() {},
             initData(needSearch) {
                 this.db("flowers").orderBy("updated_at", "desc").then(rows => {
                     this.allFlowers = rows.map(v => {

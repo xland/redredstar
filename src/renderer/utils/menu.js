@@ -59,7 +59,4 @@ const edit = {
 
 if (process.platform == 'darwin') {
     Menu.setApplicationMenu(Menu.buildFromTemplate([application, edit]));
-    console.log(111);
-} else {
-    Menu.setApplicationMenu(null);
 }
