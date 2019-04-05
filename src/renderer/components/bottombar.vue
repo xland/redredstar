@@ -18,7 +18,7 @@
             </div>
             <div>
                 <i class="iconfont icon-huohua icon"></i>
-                {{articleCount}}
+                0
             </div>
             <div>
                 <i class="iconfont icon-biaoqian icon"></i>

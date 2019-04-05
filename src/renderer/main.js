@@ -2,6 +2,7 @@ import Vue from 'vue'
 import dbInitializer from './utils/db';
 import './utils/filter'
 import './utils/util'
+import './utils/menu'
 import store from './utils/store'
 import router from './utils/router'
 import app from './app'

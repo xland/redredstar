@@ -144,7 +144,7 @@
     .tip {
         animation: flash 5.6s linear;
         position: absolute;
-        z-index: 9;
+        z-index: 6;
         line-height: 32px;
         right: 12px;
         color: #ccc;

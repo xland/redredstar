@@ -10,7 +10,7 @@ import {
   autoUpdater
 } from 'electron-updater'
 //autoUpdater.autoInstallOnAppQuit = false;
-import './menu';
+// import './menu';
 import host from './host';
 ebtMain(ipcMain)
 

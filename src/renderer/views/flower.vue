@@ -75,6 +75,7 @@
                 this.search();
             },
             search() {
+                return;
                 if (this.searchText.length > 36) {
                     swal({
                         icon: "error",
@@ -88,23 +89,10 @@
                 this.articles = result;
             },
             newFlowerBtnClick() {
-                let article = {
-                    title: '',
-                    created_at: new Date(),
-                    updated_at: new Date(),
-                    editor_type: this.$root.editorType,
-                };
-                this.db("articles").insert(article).then(rows => {
-                    article.id = rows[0];
-                    let aPath = path.join(electron.remote.app.getPath('userData'), "/xxm/" + article.id);
-                    fs.mkdirSync(aPath);
-                    fs.writeFileSync(path.join(aPath, "/a.data"), "", this.$root.rwOption);
-                    this.bus.$emit('findOrAddTab', {
-                        url: '/article/' + article.id,
-                        title: "",
-                    });
-                    this.bus.$emit('articleCount');
-                })
+                swal({
+                    icon: "info",
+                    text: "此功能尚未开发完成",
+                });
             },
             initData(needSearch) {
                 this.db("flowers").orderBy("updated_at", "desc").then(rows => {
