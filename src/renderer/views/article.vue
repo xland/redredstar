@@ -178,7 +178,6 @@
   }
 
   .barBtn:hover {
-    background: #dcedfe;
     color: #007acc;
   }
 </style>

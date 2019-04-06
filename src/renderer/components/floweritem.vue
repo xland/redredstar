@@ -1,13 +1,19 @@
 <template>
-    <div @mouseout="$parent.hoverIndex = -1" @mouseover="$parent.hoverIndex = index" @click="articleClick()"
-        class="item">
-        <div @click.stop="delArticle(index)" class="delBox" v-show="$parent.hoverIndex == index">
-            <i class="iconfont icon-shanchu"></i>
+    <div @mouseleave="$parent.hoverIndex = -1" @mouseenter="$parent.hoverIndex = index" @click="flowerClick()" class="item">
+        <div class="content" v-html="item.content?item.content:'[未命名]'">
         </div>
-        <div class="timeBox" v-show="$parent.hoverIndex != index">
-            {{item.updated_at | getSimpleTime}}
-        </div>
-        <div style="margin-right: 80px" v-html="item.content?item.content:'[未命名]'">
+        <div class="bottomRow">
+            <div style="flex: 1;">
+                <div class="rowTag">123</div>
+                <div class="rowTag">标签标签</div>
+                <div class="rowTag">123</div>
+            </div>
+            <div class="timeBox" v-show="$parent.hoverIndex != index">
+                {{item.updated_at | getSimpleTime}}
+            </div>
+            <div @click.stop="delArticle(index)" class="delBox" v-show="$parent.hoverIndex == index">
+                <i class="iconfont icon-shanchu"></i>
+            </div>
         </div>
     </div>
 </template>
@@ -24,8 +30,8 @@
             }
         },
         methods: {
-            articleClick() {
-                this.$router.push('/article/' + this.item.id)
+            flowerClick() {
+                
             },
             delArticle() {
                 swal({
@@ -71,21 +77,52 @@
     }
 </script>
 <style scoped lang="scss">
+    .bottomRow {
+        display: flex;
+        margin-top: 8px;
+        line-height: 22px;
+    }
+
+    .rowTag {
+        background: #e7f3ff;
+        color: #888;
+        cursor: pointer;
+        display: inline-block;
+        padding-left: 6px;
+        padding-right: 6px;
+        border-radius: 3px;
+        font-size: 12px;
+    }
+
+    .rowTag:hover {
+        color: #007acc;
+    }
+
+    .content {
+        max-height: 80px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 26px;
+        font-size: 13px;
+        color: #333;
+    }
+
     .timeBox {
-        float: right;
         width: 68px;
         color: #999;
         font-size: 12px;
         text-align: right;
-        padding-right: 6px;
     }
 
     .delBox {
-        float: right;
-        width: 38px;
-        font-size: 12px;
+        width: 22px;
+        height: 22px;
+        line-height: 22px;
+        overflow: hidden;
+        font-size: 11px;
         text-align: center;
         color: #F1403C;
+        border-radius: 3px;
     }
 
     .delBox:hover {
@@ -94,19 +131,11 @@
     }
 
     .item {
-        overflow: hidden;
-        height: 38px;
-        line-height: 38px;
-        font-size: 13px;
+        padding-top: 8px;
+        padding-bottom: 8px;
         cursor: pointer;
         margin-left: 8px;
         margin-right: 8px;
-        padding-left: 6px;
-        text-overflow: ellipsis;
         border-bottom: 1px solid #f6f6f6;
-    }
-
-    .item:hover {
-        background: #f6f6f6;
     }
 </style>

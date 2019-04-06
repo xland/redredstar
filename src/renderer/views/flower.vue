@@ -78,9 +78,9 @@
                 flowers: [],
                 searchTags: [],
                 searchText: '',
-                hoverIndex: -1,
                 showAddBox: false,
-                content: ""
+                content: "",
+                hoverIndex: -1,
             }
         },
         methods: {
@@ -229,10 +229,6 @@
         margin-right: 8px;
         overflow-y: hidden;
         overflow-x: hidden;
-        margin-bottom: 8px;
-        padding-bottom: 8px;
-        padding-top: 8px;
-
     }
 
     .articles:hover {
