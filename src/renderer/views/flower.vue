@@ -87,12 +87,13 @@
             saveFlower() {
                 let now = new Date();
                 let flower = {
-                    content: this.content,
+                    content: this.content.replace(/\n/g,"<br/>"),
                     updated_at: now,
                     created_at: now
                 };
                 this.db("flowers").insert(flower).then(() => {
                     this.initData(false);
+                    this.showAddBox = false;
                 });
 
             },

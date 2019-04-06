@@ -7,8 +7,7 @@
         <div class="timeBox" v-show="$parent.hoverIndex != index">
             {{item.updated_at | getSimpleTime}}
         </div>
-        <div style="margin-right: 80px">
-            {{item.content?item.content:"[未命名]"}}
+        <div style="margin-right: 80px" v-html="item.content?item.content:'[未命名]'">
         </div>
     </div>
 </template>
