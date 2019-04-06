@@ -15,8 +15,8 @@
                     <i class="iconfont icon-shijian" style="font-size: 18px !important;"></i>
                 </div>
                 <div style="max-width: 386px;overflow-x: auto;padding-top: 4px;">
-                    <div class="tag" v-for="(item,index) in searchTags">
-                        <div class="tagText">{{item.title}}</div>
+                    <div :key="item.id" class="tag" v-for="(item,index) in searchTags">
+                        <div class="tagText">{{item.content}}</div>
                         <div @click.stop="closeTag(index)" class="tagClose">
                             <i class="iconfont icon-guanbi" style="font-size: 14px !important;"></i>
                         </div>
@@ -34,16 +34,9 @@
                 <div style="flex: 1;"></div>
                 <div @click="showAddBox = true" class="btn">添加思想火花</div>
                 <div v-if="showAddBox" @click='showAddBox = false' class="maskExceptMenu" style="overflow: hidden;">
-                    <div @click.stop style="width: 360px;margin-left: auto;
-                    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
-                    margin-top: 60px;
-                    margin-right: auto;background: #fff;border-radius: 6px;">
-                        <textarea placeholder="记录我的思想火花..." class="textInput" style="height: 82px;padding-top: 8px;
-                        padding-bottom: 8px;
-                        line-height: 26px;
-                        width: calc(100% - 16px);"></textarea>
-                        <div class="btn" style="float: right;
-                        margin-bottom: 8px;width: 58px;text-align: center;">
+                    <div @click.stop class="addBoxInnerDiv">
+                        <textarea v-model="content" placeholder="记录我的思想火花..." class="textInput ta"></textarea>
+                        <div @click="saveFlower" class="btn saveBtn">
                             提交
                         </div>
                     </div>
@@ -53,7 +46,7 @@
                 </div>
             </div>
             <div class="articles box">
-                <div class="noDataTip" v-if="articles.length<1">
+                <div class="noDataTip" v-if="flowers.length<1">
                     <div>
                         思想火花空空如也...
                     </div>
@@ -61,7 +54,9 @@
                         添加思想火花
                     </div>
                 </div>
-                <articleitem :key="item.id" :item="item" :index="index" v-for="(item,index) in articles"></articleitem>
+                <floweritem :key="item.id" :item="item" :index="index" v-for="(item,index) in flowers">
+                    {{item.content}}
+                </floweritem>
             </div>
         </div>
     </div>
@@ -70,25 +65,37 @@
     const fs = require('fs');
     const path = require('path');
     const electron = require("electron")
-    import articleitem from "../components/articleitem";
+    import floweritem from "../components/floweritem";
     import tags from "../components/tags";
     export default {
         components: {
-            articleitem,
+            floweritem,
             tags
         },
         data() {
             return {
                 searchFocus: false,
-                allFlowers: [],
-                articles: [],
+                flowers: [],
                 searchTags: [],
                 searchText: '',
                 hoverIndex: -1,
                 showAddBox: false,
+                content: ""
             }
         },
         methods: {
+            saveFlower() {
+                let now = new Date();
+                let flower = {
+                    content: this.content,
+                    updated_at: now,
+                    created_at: now
+                };
+                this.db("flowers").insert(flower).then(() => {
+                    this.initData(false);
+                });
+
+            },
             closeTag(index) {
                 this.searchTags.splice(index, 1);
                 this.search();
@@ -109,8 +116,9 @@
             },
             newFlowerBtnClick() {},
             initData(needSearch) {
+                //todo:不要一下子都搞出来
                 this.db("flowers").orderBy("updated_at", "desc").then(rows => {
-                    this.allFlowers = rows.map(v => {
+                    this.flowers = rows.map(v => {
                         if (!v.content) {
                             v.content = "";
                         }
@@ -120,11 +128,10 @@
                     if (needSearch) {
                         this.search();
                     }
-                    this.articles = this.allFlowers;
                     this.db("flower_tag").select("*").then(fts => {
                         fts.forEach(f_t => {
-                            let article = this.allFlowers.find(a => a.id == a_t.flower_id);
-                            article.tagIds.push(a_t.tag_id);
+                            let flower = this.flowers.find(a => a.id == a_t.flower_id);
+                            flower.tagIds.push(a_t.tag_id);
                         })
                     })
                 });
@@ -147,6 +154,31 @@
     }
 </script>
 <style scoped lang="scss">
+    .addBoxInnerDiv {
+        width: 360px;
+        margin-left: auto;
+        box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
+        margin-top: 60px;
+        margin-right: auto;
+        background: #fff;
+        border-radius: 6px;
+    }
+
+    .saveBtn {
+        float: right;
+        margin-bottom: 8px;
+        width: 58px;
+        text-align: center;
+    }
+
+    .ta {
+        height: 82px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        line-height: 26px;
+        width: calc(100% - 16px);
+    }
+
     .searchBtn {
         width: 38px;
         line-height: 28px;

@@ -2,7 +2,7 @@
     <div @click='$parent.showSites = false' class="maskExceptMenu">
         <div class="tarSiteContainer">
             <div @click.stop @mouseenter="overOneSite(index,item)" @mouseleave="overIndex = -1" :class="['tarSiteItem',item.ready?'':'notReady']"
-                v-for="(item,index) in sites">
+            :key="item.id"  v-for="(item,index) in sites">
                 <div class="tarSiteIcon">
                     <img :src="'./static/sites/'+item.id+'/logo.png'" />
                 </div>

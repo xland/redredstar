@@ -17,7 +17,7 @@
     <site v-show="showSites"></site>
     <div v-show="showRecentArticle" class="recentArticle" @mouseenter="showRecentArticle = true"
       @mouseleave="showRecentArticle = false">
-      <div @click="$router.push('/article/' + item.id)" v-for="item in recentArticles" class="item">{{item.title}}</div>
+      <div :key="item.id" @click="$router.push('/article/' + item.id)" v-for="item in recentArticles" class="item">{{item.title}}</div>
     </div>
   </div>
 </template>

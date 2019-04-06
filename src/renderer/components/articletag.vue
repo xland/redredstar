@@ -1,6 +1,6 @@
 <template>
     <div class="blankLine">
-        <div class="tag" v-for="(item,index) in tags">
+        <div :key="item.id" class="tag" v-for="(item,index) in tags">
             <div class="tagText">{{item.title}}</div>
             <div @click.stop="removeTag(index)" class="tagClose">
                 <i class="iconfont icon-guanbi" style="font-size: 10px !important;"></i>
@@ -9,7 +9,7 @@
         <div class="tagloader">
             <div v-show="findTagResult.length > 0" class="findTagResult" :style="'left:'+tagInputLeft">
                 <div class="tagTipContainer">
-                    <div @click="addTagFinish(item)" class="tag tagIndex" v-for="(item,index) in findTagResult">
+                    <div @click="addTagFinish(item)" :key="item.id" class="tag tagIndex" v-for="(item,index) in findTagResult">
                         <div class="tagText">{{item.title}}</div>
                     </div>
                 </div>

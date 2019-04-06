@@ -1,6 +1,6 @@
 <template>
     <div class="tagContainer box">
-        <div @click="tagClick(item)" class="tag tagIndex" v-for="(item,index) in tags">
+        <div :key="item.id" @click="tagClick(item)" class="tag tagIndex" v-for="(item,index) in tags">
             <div class="tagText">{{item.title}}</div>
         </div>
         <div class="noDataTip" v-if="tags.length<1" style="font-size: 22px;">

@@ -1,7 +1,7 @@
 <template>
     <div v-if="setting" class="setting view">
         <div class="leftMenu">
-            <div @click="menuSelect(index)" :class="['item',index == menuIndex?'selected':'']"
+            <div @click="menuSelect(index)" :class="['item',index == menuIndex?'selected':'']" :key="index"
                 v-for="(item,index) in menuItems">
                 {{item}}
             </div>
@@ -96,6 +96,7 @@
     </div>
 </template>
 <script>
+    //todo:删除文章或者火花时，不要提示我
     import swal from 'sweetalert';
     var electron = require('electron');
     export default {
@@ -127,13 +128,13 @@
                     }
                 }
             },
-            logout(){
+            logout() {
                 this.$root.jnaToken = null;
                 this.$root.userInfo = null;
                 this.setting.jna_token = null;
                 this.db("settings").update({
-                                "jna_token": null
-                            }).then();
+                    "jna_token": null
+                }).then();
                 this.menuIndex = 0;
             },
             gotoJna(url) {
