@@ -1,17 +1,21 @@
 <template>
-    <div @mouseleave="$parent.hoverIndex = -1" @mouseenter="$parent.hoverIndex = index" @click="flowerClick()" class="item">
-        <div class="content" v-html="item.content?item.content:'[未命名]'">
+    <div @click="flowerClick()" class="item">
+        <div v-show="$parent.editingIndex != index" @click="editClick(index)" class="content"
+            v-html="item.content?item.content.replace(/\n/g,'<br/>'):'[未命名]'">
         </div>
-        <div class="bottomRow">
+        <div v-if="$parent.editingIndex == index">
+            <textarea class="textInput ta" v-model="item.content"></textarea>
+        </div>
+        <div v-if="$parent.editingIndex == index" class="bottomRow">
             <div style="flex: 1;">
                 <div class="rowTag">123</div>
                 <div class="rowTag">标签标签</div>
                 <div class="rowTag">123</div>
             </div>
-            <div class="timeBox" v-show="$parent.hoverIndex != index">
+            <div class="timeBox">
                 {{item.updated_at | getSimpleTime}}
             </div>
-            <div @click.stop="delArticle(index)" class="delBox" v-show="$parent.hoverIndex == index">
+            <div @click.stop="delArticle(index)" class="delBox">
                 <i class="iconfont icon-shanchu"></i>
             </div>
         </div>
@@ -25,13 +29,14 @@
     export default {
         props: ['item', 'index'],
         data() {
-            return {
-
-            }
+            return {}
         },
         methods: {
+            editClick(index) {
+                this.$parent.editingIndex = index
+            },
             flowerClick() {
-                
+
             },
             delArticle() {
                 swal({
@@ -77,9 +82,19 @@
     }
 </script>
 <style scoped lang="scss">
+    .ta {
+        height: 80px;
+        line-height: 26px;
+        font-size: 13px;
+        color: #333;
+        border-radius: 3px;
+        width: calc(100% - 18px);
+        border: 1px solid #d7e3ef;
+    }
+
     .bottomRow {
         display: flex;
-        margin-top: 8px;
+        margin-top: 2px;
         line-height: 22px;
     }
 
@@ -112,6 +127,7 @@
         color: #999;
         font-size: 12px;
         text-align: right;
+        margin-right: 12px;
     }
 
     .delBox {

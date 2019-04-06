@@ -80,7 +80,7 @@
                 searchText: '',
                 showAddBox: false,
                 content: "",
-                hoverIndex: -1,
+                editingIndex: -1,
             }
         },
         methods: {
@@ -229,6 +229,8 @@
         margin-right: 8px;
         overflow-y: hidden;
         overflow-x: hidden;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
     }
 
     .articles:hover {
