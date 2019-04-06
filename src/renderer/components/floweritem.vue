@@ -4,7 +4,8 @@
             v-html="item.content?item.content.replace(/\n/g,'<br/>'):'[未命名]'">
         </div>
         <div v-if="$parent.editingIndex == index">
-            <textarea class="textInput ta" v-model="item.content"></textarea>
+            <textarea @keydown="saveBlur(true)" @blur="saveBlur(false)" class="textInput ta"
+                v-model="item.content"></textarea>
         </div>
         <div v-if="$parent.editingIndex == index" class="bottomRow">
             <div style="flex: 1;">
@@ -34,6 +35,26 @@
         methods: {
             editClick(index) {
                 this.$parent.editingIndex = index
+                this.$nextTick(() => {
+                    document.querySelector("textarea").focus();
+                })
+            },
+            saveBlur(needSave) {
+                if (!needSave) {
+                    this.$parent.editingIndex = -1;
+                    return;
+                }
+                if (event.keyCode == 83 && (event.metaKey || event.ctrlKey)) {
+                    this.db("flowers")
+                        .update({
+                            content: this.item.content
+                        })
+                        .where({
+                            id: this.item.id
+                        }).then(() => {
+                            this.$parent.editingIndex = -1;
+                        });
+                }
             },
             flowerClick() {
 
