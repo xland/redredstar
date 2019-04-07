@@ -35,6 +35,7 @@
             }
         },
         mounted() {
+            //todo 根据refer num 排序
             this.db("tags").orderBy("created_at", "desc").then(rows => {
                 this.$root.tags = rows;
             })

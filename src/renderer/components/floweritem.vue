@@ -108,12 +108,12 @@
             },
             saveBlur(blur) {
                 let ctrlAndS = event.keyCode == 83 && (event.metaKey || event.ctrlKey);
-                if (ctrlAndS || blur) {
+                if (ctrlAndS || blur == true) {
                     this.db("flowers")
                         .update({
                             content: this.item.content,
                             updated_at: new Date()
-                        }).where(id, this.item.id)
+                        }).where("id", this.item.id)
                         .then(() => this.$parent.editingIndex = -1);
                 }
             },
