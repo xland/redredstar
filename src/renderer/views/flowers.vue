@@ -16,7 +16,7 @@
                 </div>
                 <div style="max-width: 386px;overflow-x: auto;padding-top: 4px;">
                     <div :key="item.id" class="tag" v-for="(item,index) in searchTags">
-                        <div class="tagText">{{item.content}}</div>
+                        <div class="tagText">{{item.title}}</div>
                         <div @click.stop="closeTag(index)" class="tagClose">
                             <i class="iconfont icon-guanbi" style="font-size: 14px !important;"></i>
                         </div>

@@ -14,11 +14,13 @@
                 <div class="rowTag">123</div>
                 <div class="rowTag" v-if="$parent.newTagIndex == index"
                     style="box-shadow:inset 0px 0px 0px 1px #007acc !important;">
-                    <input v-model="tagInputText" @keyup.13="addTag()" placeholder="Enter键保存"
+                    <input v-model="tagInputText" 
+                        @blur="$parent.newTagIndex = -1"
+                        @keyup.13="addTag()" placeholder="Enter键保存"
                         class="textInput tagInput" />
                 </div>
                 <div v-if="$parent.newTagIndex != index" @click="showTagInput(index)" class="rowTag"
-                    style="font-size: 16px;">+</div>
+                    style="font-size: 14px;width: 10px;">+</div>
             </div>
             <div class="timeBox">
                 {{item.updated_at | getSimpleTime}}
