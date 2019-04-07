@@ -24,10 +24,10 @@
                 </div>
                 <div :class="searchFocus?'searchContainerFocus':'searchContainer'">
                     <div class="searchInput" style="background: transparent;">
-                        <input autocomplete="off" @keyup="search" v-model="searchText" placeholder="请输入搜索内容"
+                        <input autocomplete="off" @keyup="search(false)" v-model="searchText" placeholder="请输入搜索内容"
                             @focus="searchFocus = true" @blur="searchFocus = false" class="textInput" type="text" />
                     </div>
-                    <div @click="search" class="searchBtn">
+                    <div @click="search(false)" class="searchBtn">
                         <i class="iconfont icon-search"></i>
                     </div>
                 </div>
@@ -76,14 +76,14 @@
                 showAddBox: false,
                 content: "",
                 editingIndex: -1,
-                newTagIndex:-1,
+                newTagIndex: -1,
             }
         },
         methods: {
             saveFlower() {
                 let now = new Date();
                 let flower = {
-                    content: this.content.replace(/\n/g,"<br/>"),
+                    content: this.content.replace(/\n/g, "<br/>"),
                     updated_at: now,
                     created_at: now
                 };
@@ -93,8 +93,7 @@
                 });
 
             },
-            search() {
-                return;
+            search(isGetMore) {
                 if (this.searchText.length > 36) {
                     swal({
                         icon: "error",
@@ -102,10 +101,34 @@
                     });
                     return;
                 }
-                let titleSearchArr = this.searchText.replace(/\s+/gi, '^').split('^');
-                let result = this.allArticles.filter(v => titleSearchArr.some(str => v.title.includes(str)));
-                result = result.filter(v => this.searchTags.every(st => v.tagIds.includes(st.id)));
-                this.articles = result;
+                if (!isGetMore) {
+                    this.flowers = [];
+                }
+                let query = this.db('flowers').limit(16)
+                    .orderBy("updated_at", "desc")
+                    .offset(this.flowers.length);
+                if (this.searchText.trim().length > 0) {
+                    let titleSearchArr = this.searchText.trim().replace(/\s+/gi, '^').split('^');
+                    titleSearchArr.forEach(v => {
+                        query = query.andWhere("content", "like", '%' + v + '%');
+                    });
+                }
+                if (this.searchTags.length > 0) {
+                    let tagIds = this.searchTags.map(v => v.id);
+                    this.db("flower_tag").whereIn("tag_id", tagIds).then(ftRows => {
+                        let flowerIds = ftRows.map(v => v.flower_id);
+                        flowerIds = Array.from(new Set(flowerIds));
+                        query = query.whereIn("id", flowerIds).then(result => {
+                            if (result.length < 1) return;
+                            this.flowers = this.flowers.concat(result);
+                        })
+                    })
+                } else {
+                    query = query.then(result => {
+                        if (result.length < 1) return;
+                        this.flowers = this.flowers.concat(result);
+                    })
+                }
             },
             newFlowerBtnClick() {},
         },

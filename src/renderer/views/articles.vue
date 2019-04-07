@@ -102,7 +102,6 @@
                         this.articles = this.articles.concat(result);
                     })
                 }
-
             },
             newArticleBtnClick() {
                 let now = new Date();
