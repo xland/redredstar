@@ -62,16 +62,7 @@
                             });
                     });
             },
-            getTags() {
-                this.db
-                    .distinct()
-                    .select("tags.*")
-                    .from("tags")
-                    .leftJoin("article_tag", "tags.id", "article_tag.tag_id")
-                    .where("article_tag.article_id", this.$parent.article.id).then(rows => {
-                        this.tags = rows;
-                    })
-            },
+
             tagInputBlur() {
                 var self = this;
                 setTimeout(function () {

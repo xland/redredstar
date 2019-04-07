@@ -1,5 +1,5 @@
 <template>
-    <div @click="flowerClick()" class="item">
+    <div class="item">
         <div v-show="$parent.editingIndex != index" @click="editClick(index)" class="content"
             v-html="item.content?item.content:'[未命名]'">
         </div>
@@ -117,9 +117,6 @@
                         .then(() => this.$parent.editingIndex = -1);
                 }
             },
-            flowerClick() {
-
-            },
             delArticle() {
                 swal({
                     icon: "warning",
@@ -180,7 +177,7 @@
         padding-right: 6px;
         border-radius: 3px;
         font-size: 12px;
-        margin-left: 5px;
+        margin-right: 5px;
     }
 
     .rowTag:hover {

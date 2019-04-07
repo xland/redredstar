@@ -5,7 +5,7 @@ const store = {
   editorType: 'html',
   jnaSync: true,
   jnaToken: null,
-  tags:[],
+  tags: [],
   rwOption: {
     encoding: 'utf8'
   },
@@ -38,15 +38,13 @@ const store = {
   async delNoReferTag(tagId) {
     let count = await this.db("flower_tag").count('id as count').where("tag_id", tagId);
     count = count[0].count;
-    if (count > 0) {
-      return;
-    }
+    if (count > 0) return;
     count = await this.db("article_tag").count('id as count').where("tag_id", tagId);
     count = count[0].count;
-    if (count > 0) {
-      return;
-    }
+    if (count > 0) return;
     this.db("tags").where("id", tagId).del().then();
+    let index = this.tags.findIndex(v => v.id = tagId);
+    this.tags.splice(index, 1);
     this.bus.$emit('removeTag', tagId);
   }
 }
