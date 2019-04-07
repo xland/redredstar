@@ -140,6 +140,7 @@
                     .where("id", this.$parent.article.id)
                     .then();
                 this.tags.push(tag);
+                this.$root.tags.push(tag);
                 this.tagInputText = "";
                 this.findTagResult = [];
                 this.$nextTick(() => {

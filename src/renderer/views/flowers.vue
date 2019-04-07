@@ -93,6 +93,16 @@
                 });
 
             },
+            getFlowerTag(items) {
+                var fids = items.map(v => v.id);
+                this.db("flower_tag").whereIn("flower_id", fids).then(fts => {
+                    fts.forEach(ft => {
+                        let flower = items.find(v => v.id == ft.flower_id);
+                        let tag = this.$root.tags.find(v => v.id == ft.tag_id);
+                        flower.tags.push(tag);
+                    })
+                })
+            },
             search(isGetMore) {
                 if (this.searchText.length > 36) {
                     swal({
@@ -113,21 +123,21 @@
                         query = query.andWhere("content", "like", '%' + v + '%');
                     });
                 }
+                let dataBack = result => {
+                    if (result.length < 1) return;
+                    result.forEach(v => v.tags = []);
+                    this.getFlowerTag(result);
+                    this.flowers = this.flowers.concat(result);
+                };
                 if (this.searchTags.length > 0) {
                     let tagIds = this.searchTags.map(v => v.id);
                     this.db("flower_tag").whereIn("tag_id", tagIds).then(ftRows => {
                         let flowerIds = ftRows.map(v => v.flower_id);
                         flowerIds = Array.from(new Set(flowerIds));
-                        query = query.whereIn("id", flowerIds).then(result => {
-                            if (result.length < 1) return;
-                            this.flowers = this.flowers.concat(result);
-                        })
+                        query = query.whereIn("id", flowerIds).then(dataBack)
                     })
                 } else {
-                    query = query.then(result => {
-                        if (result.length < 1) return;
-                        this.flowers = this.flowers.concat(result);
-                    })
+                    query = query.then(dataBack)
                 }
             },
             newFlowerBtnClick() {},

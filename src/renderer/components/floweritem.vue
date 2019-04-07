@@ -4,20 +4,15 @@
             v-html="item.content?item.content:'[未命名]'">
         </div>
         <div v-if="$parent.editingIndex == index">
-            <textarea @keydown="saveBlur(true)" @blur="saveBlur(false)" class="textInput ta"
-                v-model="item.content"></textarea>
+            <textarea @keydown="saveBlur" @blur="saveBlur(true)" class="textInput ta" v-model="item.content"></textarea>
         </div>
         <div class="bottomRow">
-            <div style="flex: 1;">
-                <div class="rowTag">123</div>
-                <div class="rowTag">标签标签</div>
-                <div class="rowTag">123</div>
+            <div style="flex: 1;display: flex;">
+                <div class="rowTag" :key="iTag.id" v-for="(iTag,index) in item.tags">{{iTag.title}}</div>
                 <div class="rowTag" v-if="$parent.newTagIndex == index"
                     style="box-shadow:inset 0px 0px 0px 1px #007acc !important;">
-                    <input v-model="tagInputText" 
-                        @blur="$parent.newTagIndex = -1"
-                        @keyup.13="addTag()" placeholder="Enter键保存"
-                        class="textInput tagInput" />
+                    <input v-model="tagInputText" @blur="$parent.newTagIndex = -1" @keyup.13="addTag()"
+                        placeholder="Enter键保存" class="textInput tagInput" />
                 </div>
                 <div v-if="$parent.newTagIndex != index" @click="showTagInput(index)" class="rowTag"
                     style="font-size: 14px;width: 10px;">+</div>
@@ -64,9 +59,7 @@
                     this.alert("最多输入6个标签");
                     return;
                 }
-                let hasIt = this.item.tags.some(item => {
-                    return item.title == text;
-                });
+                let hasIt = this.item.tags.some(item => item.title == text);
                 if (hasIt) {
                     this.alert("该文章已经存在该标签");
                     return;
@@ -98,6 +91,7 @@
                     "updated_at": new Date()
                 }).where("id", this.item.id).then();
                 this.item.tags.push(tag);
+                this.$root.tags.push(tag);
                 this.tagInputText = "";
             },
             showTagInput(index) {
@@ -112,21 +106,15 @@
                     document.querySelector("textarea").focus();
                 })
             },
-            saveBlur(needSave) {
-                if (!needSave) {
-                    this.$parent.editingIndex = -1;
-                    return;
-                }
-                if (event.keyCode == 83 && (event.metaKey || event.ctrlKey)) {
+            saveBlur(blur) {
+                let ctrlAndS = event.keyCode == 83 && (event.metaKey || event.ctrlKey);
+                if (ctrlAndS || blur) {
                     this.db("flowers")
                         .update({
-                            content: this.item.content
-                        })
-                        .where({
-                            id: this.item.id
-                        }).then(() => {
-                            this.$parent.editingIndex = -1;
-                        });
+                            content: this.item.content,
+                            updated_at: new Date()
+                        }).where(id, this.item.id)
+                        .then(() => this.$parent.editingIndex = -1);
                 }
             },
             flowerClick() {
@@ -192,6 +180,7 @@
         padding-right: 6px;
         border-radius: 3px;
         font-size: 12px;
+        margin-left: 5px;
     }
 
     .rowTag:hover {
