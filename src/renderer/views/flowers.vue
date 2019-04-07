@@ -32,25 +32,14 @@
                     </div>
                 </div>
                 <div style="flex: 1;"></div>
-                <div @click="showAddBox = true" class="btn">添加思想火花</div>
-                <div v-if="showAddBox" @click='showAddBox = false' class="maskExceptMenu" style="overflow: hidden;">
-                    <div @click.stop class="addBoxInnerDiv">
-                        <textarea v-model="content" placeholder="记录我的思想火花..." class="textInput ta"></textarea>
-                        <div @click="saveFlower" class="btn saveBtn">
-                            提交
-                        </div>
-                    </div>
-                    <div style="position: absolute;right: -30px;bottom: -30px;transform:rotate(45deg);">
-                        <i style="font-size: 220px;color: #dadada;" class="iconfont icon-yanhua"></i>
-                    </div>
-                </div>
+                <div @click="addFlower" class="btn">添加思想火花</div>
             </div>
             <div class="indexListContainer box">
                 <div class="noDataTip" v-if="flowers.length<1">
                     <div>
                         思想火花空空如也...
                     </div>
-                    <div @click="showAddBox = true" class="btn center" style="width: 80px;">
+                    <div @click="addFlower" class="btn center" style="width: 80px;">
                         添加思想火花
                     </div>
                 </div>
@@ -73,25 +62,30 @@
         data() {
             return {
                 flowers: [],
-                showAddBox: false,
                 content: "",
                 editingIndex: -1,
                 newTagIndex: -1,
             }
         },
         methods: {
-            saveFlower() {
+            addFlower() {
                 let now = new Date();
                 let flower = {
-                    content: this.content.replace(/\n/g, "<br/>"),
+                    content: "",
                     updated_at: now,
                     created_at: now
                 };
                 this.db("flowers").insert(flower).then(() => {
-                    this.initData(false);
-                    this.showAddBox = false;
+                    this.search();
+                    this.$nextTick(() => {
+                        this.editingIndex = 0;
+                        this.$nextTick(() => {
+                            setTimeout(function () {
+                                document.querySelector("textarea").focus();
+                            }, 300);
+                        })
+                    })
                 });
-
             },
             getFlowerTag(items) {
                 var fids = items.map(v => v.id);
@@ -139,8 +133,7 @@
                 } else {
                     query = query.then(dataBack)
                 }
-            },
-            newFlowerBtnClick() {},
+            }
         },
     }
 </script>

@@ -1,10 +1,10 @@
 <template>
     <div class="item">
         <div v-show="$parent.editingIndex != index" @click="editClick(index)" class="content"
-            v-html="item.content?item.content:'[未命名]'">
+            v-html="item.content?item.content:'[内容为空]'">
         </div>
         <div v-if="$parent.editingIndex == index">
-            <textarea @keydown="saveBlur" @blur="saveBlur(true)" class="textInput ta" v-model="item.content"></textarea>
+            <textarea placeholder="请输入您的思想火花" @keydown="saveBlur" @blur="saveBlur(true)" class="textInput ta" v-model="item.content"></textarea>
         </div>
         <div class="bottomRow">
             <div style="flex: 1;display: flex;">
