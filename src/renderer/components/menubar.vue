@@ -1,9 +1,9 @@
 <template>
     <div class="container">
-        <div @click="goto('/')" class="item selected">
+        <div @click="goto('/articles')" class="item selected">
             知识
         </div>
-        <div @click="goto('/flower')" class="item">
+        <div @click="goto('/flowers')" class="item">
             火花
         </div>
         <div @click="goto('/setting')" class="item">

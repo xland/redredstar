@@ -12,10 +12,10 @@
     //todo:图片放大缩小需要按比例
     const fs = require('fs');
     const path = require('path');
-    import img from './editor_mixin/img';
-    import md from './editor_mixin/md';
-    import ck from './editor_mixin/ck';
-    import jna from './editor_mixin/jna';
+    import img from './mixins/img';
+    import md from './mixins/md';
+    import ck from './mixins/ck';
+    import jna from './mixins/jna';
     const {
         ipcRenderer,
         remote
