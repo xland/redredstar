@@ -35,7 +35,7 @@
             }
         },
         mounted() {
-            this.db("tags").select("*").then(rows => {
+            this.db("tags").orderBy("created_at", "desc").then(rows => {
                 this.$root.tags = rows;
             })
         }

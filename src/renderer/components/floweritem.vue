@@ -91,7 +91,7 @@
                     "updated_at": new Date()
                 }).where("id", this.item.id).then();
                 this.item.tags.push(tag);
-                this.$root.tags.push(tag);
+                this.$root.tags.unshift(tag);
                 this.tagInputText = "";
             },
             showTagInput(index) {
