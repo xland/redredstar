@@ -1,9 +1,9 @@
 <template>
     <div class="tagContainer box">
-        <div :key="item.id" @click="tagClick(item)" class="tag tagIndex" v-for="(item,index) in tags">
+        <div :key="item.id" @click="tagClick(item)" class="tag tagIndex" v-for="(item,index) in $root.tags">
             <div class="tagText">{{item.title}}</div>
         </div>
-        <div class="noDataTip" v-if="tags.length<1" style="font-size: 22px;">
+        <div class="noDataTip" v-if="$root.tags.length<1" style="font-size: 22px;">
             标签库空空如也...
         </div>
     </div>
@@ -11,9 +11,7 @@
 <script>
     export default {
         data() {
-            return {
-                tags: []
-            }
+            return {}
         },
         methods: {
             tagClick(tag) {
@@ -33,20 +31,14 @@
                     return;
                 }
                 this.$parent.searchTags.push(tag);
+                this.$parent.articles = [];
                 this.$parent.search();
-            },
+            }
         },
         mounted() {
             this.db("tags").select("*").then(rows => {
-                this.tags = rows;
+                this.$root.tags = rows;
             })
-            this.bus.$on('removeTag', tagId => {
-                let index = this.tags.findIndex(v => v.id == tagId);
-                this.tags.splice(index, 1);
-                this.db("tags").where({
-                    id: tagId
-                }).del().then();
-            });
         }
     }
 </script>

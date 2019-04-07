@@ -115,3 +115,19 @@
     flex-direction: column;
     overflow: hidden;
 }
+.rightContainer {
+    float: right;
+    width: 238px;
+    height: 100%;
+    padding-bottom: 8px;
+    margin-right: 8px;
+    display: flex;
+    flex-flow: column;
+}
+.leftContainer {
+    margin-right: 246px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+}

@@ -24,10 +24,10 @@
                 </div>
                 <div :class="searchFocus?'searchContainerFocus':'searchContainer'">
                     <div class="searchInput" style="background: transparent;">
-                        <input autocomplete="off" @keyup="search" v-model="searchText" placeholder="请输入搜索内容"
+                        <input autocomplete="off" @keyup.13="textSearch" v-model="searchText" placeholder="请输入搜索内容"
                             @focus="searchFocus = true" @blur="searchFocus = false" class="textInput" type="text" />
                     </div>
-                    <div @click="search" class="searchBtn">
+                    <div @click="textSearch" class="searchBtn">
                         <i class="iconfont icon-search"></i>
                     </div>
                 </div>
@@ -62,7 +62,6 @@
         data() {
             return {
                 searchFocus: false,
-                allArticles: [],
                 articles: [],
                 searchTags: [],
                 searchText: '',
@@ -74,6 +73,10 @@
                 this.searchTags.splice(index, 1);
                 this.search();
             },
+            textSearch() {
+                this.articles = [];
+                this.search();
+            },
             search() {
                 if (this.searchText.length > 36) {
                     swal({
@@ -82,10 +85,32 @@
                     });
                     return;
                 }
-                let titleSearchArr = this.searchText.replace(/\s+/gi, '^').split('^');
-                let result = this.allArticles.filter(v => titleSearchArr.some(str => v.title.includes(str)));
-                result = result.filter(v => this.searchTags.every(st => v.tagIds.includes(st.id)));
-                this.articles = result;
+                let query = this.db('articles').limit(16)
+                    .orderBy("updated_at", "desc")
+                    .offset(this.articles.length);
+                if (this.searchText.trim().length > 0) {
+                    let titleSearchArr = this.searchText.trim().replace(/\s+/gi, '^').split('^');
+                    titleSearchArr.forEach(v => {
+                        query = query.andWhere("title", "like", '%' + v + '%');
+                    });
+                }
+                if (this.searchTags.length > 0) {
+                    let tagIds = this.searchTags.map(v => v.id);
+                    this.db("article_tag").whereIn("tag_id", tagIds).then(atRows => {
+                        let articleIds = atRows.map(v => v.article_id);
+                        articleIds = Array.from(new Set(articleIds));
+                        query = query.whereIn("id", articleIds).then(result => {
+                            if (result.length < 1) return;
+                            this.articles = this.articles.concat(result);
+                        })
+                    })
+                } else {
+                    query = query.then(result => {
+                        if (result.length < 1) return;
+                        this.articles = this.articles.concat(result);
+                    })
+                }
+
             },
             newArticleBtnClick() {
                 let now = new Date();
@@ -105,41 +130,29 @@
                     this.bus.$emit('articleCount');
                 })
             },
-            initData(needSearch) {
-                this.db("articles").orderBy("updated_at", "desc").then(rows => {
-                    this.allArticles = rows.map(v => {
-                        if (!v.title) {
-                            v.title = "";
-                        }
-                        v.tagIds = [];
-                        return v;
-                    })
-                    if (needSearch) {
-                        this.search();
-                    }
-                    this.articles = this.allArticles;
-                    this.db("article_tag").select("*").then(ats => {
-                        ats.forEach(a_t => {
-                            let article = this.allArticles.find(a => a.id == a_t.article_id);
-                            article.tagIds.push(a_t.tag_id);
-                        })
-                    })
-                });
-            }
-        },
-        mounted: function () {
-            this.initData(false);
-            this.bus.$on('removeTag', tagId => {
+            handleScroll() {
+                var dom = document.querySelector(".articles");
+                if (dom.scrollHeight - dom.scrollTop - dom.offsetHeight < 2) {
+                    this.search();
+                }
+            },
+            removeSearchTag(tagId) {
                 let index = this.searchTags.findIndex(v => v.id == tagId);
                 if (index < 0) {
                     return;
                 }
                 this.searchTags.splice(index, 1);
                 this.search();
-            });
-            this.bus.$on('articleFromWebApp', () => {
-                this.initData(true);
-            })
+            }
+        },
+        beforeDestroy() {
+            document.querySelector(".articles").removeEventListener('scroll', this.handleScroll);
+        },
+        mounted: function () {
+            document.querySelector(".articles").addEventListener('scroll', this.handleScroll);
+            this.search();
+            this.bus.$on('removeTag', tagId => this.removeSearchTag(tagId));
+            this.bus.$on('articleFromWebApp', this.search)
         }
     }
 </script>
@@ -242,24 +255,6 @@
         margin-bottom: 8px;
         display: flex;
         align-items: center;
-    }
-
-    .rightContainer {
-        float: right;
-        width: 238px;
-        height: 100%;
-        padding-bottom: 8px;
-        margin-right: 8px;
-        display: flex;
-        flex-flow: column;
-    }
-
-    .leftContainer {
-        margin-right: 246px;
-        overflow: hidden;
-        height: 100%;
-        display: flex;
-        flex-flow: column;
     }
 
     .tagIndex:hover {

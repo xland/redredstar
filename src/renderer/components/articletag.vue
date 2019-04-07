@@ -9,15 +9,16 @@
         <div class="tagloader">
             <div v-show="findTagResult.length > 0" class="findTagResult" :style="'left:'+tagInputLeft">
                 <div class="tagTipContainer">
-                    <div @click="addTagFinish(item)" :key="item.id" class="tag tagIndex" v-for="(item,index) in findTagResult">
+                    <div @click="addTagFinish(item)" :key="item.id" class="tag tagIndex"
+                        v-for="(item,index) in findTagResult">
                         <div class="tagText">{{item.title}}</div>
                     </div>
                 </div>
                 <div class="arrow-down">
                 </div>
             </div>
-            <input autocomplete="off" @blur="tagInputBlur" @focus="tagInputFocus" v-model="tagInputText" type="text" id="tagInputBox"
-                placeholder="请输入知识的标签，Enter键创建" @keyup="tagInput($event)" class="textInput" />
+            <input autocomplete="off" @blur="tagInputBlur" @focus="tagInputFocus" v-model="tagInputText" type="text"
+                id="tagInputBox" placeholder="请输入知识的标签，Enter键创建" @keyup="tagInput($event)" class="textInput" />
         </div>
     </div>
 </template>
@@ -81,45 +82,48 @@
             tagInputFocus() {
                 this.tagInputLeft = (document.getElementById("tagInputBox").offsetLeft + 8) + 'px';
             },
+            insertTag() {
+                var text = this.tagInputText.trim();
+                if (text.length < 1) {
+                    this.alert("输入的标签为空");
+                    return;
+                }
+                if (text.getByteLength() > 12) {
+                    this.alert("标签太长了");
+                    return;
+                }
+                if (this.tags.length >= 6) {
+                    this.alert("最多输入6个标签");
+                    return;
+                }
+                let hasIt = this.tags.some(item => {
+                    return item.title == text;
+                });
+                if (hasIt) {
+                    this.alert("该文章已经存在该标签");
+                    return;
+                }
+                this.db("tags")
+                    .where("title", text)
+                    .select("*")
+                    .then(rows => {
+                        if (rows.length < 1) {
+                            let tag = {
+                                title: text
+                            };
+                            this.db("tags").insert(tag).then(rows => {
+                                tag.id = rows[0];
+                                this.addTagFinish(tag)
+                            })
+                            this.bus.$emit('tagCount');
+                        } else {
+                            this.addTagFinish(rows[0]);
+                        }
+                    })
+            },
             tagInput(e) {
                 if (e.keyCode == 13) {
-                    var text = this.tagInputText.trim();
-                    if (text.length < 1) {
-                        this.alert("输入的标签为空");
-                        return;
-                    }
-                    if (text.getByteLength() > 12) {
-                        this.alert("标签太长了");
-                        return;
-                    }
-                    if (this.tags.length >= 6) {
-                        this.alert("最多输入6个标签");
-                        return;
-                    }
-                    let hasIt = this.tags.some(item => {
-                        return item.title == text;
-                    });
-                    if (hasIt) {
-                        this.alert("该文章已经存在该标签");
-                        return;
-                    }
-                    this.db("tags")
-                        .where("title", text)
-                        .select("*")
-                        .then(rows => {
-                            if (rows.length < 1) {
-                                let tag = {
-                                    title: text
-                                };
-                                this.db("tags").insert(tag).then(rows => {
-                                    tag.id = rows[0];
-                                    this.addTagFinish(tag)
-                                })
-                                this.bus.$emit('tagCount');
-                            } else {
-                                this.addTagFinish(rows[0]);
-                            }
-                        })
+                    this.insertTag();
                 } else {
                     this.findTag();
                 }

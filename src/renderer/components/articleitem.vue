@@ -1,5 +1,6 @@
 <template>
-    <div @mouseout="$parent.hoverIndex = -1" @mouseover="$parent.hoverIndex = index" @click="articleClick()" class="item">
+    <div @mouseout="$parent.hoverIndex = -1" @mouseover="$parent.hoverIndex = index" @click="articleClick()"
+        class="item">
         <div @click.stop="delArticle(index)" class="delBox" v-show="$parent.hoverIndex == index">
             <i class="iconfont icon-shanchu"></i>
         </div>
@@ -43,18 +44,11 @@
                         .where("article_id", article.id)
                         .select("*").then(at_rows => {
                             at_rows.forEach(v => {
-                                this.db("article_tag")
-                                    .count('id as count')
-                                    .where("tag_id", v.tag_id).then(tc_rows => {
-                                        if (tc_rows[0].count <= 1) {
-                                            this.bus.$emit('removeTag', v.tag_id);
-                                        }
-                                        this.db("article_tag").where({
-                                            id: v.id
-                                        }).del().then();
-                                    })
+                                this.db("article_tag").where("id",v.id).del().then(() => {
+                                    this.$root.delNoReferTag(v.tag_id)
+                                });
                             })
-                        })
+                        });
                     //删文章库
                     this.db("articles").where("id", article.id).del().then();
                     //删文件

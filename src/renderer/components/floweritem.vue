@@ -1,17 +1,24 @@
 <template>
     <div @click="flowerClick()" class="item">
         <div v-show="$parent.editingIndex != index" @click="editClick(index)" class="content"
-            v-html="item.content?item.content.replace(/\n/g,'<br/>'):'[未命名]'">
+            v-html="item.content?item.content:'[未命名]'">
         </div>
         <div v-if="$parent.editingIndex == index">
             <textarea @keydown="saveBlur(true)" @blur="saveBlur(false)" class="textInput ta"
                 v-model="item.content"></textarea>
         </div>
-        <div v-if="$parent.editingIndex == index" class="bottomRow">
+        <div class="bottomRow">
             <div style="flex: 1;">
                 <div class="rowTag">123</div>
                 <div class="rowTag">标签标签</div>
                 <div class="rowTag">123</div>
+                <div class="rowTag" v-if="$parent.newTagIndex == index"
+                    style="box-shadow:inset 0px 0px 0px 1px #007acc !important;">
+                    <input v-model="tagInputText" @keyup.13="addTag()" placeholder="Enter键保存"
+                        class="textInput tagInput" />
+                </div>
+                <div v-if="$parent.newTagIndex != index" @click="showTagInput(index)" class="rowTag"
+                    style="font-size: 16px;">+</div>
             </div>
             <div class="timeBox">
                 {{item.updated_at | getSimpleTime}}
@@ -30,9 +37,73 @@
     export default {
         props: ['item', 'index'],
         data() {
-            return {}
+            return {
+                tagInputText: "",
+            }
         },
         methods: {
+            alert(str) {
+                swal({
+                    icon: "error",
+                    text: str,
+                })
+            },
+            addTag() {
+                var text = this.tagInputText.trim();
+                if (text.length < 1) {
+                    this.alert("输入的标签为空");
+                    return;
+                }
+                if (text.getByteLength() > 12) {
+                    this.alert("标签太长了");
+                    return;
+                }
+                if (this.item.tags.length >= 6) {
+                    this.alert("最多输入6个标签");
+                    return;
+                }
+                let hasIt = this.item.tags.some(item => {
+                    return item.title == text;
+                });
+                if (hasIt) {
+                    this.alert("该文章已经存在该标签");
+                    return;
+                }
+                this.db("tags")
+                    .where("title", text)
+                    .select("*")
+                    .then(rows => {
+                        if (rows.length < 1) {
+                            let tag = {
+                                title: text
+                            };
+                            this.db("tags").insert(tag).then(rows => {
+                                tag.id = rows[0];
+                                this.addTagFinish(tag)
+                            })
+                            this.bus.$emit('tagCount');
+                        } else {
+                            this.addTagFinish(rows[0]);
+                        }
+                    })
+            },
+            addTagFinish(tag) {
+                this.db("flower_tag").insert({
+                    flower_id: this.item.id,
+                    tag_id: tag.id
+                }).then();
+                this.db("flowers").update({
+                    "updated_at": new Date()
+                }).where("id", this.item.id).then();
+                this.item.tags.push(tag);
+                this.tagInputText = "";
+            },
+            showTagInput(index) {
+                this.$parent.newTagIndex = index;
+                this.$nextTick(() => {
+                    document.querySelector(".tagInput").focus();
+                })
+            },
             editClick(index) {
                 this.$parent.editingIndex = index
                 this.$nextTick(() => {
@@ -62,49 +133,40 @@
             delArticle() {
                 swal({
                     icon: "warning",
-                    text: "确实要删除此项知识吗？",
+                    text: "确实要删除此思维火花吗？",
                     buttons: [
                         "取消", "删除"
                     ]
                 }).then((value) => {
                     if (!value) return;
                     //删界面
-                    var article = this.$parent.articles.splice(this.index, 1)[0];
+                    var flower = this.$parent.flowers.splice(this.index, 1)[0];
                     //删标签库
-                    this.db("article_tag")
-                        .where("article_id", article.id)
+                    this.db("flower_tag")
+                        .where("flower_id", flower.id)
                         .select("*").then(at_rows => {
                             at_rows.forEach(v => {
-                                this.db("article_tag")
-                                    .count('id as count')
-                                    .where("tag_id", v.tag_id).then(tc_rows => {
-                                        if (tc_rows[0].count <= 1) {
-                                            this.bus.$emit('removeTag', v.tag_id);
-                                        }
-                                        this.db("article_tag").where({
-                                            id: v.id
-                                        }).del().then();
-                                    })
+                                this.db("flower_tag").where("id", v.id).del().then(() => {
+                                    this.$root.delNoReferTag(v.tag_id)
+                                });
                             })
-                        })
-                    //删文章库
-                    this.db("articles").where("id", article.id).del().then();
-                    //删文件
-                    let basePath = path.join(electron.remote.app.getPath('userData'), "/xxm");
-                    var dir = path.join(basePath, article.id.toString());
-                    var files = fs.readdirSync(dir);
-                    files.forEach(function (file, index) {
-                        fs.unlinkSync(path.join(dir, file));
-                    });
-                    fs.rmdirSync(dir);
+                        });
+                    this.db("flowers").where("id", flower.id).del().then();
                 });
             },
         }
     }
 </script>
 <style scoped lang="scss">
+    .tagInput {
+        padding-left: 2px;
+        padding-right: 2px;
+        width: 66px;
+        font-size: 12px;
+    }
+
     .ta {
-        height: 80px;
+        height: 60px;
         line-height: 26px;
         font-size: 13px;
         color: #333;
@@ -115,7 +177,7 @@
 
     .bottomRow {
         display: flex;
-        margin-top: 2px;
+        margin-top: 6px;
         line-height: 22px;
     }
 
@@ -141,6 +203,7 @@
         line-height: 26px;
         font-size: 13px;
         color: #333;
+        white-space: nowrap;
     }
 
     .timeBox {

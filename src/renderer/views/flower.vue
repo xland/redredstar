@@ -54,9 +54,7 @@
                         添加思想火花
                     </div>
                 </div>
-                <floweritem :key="item.id" :item="item" :index="index" v-for="(item,index) in flowers">
-                    {{item.content}}
-                </floweritem>
+                <floweritem :key="item.id" :item="item" :index="index" v-for="(item,index) in flowers"></floweritem>
             </div>
         </div>
     </div>
@@ -81,6 +79,7 @@
                 showAddBox: false,
                 content: "",
                 editingIndex: -1,
+                newTagIndex:-1,
             }
         },
         methods: {
@@ -276,24 +275,6 @@
         margin-bottom: 8px;
         display: flex;
         align-items: center;
-    }
-
-    .rightContainer {
-        float: right;
-        width: 238px;
-        height: 100%;
-        padding-bottom: 8px;
-        margin-right: 8px;
-        display: flex;
-        flex-flow: column;
-    }
-
-    .leftContainer {
-        margin-right: 246px;
-        overflow: hidden;
-        height: 100%;
-        display: flex;
-        flex-flow: column;
     }
 
     .tagIndex:hover {
