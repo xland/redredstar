@@ -31,7 +31,6 @@
                     return;
                 }
                 this.$parent.searchTags.push(tag);
-                this.$parent.articles = [];
                 this.$parent.search();
             }
         },

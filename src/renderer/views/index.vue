@@ -24,10 +24,10 @@
                 </div>
                 <div :class="searchFocus?'searchContainerFocus':'searchContainer'">
                     <div class="searchInput" style="background: transparent;">
-                        <input autocomplete="off" @keyup.13="textSearch" v-model="searchText" placeholder="请输入搜索内容"
+                        <input autocomplete="off" @keyup.13="search(false)" v-model="searchText" placeholder="请输入搜索内容"
                             @focus="searchFocus = true" @blur="searchFocus = false" class="textInput" type="text" />
                     </div>
-                    <div @click="textSearch" class="searchBtn">
+                    <div @click="search(false)" class="searchBtn">
                         <i class="iconfont icon-search"></i>
                     </div>
                 </div>
@@ -73,17 +73,16 @@
                 this.searchTags.splice(index, 1);
                 this.search();
             },
-            textSearch() {
-                this.articles = [];
-                this.search();
-            },
-            search() {
+            search(isGetMore) {
                 if (this.searchText.length > 36) {
                     swal({
                         icon: "error",
                         text: "您输入的内容太长了",
                     });
                     return;
+                }
+                if(!isGetMore){
+                    this.articles = [];
                 }
                 let query = this.db('articles').limit(16)
                     .orderBy("updated_at", "desc")
@@ -133,7 +132,7 @@
             handleScroll() {
                 var dom = document.querySelector(".articles");
                 if (dom.scrollHeight - dom.scrollTop - dom.offsetHeight < 2) {
-                    this.search();
+                    this.search(true);
                 }
             },
             removeSearchTag(tagId) {
