@@ -60,6 +60,7 @@ const store = {
       title: message.title,
       created_at: new Date(),
       updated_at: new Date(),
+      from_url:message.from_url,
       editor_type: "html",
     };
     this.$root.db("articles").insert(article).then(rows => {
@@ -68,7 +69,20 @@ const store = {
       fs.mkdirSync(aPath);
       fs.writeFileSync(path.join(aPath, "/a.data"), message.content, this.$root.rwOption);
       this.bus.$emit('articleCount');
-      this.bus.$emit('newArticleAdd');
+      this.bus.$emit('newItemAdd');
+    })
+  },
+  flowerFromWebApp(e, message) {
+    let now = new Date();
+    let flower = {
+      content: message.content,
+      from_url:message.from_url,
+      updated_at: now,
+      created_at: now
+    };
+    this.$root.db("flowers").insert(flower).then(rows => {
+      this.bus.$emit('flowerCount');
+      this.bus.$emit('newItemAdd');
     })
   },
   updateVersion(e, message) {
@@ -89,8 +103,9 @@ const store = {
     ipcRenderer.on('articlePublishMsgFromMain', (e, message) => this.articlePublushCb(message))
     ipcRenderer.on('imgUploadMsgFromMain', (e, message) => this.imgUploadCb(message));
     ipcRenderer.on("alertMsgFromMain", (e, message) => swal(message));
-    ipcRenderer.on('articleFromWebApp', (e, message)=>this.articleFromWebApp(e, message));
-    ipcRenderer.on('updateMsgFromMain', (e, message)=>this.updateVersion(e, message));
+    ipcRenderer.on('articleFromWebApp', (e, message) => this.articleFromWebApp(e, message));
+    ipcRenderer.on('flowerFromWebApp', (e, message) => this.flowerFromWebApp(e, message));
+    ipcRenderer.on('updateMsgFromMain', (e, message) => this.updateVersion(e, message));
   }
 }
 export default store

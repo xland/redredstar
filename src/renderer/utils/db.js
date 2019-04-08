@@ -64,8 +64,8 @@ const initializer = {
         }).createTable('flowers', (table) => {
             table.increments('id');
             table.integer('content');
-            table.integer('updated_at').defaultTo(knex.fn.now());
             table.integer('from_url');
+            table.datetime('updated_at').defaultTo(knex.fn.now());
             table.datetime('created_at').defaultTo(knex.fn.now());
         }).createTable('flower_tag', table => {
             table.increments('id');
@@ -106,13 +106,19 @@ const initializer = {
                 table.datetime('visited_at');
             }).then();
         })
-        knex.schema.hasTable('flowers').then(flag => {
+        knex.schema.hasColumn("articles", "from_url").then(flag => {
             if (flag) return;
+            knex.schema.alterTable('articles', table => {
+                table.string('from_url');
+            }).then();
+        })
+        knex.schema.hasTable('flowers').then(flag => {
+            if (flag) return
             knex.schema.createTable('flowers', function (table) {
                 table.increments('id');
                 table.integer('content');
-                table.integer('updated_at').defaultTo(knex.fn.now());
-                table.integer('from_url');
+                table.string('from_url');
+                table.datetime('updated_at').defaultTo(knex.fn.now());
                 table.datetime('created_at').defaultTo(knex.fn.now());
             }).createTable('flower_tag', table => {
                 table.increments('id');

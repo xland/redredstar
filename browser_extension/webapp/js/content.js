@@ -3,6 +3,8 @@ const contentJs = {
     floatDom: null,
     title: null,
     content: null,
+    baseUrl: 'http://localhost:9416',
+    flowerTempFlag: false,
     mouseMove(e) {
         var dom = document.elementFromPoint(e.clientX, e.clientY);
         this.floatDom.style.left = e.pageX + "px";
@@ -29,15 +31,15 @@ const contentJs = {
         document.body.appendChild(dom);
         setTimeout(() => {
             this.dispose();
-        }, 1518);
+        }, 1218);
     },
-    postArticle() {
+    post(url, data) {
         var errMsg = {
             "ok": false,
             "msg": "请检查“想学吗”是否已启动"
         };
         var xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:9416/newArticleFromWebApp", true);
+        xhr.open("POST", url, true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.withCredentials = true;
         xhr.onreadystatechange = () => {
@@ -52,17 +54,24 @@ const contentJs = {
                 this.showReceiveMsg(errMsg)
             }
         }
+        xhr.send(data);
+    },
+    postArticle() {
+        var url = this.baseUrl + "/newArticleFromWebApp";
         var data = JSON.stringify({
             title: this.title,
-            content: this.content
+            content: this.content,
+            from_url: window.location.href
         });
-        xhr.send(data);
-        // chrome.runtime.sendMessage({
-        //     title: this.title,
-        //     content: this.content
-        // }, function (response) {
-        //     alert("保存成功");
-        // });
+        this.post(url, data);
+    },
+    postFlower() {
+        var url = this.baseUrl + "/newFlowerFromWebApp";
+        var data = JSON.stringify({
+            content: window.getSelection().toString(),
+            from_url: window.location.href
+        });
+        this.post(url, data);
     },
     mouseDown(e) {
         if (this.floatDom.innerHTML == "选为知识标题") {
@@ -108,17 +117,38 @@ const contentJs = {
         this.createFloatDom("选为知识标题");
         window.onmousemove = e => this.mouseMove(e);
         window.onmousedown = e => this.mouseDown(e);
+    },
+    startFlower() {
+        var self = this;
+        var selectEndEvent = function (event) {
+            window.removeEventListener("mouseup", selectEndEvent);
+            window.removeEventListener("selectstart",selectStartEvent);
+            self.postFlower();
+        }
+        var selectMouseMove = function (e) {
+            self.floatDom.style.left = e.pageX + "px";
+            self.floatDom.style.top = e.pageY + "px";
+            self.floatDom.style.display = "inline-block";
+        }
+        var selectStartEvent = function () {
+            self.createFloatDom("选为思想火花");
+            window.onmousemove = selectMouseMove;
+            window.addEventListener("mouseup", selectEndEvent);
+        };
+        window.addEventListener("selectstart",selectStartEvent);
     }
 }
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-    console.log(request);
     if (request == "article__xxm") {
         contentJs.startArticle();
     }
-    document.onkeydown = function (e) {
-        var ctrlKey = e.ctrlKey || e.metaKey;
-        if (ctrlKey && e.keyCode == 27) {
-            contentJs.dispose();
-        }
-    };
+    if (request == "flower__xxm") {
+        contentJs.startFlower();
+    }
 });
+document.onkeydown = function (e) {
+    var ctrlKey = e.ctrlKey || e.metaKey;
+    if (ctrlKey && e.keyCode == 27) {
+        contentJs.dispose();
+    }
+};

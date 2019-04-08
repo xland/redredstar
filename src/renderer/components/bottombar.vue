@@ -18,7 +18,7 @@
             </div>
             <div>
                 <i class="iconfont icon-huohua icon"></i>
-                0
+                {{flowerCount}}
             </div>
             <div>
                 <i class="iconfont icon-biaoqian icon"></i>
@@ -56,6 +56,7 @@
         data() {
             return {
                 rotating: false,
+                flowerCount:0,
                 articleCount: 0,
                 tagCount: 0,
                 donates: [{
@@ -74,6 +75,11 @@
                 this.bus.$on('articleCount', () => {
                     this.db("articles").count('id as count').then(rows => {
                         this.articleCount = rows[0].count;
+                    });
+                });
+                this.bus.$on('flowerCount', () => {
+                    this.db("flowers").count('id as count').then(rows => {
+                        this.flowerCount = rows[0].count;
                     });
                 });
                 this.bus.$on('tagCount', () => {
@@ -128,6 +134,7 @@
         mounted() {
             this.hookEvent();
             this.bus.$emit('articleCount');
+            this.bus.$emit('flowerCount');
             this.bus.$emit('tagCount');
         }
     }
