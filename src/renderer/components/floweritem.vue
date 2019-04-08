@@ -1,7 +1,7 @@
 <template>
     <div class="item">
         <div v-show="$parent.editingIndex != index" @click="editClick(index)" class="content"
-            v-html="item.content?item.content:'[内容为空]'">
+            v-html="item.content?item.content.replace('\n','<br>'):'[内容为空]'">
         </div>
         <div v-if="$parent.editingIndex == index">
             <textarea placeholder="请输入您的思想火花" @keydown="saveBlur" @blur="saveBlur(true)" class="textInput ta" v-model="item.content"></textarea>
@@ -190,7 +190,7 @@
         line-height: 26px;
         font-size: 13px;
         color: #333;
-        white-space: nowrap;
+        white-space: space break-all;
     }
 
     .timeBox {

@@ -138,6 +138,11 @@
                     this.tagInputFocus();
                 })
             },
+            getTags() {
+                this.db("article_tag").where("article_id", this.$parent.article.id).then(rows => {
+                    this.tags = this.$root.tags.filter(v => rows.some(r => r.tag_id == v.id));
+                })
+            },
             findTag() {
                 this.findTagResult = [];
                 var text = this.tagInputText.trim();
