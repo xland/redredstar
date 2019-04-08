@@ -1,7 +1,7 @@
 {
   "name": "想学吗",
   "description": "想学吗知识收集工具",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "manifest_version": 2,
   "icons": {
     "16": "img/16.png",
@@ -22,8 +22,5 @@
     "css": ["css/xxm.css"],
     "run_at": "document_start",
     "all_frames": false
-  }],
-  "permissions": [
-    "tabs"
-  ]
+  }]
 }
