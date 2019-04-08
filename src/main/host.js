@@ -18,13 +18,18 @@ const host = {
             response.end(JSON.stringify(msg));
         });
     },
-    start() {
-        http.createServer((request, response) => {
+    start(mw) {
+        this.mainWindow = mw;
+        let server = http.createServer((request, response) => {
             if (request.url == "/newArticleFromWebApp") {
                 this.processPost(request, response)
             }
-        }).listen(9416)
+        });
+        server.on("error", err => this.mainWindow.webContents.send('alertMsgFromMain', {
+            icon: "info",
+            text: "抱歉，文章收集失败，请重启应用后尝试或联系管理员"
+        }));
+        server.listen(9416);
     }
 }
-host.start();
 export default host;

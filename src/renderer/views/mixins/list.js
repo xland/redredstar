@@ -36,6 +36,6 @@ export default {
         document.querySelector(".indexListContainer").addEventListener('scroll', this.handleScroll);
         this.search();
         this.bus.$on('removeTag', tagId => this.removeSearchTag(tagId));
-        this.bus.$on('articleFromWebApp', this.search)
+        this.bus.$on('newArticleAdd', this.search)
     }
 }

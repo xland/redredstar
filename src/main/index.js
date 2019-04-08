@@ -43,8 +43,8 @@ function createWindow() {
   mainWindow.loadURL(winURL);
   mainWindow.on('closed', () => {
     mainWindow = null
-  })
-  host.mainWindow = mainWindow;
+  });
+  host.start(mainWindow);
   setTimeout(() => {
     if (process.env.NODE_ENV === 'production') {
       autoUpdater.checkForUpdates();
@@ -66,10 +66,10 @@ app.on('activate', () => {
 })
 
 ipcMain.on('imgUploadMain', (event, message) => {
-  mainWindow.webContents.send('imgUploadRenderer', message);
+  mainWindow.webContents.send('imgUploadMsgFromMain', message);
 });
 ipcMain.on('articlePublishMain', (event, message) => {
-  mainWindow.webContents.send('articlePublishRenderer', message);
+  mainWindow.webContents.send('articlePublishMsgFromMain', message);
 });
 
 ipcMain.on('updateMain', (event, message) => {
@@ -77,5 +77,5 @@ ipcMain.on('updateMain', (event, message) => {
 })
 
 autoUpdater.on('update-downloaded', () => {
-  mainWindow.webContents.send('updateRenderer');
+  mainWindow.webContents.send('updateMsgFromMain');
 })
