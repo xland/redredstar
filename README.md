@@ -34,7 +34,7 @@
 
 ## 界面截图
 
-> <img width="680" src="/doc/imgs/mac_index.jpg" >
+> <img width="680" src="http://www.xiangxuema.com/doc/search.gif" >
 > <img width="680" src="/doc/imgs/editor.jpg" >
 > <img width="680" src="/doc/imgs/sites.jpg" >
 > <img width="680" src="/doc/imgs/md.jpg" >
