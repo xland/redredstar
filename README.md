@@ -34,14 +34,10 @@
 
 ## 界面截图
 
-<div style="display:flex">
-    <div style="flex:1;">
-        知识的检索
-    <div>
-    <div>
-        <img width="680" src="http://www.xiangxuema.com/doc/search.gif" />
-    </div>
-</div>
+<p align="center">
+知识的检索
+<img width="680" src="http://www.xiangxuema.com/doc/search.gif" />
+</p>
 
 > <img width="680" src="/doc/imgs/editor.jpg" >
 > <img width="680" src="/doc/imgs/sites.jpg" >
