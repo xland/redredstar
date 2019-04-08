@@ -35,7 +35,7 @@
 ## 界面截图
 
 <p align="center">
-知识的检索
+知识的检索<br />
 <img width="680" src="http://www.xiangxuema.com/doc/search.gif" />
 </p>
 
