@@ -86,11 +86,11 @@ const contentJs = {
         window.onmousemove = null;
         window.onmousedown = null;
         var borderDom = document.querySelector(".ex__xxm__border");
-        if(borderDom){
+        if (borderDom) {
             borderDom.classList.remove('ex__xxm__border');
         }
         var titleDom = document.querySelector(".ex__xxm__title");
-        if(titleDom){
+        if (titleDom) {
             titleDom.classList.remove('ex__xxm__title')
         }
         var msgDom = document.querySelector(".ex__xxm__msg__div");
@@ -104,20 +104,21 @@ const contentJs = {
             })
         }
     },
-    keyDown(e) {
-        var ctrlKey = e.ctrlKey || e.metaKey;
-        if (ctrlKey && e.altKey && e.keyCode == 88) {
-            this.createFloatDom("选为知识标题");
-            window.onmousemove = e => this.mouseMove(e);
-            window.onmousedown = e => this.mouseDown(e);
-        };
-        if (ctrlKey && e.keyCode == 27) {
-            this.dispose();
-        }
+    startArticle() {
+        this.createFloatDom("选为知识标题");
+        window.onmousemove = e => this.mouseMove(e);
+        window.onmousedown = e => this.mouseDown(e);
     }
 }
-document.addEventListener('DOMContentLoaded', function () {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    console.log(request);
+    if (request == "article__xxm") {
+        contentJs.startArticle();
+    }
     document.onkeydown = function (e) {
-        contentJs.keyDown(e);
+        var ctrlKey = e.ctrlKey || e.metaKey;
+        if (ctrlKey && e.keyCode == 27) {
+            contentJs.dispose();
+        }
     };
 });

@@ -74,6 +74,7 @@
                             };
                             this.db("tags").insert(tag).then(rows => {
                                 tag.id = rows[0];
+                                this.$root.tags.unshift(tag);
                                 this.addTagFinish(tag)
                             })
                             this.bus.$emit('tagCount');
@@ -91,7 +92,6 @@
                     "updated_at": new Date()
                 }).where("id", this.item.id).then();
                 this.item.tags.push(tag);
-                this.$root.tags.unshift(tag);
                 this.tagInputText = "";
             },
             showTagInput(index) {
@@ -171,7 +171,6 @@
     .rowTag {
         background: #e7f3ff;
         color: #888;
-        cursor: pointer;
         display: inline-block;
         padding-left: 6px;
         padding-right: 6px;

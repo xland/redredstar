@@ -35,7 +35,7 @@ const store = {
           "就想用单机版", "这就去扫码登陆"
         ]
       }).then((value) => {
-        this.db("settings").update({
+        this.$root.db("settings").update({
           "jna_login_show": true
         }).then();
         if (!value) return;
@@ -44,13 +44,13 @@ const store = {
     }
   },
   async delNoReferTag(tagId) {
-    let count = await this.db("flower_tag").count('id as count').where("tag_id", tagId);
+    let count = await this.$root.db("flower_tag").count('id as count').where("tag_id", tagId);
     count = count[0].count;
     if (count > 0) return;
-    count = await this.db("article_tag").count('id as count').where("tag_id", tagId);
+    count = await this.$root.db("article_tag").count('id as count').where("tag_id", tagId);
     count = count[0].count;
     if (count > 0) return;
-    this.db("tags").where("id", tagId).del().then();
+    this.$root.db("tags").where("id", tagId).del().then();
     let index = this.tags.findIndex(v => v.id = tagId);
     this.tags.splice(index, 1);
     this.bus.$emit('removeTag', tagId);
@@ -62,7 +62,7 @@ const store = {
       updated_at: new Date(),
       editor_type: "html",
     };
-    this.db("articles").insert(article).then(rows => {
+    this.$root.db("articles").insert(article).then(rows => {
       article.id = rows[0];
       let aPath = path.join(remote.app.getPath('userData'), "/xxm/" + article.id);
       fs.mkdirSync(aPath);
@@ -89,8 +89,8 @@ const store = {
     ipcRenderer.on('articlePublishMsgFromMain', (e, message) => this.articlePublushCb(message))
     ipcRenderer.on('imgUploadMsgFromMain', (e, message) => this.imgUploadCb(message));
     ipcRenderer.on("alertMsgFromMain", (e, message) => swal(message));
-    ipcRenderer.on('articleFromWebApp', this.articleFromWebApp);
-    ipcRenderer.on('updateMsgFromMain', this.updateVersion);
+    ipcRenderer.on('articleFromWebApp', (e, message)=>this.articleFromWebApp(e, message));
+    ipcRenderer.on('updateMsgFromMain', (e, message)=>this.updateVersion(e, message));
   }
 }
 export default store
