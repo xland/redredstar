@@ -77,6 +77,7 @@
                 };
                 this.db("flowers").insert(flower).then(() => {
                     this.search();
+                    this.bus.$emit('flowerCount');
                     this.$nextTick(() => {
                         this.editingIndex = 0;
                         this.$nextTick(() => {
