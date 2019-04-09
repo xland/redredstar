@@ -35,8 +35,13 @@
 ## 界面截图
 
 <p align="center">
-知识的检索<br />
+知识检索<br />
 <img width="680" src="http://www.xiangxuema.com/doc/search.gif" />
+</p>
+
+<p align="center">
+知识编辑<br />
+<img width="680" src="http://www.xiangxuema.com/doc/edit.gif" />
 </p>
 
 > <img width="680" src="/doc/imgs/editor.jpg" >
