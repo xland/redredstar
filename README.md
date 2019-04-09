@@ -45,7 +45,7 @@
 </p>
 
 <p align="center">
-插入图片、最近打开的知识与知识发布<br />
+知识编辑插入图片、最近打开的知识与知识发布<br />
 <img width="680" src="http://www.xiangxuema.com/doc/publish.gif" />
 </p>
 
@@ -54,9 +54,15 @@
 <img width="680" src="http://www.xiangxuema.com/doc/flower.gif" />
 </p>
 
-> <img width="680" src="/doc/imgs/editor.jpg" >
-> <img width="680" src="/doc/imgs/sites.jpg" >
-> <img width="680" src="/doc/imgs/md.jpg" >
+<p align="center">
+思想火花的编辑与删除<br />
+<img width="680" src="http://www.xiangxuema.com/doc/extension_article.gif" />
+</p>
+
+<p align="center">
+markdown编辑器<br />
+<img width="680" src="/doc/imgs/md.jpg" >
+</p>
 
 ## 联系方式
 

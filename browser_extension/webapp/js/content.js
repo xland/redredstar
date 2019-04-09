@@ -152,3 +152,4 @@ document.onkeydown = function (e) {
         contentJs.dispose();
     }
 };
+//todo 右键取消；图片下载不是以http://开头，只是以//开头
