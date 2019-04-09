@@ -56,7 +56,7 @@
 
 <p align="center">
 浏览器插件收集知识<br />
-![浏览器插件收集知识](http://www.xiangxuema.com/doc/extension_article.gif)
+<img width="680" src="http://www.xiangxuema.com/doc/extension_article.gif" />
 </p>
 
 <p align="center">
