@@ -55,7 +55,7 @@
 </p>
 
 <p align="center">
-思想火花的编辑与删除<br />
+浏览器插件收集知识<br />
 <img width="680" src="http://www.xiangxuema.com/doc/extension_article.gif" />
 </p>
 
