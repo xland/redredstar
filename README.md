@@ -49,6 +49,11 @@
 <img width="680" src="http://www.xiangxuema.com/doc/publish.gif" />
 </p>
 
+<p align="center">
+思想火花的编辑与删除<br />
+<img width="680" src="http://www.xiangxuema.com/doc/flower.gif" />
+</p>
+
 > <img width="680" src="/doc/imgs/editor.jpg" >
 > <img width="680" src="/doc/imgs/sites.jpg" >
 > <img width="680" src="/doc/imgs/md.jpg" >
