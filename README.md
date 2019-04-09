@@ -44,6 +44,11 @@
 <img width="680" src="http://www.xiangxuema.com/doc/edit.gif" />
 </p>
 
+<p align="center">
+插入图片、最近打开的知识与知识发布<br />
+<img width="680" src="http://www.xiangxuema.com/doc/publish.gif" />
+</p>
+
 > <img width="680" src="/doc/imgs/editor.jpg" >
 > <img width="680" src="/doc/imgs/sites.jpg" >
 > <img width="680" src="/doc/imgs/md.jpg" >
