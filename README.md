@@ -60,6 +60,11 @@
 </p>
 
 <p align="center">
+浏览器插件收集知识<br />
+<img width="680" src="http://www.xiangxuema.com/doc/extension_flower.gif" />
+</p>
+
+<p align="center">
 markdown编辑器<br />
 <img width="680" src="/doc/imgs/md.jpg" >
 </p>
