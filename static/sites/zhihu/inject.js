@@ -3,12 +3,52 @@ const {
     ipcRenderer,
     remote
 } = require('electron');
+const os = require("os").platform();
+
 const base = require('../base');
 
 let imgProcessor = {
     imgs: null,
     doc: null,
     guard: 0,
+    cleanContent(win) {
+        let modifiers = os == "darwin" ? ['meta'] : ['control'];
+        //let keyCode = os == "darwin" ? 'Meta' : 'Control';
+        let keyCode = 'a';
+        win.webContents.sendInputEvent({
+            type: 'keyDown',
+            modifiers,
+            keyCode
+        })
+        win.webContents.sendInputEvent({
+            type: 'char',
+            modifiers,
+            keyCode
+        })
+        win.webContents.sendInputEvent({
+            type: 'keyUp',
+            modifiers,
+            keyCode
+        })
+        // browserWindow.webContents.sendInputEvent({
+        //     type: 'keyDown',
+        //     keyCode
+        // });
+        // browserWindow.webContents.sendInputEvent({
+        //     type: 'keyDown',
+        //     keyCode: 'A',
+        //     modifiers
+        // });
+        // browserWindow.webContents.sendInputEvent({
+        //     type: 'keyUp',
+        //     keyCode: 'A',
+        //     modifiers
+        // });
+        // browserWindow.webContents.sendInputEvent({
+        //     type: 'keyUp',
+        //     keyCode
+        // });
+    },
     uploadImg(dom, file) {
         let fd = new FormData();
         fd.append('picture', file);
@@ -42,27 +82,34 @@ let imgProcessor = {
         });
         var win = remote.BrowserWindow.fromId(this.winId);
         win.focus();
-        setTimeout(()=>{
-            let titleDoc = document.getElementsByClassName("WriteIndex-titleInput")[0].children[0];
-            titleDoc.value = this.title
-        },1600)
+        setTimeout(() => {
+            let ta = document.querySelector(".WriteIndex-titleInput").children[0];
+            ta.value = ""
+            ta.focus();
+            setTimeout(() => {
+                clipboard.writeText(this.title);
+                win.webContents.paste();
+            }, 380);
+        }, 880);
         setTimeout(function () {
-            let editorDoc = document.getElementsByClassName("public-DraftEditor-content")[0];
+            win.focus();
+            let editorDoc = document.querySelector(".public-DraftStyleDefault-block");
             editorDoc.click();
-            var selection = window.getSelection();
-            var range = document.createRange();
-            range.selectNode(editorDoc)
-            selection.removeAllRanges();
-            selection.addRange(range);
             setTimeout(function () {
+                //this.cleanContent(win);
+                const selection = window.getSelection();
+                const range = document.createRange();
+                range.selectNodeContents(editorDoc.parentNode.parentNode.parentNode);
+                selection.removeAllRanges();
+                selection.addRange(range);
                 clipboard.writeHTML(this.doc.body.innerHTML);
                 win.webContents.paste();
                 ipcRenderer.send('articlePublishMain', {
                     siteId: 'zhihu',
                     url: window.location.href
                 });
-            }.bind(this), 580)
-        }.bind(this), 580)
+            }.bind(this), 980);
+        }.bind(this), 1600);
     },
     start() {
         this.imgs.forEach(v => {
