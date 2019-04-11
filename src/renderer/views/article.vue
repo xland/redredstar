@@ -48,7 +48,6 @@
       this.showSites = false;
       this.$refs.articleEditor.saveContent(() => {
         this.$refs.articleEditor.destroy();
-        this.getArticle(to.params.id);
         next();
       });
     },

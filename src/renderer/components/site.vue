@@ -91,7 +91,6 @@
                 } else {
                     content = window.editorMd.getHtml();
                 }
-                debugger;
                 let articleMsg = {
                     title: this.$parent.article.title,
                     id: this.$parent.article.id,

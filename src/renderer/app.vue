@@ -2,7 +2,7 @@
   <div id="app">
     <div class="viewAndMenuContainer">
       <menubar></menubar>
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </div>
     <bottombar></bottombar>
   </div>

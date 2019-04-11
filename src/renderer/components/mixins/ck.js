@@ -1,7 +1,6 @@
 export default {
     data() {
-        return {
-        }
+        return {}
     },
     methods: {
         imageUploadCk(obj) {
@@ -28,21 +27,27 @@ export default {
                     self.saveContent();
                 }
             });
-            instans.addCommand('FindAndReplace', {
+            instans.addCommand('findAndReplace', {
                 exec: function (editor, data) {
-                    CKEDITOR.tools.callFunction(105,editor);
+                    CKEDITOR.tools.callFunction(105, editor);
                 }
             });
+            // instans.addCommand('cancleCmdZ', {
+            //     exec: function (editor, data) {
+            //         return false;
+            //     }
+            // });
+            // instans.keystrokeHandler.keystrokes[CKEDITOR.CTRL + 90] = 'cancleCmdZ';
             instans.keystrokeHandler.keystrokes[CKEDITOR.CTRL + 83] = 'saveContent';
-            instans.keystrokeHandler.keystrokes[CKEDITOR.CTRL + 70] = 'FindAndReplace';
+            instans.keystrokeHandler.keystrokes[CKEDITOR.CTRL + 70] = 'findAndReplace';
         },
-        hook(){
+        hook() {
             let self = this;
             self.saveKeyEventHook();
-            CKEDITOR.instances.editorCk.on("change",function () {
+            CKEDITOR.instances.editorCk.on("change", function () {
                 self.needSave = true;
             });
-            CKEDITOR.instances.editorCk.on("fileUploadRequest",function (evt) {
+            CKEDITOR.instances.editorCk.on("fileUploadRequest", function (evt) {
                 evt.stop();
                 self.saveImg(evt.data.fileLoader.file);
             });
@@ -50,17 +55,12 @@ export default {
         initEditorCk() {
             this.$root.curArticleMd = false;
             let self = this;
-            let cbObj = {
-                callback: function () {
-                    self.needSave = false;
-                    self.downloadInternetImg();
-                }
-            };
             window.CKEDITOR.replace('editorCk', {
                 on: {
                     instanceReady: function () {
                         self.hook();
-                        window.CKEDITOR.instances.editorCk.setData(self.articleContent, cbObj);
+                        self.needSave = false;
+                        self.downloadInternetImg();
                     },
                 }
             });

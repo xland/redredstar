@@ -4,7 +4,7 @@
             请不要改变img标签的格式（会影响文章发布）
         </div>
         <div v-show="$parent.article.editor_type == 'markdown'" id="editorMd"></div>
-        <div v-show="$parent.article.editor_type == 'html'" id="editorCk"></div>
+        <textarea v-show="$parent.article.editor_type == 'html'" id="editorCk">{{articleContent}}</textarea>
     </div>
 
 </template>
@@ -86,7 +86,9 @@
                 this.articlePath = path.join(remote.app.getPath('userData'), "/xxm/" + this.$parent.article.id);
                 this.articleContent = fs.readFileSync(path.join(this.articlePath, "a.data"), this.$root.rwOption);
                 if (this.$parent.article.editor_type == "html") {
-                    this.initEditorCk();
+                    this.$nextTick(()=>{
+                        this.initEditorCk();
+                    });
                 } else {
                     this.initEditorMd();
                 }
