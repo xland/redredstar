@@ -6,8 +6,8 @@
 
 ## 下载地址
 
-* osx64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.3.3.dmg
-* win64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.3.3.exe
+* osx64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.3.4.dmg
+* win64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.3.4.exe
 * chrome extension: http://xiangxuema.com/chrome_extension/xiangxuema.crx (需手动安装)
 
 
