@@ -6,10 +6,10 @@
 
 ## 下载地址
 
-* osx64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.3.6.dmg
-* win64: http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.3.6.exe
-* chrome插件(无需翻墙，需手动安装): http://xiangxuema.com/chrome_extension/xiangxuema.crx 
-* chrome插件(需翻墙，自动安装):：https://chrome.google.com/webstore/detail/%E6%83%B3%E5%AD%A6%E5%90%97/baccnbdhpfeckhhcfekgeheghodgnnpm?hl=zh-CN
+* osx64: <br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.3.6.dmg
+* win64: <br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.3.6.exe
+* chrome插件(无需翻墙，需手动安装): <br />http://xiangxuema.com/chrome_extension/xiangxuema.crx 
+* chrome插件(需翻墙，自动安装): <br />https://chrome.google.com/webstore/detail/%E6%83%B3%E5%AD%A6%E5%90%97/baccnbdhpfeckhhcfekgeheghodgnnpm?hl=zh-CN
 
 
 ## 功能说明
