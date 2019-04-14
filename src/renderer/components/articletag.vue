@@ -79,10 +79,6 @@
                     this.alert("输入的标签为空");
                     return;
                 }
-                if (text.getByteLength() > 12) {
-                    this.alert("标签太长了");
-                    return;
-                }
                 if (this.tags.length >= 6) {
                     this.alert("最多输入6个标签");
                     return;

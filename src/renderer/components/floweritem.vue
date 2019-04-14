@@ -4,7 +4,8 @@
             v-html="item.content?item.content.replace('\n','<br>'):'[内容为空]'">
         </div>
         <div v-if="$parent.editingIndex == index">
-            <textarea placeholder="请输入您的思想火花" @keydown="saveBlur" @blur="saveBlur(true)" class="textInput ta" v-model="item.content"></textarea>
+            <textarea placeholder="请输入您的思想火花" @keydown="saveBlur" @blur="saveBlur(true)" class="textInput ta"
+                v-model="item.content"></textarea>
         </div>
         <div class="bottomRow">
             <div style="flex: 1;display: flex;">
@@ -49,10 +50,6 @@
                 var text = this.tagInputText.trim();
                 if (text.length < 1) {
                     this.alert("输入的标签为空");
-                    return;
-                }
-                if (text.getByteLength() > 12) {
-                    this.alert("标签太长了");
                     return;
                 }
                 if (this.item.tags.length >= 6) {
@@ -177,6 +174,11 @@
         border-radius: 3px;
         font-size: 12px;
         margin-right: 5px;
+        max-width: 72px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .rowTag:hover {
