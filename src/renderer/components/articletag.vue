@@ -35,12 +35,7 @@
             };
         },
         methods: {
-            alert(str) {
-                swal({
-                    icon: "error",
-                    text: str,
-                })
-            },
+
             removeTag(index) {
                 let item = this.tags.splice(index, 1)[0];
                 this.db("article_tag")
@@ -48,18 +43,7 @@
                     .andWhere("article_id", this.$parent.article.id)
                     .del()
                     .then(() => {
-                        this.db("article_tag")
-                            .count('id as count')
-                            .where("tag_id", item.id)
-                            .then(rows => {
-                                if (rows[0].count < 1) {
-                                    this.db("tags")
-                                        .where({
-                                            id: item.id
-                                        })
-                                        .del().then();
-                                }
-                            });
+                        this.$root.delNoReferTag(item.id);
                     });
             },
 

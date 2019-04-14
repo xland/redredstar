@@ -1,23 +1,14 @@
 <template>
     <div class="item">
         <div v-show="$parent.editingIndex != index" @click="editClick(index)" class="content"
-            v-html="item.content?item.content.replace('\n','<br>'):'[内容为空]'">
+            v-html="item.content?item.content.replace(/\n/gi,'<br />'):'[内容为空]'">
         </div>
         <div v-if="$parent.editingIndex == index">
             <textarea placeholder="请输入您的思想火花" @keydown="saveBlur" @blur="saveBlur(true)" class="textInput ta"
                 v-model="item.content"></textarea>
         </div>
         <div class="bottomRow">
-            <div style="flex: 1;display: flex;">
-                <div class="rowTag" :key="iTag.id" v-for="(iTag,index) in item.tags">{{iTag.title}}</div>
-                <div class="rowTag" v-if="$parent.newTagIndex == index"
-                    style="box-shadow:inset 0px 0px 0px 1px #007acc !important;">
-                    <input v-model="tagInputText" @blur="$parent.newTagIndex = -1" @keyup.13="addTag()"
-                        placeholder="Enter键保存" class="textInput tagInput" />
-                </div>
-                <div v-if="$parent.newTagIndex != index" @click="showTagInput(index)" class="rowTag"
-                    style="font-size: 14px;width: 10px;">+</div>
-            </div>
+            <flowertag :tags="item.tags"></flowertag>
             <div class="timeBox">
                 {{item.updated_at | getSimpleTime}}
             </div>
@@ -32,11 +23,12 @@
     var path = require('path');
     const electron = require('electron');
     import swal from 'sweetalert';
+    import flowertag from "./flowertag";
     export default {
+        components:{flowertag},
         props: ['item', 'index'],
         data() {
             return {
-                tagInputText: "",
             }
         },
         methods: {
@@ -45,51 +37,6 @@
                     icon: "error",
                     text: str,
                 })
-            },
-            addTag() {
-                var text = this.tagInputText.trim();
-                if (text.length < 1) {
-                    this.alert("输入的标签为空");
-                    return;
-                }
-                if (this.item.tags.length >= 6) {
-                    this.alert("最多输入6个标签");
-                    return;
-                }
-                let hasIt = this.item.tags.some(item => item.title == text);
-                if (hasIt) {
-                    this.alert("该文章已经存在该标签");
-                    return;
-                }
-                this.db("tags")
-                    .where("title", text)
-                    .select("*")
-                    .then(rows => {
-                        if (rows.length < 1) {
-                            let tag = {
-                                title: text
-                            };
-                            this.db("tags").insert(tag).then(rows => {
-                                tag.id = rows[0];
-                                this.$root.tags.unshift(tag);
-                                this.addTagFinish(tag)
-                            })
-                            this.bus.$emit('tagCount');
-                        } else {
-                            this.addTagFinish(rows[0]);
-                        }
-                    })
-            },
-            addTagFinish(tag) {
-                this.db("flower_tag").insert({
-                    flower_id: this.item.id,
-                    tag_id: tag.id
-                }).then();
-                this.db("flowers").update({
-                    "updated_at": new Date()
-                }).where("id", this.item.id).then();
-                this.item.tags.push(tag);
-                this.tagInputText = "";
             },
             showTagInput(index) {
                 this.$parent.newTagIndex = index;
@@ -123,9 +70,7 @@
                     ]
                 }).then((value) => {
                     if (!value) return;
-                    //删界面
                     var flower = this.$parent.flowers.splice(this.index, 1)[0];
-                    //删标签库
                     this.db("flower_tag")
                         .where("flower_id", flower.id)
                         .select("*").then(at_rows => {
@@ -142,13 +87,6 @@
     }
 </script>
 <style scoped lang="scss">
-    .tagInput {
-        padding-left: 2px;
-        padding-right: 2px;
-        width: 66px;
-        font-size: 12px;
-    }
-
     .ta {
         height: 60px;
         line-height: 26px;
@@ -163,26 +101,6 @@
         display: flex;
         margin-top: 6px;
         line-height: 22px;
-    }
-
-    .rowTag {
-        background: #e7f3ff;
-        color: #888;
-        display: inline-block;
-        padding-left: 6px;
-        padding-right: 6px;
-        border-radius: 3px;
-        font-size: 12px;
-        margin-right: 5px;
-        max-width: 72px;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-    }
-
-    .rowTag:hover {
-        color: #007acc;
     }
 
     .content {
