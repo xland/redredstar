@@ -97,7 +97,7 @@
         }
     }
 </script>
-<style>
+<style scoped>
     .tagAddBtn {
         font-size: 14px !important;
         width: 10px;

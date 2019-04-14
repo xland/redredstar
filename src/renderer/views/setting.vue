@@ -91,15 +91,19 @@
             <br /> 文章发布到目标平台不夹带任何“尾巴”
         </div>
         <div v-show="menuIndex == 3" class="content">
-            <iframe src="https://jiaonia.com/Xxm/Version"></iframe>
+            <versions></versions>
         </div>
     </div>
 </template>
 <script>
     //todo:删除文章或者火花时，不要提示我
     import swal from 'sweetalert';
+    import versions from '../components/versions';
     var electron = require('electron');
     export default {
+        components:{
+            versions
+        },
         data() {
             return {
                 setting: null,
@@ -191,6 +195,8 @@
         flex: 1;
         color: #666;
         line-height: 32px;
+        height: 100%;
+        overflow-y: auto;
     }
 
     .leftMenu {

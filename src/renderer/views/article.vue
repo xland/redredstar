@@ -14,7 +14,7 @@
     </div>
     <editor ref="articleEditor"></editor>
     <articletag ref="articleTag"></articletag>
-    <site v-show="showSites"></site>
+    <sites v-show="showSites"></sites>
     <div v-show="showRecentArticle" class="recentArticle" @mouseenter="showRecentArticle = true"
       @mouseleave="showRecentArticle = false">
       <div :key="item.id" @click="$router.push('/article/' + item.id)" v-for="item in recentArticles" class="item">{{item.title}}</div>
@@ -23,7 +23,7 @@
 </template>
 <script>
   import articletag from "../components/articletag";
-  import site from "../components/site";
+  import sites from "../components/sites";
   import editor from "../components/editor";
   const fs = require('fs');
   const path = require('path');
@@ -32,7 +32,7 @@
   } = require('electron');
   export default {
     components: {
-      site,
+      sites,
       articletag,
       editor
     },
