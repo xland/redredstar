@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "./dist/electron/main.js",
   "scripts": {
-    "rebuild":"electron-rebuild",
+    "rebuild": "electron-rebuild",
     "build": "node .electron-vue/build.js && electron-builder",
     "build:dir": "node .electron-vue/build.js && electron-builder --dir",
     "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
