@@ -16,9 +16,6 @@
                 </div>
             </div>
         </div>
-        <div style="position: absolute;right: -30px;bottom: -50px;transform:rotate(45deg);">
-            <i style="font-size: 220px;color: #dadada;" class="iconfont icon-huashu"></i>
-        </div>
     </div>
 </template>
 <script>
@@ -138,7 +135,7 @@
     }
 
     .notReady {
-        filter: blur(1px);
+        filter: blur(2px);
         cursor: default;
     }
 

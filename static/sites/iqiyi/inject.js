@@ -13,12 +13,25 @@ let imgProcessor = {
     guard: 0,
     uploadImg(dom, file) {
         let fd = new FormData();
-        fd.append("type", file.type);
-        fd.append("upfile", file);
-        let url = "https://mp.toutiao.com/tools/upload_picture/?type=ueditor&pgc_watermark=1&action=uploadimage&encode=utf-8";
+        fd.append("name", file.name);
+        let extname = path.extname(file.name).substr(1);
+        fd.append("file_type", extname);
+        fd.append("file_size", file.size);
+        fd.append("auth_token", base.getCookieParam(document.cookie, "P00001"));
+        fd.append("business_type", "image");
+        fd.append("share_type", "external");
+        fd.append("share_expire", 0);
+        let userInfo = base.getCookieParam(document.cookie, "P00002")
+        userInfo = decodeURIComponent(userInfo);
+        userInfo = JSON.parse(userInfo);
+        fd.append("uid", userInfo.uid);
+        fd.append("role", "paopao_image");
+        fd.append("bizid", "jy_opendep_prod");
+        fd.append("file", file);
+        let url = "https://upload.iqiyi.com/common_upload";
         base.post(url, fd, (r) => {
             var imgObj = JSON.parse(r);
-            dom.src = imgObj.url;
+            dom.src = imgObj.data.share_url;
             ipcRenderer.send('imgUploadMain', {
                 id: dom.id,
                 siteId: this.siteId,
@@ -28,7 +41,7 @@ let imgProcessor = {
             if (this.guard < 1) {
                 this.end();
             }
-        })
+        }, {}, false)
     },
     end() {
         this.imgs.forEach(v => {
@@ -39,23 +52,13 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        window.onbeforeunload = null;
-        editor.setContent(this.doc.body.innerHTML);
-        var win = remote.BrowserWindow.fromId(this.winId);
-        win.focus();
-        let titleTb = document.querySelector("#title");
-        titleTb.focus();
-        titleTb.value = "";
-        clipboard.writeText(this.title);
-        win.webContents.paste();
+        UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
+        document.querySelector(".editorTitle input").value = this.title;
         base.ajaxInjector(obj => {
-            if (obj && obj.data && obj.data.pgc_id) {
-                let id = obj.data.pgc_id;
-                let indexUrl = document.querySelector(".tui2-menu-item").children[0].href;
-                let firstStr = indexUrl.substr(0, indexUrl.lastIndexOf('/') + 1);
+            if (obj && obj.data && obj.msg && obj.ajax_post_url.includes("save_draft")) {
                 ipcRenderer.send('articlePublishMain', {
                     siteId: this.siteId,
-                    url: firstStr + 'graphic/publish/?pgc_id=' + id
+                    url: 'https://mp.iqiyi.com/publish/content/article?id='+obj.data+'&status=4&source=ap'
                 });
             }
         })
@@ -86,12 +89,12 @@ let imgProcessor = {
 
 var waitForReady = function (cb) {
     setTimeout(function () {
-        if (typeof editor == "undefined") {
+        if (typeof UE == "undefined" || typeof UE.instants == "undefined") {
             waitForReady(cb);
             return;
         }
         cb();
-    }, 280);
+    }, 380);
 }
 var waitForIndex = function (cb) {
     setTimeout(function () {
@@ -105,19 +108,16 @@ var waitForIndex = function (cb) {
 }
 
 ipcRenderer.on('message', (event, article) => {
-    //base.removeBeforUnload();
-    let url = window.location.href;
-    if (article.type == "edit" && url != article.url) {
-        window.location.href = article.url;
-        return;
-    }
-    if (article.type == "new" && !url.includes("publish")) {
-        waitForIndex(btn => {
-            window.location.href = btn.href;
-        })
+    base.removeBeforUnload();
+    if (window.location.href == "https://mp.iqiyi.com/") {
+        if (document.querySelector(".login-btn")) {
+            return;
+        } else {
+            window.location.href = article.url;
+        }
         return;
     }
     waitForReady(() => {
         imgProcessor.init(article);
-    });
+    })
 })

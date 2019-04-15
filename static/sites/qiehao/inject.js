@@ -103,7 +103,7 @@ var waitForReady = function (cb) {
     }, 280);
 }
 ipcRenderer.on('message', (event, article) => {
-    window.onbeforeunload = null;
+    base.removeBeforUnload();
     let url = window.location.href;
     if (url == "https://om.qq.com/userAuth/index") {
         return;
@@ -113,7 +113,6 @@ ipcRenderer.on('message', (event, article) => {
         return;
     }
     waitForReady(() => {
-        window.onbeforeunload = null;
         imgProcessor.init(article);
     })
 })

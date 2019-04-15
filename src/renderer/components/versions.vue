@@ -4,12 +4,26 @@
             <div class="title">
                 <div class="dot"></div>
                 <div class="titleText">
+                    v 6.3.7
+                </div>
+            </div>
+            <div class="content">
+                支持爱奇艺；<br />
+                解决头条号文章发布后窗口无法关闭的BUG；<br />
+                删除wordpress的支持；<br />
+                修复一些小BUG，代码优化，性能优化；<br />
+            </div>
+        </div>
+        <div class="block">
+            <div class="title">
+                <div class="dot"></div>
+                <div class="titleText">
                     v 6.3.6
                 </div>
             </div>
             <div class="content">
                 移除标签字数长度的限制；<br />
-                允许删除火花；<br />
+                允许删除火花的标签；<br />
                 系统版本升级信息本地化；<br />
                 修复一些小BUG，代码优化，性能优化；<br />
             </div>

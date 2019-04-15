@@ -18,7 +18,13 @@ module.exports = {
             this.addEventListener("readystatechange", function () {
                 if (this.readyState === 4) {
                     try {
-                        var obj = JSON.parse(this.responseText);
+                        var obj = null;
+                        if(this.responseType == "json") {
+                            obj = this.response;
+                        } else{
+                            obj = JSON.parse(this.responseText);
+                        }
+                        obj.ajax_post_url = this.responseURL;
                         cb(obj);
                     } catch (error) {
                         cb(null);

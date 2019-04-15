@@ -105,7 +105,7 @@ var waitForIndex = function (cb) {
 }
 
 ipcRenderer.on('message', (event, article) => {
-    //base.removeBeforUnload();
+    base.removeBeforUnload();
     let url = window.location.href;
     if (article.type == "edit" && url != article.url) {
         window.location.href = article.url;
