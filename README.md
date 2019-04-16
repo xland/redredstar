@@ -7,10 +7,10 @@
 ## 下载地址
 
 * osx64: 
-<br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.3.7.dmg
+<br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.3.8.dmg
 
 * win64: 
-<br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.3.7.exe
+<br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.3.8.exe
 
 * chrome插件(无需翻墙，需手动安装): 
 <br />http://xiangxuema.com/chrome_extension/xiangxuema.crx 
