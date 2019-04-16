@@ -35,7 +35,12 @@
             };
         },
         methods: {
-
+            alert(str) {
+                swal({
+                    icon: "error",
+                    text: str,
+                })
+            },
             removeTag(index) {
                 let item = this.tags.splice(index, 1)[0];
                 this.db("article_tag")
@@ -46,7 +51,6 @@
                         this.$root.delNoReferTag(item.id);
                     });
             },
-
             tagInputBlur() {
                 var self = this;
                 setTimeout(function () {

@@ -6,16 +6,29 @@
         <div @click="goto('/flowers')" class="item">
             火花
         </div>
+        <div @click="notReady('/mindmaps')" class="item">
+            脑图
+        </div>
+        <div @click="notReady('/schedules')" class="item">
+            日程
+        </div>
         <div @click="goto('/setting')" class="item">
             设置
         </div>
     </div>
 </template>
 <script>
+    import swal from 'sweetalert';
     export default {
         methods: {
             goto(url) {
                 this.$router.push(url);
+            },
+            notReady(url){
+                swal({
+                    icon: "info",
+                    text: "此功能尚未完成！",
+                })
             }
         }
     }

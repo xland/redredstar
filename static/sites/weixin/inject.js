@@ -105,7 +105,6 @@ let imgProcessor = {
 var waitForReady = function (cb) {
     setTimeout(function () {
         if (!document.getElementById("ueditor_0")) {
-            console.log('wait');
             waitForReady(cb);
             return;
         }

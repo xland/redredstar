@@ -55,9 +55,10 @@ export default [{
         title: '爱奇艺',
         url:'https://mp.iqiyi.com/publish/feed/article'
     }, {
-        ready: false,
+        ready: true,
         id: 'dayuhao',
         title: '大鱼号',
+        url:'https://mp.dayu.com/dashboard/article/write'
     }, {
         ready: false,
         id: 'wangyihao',
