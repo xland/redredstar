@@ -52,7 +52,7 @@ export default [{
     {
         ready: true,
         id: 'iqiyi',
-        title: '爱奇艺',
+        title: '奇艺号',
         url:'https://mp.iqiyi.com/publish/feed/article'
     }, {
         ready: true,
