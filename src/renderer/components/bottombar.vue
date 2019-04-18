@@ -1,7 +1,7 @@
 <template>
     <div class="bottombar">
         <div class="bottombarRight">
-            <div @click="addBug">
+            <div @click="goto('https://github.com/xland/xiangxuema/issues')">
                 <i class="iconfont icon-bug icon"></i> Bug
             </div>
             <div @click="showQrCode('donateQrCode')">
@@ -124,8 +124,8 @@
                     this.qrCodeId = null;
                 });
             },
-            addBug() {
-                electron.remote.shell.openExternal("https://github.com/xland/xiangxuema/issues");
+            goto(url) {
+                electron.remote.shell.openExternal(url);
             },
             getVersion() {
                 return electron.remote.app.getVersion();
