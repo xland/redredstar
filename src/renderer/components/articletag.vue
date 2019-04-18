@@ -75,7 +75,7 @@
                     return item.title == text;
                 });
                 if (hasIt) {
-                    this.alert("该文章已经存在该标签");
+                    this.alert("该知识已经存在该标签");
                     return;
                 }
                 this.db("tags")
