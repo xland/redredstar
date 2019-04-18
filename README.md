@@ -76,7 +76,7 @@
 
 <p align="center">
 markdown编辑器<br />
-<img width="680" src="/doc/imgs/md.jpg" >
+<img width="680" src="http://www.xiangxuema.com/doc/markdown.jpg" />
 </p>
 
 ## 联系方式
