@@ -58,7 +58,7 @@ export default {
             if (this.$parent.article.editor_type == "html") {
                 content = window.CKEDITOR.instances.editorCk.getData();
             } else {
-                content = window.editorMd.getValue();
+                content = window.editorMd.getHtml();
             }
             let parser = new DOMParser();
             let doc = parser.parseFromString(content, "text/html");
