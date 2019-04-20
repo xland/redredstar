@@ -9,22 +9,22 @@ const router = new Router({
             redirect: '/articles'
         },{
             path:'/articles',
-            component: () => import( /* webpackChunkName: "base" */ '../views/articles.vue'),
+            component: () => import( /* webpackChunkName: "article" */ '../views/articles.vue'),
         },{
             path: '/article/:id',
-            component: () => import( /* webpackChunkName: "base" */ '../views/article.vue'),
+            component: () => import( /* webpackChunkName: "article" */ '../views/article.vue'),
         },{
             path:'/minds',
-            component: () => import( /* webpackChunkName: "base" */ '../views/minds.vue'),
+            component: () => import( /* webpackChunkName: "mind" */ '../views/minds.vue'),
         },{
             path: '/mind/:id',
-            component: () => import( /* webpackChunkName: "base" */ '../views/mind.vue'),
+            component: () => import( /* webpackChunkName: "mind" */ '../views/mind.vue'),
         },{
             path: '/flowers',
-            component: () => import( /* webpackChunkName: "base" */ '../views/flowers.vue'),
+            component: () => import( /* webpackChunkName: "flower" */ '../views/flowers.vue'),
         },{
             path: '/setting',
-            component: () => import( /* webpackChunkName: "base" */ '../views/setting.vue'),
+            component: () => import( /* webpackChunkName: "setting" */ '../views/setting.vue'),
         }
     ]
 });
