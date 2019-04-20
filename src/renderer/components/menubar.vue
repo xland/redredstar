@@ -6,7 +6,7 @@
         <div @click="goto('/flowers')" class="item">
             火花
         </div>
-        <div @click="notReady('/mindmaps')" class="item">
+        <div @click="goto('/minds')" class="item">
             脑图
         </div>
         <div @click="notReady('/schedules')" class="item">

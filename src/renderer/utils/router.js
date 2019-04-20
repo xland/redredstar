@@ -14,6 +14,12 @@ const router = new Router({
             path: '/article/:id',
             component: () => import( /* webpackChunkName: "base" */ '../views/article.vue'),
         },{
+            path:'/minds',
+            component: () => import( /* webpackChunkName: "base" */ '../views/minds.vue'),
+        },{
+            path: '/mind/:id',
+            component: () => import( /* webpackChunkName: "base" */ '../views/mind.vue'),
+        },{
             path: '/flowers',
             component: () => import( /* webpackChunkName: "base" */ '../views/flowers.vue'),
         },{

@@ -64,6 +64,16 @@ const initializer = {
             table.increments('id');
             table.integer('tag_id');
             table.integer('flower_id');
+        }).createTable('minds', table => {
+            table.increments('id');
+            table.string('title');
+            table.datetime('created_at').defaultTo(knex.fn.now());
+            table.datetime('updated_at').defaultTo(knex.fn.now());
+            table.datetime('visited_at').defaultTo(knex.fn.now());
+        }).createTable('mind_tag', table => {
+            table.increments('id');
+            table.integer('tag_id');
+            table.integer('mind_id');
         })
     },
     initDefaultData() {
@@ -77,14 +87,6 @@ const initializer = {
         return knex.insert(defaultSetting).into("settings").then();
     },
     extarColumns() {
-        knex.schema.hasColumn("settings", "jna_sync").then(flag => {
-            if (flag) return;
-            knex.schema.alterTable('settings', table => {
-                table.boolean('jna_sync').defaultTo(true);
-                table.string('jna_token');
-                table.boolean('jna_login_show').defaultTo(false);
-            }).then();
-        });
         knex.schema.hasColumn("articles", "visited_at").then(flag => {
             if (flag) return;
             knex.schema.alterTable('articles', table => {
@@ -96,7 +98,7 @@ const initializer = {
             knex.schema.alterTable('articles', table => {
                 table.string('from_url');
             }).then();
-        })
+        });
         knex.schema.hasTable('flowers').then(flag => {
             if (flag) return
             knex.schema.createTable('flowers', function (table) {
@@ -109,6 +111,20 @@ const initializer = {
                 table.increments('id');
                 table.integer('tag_id');
                 table.integer('flower_id');
+            }).then();
+        });
+        knex.schema.hasTable('minds').then(flag => {
+            if (flag) return
+            knex.schema.createTable('minds', table => {
+                table.increments('id');
+                table.string('title');
+                table.datetime('created_at').defaultTo(knex.fn.now());
+                table.datetime('updated_at').defaultTo(knex.fn.now());
+                table.datetime('visited_at').defaultTo(knex.fn.now());
+            }).createTable('mind_tag', table => {
+                table.increments('id');
+                table.integer('tag_id');
+                table.integer('mind_id');
             }).then();
         });
     },
