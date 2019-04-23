@@ -35,7 +35,7 @@
                 <div @click="newArticleBtnClick" class="btn">添加脑图</div>
             </div>
             <div class="indexListContainer box" style="padding-top: 8px;">
-                <div class="noDataTip" v-if="articles.length<1">
+                <div class="noDataTip" v-if="minds.length<1">
                     <div>
                         脑图库空空如也
                     </div>
@@ -43,7 +43,7 @@
                         添加脑图
                     </div>
                 </div>
-                <articleitem :key="item.id" :item="item" :index="index" v-for="(item,index) in articles"></articleitem>
+                <minditem :key="item.id" :item="item" :index="index" v-for="(item,index) in minds"></minditem>
             </div>
         </div>
     </div>
@@ -52,16 +52,16 @@
     const fs = require('fs');
     const path = require('path');
     const electron = require("electron")
-    import articleitem from "../components/articleitem";
+    import minditem from "../components/minditem";
     import list from "./mixins/list";
     export default {
         mixins: [list],
         components: {
-            articleitem,
+            minditem,
         },
         data() {
             return {
-                articles: [],
+                minds: [],
                 hoverIndex: -1,
             }
         },
@@ -75,11 +75,11 @@
                     return;
                 }
                 if (!isGetMore) {
-                    this.articles = [];
+                    this.minds = [];
                 }
                 let query = this.db('minds').limit(16)
                     .orderBy("updated_at", "desc")
-                    .offset(this.articles.length);
+                    .offset(this.minds.length);
                 if (this.searchText.trim().length > 0) {
                     let titleSearchArr = this.searchText.trim().replace(/\s+/gi, '^').split('^');
                     titleSearchArr.forEach(v => {
@@ -93,13 +93,13 @@
                         articleIds = Array.from(new Set(articleIds));
                         query = query.whereIn("id", articleIds).then(result => {
                             if (result.length < 1) return;
-                            this.articles = this.articles.concat(result);
+                            this.minds = this.minds.concat(result);
                         })
                     })
                 } else {
                     query = query.then(result => {
                         if (result.length < 1) return;
-                        this.articles = this.articles.concat(result);
+                        this.minds = this.minds.concat(result);
                     })
                 }
             },
