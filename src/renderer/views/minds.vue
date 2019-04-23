@@ -105,18 +105,31 @@
             },
             newArticleBtnClick() {
                 let now = new Date();
-                let article = {
+                let mind = {
                     title: '',
                     created_at: now,
                     updated_at: now,
                     visited_at: now
                 };
-                this.db("minds").insert(article).then(rows => {
-                    article.id = rows[0];
-                    let aPath = path.join(electron.remote.app.getPath('userData'), "/xxm/m_" + article.id);
+                this.db("minds").insert(mind).then(rows => {
+                    mind.id = rows[0];
+                    let aPath = path.join(electron.remote.app.getPath('userData'), "/xxm/m_" + mind.id);
                     fs.mkdirSync(aPath);
-                    fs.writeFileSync(path.join(aPath, "/m.json"), "", this.$root.rwOption);
-                    this.$router.push('/mind/' + article.id)
+                    let initData = `{
+                        "root": {
+                            "data": {
+                                "id": ${mind.id},
+                                "created": ${now.getTime()},
+                                "text": ""
+                            },
+                            "children": []
+                        }
+                        "template": "default",
+                        "theme": "default",
+                        "version": "1.4.43"
+                    }`;
+                    fs.writeFileSync(path.join(aPath, "/m.json"), initData, this.$root.rwOption);
+                    this.$router.push('/mind/' + mind.id)
                     this.bus.$emit('mindCount');
                 })
             }
