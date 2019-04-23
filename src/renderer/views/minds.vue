@@ -115,20 +115,20 @@
                     mind.id = rows[0];
                     let aPath = path.join(electron.remote.app.getPath('userData'), "/xxm/m_" + mind.id);
                     fs.mkdirSync(aPath);
-                    let initData = `{
+                    let initData = {
                         "root": {
                             "data": {
-                                "id": ${mind.id},
-                                "created": ${now.getTime()},
+                                "id": mind.id,
+                                "created": now.getTime(),
                                 "text": ""
                             },
                             "children": []
-                        }
+                        },
                         "template": "default",
                         "theme": "default",
                         "version": "1.4.43"
-                    }`;
-                    fs.writeFileSync(path.join(aPath, "/m.json"), initData, this.$root.rwOption);
+                    };
+                    fs.writeFileSync(path.join(aPath, "/m.data"), JSON.stringify(initData), this.$root.rwOption);
                     this.$router.push('/mind/' + mind.id)
                     this.bus.$emit('mindCount');
                 })

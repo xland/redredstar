@@ -31,7 +31,8 @@
         data() {
             return {
                 mind: null,
-                recentMinds:[]
+                recentMinds: [],
+                mindPath:null
             }
         },
         beforeRouteUpdate(to, from, next) {
@@ -50,18 +51,17 @@
         },
         methods: {
             getData(id) {
-                this.db("minds").where("id", id).select("*").then(rows => {
-                    this.mind = rows[0];
-                    this.mind.visited_at = new Date();
-                    this.db('minds').where("id", this.mind.id).update(this.mind).then(() => {
-                        this.db("minds").orderBy("visited_at", "desc").limit(8).offset(1).then(
-                            recentRows => {
-                                this.recentMinds = recentRows;
-                            })
-                    });
-                    this.$nextTick(() => {
-                    })
-                })
+                this.mindPath = path.join(remote.app.getPath('userData'), "/xxm/m_" + id);
+                this.mind = JSON.parse(fs.readFileSync(path.join(this.mindPath, "m.data"), this.$root.rwOption));
+                this.db('minds').where("id", id).update({
+                    "visited_at": new Date()
+                }).then(() => {
+                    this.db("minds").orderBy("visited_at", "desc").limit(8).offset(1).then(
+                        recentRows => {
+                            this.recentMinds = recentRows;
+                        })
+                });
+                this.$nextTick(() => {})
             },
         }
     };
