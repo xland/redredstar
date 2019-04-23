@@ -40,11 +40,11 @@
                     //删界面
                     var mind = this.$parent.minds.splice(this.index, 1)[0];
                     //删标签库
-                    this.db("article_tag")
-                        .where("article_id", mind.id)
+                    this.db("mind_tag")
+                        .where("mind_id", mind.id)
                         .select("*").then(at_rows => {
                             at_rows.forEach(v => {
-                                this.db("article_tag").where("id",v.id).del().then(() => {
+                                this.db("mind_tag").where("id",v.id).del().then(() => {
                                     this.$root.delNoReferTag(v.tag_id)
                                 });
                             })
@@ -53,7 +53,7 @@
                     this.db("minds").where("id", mind.id).del().then();
                     //删文件
                     let basePath = path.join(electron.remote.app.getPath('userData'), "/xxm");
-                    var dir = path.join(basePath, mind.id.toString());
+                    var dir = path.join(basePath, "m_"+mind.id.toString());
                     var files = fs.readdirSync(dir);
                     files.forEach(function (file, index) {
                         fs.unlinkSync(path.join(dir, file));

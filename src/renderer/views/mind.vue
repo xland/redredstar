@@ -30,23 +30,39 @@
         },
         data() {
             return {
-                mind: null
+                mind: null,
+                recentMinds:[]
             }
         },
         beforeRouteUpdate(to, from, next) {
-            this.$refs.articleEditor.saveContent(() => {
-                next();
-            });
+            // this.$refs.articleEditor.saveContent(() => {
+            //     next();
+            // });
         },
         beforeRouteLeave(to, from, next) {
-            this.$refs.articleEditor.saveContent(() => {
-                next();
-            });
+            // this.$refs.articleEditor.saveContent(() => {
+            //     next();
+            // });
         },
         mounted() {
+            let id = this.$route.params.id;
+            this.getData(id);
         },
         methods: {
-
+            getData(id) {
+                this.db("minds").where("id", id).select("*").then(rows => {
+                    this.mind = rows[0];
+                    this.mind.visited_at = new Date();
+                    this.db('minds').where("id", this.mind.id).update(this.mind).then(() => {
+                        this.db("minds").orderBy("visited_at", "desc").limit(8).offset(1).then(
+                            recentRows => {
+                                this.recentMinds = recentRows;
+                            })
+                    });
+                    this.$nextTick(() => {
+                    })
+                })
+            },
         }
     };
 </script>
