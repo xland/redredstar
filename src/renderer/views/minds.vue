@@ -120,7 +120,9 @@
                             "data": {
                                 "id": mind.id,
                                 "created": now.getTime(),
-                                "text": ""
+                                "text": "",
+                                "x":0,
+                                "y":0
                             },
                             "children": []
                         },

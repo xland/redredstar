@@ -4,9 +4,8 @@
             xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
             <defs></defs>
             <g>
-                <!-- root -->
-                <g>
-                    <rect width="100" height="30" x="50%" y="50%" fill="#ff0033"></rect>
+                <g :x="mind.root.data.x" :y="mind.root.data.y">
+                    <rect width="100" height="30" fill="#ff0033"></rect>
                     <text>{{mind.root.data.text}}</text>
                 </g>
                 <mindnode :node="item" :key="item.data.id" v-for="item in mind.root.children">
@@ -32,22 +31,32 @@
             return {
                 mind: null,
                 recentMinds: [],
-                mindPath:null
+                mindPath: null
             }
         },
         beforeRouteUpdate(to, from, next) {
+            next();
             // this.$refs.articleEditor.saveContent(() => {
             //     next();
             // });
         },
         beforeRouteLeave(to, from, next) {
+            next();
             // this.$refs.articleEditor.saveContent(() => {
-            //     next();
+            //     
             // });
         },
         mounted() {
             let id = this.$route.params.id;
             this.getData(id);
+            let self = this;
+            this.$nextTick(() => {
+                var dom = document.getElementById("mind");
+                let h = dom.clientHeight / 2;
+                let w = dom.clientWidth / 2;
+                self.mind.root.data.x = w;
+                self.mind.root.data.y = h;
+            })
         },
         methods: {
             getData(id) {
@@ -61,7 +70,6 @@
                             this.recentMinds = recentRows;
                         })
                 });
-                this.$nextTick(() => {})
             },
         }
     };
