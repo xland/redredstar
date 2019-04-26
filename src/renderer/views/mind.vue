@@ -4,7 +4,7 @@
             xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
             <defs></defs>
             <g>
-                <g :x="mind.root.data.x" :y="mind.root.data.y">
+                <g :transform="`translate(${mind.root.data.x},${mind.root.data.y})`">
                     <rect width="100" height="30" fill="#ff0033"></rect>
                     <text>{{mind.root.data.text}}</text>
                 </g>

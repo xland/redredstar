@@ -61,6 +61,10 @@ export default [{
         url:'https://mp.dayu.com/dashboard/article/write'
     }, {
         ready: false,
+        id: 'souhuhao',
+        title: '搜狐号',
+    }, {
+        ready: false,
         id: 'wangyihao',
         title: '网易号',
     }, {
