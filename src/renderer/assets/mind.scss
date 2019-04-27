@@ -5,9 +5,30 @@
 .node rect {
     rx: 3;
     ry: 3;
-    fill: #75a1be;
+
 }
-.node .rectSelected{
-    stroke: #3a505f;
-    stroke-width:2; 
+
+.node text{
+    fill: #000;
+    stroke-width: 0;
+}
+
+.nodeGrade1 rect {
+    fill: #0084ff;
+}
+.nodeGrade1>g>text {
+    fill: #fff;
+}
+
+.nodeGrade2 rect {
+    fill: #e7f3ff;
+}
+
+.nodeGradeElese rect {
+    fill: #e7f3ff;
+}
+
+.nodeSelected>g>rect {
+    stroke: #006288;
+    stroke-width: 1.6;
 }

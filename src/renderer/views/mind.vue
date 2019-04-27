@@ -1,9 +1,10 @@
 <template>
-    <div id="mind" class="view" v-if="mind">
+    <div id="mind" class="view" v-if="node">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1"
             xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
-            <defs></defs>
-            <mindnode :node="mind.root" :isAtRight="true">
+            <defs>
+            </defs>
+            <mindnode :prop-data="node">
             </mindnode>
         </svg>
     </div>
@@ -22,8 +23,7 @@
         },
         data() {
             return {
-                mind: null,
-                selectedNode: null,
+                node: null,
                 recentMinds: [],
                 mindPath: null
             }
@@ -45,85 +45,29 @@
             this.getData(id);
             this.centerRootNode();
             this.newNode();
-            this.resetSelectNode();
         },
         methods: {
-            resetSelectNode(){
-                this.bus.$on('resetSelectNode', (item) => {
-                    if(this.selectedNode){
-                        this.selectedNode.data.isSelected = false;
-                    }
-                    this.selectedNode = item;
-                });
-            },
             newNode() {
                 var self = this;
                 document.onkeydown = function (event) {
-                    if (event.keyCode == 9 && self.selectedNode && self.selectedNode.data.isSelected) {
-                        let newNode = {
-                            data: {
-                                "id": self.selectedNode.data.id + "_" + Math.floor(Math.random() * 1000000),
-                                "created": new Date().getTime(),
-                                "text": "",
-                                "x": 0,
-                                "y": 0,
-                                "isSelected": true
-                            },
-                            children: []
-                        }
-                        self.selectedNode.data.isSelected = false;
-                        self.selectedNode.children.push(newNode);
-                        if (self.selectedNode.data.isRoot) {
-                            self.setRootChild()
-                        } else {
-                            self.setNormalChild();
-                        }
-                        self.selectedNode = newNode;
-                    }
-                }
-            },
-            setNormalChild() {
-                debugger;
-                let count = this.selectedNode.children.length;
-                let startY = 0 - ((count - 1) * 60 + count * 30) / 2 + 15;
-                for (let i = 0; i < count; i++) {
-                    let curNode = this.selectedNode.children[i];
-                    curNode.data.x = 200;
-                    curNode.data.y = startY + i * 60 + i * 30;
-                }
-            },
-            setRootChild() {
-                let count = this.selectedNode.children.length;
-                let midIndex = Math.ceil(count / 2);
-                let startY = 0 - ((midIndex - 1) * 60 + midIndex * 30) / 2 + 15;
-                for (let i = 0; i < midIndex; i++) {
-                    let curNode = this.selectedNode.children[i];
-                    curNode.data.x = 200;
-                    curNode.data.y = startY + i * 60 + i * 30;
-                }
-                let leftCount = count - midIndex;
-                startY = 0 - ((leftCount - 1) * 60 + leftCount * 30) / 2 + 15;
-                for (let i = 0; i < leftCount; i++) {
-                    let curNode = this.selectedNode.children[midIndex + i];
-                    curNode.data.x = -200;
-                    curNode.data.y = startY + i * 60 + i * 30;
+                    if (event.keyCode != 9) return;
+                    self.bus.$emit('addSubNode');
                 }
             },
             centerRootNode() {
-                let self = this;
                 this.$nextTick(() => {
                     var dom = document.getElementById("mind");
                     let y = dom.clientHeight / 2 - 16;
                     let x = dom.clientWidth / 2 - 50;
-                    self.mind.root.data.x = x;
-                    self.mind.root.data.y = y;
+                    this.node.data.x = x;
+                    this.node.data.y = y;
                 })
             },
             getData(id) {
                 this.mindPath = path.join(remote.app.getPath('userData'), "/xxm/m_" + id);
                 let mind = fs.readFileSync(path.join(this.mindPath, "m.data"), this.$root.rwOption);
                 mind = JSON.parse(mind);
-                this.mind = mind;
+                this.node = mind.root;
                 this.db('minds').where("id", id).update({
                     "visited_at": new Date()
                 }).then(() => {
@@ -132,11 +76,6 @@
                             this.recentMinds = recentRows;
                         })
                 });
-            },
-            clearSelect() {
-                let recursive = function (node) {
-
-                }
             }
         }
     };
