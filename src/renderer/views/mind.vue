@@ -50,7 +50,7 @@
             newNode() {
                 var self = this;
                 document.onkeydown = function (event) {
-                    if (event.keyCode == 9) {
+                    if (event.keyCode == 9 && self.selectedNode && self.selectedNode.data.isSelected) {
                         let newNode = {
                             data: {
                                 "id": self.selectedNode.data.id + "_" + Math.floor(Math.random() * 1000000),
@@ -60,10 +60,25 @@
                                 "y": 0,
                                 "isSelected": true
                             },
-                            children:[]
+                            children: []
                         }
                         self.selectedNode.data.isSelected = false;
                         self.selectedNode.children.push(newNode);
+                        let count = self.selectedNode.children.length;
+                        let midIndex = Math.ceil(count / 2);
+                        let startY = 0 - ((midIndex - 1) * 60 + midIndex * 30) / 2 + 15;
+                        for (let i = 0; i < midIndex; i++) {
+                            let curNode = self.selectedNode.children[i];
+                            curNode.data.x = 200;
+                            curNode.data.y = startY + i * 60 + i * 30;
+                        }
+                        let leftCount = count - midIndex;
+                        startY = 0 - ((leftCount - 1) * 60 + leftCount * 30) / 2 + 15;
+                        for (let i = 0; i < leftCount; i++) {
+                            let curNode = self.selectedNode.children[midIndex + i];
+                            curNode.data.x = -200;
+                            curNode.data.y = startY + i * 60 + i * 30;
+                        }
                         self.selectedNode = newNode;
                     }
                 }
