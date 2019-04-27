@@ -118,11 +118,14 @@
                     let initData = {
                         "root": {
                             "data": {
-                                "id": mind.id,
+                                "id": "node_0",
                                 "created": now.getTime(),
                                 "text": "",
                                 "x":0,
-                                "y":0
+                                "y":0,
+                                "isNew":true,
+                                "isSelected":true,
+                                "isRoot":true
                             },
                             "children": []
                         },

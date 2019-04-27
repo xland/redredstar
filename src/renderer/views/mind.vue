@@ -3,15 +3,8 @@
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1"
             xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
             <defs></defs>
-            <g>
-                <g :transform="`translate(${mind.root.data.x},${mind.root.data.y})`">
-                    <rect width="100" height="30" fill="#ff0033"></rect>
-                    <text>{{mind.root.data.text}}</text>
-                </g>
-                <mindnode :node="item" :key="item.data.id" v-for="item in mind.root.children">
-                </mindnode>
-            </g>
-
+            <mindnode :node="mind.root">
+            </mindnode>
         </svg>
     </div>
 </template>
@@ -30,6 +23,7 @@
         data() {
             return {
                 mind: null,
+                selectedNode: null,
                 recentMinds: [],
                 mindPath: null
             }
@@ -49,16 +43,41 @@
         mounted() {
             let id = this.$route.params.id;
             this.getData(id);
-            let self = this;
-            this.$nextTick(() => {
-                var dom = document.getElementById("mind");
-                let h = dom.clientHeight / 2;
-                let w = dom.clientWidth / 2;
-                self.mind.root.data.x = w;
-                self.mind.root.data.y = h;
-            })
+            this.centerRootNode();
+            this.newNode();
         },
         methods: {
+            newNode() {
+                var self = this;
+                document.onkeydown = function (event) {
+                    if (event.keyCode == 9) {
+                        let newNode = {
+                            data: {
+                                "id": self.selectedNode.data.id + "_" + Math.floor(Math.random() * 1000000),
+                                "created": new Date().getTime(),
+                                "text": "",
+                                "x": 0,
+                                "y": 0,
+                                "isSelected": true
+                            },
+                            children:[]
+                        }
+                        self.selectedNode.data.isSelected = false;
+                        self.selectedNode.children.push(newNode);
+                        self.selectedNode = newNode;
+                    }
+                }
+            },
+            centerRootNode() {
+                let self = this;
+                this.$nextTick(() => {
+                    var dom = document.getElementById("mind");
+                    let y = dom.clientHeight / 2 - 16;
+                    let x = dom.clientWidth / 2 - 50;
+                    self.mind.root.data.x = x;
+                    self.mind.root.data.y = y;
+                })
+            },
             getData(id) {
                 this.mindPath = path.join(remote.app.getPath('userData'), "/xxm/m_" + id);
                 this.mind = JSON.parse(fs.readFileSync(path.join(this.mindPath, "m.data"), this.$root.rwOption));
@@ -71,6 +90,11 @@
                         })
                 });
             },
+            clearSelect() {
+                let recursive = function (node) {
+
+                }
+            }
         }
     };
 </script>

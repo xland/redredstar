@@ -1,0 +1,13 @@
+.node {
+    cursor: pointer;
+}
+
+.node rect {
+    rx: 3;
+    ry: 3;
+    fill: #75a1be;
+}
+.node .rectSelected{
+    stroke: #3a505f;
+    stroke-width:2; 
+}
