@@ -1,12 +1,12 @@
 <template>
     <g :id="node.data.id" :class="nodeClass" :transform="`translate(${leftValue},${node.data.y})`">
+        <mindnode :key="item.data.id" :prop-data="item" v-for="item in node.children">
+        </mindnode>
         <g @click="nodeSelect">
             <rect width="100" height="30"></rect>
             <text transform="translate(24,20)">{{node.data.text||'[未命名]'}}</text>
-            <!-- line -->
+            <path v-if="grade > 1" :d='pathValue' style="fill: none;stroke: #0084ff"></path>
         </g>
-        <mindnode :key="item.data.id" :prop-data="item" v-for="item in node.children">
-        </mindnode>
     </g>
 </template>
 <script>
@@ -20,6 +20,7 @@
         data() {
             return {
                 isSelected: false,
+                grade: -1,
                 node: this.propData,
                 nodeClass: ['node']
             }
@@ -35,21 +36,43 @@
                     return 0 - this.node.data.x;
                 }
                 return this.node.data.x;
+            },
+            pathValue() {
+                let distanceY = Math.abs(this.node.data.y);
+                let distanceX = Math.abs(this.node.data.x);
+                if (this.node.data.x > 0 && this.node.data.y > 0) {
+                    let startX = 0;
+                    let endX = 0 - distanceX + 50;
+                    let endY = 0 - distanceY + 15;
+                    return `M${startX} 15Q${endX} 15,${endX} ${endY}`;
+                }
+                if (this.node.data.x > 0 && this.node.data.y <= 0) {
+                    let startX = 0;
+                    let endX = 0 - distanceX + 50;
+                    let endY = distanceY + 15;
+                    return `M${startX} 15Q${endX} 15,${endX} ${endY}`;
+                }
+                if (this.node.data.x <= 0 && this.node.data.y <= 0) {
+                    let startX = 100;
+                    let endX = distanceX + 50;
+                    let endY = distanceY + 15;
+                    return `M${startX} 15Q${endX} 15,${endX} ${endY}`;
+                }
+                if (this.node.data.x <= 0 && this.node.data.y > 0) {
+                    let startX = 100;
+                    let endX = distanceX + 50;
+                    let endY = 0 - distanceY + 15;
+                    return `M${startX} 15Q${endX} 15,${endX} ${endY}`;
+                }
             }
         },
         methods: {
             setClass() {
-                let grade = this.node.data.id.split('_').length;
-                switch (grade) {
-                    case 2:
-                        this.nodeClass.push('nodeGrade1');
-                        break
-                    case 3:
-                        this.nodeClass.push('nodeGrade2');
-                        break;
-                    default:
-                        this.nodeClass.push('nodeGradeElese');
-                        break;
+                this.grade = this.node.data.id.split('_').length - 1;
+                if (this.grade <= 2) {
+                    this.nodeClass.push('nodeGrade' + this.grade);
+                } else {
+                    this.nodeClass.push('nodeGradeElese');
                 }
             },
             cancelSelect() {
@@ -114,7 +137,7 @@
                 if (this.isSelected) {
                     this.nodeClass.pop();
                     this.isSelected = false;
-                }else{
+                } else {
                     this.nodeClass.push("nodeSelected");
                     this.isSelected = true;
                 }
