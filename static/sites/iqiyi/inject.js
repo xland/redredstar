@@ -54,8 +54,8 @@ let imgProcessor = {
         });
         UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
         document.querySelector(".editorTitle input").value = this.title;
-        base.ajaxInjector(obj => {
-            if (obj && obj.data && obj.msg && obj.ajax_post_url.includes("save_draft")) {
+        base.ajaxInjector((obj,url) => {
+            if (obj && obj.data && obj.msg && url.includes("save_draft")) {
                 ipcRenderer.send('articlePublishMain', {
                     siteId: this.siteId,
                     url: 'https://mp.iqiyi.com/publish/content/article?id='+obj.data+'&status=4&source=ap'

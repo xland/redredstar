@@ -60,9 +60,10 @@ export default [{
         title: '大鱼号',
         url:'https://mp.dayu.com/dashboard/article/write'
     }, {
-        ready: false,
+        ready: true,
         id: 'souhuhao',
         title: '搜狐号',
+        url:'https://mp.sohu.com/mpfe/v3/main/news/addarticle?contentStatus=1'
     }, {
         ready: false,
         id: 'wangyihao',

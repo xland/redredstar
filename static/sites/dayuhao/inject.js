@@ -45,8 +45,9 @@ let imgProcessor = {
         });
         UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
         document.querySelector("#title").value = this.title;
-        base.ajaxInjector(obj => {
-            if (obj && obj.data && obj.data._id && obj.ajax_post_url.includes("save-draft")) {
+        base.ajaxInjector((obj,url) => {
+            if (obj && obj.data && obj.data._id && url.includes("save-draft")) {
+                debugger;
                 ipcRenderer.send('articlePublishMain', {
                     siteId: this.siteId,
                     url: 'https://mp.dayu.com/dashboard/article/write?draft_id=' + obj.data._id

@@ -13,7 +13,6 @@ let imgProcessor = {
     guard: 0,
     cleanContent(win) {
         let modifiers = os == "darwin" ? ['meta'] : ['control'];
-        //let keyCode = os == "darwin" ? 'Meta' : 'Control';
         let keyCode = 'a';
         win.webContents.sendInputEvent({
             type: 'keyDown',
@@ -30,24 +29,6 @@ let imgProcessor = {
             modifiers,
             keyCode
         })
-        // browserWindow.webContents.sendInputEvent({
-        //     type: 'keyDown',
-        //     keyCode
-        // });
-        // browserWindow.webContents.sendInputEvent({
-        //     type: 'keyDown',
-        //     keyCode: 'A',
-        //     modifiers
-        // });
-        // browserWindow.webContents.sendInputEvent({
-        //     type: 'keyUp',
-        //     keyCode: 'A',
-        //     modifiers
-        // });
-        // browserWindow.webContents.sendInputEvent({
-        //     type: 'keyUp',
-        //     keyCode
-        // });
     },
     uploadImg(dom, file) {
         let fd = new FormData();

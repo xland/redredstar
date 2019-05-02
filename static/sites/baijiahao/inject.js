@@ -53,6 +53,7 @@ let imgProcessor = {
         titleTb.value = "";
         clipboard.writeText(this.title);
         win.webContents.paste();
+
         base.ajaxInjector(obj => {
             if (obj && obj.ret) {
                 let id = obj.ret.article_id;

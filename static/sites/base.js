@@ -19,13 +19,12 @@ module.exports = {
                 if (this.readyState === 4) {
                     try {
                         var obj = null;
-                        if(this.responseType == "json") {
+                        if (this.responseType == "json") {
                             obj = this.response;
-                        } else{
+                        } else {
                             obj = JSON.parse(this.responseText);
                         }
-                        obj.ajax_post_url = this.responseURL;
-                        cb(obj);
+                        cb(obj,this.responseURL);
                     } catch (error) {
                         cb(null);
                     }
@@ -96,8 +95,10 @@ module.exports = {
         return file;
     },
     removeBeforUnload() {
-        setInterval(() => {
-            window.onbeforeunload = null;
-        }, 560);
+        var wc = remote.getCurrentWebContents();
+        wc.on('will-prevent-unload', event => {
+            var win = remote.BrowserWindow.fromWebContents(wc);
+            win.destroy();
+        })
     }
 }
