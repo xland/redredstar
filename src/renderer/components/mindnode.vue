@@ -1,5 +1,5 @@
 <template>
-    <g :id="node.data.id" :class="nodeClass" :transform="`translate(${leftValue},${node.data.y})`">
+    <g :id="node.data.id" :class="nodeClass" :transform="`translate(${xValue},${yValue})`">
         <mindnode :key="item.data.id" :prop-data="item" v-for="item in node.children">
         </mindnode>
         <g @click="nodeSelect">
@@ -31,39 +31,38 @@
             this.setClass();
         },
         computed: {
-            leftValue() {
-                if (this.node.data.x > 0 && this.$parent.node && this.$parent.node.data.x < 0) {
-                    return 0 - this.node.data.x;
+            xValue() {
+                let x = 200;
+                if (this.$parent.node.data.id == "node_0") {
+                    let index = this.$parent.node.children.findIndex(v => this.node.data.id == v.data.id);
+                    if (index % 2 == 0) return x;
+                    else return 0 - x;
+                } else {
+                    if (this.$parent.xValue > 0) return x;
+                    else return 0 - x;
                 }
-                return this.node.data.x;
             },
+            yValue() {
+                let oneHeight = 30 + 60;
+                let index = this.$parent.node.children.findIndex(v => this.node.data.id == v.data.id);
+                let count = this.$parent.node.children.length;
+                if (this.$parent.node.data.id == "node_0") {
+                    if (index % 2 == 0) count = Math.ceil(count / 2);
+                    else count = Math.floor(count / 2);
+                    index = Math.floor(index / 2);
+                }
+                let totalHeight = (count - 1) * oneHeight;
+                let curHeight = index * oneHeight;
+                let y = curHeight - totalHeight / 2;
+                return y;
+            },
+
             pathValue() {
-                let distanceY = Math.abs(this.node.data.y);
-                let distanceX = Math.abs(this.node.data.x);
-                if (this.node.data.x > 0 && this.node.data.y > 0) {
-                    let startX = 0;
-                    let endX = 0 - distanceX + 50;
-                    let endY = 0 - distanceY + 15;
-                    return `M${startX} 15Q${endX} 15,${endX} ${endY}`;
-                }
-                if (this.node.data.x > 0 && this.node.data.y <= 0) {
-                    let startX = 0;
-                    let endX = 0 - distanceX + 50;
-                    let endY = distanceY + 15;
-                    return `M${startX} 15Q${endX} 15,${endX} ${endY}`;
-                }
-                if (this.node.data.x <= 0 && this.node.data.y <= 0) {
-                    let startX = 100;
-                    let endX = distanceX + 50;
-                    let endY = distanceY + 15;
-                    return `M${startX} 15Q${endX} 15,${endX} ${endY}`;
-                }
-                if (this.node.data.x <= 0 && this.node.data.y > 0) {
-                    let startX = 100;
-                    let endX = distanceX + 50;
-                    let endY = 0 - distanceY + 15;
-                    return `M${startX} 15Q${endX} 15,${endX} ${endY}`;
-                }
+                let endX = 0 - this.xValue + 50;
+                let endY = 0 - this.yValue + 15;
+                let startX = this.xValue > 0 ? 0 : 100;
+                let startY = 15;
+                return `M${startX} ${startY}Q${endX} 15,${endX} ${endY}`;
             }
         },
         methods: {
@@ -84,32 +83,6 @@
                     }
                 });
             },
-            setNormalChild() {
-                let count = this.node.children.length;
-                let startY = 0 - ((count - 1) * 60 + count * 30) / 2 + 15;
-                for (let i = 0; i < count; i++) {
-                    let curNode = this.node.children[i];
-                    curNode.data.x = 200;
-                    curNode.data.y = startY + i * 60 + i * 30;
-                }
-            },
-            setRootChild() {
-                let count = this.node.children.length;
-                let midIndex = Math.ceil(count / 2);
-                let startY = 0 - ((midIndex - 1) * 60 + midIndex * 30) / 2 + 15;
-                for (let i = 0; i < midIndex; i++) {
-                    let curNode = this.node.children[i];
-                    curNode.data.x = 200;
-                    curNode.data.y = startY + i * 60 + i * 30;
-                }
-                let leftCount = count - midIndex;
-                startY = 0 - ((leftCount - 1) * 60 + leftCount * 30) / 2 + 15;
-                for (let i = 0; i < leftCount; i++) {
-                    let curNode = this.node.children[midIndex + i];
-                    curNode.data.x = -200;
-                    curNode.data.y = startY + i * 60 + i * 30;
-                }
-            },
             addSubNode() {
                 let self = this;
                 this.bus.$on('addSubNode', () => {
@@ -125,11 +98,6 @@
                         children: []
                     }
                     self.node.children.push(newNode);
-                    if (self.node.data.id == "node_0") {
-                        self.setRootChild()
-                    } else {
-                        self.setNormalChild();
-                    }
                 });
             },
             nodeSelect() {
