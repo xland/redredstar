@@ -39,7 +39,6 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        window.onbeforeunload = null;
         editor.setContent(this.doc.body.innerHTML);
         var win = remote.BrowserWindow.fromId(this.winId);
         win.focus();

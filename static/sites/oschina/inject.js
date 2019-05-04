@@ -67,7 +67,7 @@ let imgProcessor = {
 }
 
 ipcRenderer.on('message', (event, article) => {
-    window.onbeforeunload = null;
+    base.removeBeforUnload();
     let url = window.location.href;
     let userId = $(".go-inbox").find("a").attr("href");
     let baseUrl = "";

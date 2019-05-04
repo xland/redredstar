@@ -44,7 +44,6 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        window.onbeforeunload = null;
         let iframe = document.getElementById("ueditor_0").contentWindow
         iframe.editor.setContent(this.doc.body.innerHTML);
         var win = remote.BrowserWindow.fromId(this.winId);

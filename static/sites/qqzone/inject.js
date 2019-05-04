@@ -64,7 +64,6 @@ let imgProcessor = {
             })
         });
         setTimeout(()=>{
-            window.onbeforeunload = null;
             UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
             document.getElementById("title").value = this.title;
         },600);
@@ -115,6 +114,7 @@ var waitForReady = function (cb) {
 }
 
 ipcRenderer.on('message', (event, article) => {
+    base.removeBeforUnload();
     let url = window.location.href;
     if(article.type == "new"){
         if (url.startsWith('https://rc.qzone.qq.com/blog/add')) {
@@ -137,7 +137,6 @@ ipcRenderer.on('message', (event, article) => {
     // }
     // if (token && type == "10") {
     //     waitForReady(function () {
-    //         window.onbeforeunload = null;
     //         imgProcessor.init(article);
     //     });
     // }

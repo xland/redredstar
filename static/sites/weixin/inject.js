@@ -64,7 +64,6 @@ let imgProcessor = {
             })
         });
         setTimeout(()=>{
-            window.onbeforeunload = null;
             UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
             document.getElementById("title").value = this.title;
         },600);
@@ -113,6 +112,7 @@ var waitForReady = function (cb) {
 }
 
 ipcRenderer.on('message', (event, article) => {
+    base.removeBeforUnload();
     let url = window.location.href;
     let token = base.getUrlParam(url, "token");
     let type = base.getUrlParam(url, "type");
@@ -131,7 +131,6 @@ ipcRenderer.on('message', (event, article) => {
     }
     if (token && type == "10") {
         waitForReady(function () {
-            window.onbeforeunload = null;
             imgProcessor.init(article);
         });
     }

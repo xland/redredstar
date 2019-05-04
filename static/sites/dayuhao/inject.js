@@ -47,7 +47,6 @@ let imgProcessor = {
         document.querySelector("#title").value = this.title;
         base.ajaxInjector((obj,url) => {
             if (obj && obj.data && obj.data._id && url.includes("save-draft")) {
-                debugger;
                 ipcRenderer.send('articlePublishMain', {
                     siteId: this.siteId,
                     url: 'https://mp.dayu.com/dashboard/article/write?draft_id=' + obj.data._id

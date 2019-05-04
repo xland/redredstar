@@ -66,7 +66,7 @@ let imgProcessor = {
 }
 
 ipcRenderer.on('message', (event, article) => {
-    window.onbeforeunload = null;
+    base.removeBeforUnload();
     if (window.location.href.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
         var url = document.getElementById("TipsPanel_LinkEdit").href
         ipcRenderer.send('articlePublishMain', {

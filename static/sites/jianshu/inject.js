@@ -127,6 +127,7 @@ var waitForSave = function () {
 }
 
 ipcRenderer.on('message', (event, article) => {
+    base.removeBeforUnload();
     var url = window.location.href;
     if (url == 'https://www.jianshu.com/sign_in') {
         return;

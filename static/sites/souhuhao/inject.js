@@ -1,5 +1,3 @@
-const fs = require('fs');
-const path = require('path');
 const {
     clipboard,
     ipcRenderer,
@@ -13,16 +11,11 @@ let imgProcessor = {
     guard: 0,
     uploadImg(dom, file) {
         let fd = new FormData();
-        fd.append("id", "WU_FILE_" + this.guard);
-        fd.append("name", file.name);
-        fd.append("type", file.type);
-        fd.append("lastModifiedDate", new Date());
-        fd.append("size", file.size);
-        fd.append("upfile", file);
-        let url = `https://ns.dayu.com/article/imageUpload?appid=website&fromMaterial=0&wmid=${globalConfig.wmid}&wmname=${encodeURIComponent(globalConfig.weMediaName)}&sign=${globalConfig.nsImageUploadSign}`;
+        fd.append('file', file);
+        var url = 'https://mp.sohu.com/commons/upload/file';
         base.post(url, fd, (r) => {
             var imgObj = JSON.parse(r);
-            dom.src = imgObj.data.imgInfo.url;
+            dom.src = "http:" + imgObj.url;
             ipcRenderer.send('imgUploadMain', {
                 id: dom.id,
                 siteId: this.siteId,
@@ -32,7 +25,7 @@ let imgProcessor = {
             if (this.guard < 1) {
                 this.end();
             }
-        }, {}, false)
+        });
     },
     end() {
         this.imgs.forEach(v => {
@@ -43,15 +36,24 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
-        document.querySelector("#title").value = this.title;
-        base.ajaxInjector(obj => {
-            if (obj && obj.data && obj.data._id && obj.ajax_post_url.includes("save-draft")) {
+        var win = remote.BrowserWindow.fromId(this.winId);
+        win.focus();
+        setTimeout(() => {
+            let ta = document.querySelector(".title>.title");
+            ta.value = ""
+            ta.focus();
+            setTimeout(() => {
+                clipboard.writeText(this.title);
+                win.webContents.paste();
+            }, 380);
+        }, 880);
+        editor.__quill.clipboard.dangerouslyPasteHTML(this.doc.body.innerHTML);
+        base.ajaxInjector((obj, url) => {
+            if (obj && url == 'https://mp.sohu.com/v3/news/draft')
                 ipcRenderer.send('articlePublishMain', {
-                    siteId: this.siteId,
-                    url: 'https://mp.dayu.com/dashboard/article/write?draft_id=' + obj.data._id
+                    siteId: 'souhuhao',
+                    url: 'https://mp.sohu.com/mpfe/v3/main/news/addarticle?contentStatus=2&id=' + obj
                 });
-            }
         })
     },
     start() {
@@ -77,20 +79,24 @@ let imgProcessor = {
         this.start();
     }
 }
-
 var waitForReady = function (cb) {
     setTimeout(function () {
-        if (!document.getElementById("ueditor_0")) {
+        if (!document.querySelector(".ql-editor")) {
             waitForReady(cb);
             return;
         }
         cb();
     }, 380);
 }
-
 ipcRenderer.on('message', (event, article) => {
     base.removeBeforUnload();
-    waitForReady(() => {
+    var url = window.location.href;
+    if (url == "https://mp.sohu.com/mpfe/v3/main/first/page") {
+        window.location.href = article.url;
+        return;
+    }
+    waitForReady(function () {
         imgProcessor.init(article);
     })
+    return;
 })

@@ -43,7 +43,6 @@
                 }
             },
             yValue() {
-                let oneHeight = 30 + 60;
                 let index = this.$parent.node.children.findIndex(v => this.node.data.id == v.data.id);
                 let count = this.$parent.node.children.length;
                 if (this.$parent.node.data.id == "node_0") {
@@ -51,6 +50,17 @@
                     else count = Math.floor(count / 2);
                     index = Math.floor(index / 2);
                 }
+                let oneHeight = 30 + 60;
+                // if (this.$parent.node.children[index - 1]) {
+                //     let preNodeId = this.$parent.node.children[index - 1].data.id;
+                //     let preHeight = document.querySelector("#" + preNodeId).getBBox().height;
+                //     oneHeight += preHeight / 2;
+                // }
+                // if (this.$parent.node.children[index + 1]) {
+                //     let nextNodeId = this.$parent.node.children[index + 1].data.id;
+                //     let nextHeight = document.querySelector("#" + nextNodeId).getBBox().height;
+                //     oneHeight += nextHeight / 2;
+                // }
                 let totalHeight = (count - 1) * oneHeight;
                 let curHeight = index * oneHeight;
                 let y = curHeight - totalHeight / 2;

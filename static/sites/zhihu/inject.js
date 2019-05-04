@@ -117,7 +117,7 @@ let imgProcessor = {
 }
 
 ipcRenderer.on('message', (event, article) => {
-    window.onbeforeunload = null;
+    base.removeBeforUnload();
     var url = window.location.href;
     if (url.startsWith("https://www.zhihu.com/signin")) {
         return;

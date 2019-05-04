@@ -43,7 +43,6 @@ let imgProcessor = {
                 delete v.dataset[ds];
             })
         });
-        window.onbeforeunload = null;
         let iframe = document.getElementById("ueditor_0").contentWindow
         iframe.editor.setContent(this.doc.body.innerHTML);
         var win = remote.BrowserWindow.fromId(this.winId);
@@ -107,7 +106,7 @@ var waitForReady = function (cb) {
 //https://baijiahao.baidu.com/builderinner/api/content/file/upload
 //img up response success","ret":{"app_id":1587171278593857,"bos_url":"http:\/\/pic.rmb.bdstatic.com\
 ipcRenderer.on('message', (event, article) => {
-    window.onbeforeunload = null;
+    base.removeBeforUnload();
     let url = window.location.href;
     if (url.startsWith('https://baijiahao.baidu.com/builder/rc/edit')) {
         if (article.type == "edit" && url != article.url) {
@@ -115,7 +114,6 @@ ipcRenderer.on('message', (event, article) => {
             return;
         }
         waitForReady(() => {
-            window.onbeforeunload = null;
             imgProcessor.init(article);
         })
     }
