@@ -4,9 +4,10 @@
             xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
             <defs>
             </defs>
-            <g :class="['node','nodeGrade1',nodeSelected]" :transform="`translate(${node.data.x},${node.data.y})`">
-                <mindnode :key="item.data.id" :prop-data="item" v-for="item in node.children">
-                </mindnode>
+            <g :id="node.data.id" :class="['node','nodeGrade1',isSelected?'nodeSelected':'']"
+                :transform="`translate(${node.data.x},${node.data.y})`">
+                <node :key="item.data.id" :prop-data="item" v-for="item in node.children">
+                </node>
                 <g @click="nodeSelect">
                     <rect width="100" height="30"></rect>
                     <text transform="translate(24,20)">{{node.data.text||'[未命名]'}}</text>
@@ -19,17 +20,18 @@
     import SVG from "svg.js"
     const fs = require('fs');
     const path = require('path');
-    import mindnode from "../components/mindnode"
+    import node from "../components/minds/node"
+    import common from "../components/minds/common"
     const {
         remote
     } = require('electron');
     export default {
+        mixins: [common],
         components: {
-            mindnode
+            node
         },
         data() {
             return {
-                nodeSelected: '',
                 node: null,
                 recentMinds: [],
                 mindPath: null
@@ -52,42 +54,15 @@
             this.getData(id);
             this.centerRootNode();
             this.newNode();
-            this.cancelSelect();
         },
         methods: {
-            cancelSelect() {
-                let self = this;
-                this.bus.$on('cancelSelect', id => {
-                    if (id != 'node_0' && self.nodeSelected != '') {
-                        self.nodeSelected = '';
-                    }
-                });
-            },
-            nodeSelect() {
-                this.bus.$emit('cancelSelect', 'node_0');
-                if (this.nodeSelected == '') {
-                    this.nodeSelected = 'nodeSelected';
-                } else {
-                    this.nodeSelected = '';
-                }
-
-            },
             newNode() {
                 var self = this;
                 document.onkeydown = function (event) {
                     if (event.keyCode != 9) return;
-                    if (self.nodeSelected != '') {
-                        let newNode = {
-                            data: {
-                                "id": self.node.data.id + "_" + Math.floor(Math.random() * 1000000),
-                                "created": new Date().getTime(),
-                                "text": "",
-                                "x": 0,
-                                "y": 0
-                            },
-                            children: []
-                        }
-                        self.node.children.push(newNode);
+                    if (self.isSelected) {
+                        let x = self.node.children.length % 2 == 0 ? 200 : -200;
+                        self.addSubNode(x);
                         return;
                     }
                     self.bus.$emit('addSubNode');
@@ -115,6 +90,30 @@
                             this.recentMinds = recentRows;
                         })
                 });
+            },
+            reLocation(isRight) {
+                this.switchPath('none');
+                let index = isRight ? 0 : 1;
+                let cur = this.node.children[index];
+                let preHeight = document.getElementById(cur.data.id).getBBox().height;
+                let y = 0
+                cur.data.y = y;
+                cur = this.node.children[index += 2];
+                while (cur) {
+                    let curHeight = document.getElementById(cur.data.id).getBBox().height;
+                    y += curHeight / 2 + 60 + preHeight / 2;
+                    cur.data.y = y;
+                    preHeight = curHeight;
+                    cur = this.node.children[index += 2];
+                }
+                let center = y / 2;
+                index = isRight ? 0 : 1;
+                cur = this.node.children[index];
+                while (cur) {
+                    cur.data.y -= center;
+                    cur = this.node.children[index += 2];
+                }
+                this.switchPath('inherit');
             }
         }
     };
