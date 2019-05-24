@@ -1,12 +1,15 @@
 <template>
-    <div id="mind" class="view" v-if="node">
+    <div @keydown="restore" @mousewheel="wheel" @mousedown="dragStart" @mouseup="dragEnd" @mousemove="draging" id="mind"
+        :class="['view',drag.ing?'drag':'']" v-if="node">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1"
             xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
             <defs>
             </defs>
-            <g :id="node.data.id" :class="['node','nodeGrade1',isSelected?'nodeSelected':'']"
-                :transform="`translate(${node.data.x},${node.data.y})`">
-                <node :key="item.data.id" :prop-data="item" v-for="item in node.children">
+            <g :id="node.data.id" 
+                :class="['node','nodeGrade1',isSelected?'nodeSelected':'']" 
+                transform-origin="center"
+                :transform="`scale(${scale}) translate(${node.data.x},${node.data.y})`">
+                <node @mousedown.stop :key="item.data.id" :prop-data="item" v-for="item in node.children">
                 </node>
                 <g @click="nodeSelect">
                     <rect width="100" height="30"></rect>
@@ -34,7 +37,17 @@
             return {
                 node: null,
                 recentMinds: [],
-                mindPath: null
+                mindPath: null,
+                drag: {
+                    x: 0,
+                    y: 0,
+                    ing: false
+                },
+                scale: 1,
+                center: {
+                    x: 0,
+                    y: 0
+                }
             }
         },
         beforeRouteUpdate(to, from, next) {
@@ -56,6 +69,29 @@
             this.newNode();
         },
         methods: {
+            restore(e){
+                
+            },
+            wheel(e) {
+                if (e.metaKey || e.ctrlKey) {
+                    this.scale += e.deltaY / 100;
+                }
+            },
+            dragStart(e) {
+                this.drag.x = e.x;
+                this.drag.y = e.y;
+                this.drag.ing = true;
+            },
+            dragEnd() {
+                this.drag.ing = false;
+            },
+            draging(e) {
+                if (!this.drag.ing) return;
+                this.node.data.x = this.node.data.x + (e.x - this.drag.x) / this.scale
+                this.node.data.y = this.node.data.y + (e.y - this.drag.y) / this.scale;
+                this.drag.x = e.x;
+                this.drag.y = e.y;
+            },
             newNode() {
                 var self = this;
                 document.onkeydown = function (event) {
@@ -71,10 +107,10 @@
             centerRootNode() {
                 this.$nextTick(() => {
                     var dom = document.getElementById("mind");
-                    let y = dom.clientHeight / 2 - 15;
-                    let x = dom.clientWidth / 2 - 50;
-                    this.node.data.x = x;
-                    this.node.data.y = y;
+                    this.center.y = dom.clientHeight / 2;
+                    this.center.x = dom.clientWidth / 2;
+                    this.node.data.x = this.center.x - 50;
+                    this.node.data.y = this.center.y - 15;
                 })
             },
             getData(id) {
@@ -129,5 +165,9 @@
         display: flex;
         flex-flow: column;
         background: #fff;
+    }
+
+    .drag {
+        cursor: move;
     }
 </style>
