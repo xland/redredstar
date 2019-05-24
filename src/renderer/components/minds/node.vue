@@ -5,7 +5,7 @@
         <g @click="nodeSelect">
             <rect width="100" height="30"></rect>
             <text transform="translate(24,20)">{{node.data.text||'[未命名]'}}</text>
-            <path :class="$parent.node.data.id" :d='pathValue' style="fill: none;stroke: #0084ff"></path>
+            <path marker-start="url(#starter)" :class="$parent.node.data.id" :d='pathValue' style="fill: none;stroke: #0084ff"></path>
         </g>
     </g>
 </template>

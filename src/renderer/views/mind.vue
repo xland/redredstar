@@ -1,13 +1,16 @@
 <template>
-    <div @keydown="restore" @mousewheel="wheel" @mousedown="dragStart" @mouseup="dragEnd" @mousemove="draging" id="mind"
-        :class="['view',drag.ing?'drag':'']" v-if="node">
+    <div tabindex="1" @keydown="restore" @mousewheel="wheel" @mousedown="dragStart" @mouseup="dragEnd"
+        @mousemove="draging" id="mind" :class="['view',drag.ing?'drag':'']" v-if="node">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1"
             xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
             <defs>
+                <marker id="starter" refX="-6" refY="0" 
+                    markerUnits="strokeWidth" markerWidth="5"
+                    markerHeight="5" orient="auto">
+                    <path fill="white" stroke="gray" d="M6,0A6,6,0,1,1,-6,0A6,6,0,1,1,6,0"></path>
+                </marker>
             </defs>
-            <g :id="node.data.id" 
-                :class="['node','nodeGrade1',isSelected?'nodeSelected':'']" 
-                transform-origin="center"
+            <g :id="node.data.id" :class="['node','nodeGrade1',isSelected?'nodeSelected':'']" transform-origin="center"
                 :transform="`scale(${scale}) translate(${node.data.x},${node.data.y})`">
                 <node @mousedown.stop :key="item.data.id" :prop-data="item" v-for="item in node.children">
                 </node>
@@ -43,11 +46,7 @@
                     y: 0,
                     ing: false
                 },
-                scale: 1,
-                center: {
-                    x: 0,
-                    y: 0
-                }
+                scale: 1
             }
         },
         beforeRouteUpdate(to, from, next) {
@@ -69,8 +68,11 @@
             this.newNode();
         },
         methods: {
-            restore(e){
-                
+            restore(e) {
+                if ((e.metaKey || e.ctrlKey) && event.keyCode == 27) {
+                    this.scale = 1;
+                    this.centerRootNode();
+                }
             },
             wheel(e) {
                 if (e.metaKey || e.ctrlKey) {
@@ -107,10 +109,8 @@
             centerRootNode() {
                 this.$nextTick(() => {
                     var dom = document.getElementById("mind");
-                    this.center.y = dom.clientHeight / 2;
-                    this.center.x = dom.clientWidth / 2;
-                    this.node.data.x = this.center.x - 50;
-                    this.node.data.y = this.center.y - 15;
+                    this.node.data.x = dom.clientWidth / 2 - 50;
+                    this.node.data.y = dom.clientHeight / 2 - 15;
                 })
             },
             getData(id) {
@@ -165,6 +165,11 @@
         display: flex;
         flex-flow: column;
         background: #fff;
+    }
+
+    #mind:focus {
+        border: none;
+        outline: none;
     }
 
     .drag {
