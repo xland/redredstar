@@ -2,10 +2,11 @@
     <g :id="node.data.id" :class="classValue" :transform="`translate(${node.data.x},${node.data.y})`">
         <node :key="item.data.id" :prop-data="item" v-for="item in node.children">
         </node>
-        <g @click="nodeSelect">
-            <rect width="100" height="30"></rect>
-            <text transform="translate(24,20)">{{node.data.text||'[未命名]'}}</text>
-            <path marker-start="url(#starter)" :class="$parent.node.data.id" :d='pathValue' style="fill: none;stroke: #0084ff"></path>
+        <g>
+            <rect @click="nodeSelect" width="100" height="30"></rect>
+            <text @click="nodeSelect" transform="translate(24,20)">{{node.data.text||'[未命名]'}}</text>
+            <path :class="$parent.node.data.id" :d='pathValue' style="fill: none;stroke: #0084ff"></path>           
+            <use y="10" x="-10" xlink:href="#plus"></use>
         </g>
     </g>
 </template>

@@ -4,11 +4,13 @@
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1"
             xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
             <defs>
-                <marker id="starter" refX="-6" refY="0" 
-                    markerUnits="strokeWidth" markerWidth="5"
-                    markerHeight="5" orient="auto">
-                    <path fill="white" stroke="gray" d="M6,0A6,6,0,1,1,-6,0A6,6,0,1,1,6,0"></path>
-                </marker>
+                <symbol id="plus">
+                    <circle cx="5" cy="5" r="4" fill="none" stroke="#0084ff"></circle>
+                    <path d="M5,1L5,9" stroke="#0084ff"></path>
+                </symbol>
+                <symbol id="subtract">
+                    <circle cx="5" cy="5" r="4" fill="none" stroke="#0084ff"></circle>
+                </symbol>
             </defs>
             <g :id="node.data.id" :class="['node','nodeGrade1',isSelected?'nodeSelected':'']" transform-origin="center"
                 :transform="`scale(${scale}) translate(${node.data.x},${node.data.y})`">
