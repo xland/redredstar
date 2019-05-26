@@ -6,8 +6,9 @@
             <rect @click="nodeSelect" width="100" height="30"></rect>
             <text @click="nodeSelect" transform="translate(24,20)">{{node.data.text||'[未命名]'}}</text>
             <path :class="$parent.node.data.id" :d='pathValue' style="fill: none;stroke: #0084ff"></path>
-            <use @click="plus" v-if="node.children_temp" y="10" x="-9" xlink:href="#plus"></use>
-            <use @click="subtract" v-if="node.children.length > 1" y="10" x="-9" xlink:href="#subtract"></use>
+            <use @click="plus" v-if="node.children_temp" y="10" :x="node.data.x > 0?-9:100" xlink:href="#plus"></use>
+            <use @click="subtract" v-if="node.children.length > 1" y="10" :x="node.data.x > 0?-9:100"
+                xlink:href="#subtract"></use>
         </g>
     </g>
 </template>
@@ -36,10 +37,10 @@
         },
         computed: {
             pathValue() {
-                let endX = 0 - this.node.data.x + 50;
-                let endY = 0 - this.node.data.y + 15;
                 let startX = this.node.data.x > 0 ? 0 : 100;
                 let startY = 15;
+                let endX = 0 - this.node.data.x + 50;
+                let endY = 0 - this.node.data.y + 15;
                 return `M${startX} ${startY}Q${endX} 15,${endX} ${endY}`;
             },
             classValue() {
