@@ -26,16 +26,20 @@ export default {
                 dom.style.display = flag;
             }
         },
+        getNodeHeight(node) {
+            if (node.children_temp) return 30;
+            return document.getElementById(node.data.id).getBBox().height;
+        },
         reLocation() {
             this.switchPath('none');
             let index = 0;
             let cur = this.node.children[index];
-            let preHeight = document.getElementById(cur.data.id).getBBox().height;
+            let preHeight = this.getNodeHeight(cur);
             let y = 0
             cur.data.y = y;
             cur = this.node.children[index += 1];
             while (cur) {
-                let curHeight = document.getElementById(cur.data.id).getBBox().height;
+                let curHeight = this.getNodeHeight(cur);
                 y += curHeight / 2 + 60 + preHeight / 2;
                 cur.data.y = y;
                 preHeight = curHeight;
@@ -49,10 +53,13 @@ export default {
                 cur = this.node.children[index += 1];
             }
             this.switchPath('inherit');
-            if (this.$parent.reLocation)
-                this.$parent.reLocation(this.node.data.x > 0);
+            this.$parent.reLocation(this.node.data.x > 0);
         },
         addSubNode(x) {
+            if (this.node.children_temp) {
+                this.node.children = this.node.children_temp;
+                delete this.node.children_temp;
+            }
             let newNode = {
                 data: {
                     "id": this.node.data.id + "_" + Math.floor(Math.random() * 1000000),

@@ -52,6 +52,9 @@
 <script>
     import swal from 'sweetalert';
     var electron = require('electron');
+    const {
+        BrowserWindow
+    } = require('electron').remote
     export default {
         data() {
             return {
@@ -168,7 +171,7 @@
 
     .bottombarRight {
         float: right;
-        width: 280px;
+        width: 380px;
         text-align: right;
         padding-right: 8px;
     }

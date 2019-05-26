@@ -5,11 +5,11 @@
             xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
             <defs>
                 <symbol id="plus">
-                    <circle cx="5" cy="5" r="4" fill="none" stroke="#0084ff"></circle>
+                    <circle cx="5" cy="5" r="4" fill="#00000000" stroke="#0084ff"></circle>
                     <path d="M5,1L5,9" stroke="#0084ff"></path>
                 </symbol>
                 <symbol id="subtract">
-                    <circle cx="5" cy="5" r="4" fill="none" stroke="#0084ff"></circle>
+                    <circle cx="5" cy="5" r="4" fill="#00000000" stroke="#0084ff"></circle>
                 </symbol>
             </defs>
             <g :id="node.data.id" :class="['node','nodeGrade1',isSelected?'nodeSelected':'']" transform-origin="center"
@@ -133,12 +133,12 @@
                 this.switchPath('none');
                 let index = isRight ? 0 : 1;
                 let cur = this.node.children[index];
-                let preHeight = document.getElementById(cur.data.id).getBBox().height;
+                let preHeight = this.getNodeHeight(cur);
                 let y = 0
                 cur.data.y = y;
                 cur = this.node.children[index += 2];
                 while (cur) {
-                    let curHeight = document.getElementById(cur.data.id).getBBox().height;
+                    let curHeight = this.getNodeHeight(cur);
                     y += curHeight / 2 + 60 + preHeight / 2;
                     cur.data.y = y;
                     preHeight = curHeight;

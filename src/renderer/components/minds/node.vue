@@ -5,8 +5,9 @@
         <g>
             <rect @click="nodeSelect" width="100" height="30"></rect>
             <text @click="nodeSelect" transform="translate(24,20)">{{node.data.text||'[未命名]'}}</text>
-            <path :class="$parent.node.data.id" :d='pathValue' style="fill: none;stroke: #0084ff"></path>           
-            <use y="10" x="-10" xlink:href="#plus"></use>
+            <path :class="$parent.node.data.id" :d='pathValue' style="fill: none;stroke: #0084ff"></path>
+            <use @click="plus" v-if="node.children_temp" y="10" x="-9" xlink:href="#plus"></use>
+            <use @click="subtract" v-if="node.children.length > 1" y="10" x="-9" xlink:href="#subtract"></use>
         </g>
     </g>
 </template>
@@ -46,10 +47,24 @@
                 this.node.data.id.split('_').length == 3 ? arr.add('nodeGrade2') : arr.delete('nodeGradeElese');
                 this.isSelected ? arr.add('nodeSelected') : arr.delete('nodeSelected');
                 return [...arr];
-            }
+            },
         },
         methods: {
+            subtract() {
+                this.node.children_temp = this.node.children;
+                this.node.children = [];
+                this.$nextTick(() => {
+                    this.$parent.reLocation(this.node.data.x > 0);
+                });
+            },
+            plus() {
+                this.node.children = this.node.children_temp;
+                delete this.node.children_temp;
+                this.$nextTick(() => {
+                    this.reLocation(this.node.data.x > 0);
+                });
 
+            }
         }
     }
 </script>
