@@ -1,13 +1,14 @@
 <template>
   <div id="app">
-    <div class="viewAndMenuContainer">
+    <!-- <div class="viewAndMenuContainer">
       <menubar></menubar>
       <router-view :key="$route.fullPath" />
     </div>
-    <bottombar></bottombar>
-    <!-- <webview disablewebsecurity preload="file:///project/xiangxuema/src/renderer/test.js" style="height: 100%"
-      src="https://item.taobao.com/item.htm?id=548238354539">
-    </webview> -->
+    <bottombar></bottombar> -->
+
+    <webview disablewebsecurity preload="file:///project/xiangxuema/src/renderer/test.js" style="height: 100%"
+      src="https://www.taobao.com/markets/footmark/tbfoot?spm=a1z09.2.1997525045.3.67002e8dnsr3yo">
+    </webview>
   </div>
 </template>
 
@@ -24,11 +25,14 @@
     },
     methods: {},
     mounted() {
-      // const webview = document.querySelector('webview')
-      // webview.addEventListener('dom-ready', () => {
-      //   webview.openDevTools()
-      // })
-      // return;
+      const webview = document.querySelector('webview')
+      webview.addEventListener('dom-ready', () => {
+        webview.openDevTools()
+      })
+      webview.addEventListener('new-window', (e) => {
+        webview.loadURL(e.url);
+      })
+      return;
 
       this.db("settings").select("*").then(rows => this.$root.init(rows[0]));
       this.$root.hookMsgFromMainProcess();
