@@ -34,7 +34,9 @@ function createWindow() {
     "minHeight": 600,
     "autoHideMenuBar": false,
     "webPreferences": {
-      "webSecurity": false
+      "nodeIntegration":true,
+      "webSecurity": false,
+      "webviewTag": true
     }
   });
   if (process.platform != 'darwin') {
