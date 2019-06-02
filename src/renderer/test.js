@@ -1,5 +1,17 @@
 const session = require('electron').remote.session;
 
+
+setInterval(function(){
+	document.querySelector("[data-cpid='C84F80D918DEC0BD7BBEB4C5EAA15CF5_babel']").click();
+},100)
+
+setInterval(function(){
+	let closeBtn = document.querySelector(".mask .layer-close");
+	if(closeBtn){
+		closeBtn.click();
+	}
+},100)
+
 // let breakPoint = function(){
 //     debugger;
 //     setTimeout(breakPoint,300);

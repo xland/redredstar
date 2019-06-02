@@ -123,6 +123,8 @@
                                 "text": "",
                                 "x":0,
                                 "y":0,
+                                "w":72,
+                                "h":30,
                                 "isNew":true,
                                 "isSelected":true,
                                 "isRoot":true

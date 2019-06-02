@@ -4,7 +4,6 @@
             <div class="tagText">{{item.title}}</div>
         </div>
         <div class="noDataTip" v-if="$root.tags.length<1" style="font-size: 22px;">
-            
 	    标签库空空如也...
         </div>
     </div>

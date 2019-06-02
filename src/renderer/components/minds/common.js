@@ -1,14 +1,25 @@
 export default {
     data() {
         return {
-            isSelected: false
+            isSelected: false,
+            isEdit: false,
+            timeStamp: new Date().getTime(),
+            editTxt: ''
         }
     },
     mounted() {
         this.cancelSelect();
     },
     methods: {
-        nodeSelect() {
+        nodeClick(event) {
+            let ts = new Date().getTime();
+            let span = ts - this.timeStamp;
+            this.timeStamp = ts;
+            if (span < 300) {
+                this.editTxt = this.node.data.text;
+                this.isEdit = true;
+                return;
+            }
             this.bus.$emit('cancelSelect', this.node.data.id);
             this.isSelected = !this.isSelected;
         },
@@ -18,10 +29,32 @@ export default {
                 if (id != self.node.data.id && self.isSelected) {
                     self.isSelected = false;
                 }
+                if (self.isEdit) {
+                    self.isEdit = false;
+                    self.node.data.text = self.editTxt;
+                    self.$nextTick(() => {
+                        let w = document.querySelector(`#${self.node.data.id} > .gRec > text`).getBBox().width + 24;
+                        let span = w - self.node.data.w;
+                        let nodes = self.node.children || self.node.children_temp;
+                        if (self.node.data.x < 0) {
+                            self.node.data.x -= span;
+                            nodes.forEach(element => {
+                                element.data.x -= span;
+                            });
+                        } else {
+                            nodes.forEach(element => {
+                                if(element.data.x > 0){
+                                    element.data.x += span;
+                                }
+                            });
+                        }
+                        self.node.data.w = w;
+                    })
+                }
             });
         },
         switchPath(flag) {
-            var arr = document.getElementsByClassName(this.node.data.id);
+            var arr = document.querySelectorAll(`#${this.node.data.id} path`);
             for (let dom of arr) {
                 dom.style.display = flag;
             }
@@ -53,7 +86,9 @@ export default {
                 cur = this.node.children[index += 1];
             }
             this.switchPath('inherit');
-            this.$parent.reLocation(this.node.data.x > 0);
+            this.$nextTick(() => {
+                this.$parent.reLocation(this.node.data.x > 0);
+            })
         },
         addSubNode(x) {
             if (this.node.children_temp) {
@@ -66,6 +101,8 @@ export default {
                     "created": new Date().getTime(),
                     "text": "",
                     "y": 0,
+                    "w": 72,
+                    "h": 30,
                     x
                 },
                 children: []

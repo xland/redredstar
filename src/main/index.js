@@ -28,8 +28,8 @@ if (process.env.NODE_ENV !== 'development') {
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    "width": 980,
-    "height": 600,
+    "width": 1216,
+    "height": 830,
     "minWidth": 980,
     "minHeight": 600,
     "autoHideMenuBar": false,

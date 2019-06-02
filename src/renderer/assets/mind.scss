@@ -32,3 +32,12 @@
     stroke: #006288;
     stroke-width: 1.6;
 }
+.svgInput {
+    height: 28px;
+    padding: 0px;
+    padding-left: 6px;
+    padding-right: 6px;
+    outline: none;
+    border: 1px solid #0084ff;
+    width: calc(100% - 14px);
+  }

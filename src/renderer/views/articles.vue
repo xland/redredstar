@@ -34,7 +34,7 @@
                 <div style="flex: 1;"></div>
                 <div @click="newArticleBtnClick" class="btn">添加知识</div>
             </div>
-            <div class="indexListContainer box" style="padding-top: 8px;">
+            <div class="indexListContainer box">
                 <div class="noDataTip" v-if="articles.length<1">
                     <div>
                         知识库空空如也

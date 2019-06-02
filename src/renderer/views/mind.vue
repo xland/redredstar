@@ -1,180 +1,257 @@
 <template>
-    <div tabindex="1" @keydown="restore" @mousewheel="wheel" @mousedown="dragStart" @mouseup="dragEnd"
-        @mousemove="draging" id="mind" :class="['view',drag.ing?'drag':'']" v-if="node">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" version="1.1"
-            xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs">
-            <defs>
-                <symbol id="plus">
-                    <circle cx="5" cy="5" r="4" fill="#00000000" stroke="#0084ff"></circle>
-                    <path d="M5,1L5,9" stroke="#0084ff"></path>
-                </symbol>
-                <symbol id="subtract">
-                    <circle cx="5" cy="5" r="4" fill="#00000000" stroke="#0084ff"></circle>
-                </symbol>
-            </defs>
-            <g :id="node.data.id" :class="['node','nodeGrade1',isSelected?'nodeSelected':'']" transform-origin="center"
-                :transform="`scale(${scale}) translate(${node.data.x},${node.data.y})`">
-                <node @mousedown.stop :key="item.data.id" :prop-data="item" v-for="item in node.children">
-                </node>
-                <g @click="nodeSelect">
-                    <rect width="100" height="30"></rect>
-                    <text transform="translate(24,20)">{{node.data.text||'[未命名]'}}</text>
-                </g>
-            </g>
-        </svg>
+  <div tabindex="1" id="mind" :class="['view',drag.ing?'drag':'']" v-if="node">
+    <div class="helpBtn" @click="showHelp">
+      <i class="iconfont icon-help icon"></i>
     </div>
+    <div style="display: none">
+      <div id="helpContainer">
+        在画布空白处按住鼠标左键拖动画布；
+        <br>选中节点后，按Tab键增加子节点；
+        <br>双击节点，修改节点内文字；
+        <br>按住Ctrl(⌘)键，滚动鼠标滚轮，放大或缩小画布；
+        <br>双击画布空白处，还原画布状态；
+        <br>
+      </div>
+    </div>
+    <svg
+      width="100%"
+      height="100%"
+      xmlns="http://www.w3.org/2000/svg"
+      version="1.1"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:svgjs="http://svgjs.com/svgjs"
+      @mousewheel="wheel"
+      @mousedown.self="dragStart"
+      @mouseup="dragEnd"
+      @mousemove="draging"
+    >
+      <defs>
+        <symbol id="plus">
+          <circle cx="5" cy="5" r="4" fill="#00000000" stroke="#0084ff"></circle>
+          <path d="M5,1L5,9" stroke="#0084ff"></path>
+        </symbol>
+        <symbol id="subtract">
+          <circle cx="5" cy="5" r="4" fill="#00000000" stroke="#0084ff"></circle>
+        </symbol>
+      </defs>
+      <g
+        :id="node.data.id"
+        :class="['node','nodeGrade1',isSelected?'nodeSelected':'']"
+        transform-origin="center"
+        :transform="`scale(${scale}) translate(${node.data.x},${node.data.y})`"
+      >
+        <node @mousedown.stop :key="item.data.id" :prop-data="item" v-for="item in node.children"></node>
+        <g class="gRec">
+          <rect @click.stop="nodeClick" :width="node.data.w" :height="node.data.h"></rect>
+          <text @click.stop="nodeClick" transform="translate(12,20)">{{node.data.text||'[未命名]'}}</text>
+          <foreignObject
+            @mousedown.stop
+            v-if="isEdit"
+            x="0"
+            y="0"
+            :width="node.data.w"
+            :height="node.data.h"
+          >
+            <input v-model="editTxt" autofocus class="svgInput" type="text"></input>
+          </foreignObject>
+        </g>
+      </g>
+    </svg>
+  </div>
 </template>
 <script>
-    import SVG from "svg.js"
-    const fs = require('fs');
-    const path = require('path');
-    import node from "../components/minds/node"
-    import common from "../components/minds/common"
-    const {
-        remote
-    } = require('electron');
-    export default {
-        mixins: [common],
-        components: {
-            node
-        },
-        data() {
-            return {
-                node: null,
-                recentMinds: [],
-                mindPath: null,
-                drag: {
-                    x: 0,
-                    y: 0,
-                    ing: false
-                },
-                scale: 1
-            }
-        },
-        beforeRouteUpdate(to, from, next) {
-            next();
-            // this.$refs.articleEditor.saveContent(() => {
-            //     next();
-            // });
-        },
-        beforeRouteLeave(to, from, next) {
-            next();
-            // this.$refs.articleEditor.saveContent(() => {
-            //     
-            // });
-        },
-        mounted() {
-            let id = this.$route.params.id;
-            this.getData(id);
-            this.centerRootNode();
-            this.newNode();
-        },
-        methods: {
-            restore(e) {
-                if ((e.metaKey || e.ctrlKey) && event.keyCode == 27) {
-                    this.scale = 1;
-                    this.centerRootNode();
-                }
-            },
-            wheel(e) {
-                if (e.metaKey || e.ctrlKey) {
-                    this.scale += e.deltaY / 100;
-                }
-            },
-            dragStart(e) {
-                this.drag.x = e.x;
-                this.drag.y = e.y;
-                this.drag.ing = true;
-            },
-            dragEnd() {
-                this.drag.ing = false;
-            },
-            draging(e) {
-                if (!this.drag.ing) return;
-                this.node.data.x = this.node.data.x + (e.x - this.drag.x) / this.scale
-                this.node.data.y = this.node.data.y + (e.y - this.drag.y) / this.scale;
-                this.drag.x = e.x;
-                this.drag.y = e.y;
-            },
-            newNode() {
-                var self = this;
-                document.onkeydown = function (event) {
-                    if (event.keyCode != 9) return;
-                    if (self.isSelected) {
-                        let x = self.node.children.length % 2 == 0 ? 200 : -200;
-                        self.addSubNode(x);
-                        return;
-                    }
-                    self.bus.$emit('addSubNode');
-                }
-            },
-            centerRootNode() {
-                this.$nextTick(() => {
-                    var dom = document.getElementById("mind");
-                    this.node.data.x = dom.clientWidth / 2 - 50;
-                    this.node.data.y = dom.clientHeight / 2 - 15;
-                })
-            },
-            getData(id) {
-                this.mindPath = path.join(remote.app.getPath('userData'), "/xxm/m_" + id);
-                let mind = fs.readFileSync(path.join(this.mindPath, "m.data"), this.$root.rwOption);
-                mind = JSON.parse(mind);
-                this.node = mind.root;
-                this.db('minds').where("id", id).update({
-                    "visited_at": new Date()
-                }).then(() => {
-                    this.db("minds").orderBy("visited_at", "desc").limit(8).offset(1).then(
-                        recentRows => {
-                            this.recentMinds = recentRows;
-                        })
-                });
-            },
-            reLocation(isRight) {
-                this.switchPath('none');
-                let index = isRight ? 0 : 1;
-                let cur = this.node.children[index];
-                let preHeight = this.getNodeHeight(cur);
-                let y = 0
-                cur.data.y = y;
-                cur = this.node.children[index += 2];
-                while (cur) {
-                    let curHeight = this.getNodeHeight(cur);
-                    y += curHeight / 2 + 60 + preHeight / 2;
-                    cur.data.y = y;
-                    preHeight = curHeight;
-                    cur = this.node.children[index += 2];
-                }
-                let center = y / 2;
-                index = isRight ? 0 : 1;
-                cur = this.node.children[index];
-                while (cur) {
-                    cur.data.y -= center;
-                    cur = this.node.children[index += 2];
-                }
-                this.switchPath('inherit');
-            }
-        }
+import SVG from "svg.js";
+const fs = require("fs");
+const path = require("path");
+import node from "../components/minds/node";
+import common from "../components/minds/common";
+const { remote } = require("electron");
+export default {
+  mixins: [common],
+  components: {
+    node
+  },
+  data() {
+    return {
+      node: null,
+      recentMinds: [],
+      mindPath: null,
+      drag: {
+        x: 0,
+        y: 0,
+        ing: false
+      },
+      scale: 1
     };
+  },
+  beforeRouteUpdate(to, from, next) {
+    next();
+    // this.$refs.articleEditor.saveContent(() => {
+    //     next();
+    // });
+  },
+  beforeRouteLeave(to, from, next) {
+    next();
+    // this.$refs.articleEditor.saveContent(() => {
+    //
+    // });
+  },
+  mounted() {
+    let id = this.$route.params.id;
+    this.getData(id);
+    this.centerRootNode();
+    this.newNode();
+  },
+  methods: {
+    showHelp() {
+      swal({
+        width: 580,
+        content: document.getElementById("helpContainer"),
+        buttons: false
+      }).then(() => {
+        this.qrCodeId = null;
+      });
+    },
+    wheel(e) {
+      if (e.metaKey || e.ctrlKey) {
+        this.scale += e.deltaY / 1000;
+      }
+    },
+    dragStart(e) {
+      let ts = new Date().getTime();
+      let span = ts - this.timeStamp;
+      this.timeStamp = ts;
+      if (span < 300) {
+        this.scale = 1;
+        this.centerRootNode();
+        return;
+      }
+      this.bus.$emit("cancelSelect", -1);
+      this.drag.x = e.x;
+      this.drag.y = e.y;
+      this.drag.ing = true;
+    },
+    dragEnd() {
+      this.drag.ing = false;
+    },
+    draging(e) {
+      if (!this.drag.ing) return;
+      this.node.data.x = this.node.data.x + (e.x - this.drag.x) / this.scale;
+      this.node.data.y = this.node.data.y + (e.y - this.drag.y) / this.scale;
+      this.drag.x = e.x;
+      this.drag.y = e.y;
+    },
+    newNode() {
+      var self = this;
+      document.onkeydown = function(event) {
+        if (event.keyCode != 9) return;
+        if (self.isSelected) {
+          let x = self.node.children.length % 2 == 0 ? (self.node.data.w+128) : (0-72-128);
+          self.addSubNode(x);
+          return;
+        }
+        self.bus.$emit("addSubNode");
+      };
+    },
+    centerRootNode() {
+      this.$nextTick(() => {
+        var dom = document.getElementById("mind");
+        this.node.data.x = dom.clientWidth / 2 - 50;
+        this.node.data.y = dom.clientHeight / 2 - 15;
+      });
+    },
+    getData(id) {
+      this.mindPath = path.join(remote.app.getPath("userData"), "/xxm/m_" + id);
+      let mind = fs.readFileSync(
+        path.join(this.mindPath, "m.data"),
+        this.$root.rwOption
+      );
+      mind = JSON.parse(mind);
+      this.node = mind.root;
+      this.db("minds")
+        .where("id", id)
+        .update({
+          visited_at: new Date()
+        })
+        .then(() => {
+          this.db("minds")
+            .orderBy("visited_at", "desc")
+            .limit(8)
+            .offset(1)
+            .then(recentRows => {
+              this.recentMinds = recentRows;
+            });
+        });
+    },
+    reLocation(isRight) {
+      this.switchPath("none");
+      let index = isRight ? 0 : 1;
+      let cur = this.node.children[index];
+      let preHeight = this.getNodeHeight(cur);
+      let y = 0;
+      cur.data.y = y;
+      cur = this.node.children[(index += 2)];
+      while (cur) {
+        let curHeight = this.getNodeHeight(cur);
+        y += curHeight / 2 + 60 + preHeight / 2;
+        cur.data.y = y;
+        preHeight = curHeight;
+        cur = this.node.children[(index += 2)];
+      }
+      let center = y / 2;
+      index = isRight ? 0 : 1;
+      cur = this.node.children[index];
+      while (cur) {
+        cur.data.y -= center;
+        cur = this.node.children[(index += 2)];
+      }
+      this.switchPath("inherit");
+    }
+  }
+};
 </script>
 <style lang="scss" scoped>
-    #mind {
-        overflow: hidden;
-        margin: 8px;
-        margin-top: 0px;
-        box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
-        height: calc(100% - 8px);
-        border-radius: 3px;
-        display: flex;
-        flex-flow: column;
-        background: #fff;
-    }
+#mind {
+  overflow: hidden;
+  margin: 8px;
+  margin-top: 0px;
+  box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
+  height: calc(100% - 8px);
+  border-radius: 3px;
+  display: flex;
+  flex-flow: column;
+  background: #fff;
+}
 
-    #mind:focus {
-        border: none;
-        outline: none;
-    }
+#mind:focus {
+  border: none;
+  outline: none;
+}
 
-    .drag {
-        cursor: move;
-    }
+.drag {
+  cursor: move;
+}
+.helpBtn {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  z-index: 99;
+  width: 36px;
+  height: 36px;
+  color: #0084ff;
+  text-align: center;
+  line-height: 36px;
+  background: #fff;
+  border-top-right-radius: 4px;
+  cursor: pointer;
+}
+.helpBtn:hover {
+  background: #e7f3ff;
+}
+#helpContainer {
+  text-align: left;
+  padding-left: 12px;
+  padding-right: 12px;
+  line-height: 32px;
+}
 </style>
