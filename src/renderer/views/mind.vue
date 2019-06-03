@@ -1,15 +1,31 @@
 <template>
   <div tabindex="1" id="mind" :class="['view',drag.ing?'drag':'']" v-if="node">
+    <tagslide show="true" ref="tagslide">
+    </tagslide>
     <div class="tools">
+      <div class="toolBtn" @click="$refs.tagslide.show=true">
+        <i class="iconfont icon-biaoqian icon"></i>
+      </div>
       <div class="toolBtn" @mouseenter="showRecent = true" @mouseleave="showRecent = false">
         <i class="iconfont icon-zuijin icon"></i>
       </div>
-      <div class="toolBtn" style="border-top-right-radius: 4px;" @click="showHelp">
+      <div class="toolBtn" @click="showHelp">
         <i class="iconfont icon-help icon"></i>
       </div>
     </div>
-    <div v-show="showRecent" class="recent" @mouseenter="showRecent = true" @mouseleave="showRecent = false" style="top:44px;">
-      <div :key="item.id" @click="$router.push('/mind/' + item.id)" v-for="item in recent" class="item">{{item.title}}</div>
+    <div
+      v-show="showRecent"
+      class="recent"
+      @mouseenter="showRecent = true"
+      @mouseleave="showRecent = false"
+      style="top:44px;"
+    >
+      <div
+        :key="item.id"
+        @click="$router.push('/mind/' + item.id)"
+        v-for="item in recent"
+        class="item"
+      >{{item.title}}</div>
     </div>
     <div style="display: none">
       <div id="helpContainer">
@@ -76,20 +92,22 @@ import SVG from "svg.js";
 const fs = require("fs");
 const path = require("path");
 import node from "../components/minds/node";
+import tagslide from "../components/tagslide";
 import common from "../components/minds/common";
 import { truncate } from "fs";
 const { remote } = require("electron");
 export default {
   mixins: [common],
   components: {
-    node
+    node,
+    tagslide
   },
   data() {
     return {
       node: null,
       mindPath: null,
-      recent:[],
-      showRecent:false,
+      recent: [],
+      showRecent: false,
       drag: {
         x: 0,
         y: 0,
@@ -97,7 +115,7 @@ export default {
       },
       scale: 1,
       tick: null,
-      needSave: false,
+      needSave: false
     };
   },
   beforeRouteUpdate(to, from, next) {
@@ -125,7 +143,7 @@ export default {
   methods: {
     save(cb) {
       if (!this.needSave) return;
-      this.bus.$emit('saving');
+      this.bus.$emit("saving");
       let obj = {
         template: "default",
         theme: "default",
@@ -148,6 +166,7 @@ export default {
         })
         .then();
     },
+    showTag() {},
     showHelp() {
       swal({
         width: 580,
@@ -300,13 +319,16 @@ export default {
   z-index: 99;
   color: #0084ff;
   text-align: center;
+  height: 38px;
   line-height: 38px;
+  background: #fff;
   cursor: pointer;
+  border-top-right-radius: 4px;
 }
 .toolBtn {
   display: inline-block;
-  width: 36px;
-  height: 36px;
+  height: 38px;
+  width: 38px;
 }
 .toolBtn:hover {
   background: #e7f3ff;
