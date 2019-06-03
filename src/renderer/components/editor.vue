@@ -36,7 +36,7 @@
                     if (cb) cb();
                     return;
                 }
-                this.bus.$emit('saveContent');
+                this.bus.$emit('saving');
                 if (this.$parent.article.editor_type == "html") {
                     this.articleContent = window.CKEDITOR.instances.editorCk.getData();
                 } else {

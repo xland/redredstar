@@ -1,7 +1,15 @@
 <template>
   <div tabindex="1" id="mind" :class="['view',drag.ing?'drag':'']" v-if="node">
-    <div class="helpBtn" @click="showHelp">
-      <i class="iconfont icon-help icon"></i>
+    <div class="tools">
+      <div class="toolBtn" @mouseenter="showRecent = true" @mouseleave="showRecent = false">
+        <i class="iconfont icon-zuijin icon"></i>
+      </div>
+      <div class="toolBtn" style="border-top-right-radius: 4px;" @click="showHelp">
+        <i class="iconfont icon-help icon"></i>
+      </div>
+    </div>
+    <div v-show="showRecent" class="recent" @mouseenter="showRecent = true" @mouseleave="showRecent = false" style="top:44px;">
+      <div :key="item.id" @click="$router.push('/mind/' + item.id)" v-for="item in recent" class="item">{{item.title}}</div>
     </div>
     <div style="display: none">
       <div id="helpContainer">
@@ -79,8 +87,9 @@ export default {
   data() {
     return {
       node: null,
-      recentMinds: [],
       mindPath: null,
+      recent:[],
+      showRecent:false,
       drag: {
         x: 0,
         y: 0,
@@ -88,7 +97,7 @@ export default {
       },
       scale: 1,
       tick: null,
-      needSave: false
+      needSave: false,
     };
   },
   beforeRouteUpdate(to, from, next) {
@@ -116,14 +125,13 @@ export default {
   methods: {
     save(cb) {
       if (!this.needSave) return;
+      this.bus.$emit('saving');
       let obj = {
         template: "default",
         theme: "default",
         version: "1.4.43",
         root: this.node
       };
-      let id = this.$route.params.id;
-      this.mindPath = path.join(remote.app.getPath("userData"), "/xxm/m_" + id);
       fs.writeFileSync(
         path.join(this.mindPath, "m.data"),
         JSON.stringify(obj),
@@ -151,9 +159,9 @@ export default {
     },
     wheel(e) {
       if (e.metaKey || e.ctrlKey) {
-        this.scale += (0 - e.deltaY / 1000);
-      }else{
-        this.node.data.y += (0 - e.deltaY);
+        this.scale += 0 - e.deltaY / 1000;
+      } else {
+        this.node.data.y += 0 - e.deltaY;
       }
     },
     dragStart(e) {
@@ -228,7 +236,7 @@ export default {
             .limit(8)
             .offset(1)
             .then(recentRows => {
-              this.recentMinds = recentRows;
+              this.recent = recentRows;
             });
         });
     },
@@ -285,21 +293,22 @@ export default {
 .drag {
   cursor: move;
 }
-.helpBtn {
+.tools {
   position: absolute;
   right: 8px;
   top: 8px;
   z-index: 99;
-  width: 36px;
-  height: 36px;
   color: #0084ff;
   text-align: center;
-  line-height: 36px;
-  background: #fff;
-  border-top-right-radius: 4px;
+  line-height: 38px;
   cursor: pointer;
 }
-.helpBtn:hover {
+.toolBtn {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+}
+.toolBtn:hover {
   background: #e7f3ff;
 }
 #helpContainer {

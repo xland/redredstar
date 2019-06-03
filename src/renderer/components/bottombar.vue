@@ -12,15 +12,15 @@
             </div>
         </div>
         <div class="bottombarLeft">
-            <div>
+            <div :title="'文章总数：'+articleCount">
                 <i class="iconfont icon-wenzhang icon"></i>
                 {{articleCount}}
             </div>
-            <div>
+            <div :title="'火花总数：'+flowerCount">
                 <i class="iconfont icon-huohua icon"></i>
                 {{flowerCount}}
             </div>
-            <div>
+            <div :title="'标签总数：'+tagCount">
                 <i class="iconfont icon-biaoqian icon"></i>
                 {{tagCount}}
             </div>
@@ -90,7 +90,7 @@
                         this.tagCount = rows[0].count;
                     })
                 });
-                this.bus.$on('saveContent', () => {
+                this.bus.$on('saving', () => {
                     this.rotating = true;
                     setTimeout(() => {
                         this.rotating = false

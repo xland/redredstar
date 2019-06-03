@@ -15,7 +15,7 @@
     <editor ref="articleEditor"></editor>
     <articletag ref="articleTag"></articletag>
     <sites v-show="showSites"></sites>
-    <div v-show="showRecentArticle" class="recentArticle" @mouseenter="showRecentArticle = true"
+    <div v-show="showRecentArticle" class="recent" @mouseenter="showRecentArticle = true"
       @mouseleave="showRecentArticle = false">
       <div :key="item.id" @click="$router.push('/article/' + item.id)" v-for="item in recentArticles" class="item">{{item.title}}</div>
     </div>
@@ -122,37 +122,6 @@
   };
 </script>
 <style lang="scss" scoped>
-  .recentArticle {
-    position: absolute;
-    border-top: 1px solid #e5e5e5;
-    line-height: 32px;
-    right: 8px;
-    top: 45px;
-    background: #fff;
-    box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
-    border-bottom-left-radius: 6px;
-    border-bottom-right-radius: 6px;
-    padding-top: 6px;
-    padding-bottom: 6px;
-    z-index: 9;
-  }
-
-  .recentArticle .item {
-    padding-left: 8px;
-    padding-right: 8px;
-    max-width: 256px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    color: #666;
-    cursor: pointer;
-  }
-
-  .recentArticle .item:hover {
-    background: #dcedfe;
-    color: #007acc;
-  }
-
   #article {
     overflow: hidden;
     margin: 8px;
