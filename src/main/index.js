@@ -36,7 +36,6 @@ function createWindow() {
     "webPreferences": {
       "nodeIntegration":true,
       "webSecurity": false,
-      "webviewTag": true
     }
   });
   if (process.platform != 'darwin') {

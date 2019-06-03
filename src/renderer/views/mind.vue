@@ -1,6 +1,6 @@
 <template>
   <div tabindex="1" id="mind" :class="['view',drag.ing?'drag':'']" v-if="node">
-    <tagslide show="true" ref="tagslide">
+    <tagslide refer="mind" :id="$route.params.id" ref="tagslide">
     </tagslide>
     <div class="tools">
       <div class="toolBtn" @click="$refs.tagslide.show=true">
