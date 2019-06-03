@@ -45,12 +45,8 @@
 <style scoped>
     .tagContainer {
         overflow-y: auto;
-        margin-top: 0px;
-        margin-bottom: 8px;
-        padding-right: 8px;
-        flex: 1;
-        padding-top: 11px;
-        padding-bottom: 6px;
+        padding: 8px;
+        height: calc(100% - 24px);
     }
 
     .tagIndex {

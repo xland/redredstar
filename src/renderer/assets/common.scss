@@ -55,7 +55,10 @@
     box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
     background: #fff;
 }
-
+.searchTagContainer{
+    max-width: 386px;overflow-x: auto;padding-top: 3px;
+    padding-left: 6px;
+}
 .tag {
     display: inline-block;
     background: #e7f3ff;
@@ -65,14 +68,18 @@
     font-size: 12px;
     padding-left: 6px;
     padding-right: 16px;
-    margin-left: 8px;
     cursor: pointer;
     border: 1px solid #0084FF;
     max-width: 126px;
     overflow: hidden;
     height: 22px;
     white-space: nowrap;
-    position: relative;
+    position: relative;  
+
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 .tagClose {

@@ -24,10 +24,6 @@
   padding: 8px;
 }
 .tagIndex {
-  margin-top: 6px;
-  margin-bottom: 6px;
-  margin-left: 3px;
-  margin-right: 3px;
   padding-right: 6px;
   background: #fff;
 }
@@ -43,6 +39,7 @@
   padding-top: 8px;
   flex: 1;
   border-bottom: 1px dashed rgb(204, 204, 204);
+  overflow-y: auto;
 }
 .all .tagIndex {
   padding-right: 19px;

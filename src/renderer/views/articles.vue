@@ -14,7 +14,7 @@
                 <div v-if="false" class="searchBtn">
                     <i class="iconfont icon-shijian" style="font-size: 18px !important;"></i>
                 </div>
-                <div style="max-width: 386px;overflow-x: auto;padding-top: 4px;">
+                <div class="searchTagContainer">
                     <div :key="item.id" class="tag" v-for="(item,index) in searchTags">
                         <div class="tagText">{{item.title}}</div>
                         <div @click.stop="closeTag(index)" class="tagClose">
