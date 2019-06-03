@@ -7,6 +7,7 @@
       <div id="helpContainer">
         在画布空白处按住鼠标左键拖动画布；
         <br>选中节点后，按Tab键增加子节点；
+        <br>选中节点后，按Del(Backspace)键删除节点；
         <br>双击节点，修改节点内文字；
         <br>按住Ctrl(⌘)键，滚动鼠标滚轮，放大或缩小画布；
         <br>双击画布空白处，还原画布状态；
@@ -150,7 +151,9 @@ export default {
     },
     wheel(e) {
       if (e.metaKey || e.ctrlKey) {
-        this.scale += e.deltaY / 1000;
+        this.scale += (0 - e.deltaY / 1000);
+      }else{
+        this.node.data.y += (0 - e.deltaY);
       }
     },
     dragStart(e) {
