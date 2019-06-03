@@ -34,10 +34,18 @@
 .tagIndex:hover {
   background: #e7f3ff;
 }
+.tagClose {
+  width: 18px;
+  text-align: center;
+}
+
 .all {
   padding-top: 8px;
   flex: 1;
   border-bottom: 1px dashed rgb(204, 204, 204);
+}
+.all .tagIndex {
+  padding-right: 18px;
 }
 .selected {
   padding-top: 8px;
@@ -106,6 +114,9 @@
           v-for="(item,index) in tagEles"
         >
           <div class="tagText">{{item.title}}</div>
+          <div @click.stop="tagRemove(item,index)" class="tagClose">
+            <i class="iconfont icon-guanbi" style="font-size: 16px !important;"></i>
+          </div>
         </div>
       </div>
       <div class="add">
@@ -133,11 +144,36 @@ export default {
     console.log(this.id);
   },
   methods: {
+    async tagRemove(item, index) {
+      let val = await swal({
+        text:
+          "你确定要删除这个标签吗？所有与之关联的文章、火花、脑图等，都将取消关联！",
+        icon: "warning",
+        buttons: ["取消", "删除"],
+        dangerMode: true
+      });
+      if (!val) return;
+      await this.db("article_tag")
+        .where("tag_id", item.id)
+        .del();
+      await this.db("flower_tag")
+        .where("tag_id", item.id)
+        .del();
+      await this.db("mind_tag")
+        .where("tag_id", item.id)
+        .del();
+      await this.db("tags")
+        .where("id", item.id)
+        .del();
+      this.tagEles.splice(index, 1);
+    },
     async tagCancelSelect(item, index) {
-      await this.db(this.refer + "_tag").where({
-        tag_id: item.id,
-        mind_id: this.id
-      }).del();
+      await this.db(this.refer + "_tag")
+        .where({
+          tag_id: item.id,
+          mind_id: this.id
+        })
+        .del();
       this.tagSelected.splice(index, 1);
       this.tagEles.unshift(item);
     },
