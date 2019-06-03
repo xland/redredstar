@@ -15,9 +15,13 @@ export default {
             let ts = new Date().getTime();
             let span = ts - this.timeStamp;
             this.timeStamp = ts;
+            this.bus.$emit("needSave");
             if (span < 300) {
                 this.editTxt = this.node.data.text;
                 this.isEdit = true;
+                this.$nextTick(()=>{
+                    document.querySelector(`#${this.node.data.id} > .gRec input`).focus();
+                })
                 return;
             }
             this.bus.$emit('cancelSelect', this.node.data.id);
@@ -28,6 +32,7 @@ export default {
             this.bus.$on('cancelSelect', id => {
                 if (id != self.node.data.id && self.isSelected) {
                     self.isSelected = false;
+                    self.bus.$emit("needSave");
                 }
                 if (self.isEdit) {
                     self.isEdit = false;
@@ -35,14 +40,13 @@ export default {
                     self.$nextTick(() => {
                         let w = document.querySelector(`#${self.node.data.id} > .gRec > text`).getBBox().width + 24;
                         let span = w - self.node.data.w;
-                        let nodes = self.node.children || self.node.children_temp;
                         if (self.node.data.x < 0) {
                             self.node.data.x -= span;
-                            nodes.forEach(element => {
+                            self.node.children.forEach(element => {
                                 element.data.x -= span;
                             });
                         } else {
-                            nodes.forEach(element => {
+                            self.node.children.forEach(element => {
                                 if(element.data.x > 0){
                                     element.data.x += span;
                                 }
@@ -50,23 +54,25 @@ export default {
                         }
                         self.node.data.w = w;
                     })
+                    self.bus.$emit("needSave");
                 }
             });
         },
         switchPath(flag) {
-            var arr = document.querySelectorAll(`#${this.node.data.id} path`);
+            var arr = document.querySelectorAll(`#${this.node.data.id} > .gChild > g  > .gRec > path`);
             for (let dom of arr) {
                 dom.style.display = flag;
             }
         },
         getNodeHeight(node) {
-            if (node.children_temp) return 30;
+            if (node.data.isClose) return 30;
             return document.getElementById(node.data.id).getBBox().height;
         },
         reLocation() {
             this.switchPath('none');
             let index = 0;
             let cur = this.node.children[index];
+            if(!cur) return;
             let preHeight = this.getNodeHeight(cur);
             let y = 0
             cur.data.y = y;
@@ -91,10 +97,7 @@ export default {
             })
         },
         addSubNode(x) {
-            if (this.node.children_temp) {
-                this.node.children = this.node.children_temp;
-                delete this.node.children_temp;
-            }
+            this.node.data.isClose = false;
             let newNode = {
                 data: {
                     "id": this.node.data.id + "_" + Math.floor(Math.random() * 1000000),
@@ -108,6 +111,7 @@ export default {
                 children: []
             }
             this.node.children.push(newNode);
+            this.bus.$emit("needSave");
             if (this.node.children.length > 1)
                 this.$nextTick(() => this.reLocation(x > 0));
         }

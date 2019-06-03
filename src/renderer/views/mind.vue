@@ -40,19 +40,22 @@
         transform-origin="center"
         :transform="`scale(${scale}) translate(${node.data.x},${node.data.y})`"
       >
-        <node @mousedown.stop :key="item.data.id" :prop-data="item" v-for="item in node.children"></node>
+        <g class="gChild">
+          <node @mousedown.stop :key="item.data.id" :prop-data="item" v-for="item in node.children"></node>
+        </g>
         <g class="gRec">
           <rect @click.stop="nodeClick" :width="node.data.w" :height="node.data.h"></rect>
           <text @click.stop="nodeClick" transform="translate(12,20)">{{node.data.text||'[未命名]'}}</text>
           <foreignObject
             @mousedown.stop
-            v-if="isEdit"
+            @keydown.stop
+            v-show="isEdit"
             x="0"
             y="0"
             :width="node.data.w"
             :height="node.data.h"
           >
-            <input v-model="editTxt" autofocus class="svgInput" type="text"></input>
+            <input @change="titleChange" v-model="editTxt" class="svgInput" type="text"></input>
           </foreignObject>
         </g>
       </g>
@@ -65,6 +68,7 @@ const fs = require("fs");
 const path = require("path");
 import node from "../components/minds/node";
 import common from "../components/minds/common";
+import { truncate } from "fs";
 const { remote } = require("electron");
 export default {
   mixins: [common],
@@ -81,28 +85,60 @@ export default {
         y: 0,
         ing: false
       },
-      scale: 1
+      scale: 1,
+      tick: null,
+      needSave: false
     };
   },
   beforeRouteUpdate(to, from, next) {
+    this.save();
+    clearInterval(this.tick);
     next();
-    // this.$refs.articleEditor.saveContent(() => {
-    //     next();
-    // });
   },
   beforeRouteLeave(to, from, next) {
+    this.save();
+    clearInterval(this.tick);
     next();
-    // this.$refs.articleEditor.saveContent(() => {
-    //
-    // });
   },
   mounted() {
     let id = this.$route.params.id;
     this.getData(id);
     this.centerRootNode();
-    this.newNode();
+    this.hookKeyDown();
+    this.tick = setInterval(() => {
+      this.save();
+    }, this.$root.tickStep);
+    this.bus.$on("needSave", () => {
+      this.needSave = true;
+    });
   },
   methods: {
+    save(cb) {
+      if (!this.needSave) return;
+      let obj = {
+        template: "default",
+        theme: "default",
+        version: "1.4.43",
+        root: this.node
+      };
+      let id = this.$route.params.id;
+      this.mindPath = path.join(remote.app.getPath("userData"), "/xxm/m_" + id);
+      fs.writeFileSync(
+        path.join(this.mindPath, "m.data"),
+        JSON.stringify(obj),
+        this.$root.rwOption
+      );
+      this.needSave = false;
+    },
+    titleChange() {
+      let id = this.$route.params.id;
+      this.db("minds")
+        .where("id", id)
+        .update({
+          title: this.editTxt
+        })
+        .then();
+    },
     showHelp() {
       swal({
         width: 580,
@@ -133,6 +169,7 @@ export default {
     },
     dragEnd() {
       this.drag.ing = false;
+      this.bus.$emit("needSave");
     },
     draging(e) {
       if (!this.drag.ing) return;
@@ -141,16 +178,24 @@ export default {
       this.drag.x = e.x;
       this.drag.y = e.y;
     },
-    newNode() {
+    hookKeyDown() {
       var self = this;
       document.onkeydown = function(event) {
-        if (event.keyCode != 9) return;
-        if (self.isSelected) {
-          let x = self.node.children.length % 2 == 0 ? (self.node.data.w+128) : (0-72-128);
+        if (event.keyCode == 9) {
+          self.bus.$emit("addSubNode");
+          if (!self.isSelected) return;
+          let rightSideNodes = self.node.children.filter(v => v.data.x > 0);
+          let newNodeAtRight =
+            rightSideNodes.length <= self.node.children.length / 2;
+          let x = newNodeAtRight ? self.node.data.w + 128 : 0 - 72 - 128;
           self.addSubNode(x);
-          return;
         }
-        self.bus.$emit("addSubNode");
+        if (event.keyCode == 46 || event.keyCode == 8) {
+          self.bus.$emit("delNode");
+        }
+        if (event.keyCode == 83 && (event.metaKey || event.ctrlKey)) {
+          self.save();
+        }
       };
     },
     centerRootNode() {
@@ -158,6 +203,7 @@ export default {
         var dom = document.getElementById("mind");
         this.node.data.x = dom.clientWidth / 2 - 50;
         this.node.data.y = dom.clientHeight / 2 - 15;
+        this.bus.$emit("needSave");
       });
     },
     getData(id) {
@@ -184,28 +230,33 @@ export default {
         });
     },
     reLocation(isRight) {
+      let curSideNodes = this.node.children.filter(
+        v => v.data.x > 0 == isRight
+      );
+      if (curSideNodes.length < 1) return;
       this.switchPath("none");
-      let index = isRight ? 0 : 1;
-      let cur = this.node.children[index];
+      let index = 0;
+      let cur = curSideNodes[index];
       let preHeight = this.getNodeHeight(cur);
       let y = 0;
       cur.data.y = y;
-      cur = this.node.children[(index += 2)];
+      cur = curSideNodes[(index += 1)];
       while (cur) {
         let curHeight = this.getNodeHeight(cur);
         y += curHeight / 2 + 60 + preHeight / 2;
         cur.data.y = y;
         preHeight = curHeight;
-        cur = this.node.children[(index += 2)];
+        cur = curSideNodes[(index += 1)];
       }
       let center = y / 2;
-      index = isRight ? 0 : 1;
-      cur = this.node.children[index];
+      index = 0;
+      cur = curSideNodes[index];
       while (cur) {
         cur.data.y -= center;
-        cur = this.node.children[(index += 2)];
+        cur = curSideNodes[(index += 1)];
       }
       this.switchPath("inherit");
+      this.bus.$emit("needSave");
     }
   }
 };
