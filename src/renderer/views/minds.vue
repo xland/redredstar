@@ -89,8 +89,7 @@
                 if (this.searchTags.length > 0) {
                     let tagIds = this.searchTags.map(v => v.id);
                     this.db("mind_tag").whereIn("tag_id", tagIds).then(atRows => {
-                        let articleIds = atRows.map(v => v.article_id);
-                        articleIds = Array.from(new Set(articleIds));
+                        let articleIds = atRows.map(v => v.mind_id);
                         query = query.whereIn("id", articleIds).then(result => {
                             if (result.length < 1) return;
                             this.minds = this.minds.concat(result);

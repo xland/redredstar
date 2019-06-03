@@ -45,7 +45,7 @@
   border-bottom: 1px dashed rgb(204, 204, 204);
 }
 .all .tagIndex {
-  padding-right: 18px;
+  padding-right: 19px;
 }
 .selected {
   padding-top: 8px;
@@ -133,7 +133,7 @@ export default {
   props: ["refer", "id"],
   data() {
     return {
-      show: true,
+      show: false,
       tagInputText: "",
       tagEles: [],
       tagSelected: []
@@ -141,7 +141,6 @@ export default {
   },
   mounted() {
     this.getData();
-    console.log(this.id);
   },
   methods: {
     async tagRemove(item, index) {
@@ -168,28 +167,30 @@ export default {
       this.tagEles.splice(index, 1);
     },
     async tagCancelSelect(item, index) {
+      let obj = {
+        tag_id: item.id
+      };
+      obj[this.refer + "_id"] = this.id;
       await this.db(this.refer + "_tag")
-        .where({
-          tag_id: item.id,
-          mind_id: this.id
-        })
+        .where(obj)
         .del();
       this.tagSelected.splice(index, 1);
       this.tagEles.unshift(item);
     },
     async tagSelect(item, index) {
-      await this.db(this.refer + "_tag").insert({
-        tag_id: item.id,
-        mind_id: this.id
-      });
+      let obj = {
+        tag_id: item.id
+      };
+      obj[this.refer + "_id"] = this.id;
+      await this.db(this.refer + "_tag").insert(obj);
       this.tagEles.splice(index, 1);
       this.tagSelected.unshift(item);
     },
     async getData() {
       //todo 根据refer num 排序
-      this.$root.tags = await this.db("tags").orderBy("created_at", "desc");
-      let mts = await this.db(this.refer + "_tag").where("mind_id", this.id);
-      this.$root.tags.forEach(v => {
+      let allTags = await this.db("tags").orderBy("created_at", "desc");
+      let mts = await this.db(this.refer + "_tag").where(this.refer + "_id", this.id);
+      allTags.forEach(v => {
         let flag = mts.some(i => i.tag_id == v.id);
         if (flag) this.tagSelected.push(v);
         else this.tagEles.push(v);
@@ -201,7 +202,7 @@ export default {
         text: str
       });
     },
-    addTag() {
+    async addTag() {
       var text = this.tagInputText.trim();
       if (text.length < 1) {
         this.alert("输入的标签为空");
@@ -215,12 +216,10 @@ export default {
       let tag = {
         title: text
       };
-      this.db("tags")
-        .insert(tag)
-        .then(rows => {
-          tag.id = rows[0];
-          this.$root.tags.unshift(tag);
-        });
+      let row = await this.db("tags").insert(tag);
+      tag.id = row[0];
+      this.tagEles.unshift(tag);
+      this.tagInputText = "";
       this.bus.$emit("tagCount");
     }
   }

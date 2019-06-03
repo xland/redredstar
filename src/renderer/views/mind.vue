@@ -169,11 +169,8 @@ export default {
     showTag() {},
     showHelp() {
       swal({
-        width: 580,
         content: document.getElementById("helpContainer"),
         buttons: false
-      }).then(() => {
-        this.qrCodeId = null;
       });
     },
     wheel(e) {
@@ -332,11 +329,5 @@ export default {
 }
 .toolBtn:hover {
   background: #e7f3ff;
-}
-#helpContainer {
-  text-align: left;
-  padding-left: 12px;
-  padding-right: 12px;
-  line-height: 32px;
 }
 </style>
