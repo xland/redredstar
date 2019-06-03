@@ -31,7 +31,7 @@
             del() {
                 swal({
                     icon: "warning",
-                    text: "确实要删除此项知识吗？",
+                    text: "确实要删除此脑图吗？",
                     buttons: [
                         "取消", "删除"
                     ]
