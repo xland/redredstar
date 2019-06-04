@@ -2,30 +2,17 @@
   <div tabindex="1" id="mind" :class="['view',drag.ing?'drag':'']" v-if="node">
     <tagslide refer="mind" :id="$route.params.id" ref="tagslide">
     </tagslide>
+    <recent refer="mind" :id="$route.params.id" ref="recent"></recent>
     <div class="tools">
       <div class="toolBtn" @click="$refs.tagslide.show=true">
         <i class="iconfont icon-biaoqian icon"></i>
       </div>
-      <div class="toolBtn" @mouseenter="showRecent = true" @mouseleave="showRecent = false">
+      <div class="toolBtn" @mouseenter="$refs.recent.show=true" @mouseleave="$refs.recent.show=false">
         <i class="iconfont icon-zuijin icon"></i>
       </div>
       <div class="toolBtn" @click="showHelp">
         <i class="iconfont icon-help icon"></i>
       </div>
-    </div>
-    <div
-      v-show="showRecent"
-      class="recent"
-      @mouseenter="showRecent = true"
-      @mouseleave="showRecent = false"
-      style="top:44px;"
-    >
-      <div
-        :key="item.id"
-        @click="$router.push('/mind/' + item.id)"
-        v-for="item in recent"
-        class="item"
-      >{{item.title}}</div>
     </div>
     <div style="display: none">
       <div id="helpContainer">
@@ -93,6 +80,7 @@ const fs = require("fs");
 const path = require("path");
 import node from "../components/minds/node";
 import tagslide from "../components/tagslide";
+import recent from "../components/recent";
 import common from "../components/minds/common";
 import { truncate } from "fs";
 const { remote } = require("electron");
@@ -100,14 +88,13 @@ export default {
   mixins: [common],
   components: {
     node,
-    tagslide
+    tagslide,
+    recent
   },
   data() {
     return {
       node: null,
       mindPath: null,
-      recent: [],
-      showRecent: false,
       drag: {
         x: 0,
         y: 0,
@@ -241,20 +228,6 @@ export default {
       );
       mind = JSON.parse(mind);
       this.node = mind.root;
-      this.db("minds")
-        .where("id", id)
-        .update({
-          visited_at: new Date()
-        })
-        .then(() => {
-          this.db("minds")
-            .orderBy("visited_at", "desc")
-            .limit(8)
-            .offset(1)
-            .then(recentRows => {
-              this.recent = recentRows;
-            });
-        });
     },
     reLocation(isRight) {
       let curSideNodes = this.node.children.filter(

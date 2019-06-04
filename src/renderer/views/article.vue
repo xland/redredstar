@@ -17,8 +17,8 @@
       </div>
       <div
         class="barBtn"
-        @mouseenter="showRecentArticle = true"
-        @mouseleave="showRecentArticle = false"
+        @mouseenter="$refs.recent.show=true"
+        @mouseleave="$refs.recent.show=false"
       >
         <i class="iconfont icon-zuijin" style="font-size: 16px !important;"></i>
       </div>
@@ -31,21 +31,8 @@
     </div>
     <editor ref="articleEditor"></editor>
     <sites v-show="showSites"></sites>
-    <div
-      v-show="showRecentArticle"
-      class="recent"
-      @mouseenter="showRecentArticle = true"
-      @mouseleave="showRecentArticle = false"
-    >
-      <div
-        :key="item.id"
-        @click="$router.push('/article/' + item.id)"
-        v-for="item in recentArticles"
-        class="item"
-      >{{item.title}}</div>
-    </div>
-    <tagslide refer="article" :id="$route.params.id" ref="tagslide">
-    </tagslide>
+    <tagslide refer="article" :id="$route.params.id" ref="tagslide"></tagslide>
+    <recent refer="article" :id="$route.params.id" ref="recent"></recent>
     <div style="display: none">
       <div id="helpContainer">
         您通过“想学吗”编辑的知识，以及知识内部的图片、个人设置等数据均保存在本地；
@@ -66,6 +53,7 @@
 import sites from "../components/sites";
 import editor from "../components/editor";
 import tagslide from "../components/tagslide";
+import recent from "../components/recent";
 const fs = require("fs");
 const path = require("path");
 const { remote } = require("electron");
@@ -73,14 +61,13 @@ export default {
   components: {
     sites,
     editor,
-    tagslide
+    tagslide,
+    recent
   },
   data() {
     return {
       showSites: false,
-      article: null,
-      showRecentArticle: false,
-      recentArticles: []
+      article: null
     };
   },
   beforeRouteUpdate(to, from, next) {
@@ -106,9 +93,8 @@ export default {
       swal({
         content: document.getElementById("helpContainer"),
         buttons: false,
-        className: 'modelWidth'
-      })
-      
+        className: "modelWidth"
+      });
     },
     showSitesClick() {
       this.showSites = true;
@@ -148,19 +134,6 @@ export default {
         .select("*")
         .then(rows => {
           this.article = rows[0];
-          this.article.visited_at = new Date();
-          this.db("articles")
-            .where("id", this.article.id)
-            .update(this.article)
-            .then(() => {
-              this.db("articles")
-                .orderBy("visited_at", "desc")
-                .limit(8)
-                .offset(1)
-                .then(recentRows => {
-                  this.recentArticles = recentRows;
-                });
-            });
           this.$nextTick(() => {
             this.$refs.articleEditor.getContent();
             this.hookArticleRefresh();
@@ -214,7 +187,7 @@ export default {
 }
 </style>
 <style>
-.modelWidth{
+.modelWidth {
   width: 960px !important;
 }
 </style>
