@@ -89,6 +89,9 @@
   background: #1787fb;
   color: #fff;
 }
+.noData{
+  line-height:38px;text-align:center;font-size:16px;color:#bbb;
+}
 </style>
 <template>
   <div v-show="show" class="bg" @click="show=false">
@@ -103,7 +106,10 @@
           <div class="tagText">{{item.title}}</div>
         </div>
       </div>
-      <div class="all tagContainer">
+      <div class="selected tagContainer noData" v-else>
+          该{{refer == 'mind'?'脑图':'文章'}}未选择任何标签
+      </div>
+      <div class="all tagContainer" v-if="tagEles.length > 0">
         <div
           :key="item.id"
           @click="tagSelect(item,index)"
@@ -115,6 +121,9 @@
             <i class="iconfont icon-guanbi" style="font-size: 16px !important;"></i>
           </div>
         </div>
+      </div>
+      <div class="all tagContainer noData" v-else>
+          标签库中没有可供选择的标签
       </div>
       <div class="add">
         <div class="input">
@@ -216,6 +225,7 @@ export default {
       let row = await this.db("tags").insert(tag);
       tag.id = row[0];
       this.tagEles.unshift(tag);
+      this.tagSelect(tag,0);
       this.tagInputText = "";
       this.bus.$emit("tagCount");
     }
