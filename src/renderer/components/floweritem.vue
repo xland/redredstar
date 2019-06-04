@@ -101,6 +101,7 @@
         display: flex;
         margin-top: 6px;
         line-height: 22px;
+        height: 22px;
     }
 
     .content {
@@ -114,7 +115,7 @@
     }
 
     .timeBox {
-        width: 68px;
+        width: 168px;
         color: #999;
         font-size: 12px;
         text-align: right;

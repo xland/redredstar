@@ -215,6 +215,6 @@ export default {
 </style>
 <style>
 .modelWidth{
-  width: 930px !important;
+  width: 960px !important;
 }
 </style>
