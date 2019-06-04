@@ -13,7 +13,6 @@
   padding-bottom: 6px;
   z-index: 999;
 }
-
 .recent .item {
   padding-left: 8px;
   padding-right: 8px;
@@ -26,7 +25,6 @@
   color: #666;
   cursor: pointer;
 }
-
 .recent .item:hover {
   background: #dcedfe;
   color: #007acc;
