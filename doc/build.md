@@ -2,7 +2,7 @@
 
 - npm install
 - npm run buildsharp
-- npm install sqlite3 --build-from-source --runtime=electron --target=3.1.6 --dist-url=https://atom.io/download/electron
+- npm install sqlite3 --build-from-source --runtime=electron --target=5.0.2 --dist-url=https://atom.io/download/electron
 - npm run dev
 
 ## For win：
