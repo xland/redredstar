@@ -66,15 +66,17 @@ export default {
   },
   computed: {
     pathValue() {
-      let startX = this.node.data.x > 0 ? 0 : this.node.data.w;
+      let startX = 0;
       let startY = 15;
-      let endX =
-        0 -
-        this.node.data.x +
-        (this.node.data.x > 0 ? this.$parent.node.data.w : 0);
+      let endX = 0 - this.node.data.x + this.$parent.node.data.w;
       let endY = 0 - this.node.data.y + 15;
-      //return `M${startX},${startY}C${endX/2},${startY},${endX/2},${endY},${endX},${endY}`;
-      return `M${startX},${startY}Q${endX},${startY},${endX},${endY}`;
+      let span = -10;
+      if(this.node.data.x < 0){
+        startX = this.node.data.w;
+        endX = 0 - this.node.data.x;
+        span = 10;
+      }
+      return `M${startX},${startY}L${startX+span},${startY}C${startX+6*span},${startY},${endX-6*span},${endY},${endX},${endY}`;
     },
     classValue() {
       let arr = new Set(["node"]);
