@@ -52,9 +52,6 @@
 <script>
     import swal from 'sweetalert';
     var electron = require('electron');
-    const {
-        BrowserWindow
-    } = require('electron').remote
     export default {
         data() {
             return {
