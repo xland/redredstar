@@ -79,6 +79,11 @@ markdown编辑器<br />
 <img width="680" src="/doc/imgs/markdown.jpg" />
 </p>
 
+<p align="center">
+markdown编辑器<br />
+<img width="680" src="/doc/imgs/mind.png" />
+</p>
+
 ## 联系方式
 
 * 联系方式：412588801@qq.com
