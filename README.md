@@ -80,7 +80,7 @@ markdown编辑器<br />
 </p>
 
 <p align="center">
-markdown编辑器<br />
+脑图<br />
 <img width="680" src="/doc/imgs/mind.png" />
 </p>
 
