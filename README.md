@@ -51,6 +51,11 @@
 ## 界面截图
 
 <p align="center">
+对接的平台<br />
+<img width="680" src="/doc/imgs/site.png" />
+</p>
+
+<p align="center">
 知识检索<br />
 <img width="680" src="http://www.xiangxuema.com/doc/search.gif" />
 </p>
