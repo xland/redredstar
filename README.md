@@ -13,7 +13,7 @@
 ## 下载地址
 
 * osx64: 
-<br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.4.1.dmg
+<br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.4.3.dmg
 
 * win64: 
 <br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.4.3.exe
