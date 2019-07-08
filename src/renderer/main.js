@@ -16,8 +16,7 @@ const BAIDU_SITE_ID = '75bf2b763da29b214e586f7dfa74403c'
 ebtRenderer(ipcRenderer, BAIDU_SITE_ID, router)
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
-Vue.config.productionTip = false
-
+Vue.config.productionTip = false;
 dbInitializer.init(db => {
   new Vue({
     data: store,

@@ -75,7 +75,6 @@
   </div>
 </template>
 <script>
-import SVG from "svg.js";
 const fs = require("fs");
 const path = require("path");
 import node from "../components/minds/node";

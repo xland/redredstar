@@ -32,7 +32,6 @@
       //   webview.loadURL(e.url);
       // })
       // return;
-
       this.db("settings").select("*").then(rows => this.$root.init(rows[0]));
       this.$root.hookMsgFromMainProcess();
     }

@@ -1,6 +1,6 @@
 <template>
   <g :id="node.data.id" :class="classValue" :transform="`translate(${node.data.x},${node.data.y})`">
-    <g class="gChild">
+    <g v-show="!node.data.isClose" class="gChild">
       <node :key="item.data.id" :prop-data="item" v-for="item in node.children"></node>
     </g>
     <g class="gRec">
@@ -15,7 +15,7 @@
         :width="node.data.w"
         :height="node.data.h"
       >
-        <input v-model="editTxt" class="svgInput" type="text">
+        <input v-model="editTxt" class="svgInput" type="text" />
       </foreignObject>
       <path :d="pathValue"></path>
       <use
@@ -71,12 +71,13 @@ export default {
       let endX = 0 - this.node.data.x + this.$parent.node.data.w;
       let endY = 0 - this.node.data.y + 15;
       let span = -10;
-      if(this.node.data.x < 0){
+      if (this.node.data.x < 0) {
         startX = this.node.data.w;
         endX = 0 - this.node.data.x;
         span = 10;
       }
-      return `M${startX},${startY}L${startX+span},${startY}C${startX+6*span},${startY},${endX-6*span},${endY},${endX},${endY}`;
+      return `M${startX},${startY}L${startX + span},${startY}C${startX +
+        6 * span},${startY},${endX - 6 * span},${endY},${endX},${endY}`;
     },
     classValue() {
       let arr = new Set(["node"]);
@@ -98,18 +99,22 @@ export default {
       });
     },
     subtract() {
-      document.querySelector(`#${this.node.data.id} > .gChild`).style.display =
-        "none"; //why can not set isClose directly
-      this.$parent.reLocation(this.node.data.x > 0);
+      // document.querySelector(`#${this.node.data.id} > .gChild`).style.display =
+      //   "none"; //why can not set isClose directly
+
       this.node.data.isClose = true;
-      this.bus.$emit("needSave");
+      this.$nextTick(_ => {
+        this.$parent.reLocation(this.node.data.x > 0);
+        this.bus.$emit("needSave");
+      });
     },
     plus() {
-      document.querySelector(`#${this.node.data.id} > .gChild`).style.display =
-        "inherit";
-      this.reLocation(this.node.data.x > 0);
+      // document.querySelector(`#${this.node.data.id} > .gChild`).style.display = "inherit";
       this.node.data.isClose = false;
-      this.bus.$emit("needSave");
+      this.$nextTick(_ => {
+        this.reLocation(this.node.data.x > 0);
+        this.bus.$emit("needSave");
+      });
     }
   }
 };

@@ -77,7 +77,7 @@
                 if (!isGetMore) {
                     this.minds = [];
                 }
-                let query = this.db('minds').limit(16)
+                let query = this.db('minds').limit(38)
                     .orderBy("updated_at", "desc")
                     .offset(this.minds.length);
                 if (this.searchText.trim().length > 0) {

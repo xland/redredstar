@@ -109,7 +109,7 @@
                 if (!isGetMore) {
                     this.flowers = [];
                 }
-                let query = this.db('flowers').limit(16)
+                let query = this.db('flowers').limit(38)
                     .orderBy("updated_at", "desc")
                     .offset(this.flowers.length);
                 if (this.searchText.trim().length > 0) {
