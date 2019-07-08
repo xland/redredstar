@@ -16,7 +16,7 @@
 <br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.4.1.dmg
 
 * win64: 
-<br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.4.2.exe
+<br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.4.3.exe
 
 * chrome插件(无需翻墙，需手动安装): 
 <br />http://xiangxuema.com/chrome_extension/xiangxuema.crx 
