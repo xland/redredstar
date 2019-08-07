@@ -5,9 +5,6 @@
       <router-view :key="$route.fullPath" />
     </div>
     <bottombar></bottombar>
-    <!-- <webview disablewebsecurity preload="D:/project/xiangxuema/src/renderer/test.js" style="height: 100%"
-      src="https://i.taobao.com/my_taobao_api/guess_you_like.json">
-    </webview> -->
   </div>
 </template>
 
@@ -22,18 +19,15 @@
     data() {
       return {}
     },
-    methods: {},
+    methods: {
+      async init(){ 
+        let setting = await this.db("settings").select("*").first();
+        this.$root.init(setting)
+        this.$root.hookMsgFromMainProcess();
+      }
+    },
     mounted() {
-      // const webview = document.querySelector('webview')
-      // webview.addEventListener('dom-ready', () => {
-      //   webview.openDevTools()
-      // })
-      // webview.addEventListener('new-window', (e) => {
-      //   webview.loadURL(e.url);
-      // })
-      // return;
-      this.db("settings").select("*").then(rows => this.$root.init(rows[0]));
-      this.$root.hookMsgFromMainProcess();
+      this.init();
     }
   }
 </script>
