@@ -21,8 +21,8 @@ const knex = require('knex')({
 });
 
 const initializer = {
-    initTable() {
-        return knex.schema.createTable('articles', table => {
+    async initTable() {
+        await knex.schema.createTable('articles', table => {
             table.increments('id');
             table.string('title');
             table.string('from_url');
@@ -76,7 +76,7 @@ const initializer = {
             table.integer('mind_id');
         })
     },
-    initDefaultData() {
+    async initDefaultData() {
         let defaultSetting = {
             autosave_interval: 8,
             img_w: 1300,
@@ -84,61 +84,55 @@ const initializer = {
             editor_type: 'html',
             jna_sync: true,
         };
-        return knex.insert(defaultSetting).into("settings").then();
+        await knex.insert(defaultSetting).into("settings");
     },
-    extarColumns() {
-        knex.schema.hasColumn("articles", "visited_at").then(flag => {
-            if (flag) return;
-            knex.schema.alterTable('articles', table => {
-                table.datetime('visited_at');
-            }).then();
-        })
-        knex.schema.hasColumn("articles", "from_url").then(flag => {
-            if (flag) return;
-            knex.schema.alterTable('articles', table => {
-                table.string('from_url');
-            }).then();
+    async extarColumns() {
+        let flag = await knex.schema.hasColumn("articles", "visited_at");
+        if (flag) return;
+        await knex.schema.alterTable('articles', table => {
+            table.datetime('visited_at');
         });
-        knex.schema.hasTable('flowers').then(flag => {
-            if (flag) return
-            knex.schema.createTable('flowers', function (table) {
-                table.increments('id');
-                table.integer('content');
-                table.string('from_url');
-                table.datetime('updated_at').defaultTo(knex.fn.now());
-                table.datetime('created_at').defaultTo(knex.fn.now());
-            }).createTable('flower_tag', table => {
-                table.increments('id');
-                table.integer('tag_id');
-                table.integer('flower_id');
-            }).then();
+        flag = knex.schema.hasColumn("articles", "from_url");
+        if (flag) return;
+        await knex.schema.alterTable('articles', table => {
+            table.string('from_url');
         });
-        knex.schema.hasTable('minds').then(flag => {
-            if (flag) return
-            knex.schema.createTable('minds', table => {
-                table.increments('id');
-                table.string('title');
-                table.datetime('created_at').defaultTo(knex.fn.now());
-                table.datetime('updated_at').defaultTo(knex.fn.now());
-                table.datetime('visited_at').defaultTo(knex.fn.now());
-            }).createTable('mind_tag', table => {
-                table.increments('id');
-                table.integer('tag_id');
-                table.integer('mind_id');
-            }).then();
+        flag = knex.schema.hasTable('flowers');
+        if (flag) return
+        await knex.schema.createTable('flowers', function(table) {
+            table.increments('id');
+            table.integer('content');
+            table.string('from_url');
+            table.datetime('updated_at').defaultTo(knex.fn.now());
+            table.datetime('created_at').defaultTo(knex.fn.now());
+        }).createTable('flower_tag', table => {
+            table.increments('id');
+            table.integer('tag_id');
+            table.integer('flower_id');
+        });
+        flag = knex.schema.hasTable('minds');
+        if (flag) return
+        await knex.schema.createTable('minds', table => {
+            table.increments('id');
+            table.string('title');
+            table.datetime('created_at').defaultTo(knex.fn.now());
+            table.datetime('updated_at').defaultTo(knex.fn.now());
+            table.datetime('visited_at').defaultTo(knex.fn.now());
+        }).createTable('mind_tag', table => {
+            table.increments('id');
+            table.integer('tag_id');
+            table.integer('mind_id');
         });
     },
-    init(cb) {
+    async init(cb) {
         if (!firstTime) {
             cb(knex);
             this.extarColumns();
             return;
         }
-        this.initTable().then(() => {
-            this.initDefaultData().then(() => {
-                cb(knex)
-            })
-        });
+        await this.initTable();
+        await this.initDefaultData();
+        cb(knex)
     }
 }
 
