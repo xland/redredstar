@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-import sharp from 'sharp';
+import compressor from 'compressorjs';
 const request = require('request');
 const url = require("url");
 export default {
@@ -17,34 +17,51 @@ export default {
         }
     },
     methods: {
-        imgCompress(fullName) {
-            let extIndex = fullName.lastIndexOf('.');
-            let tempName = fullName.substring(0, extIndex) + "_temp" + fullName.substring(extIndex);
+        imgCompress(fullName, cb) {
+            let data = fs.readFileSync(fullName);
+            let file = new File([data], path.basename(fullName), { type: this.fileTypeMap[path.extname(fullName).substr(1)] });
             if (this.$root.imgWidth > 0 && this.$root.imgHight > 0) {
-                sharp(fullName)
-                    .resize(this.$root.imgWidth, this.$root.imgHight, {
-                        withoutEnlargement: true,
-                        fit: "inside"
-                    })
-                    .toFile(tempName)
-                    .then(() => {
-                        fs.unlink(fullName, err => {
-                            if (!err) {
-                                fs.rename(tempName, fullName, err => {
-                                    err && console.log(err);
-                                });
+                new compressor(file, {
+                    quality: 0.8,
+                    success(result) {
+                        fs.unlinkSync(fullName)
+                        let fr = new FileReader();
+                        fr.onload = () => {
+                            if (fr.readyState == 2) {
+                                var buffer = new Buffer.from(fr.result);
+                                fs.writeFileSync(fullName, buffer);
+                                cb();
                             }
-                        })
-                    });
+                        };
+                        fr.readAsArrayBuffer(result);
+                    },
+                    error(err) {
+                        console.log(err.message);
+                    },
+                });
             }
-            // attention('input.jpg')
-            //     .swatches(1)
-            //     .palette(function (err, palette) {
-            //         palette.swatches.forEach(function (swatch) {
-            //             console.dir(swatch);
-            //         });
-            //     });
         },
+        // imgCompress(fullName) {
+        //     let extIndex = fullName.lastIndexOf('.');
+        //     let tempName = fullName.substring(0, extIndex) + "_temp" + fullName.substring(extIndex);
+        //     if (this.$root.imgWidth > 0 && this.$root.imgHight > 0) {
+        //         sharp(fullName)
+        //             .resize(this.$root.imgWidth, this.$root.imgHight, {
+        //                 withoutEnlargement: true,
+        //                 fit: "inside"
+        //             })
+        //             .toFile(tempName)
+        //             .then(() => {
+        //                 fs.unlink(fullName, err => {
+        //                     if (!err) {
+        //                         fs.rename(tempName, fullName, err => {
+        //                             err && console.log(err);
+        //                         });
+        //                     }
+        //                 })
+        //             });
+        //     }
+        // },
         imgSaveBase64Obj(dom) {
             let id = "img" + new Date().getTime();
             let base64Data = dom.src.replace(/^data:([A-Za-z-+/]+);base64,/, '');
@@ -65,8 +82,7 @@ export default {
                 if (fr.readyState == 2) {
                     var buffer = new Buffer.from(fr.result);
                     fs.writeFile(fullName, buffer, err => {
-                        this.imgCompress(fullName);
-                        cb(id, fullName, err);
+                        this.imgCompress(fullName, _ => cb(id, fullName, ''));
                     });
                 }
             };

@@ -1,17 +1,20 @@
 const electron = require('electron');
 const fs = require('fs-extra')
 const path = require('path');
-const basePath = path.join(electron.remote.app.getPath('userData'), "/xxm");
+const basePath = electron.remote.app.getPath('userData');
 var firstTime = false;
-if (!fs.existsSync(basePath)) {
+if (fs.existsSync(path.join(basePath, 'xxm_import'))) {
+    fs.removeSync(path.join(basePath, 'xxm'));
+    fs.renameSync(path.join(basePath, 'xxm_import'), path.join(basePath, 'xxm'));
+} else if (!fs.existsSync(path.join(basePath, 'xxm'))) {
     firstTime = true;
-    fs.mkdirSync(basePath);
+    fs.mkdirSync(path.join(basePath, 'xxm'));
 }
 const knex = require('knex')({
     client: 'sqlite3',
     useNullAsDefault: true,
     connection: {
-        filename: path.join(basePath, "db")
+        filename: path.join(basePath, 'xxm', "db")
     },
     log: {
         info(message) {

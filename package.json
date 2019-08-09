@@ -15,18 +15,17 @@
         "pack": "npm run pack:main && npm run pack:renderer",
         "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
         "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
-        "buildsharp": "electron-rebuild -f -w sharp",
         "postinstall": ""
     },
     "build": {
         "npmRebuild": "false",
         "electronDownload": {
-            "version": "5.0.2",
+            "version": "6.0.1",
             "cache": "./cache",
             "mirror": "https://npm.taobao.org/mirrors/electron/",
             "arch": "x64"
         },
-        "electronVersion": "5.0.2",
+        "electronVersion": "6.0.1",
         "productName": "想学吗",
         "appId": "com.xiangxuema",
         "directories": {
@@ -35,10 +34,12 @@
         "files": [
             "dist/electron/**/*"
         ],
-        "publish": [{
-            "provider": "generic",
-            "url": "http://xiangxuema.com/download"
-        }],
+        "publish": [
+            {
+                "provider": "generic",
+                "url": "http://xiangxuema.com/download"
+            }
+        ],
         "nsis": {
             "oneClick": false,
             "perMachine": true,
@@ -48,7 +49,8 @@
             "runAfterFinish": true
         },
         "dmg": {
-            "contents": [{
+            "contents": [
+                {
                     "x": 410,
                     "y": 150,
                     "type": "link",
@@ -72,12 +74,13 @@
         }
     },
     "dependencies": {
+        "adm-zip": "^0.4.13",
+        "compressorjs": "^1.0.5",
         "electron-baidu-tongji": "^1.0.2",
         "electron-updater": "^4.0.6",
         "fs-extra": "^7.0.1",
         "knex": "^0.16.3",
-        "sharp": "^0.22.1",
-        "sqlite3": "^4.0.8",
+        "sqlite3": "^4.0.9",
         "sweetalert": "^2.1.2",
         "vue": "^2.5.16",
         "vue-electron": "^1.0.6",
@@ -99,7 +102,7 @@
         "css-loader": "^0.28.11",
         "del": "^3.0.0",
         "devtron": "^1.4.0",
-        "electron": "^5.0.2",
+        "electron": "^6.0.1",
         "electron-builder": "^20.19.2",
         "electron-debug": "^1.5.0",
         "electron-devtools-installer": "^2.2.4",

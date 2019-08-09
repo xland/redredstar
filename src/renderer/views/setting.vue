@@ -55,63 +55,35 @@
             </div>
         </div>
         <div v-show="menuIndex == 1" class="content">
-            <div style="padding: 8px 18px 8px 18px;" v-if="userInfo != null">
-                <div style="color: #888">以下信息是您在“教你啊”网站的用户信息：</div>
-                <div style="display: flex">
-                    <div style="width: 260px">
-                        <div class="formItem">昵称：{{userInfo.nick_name}}</div>
-                        <div class="formItem">邮箱：{{userInfo.email}}</div>
-                        <div class="formItem">电话：{{userInfo.phone}}</div>
-                        <div class="formItem">提问数量：{{userInfo.question_num}}</div>
-                        <div class="formItem">回答数量：{{userInfo.answer_num}}</div>
-                        <div class="formItem">积分：{{userInfo.score}}</div>
-                        <div class="formItem">总金额：{{userInfo.total_money}}元</div>
-                    </div>
-                    <div style="flex: 1;">
-                        <img :src="userInfo.avatar" />
-                    </div>
-                </div>
-                <div class="formItem" style="padding-left: 0px">
-                    <div @click="gotoJna('https://jiaonia.com/My/Info/')" class="btn" style="margin-left: 0px;">
-                        去“教你啊”修改信息
-                    </div>
-                    <div @click="logout()" class="btn" style="background: #ccc;">
-                        退出登录
-                    </div>
-                </div>
-            </div>
+            <user />
         </div>
-        <div v-show="menuIndex == 2" class="content" style="padding: 8px 18px 8px 18px;">
-            您通过“想学吗”编辑的知识，以及知识内部的图片、个人设置等数据均保存在本地；
-            <br /> 您的知识，可以自由的发布到“微信公众号”、“简书”、“博客园”、“开源中国”等十几个知名网站（需拥有相应网站的账号）；
-            <br /> 发布知识时，知识内部的图片也会上传到对应的网站上；
-            <br /> 修改知识后，再次发布该知识，不会导致图片重复上传；
-            <br /> 在文章中删除图片，本地目录中的图片也会被删除，不会留有垃圾数据；
-            <br /> “想学吗”不会保存您任何博客平台的账号数据；
-            <br /> “想学吗”浏览器插件包括文章收集功能和思想火花收集功能，可以快速收集互联网的文章或简短的文字；
-            <br /> “想学吗”浏览器插件收集文章时，也会把文章内的图片下载到本地；
-            <br /> 文章发布到自媒体平台，只有保存成草稿，才可以再次编辑修改，发表之后往往是不能修改的；
+        <div v-show="menuIndex == 2" class="content">
+            <help />
         </div>
         <div v-show="menuIndex == 3" class="content">
-            <versions></versions>
+            <versions />
+        </div>
+        <div v-show="menuIndex == 4" class="content">
+            <dataManage />
         </div>
     </div>
 </template>
 <script>
     //todo:删除文章或者火花时，不要提示我
     import swal from 'sweetalert';
-    import versions from '../components/versions';
-    var electron = require('electron');
+    import versions from '../components/setting/versions';
+    import help from '../components/setting/help';
+    import user from '../components/setting/user';
+    import dataManage from '../components/setting/dataManage';
     export default {
         components:{
-            versions
+            versions,help,user,dataManage
         },
         data() {
             return {
                 setting: null,
-                userInfo: null,
                 menuIndex: 0,
-                menuItems: ['系统设置', '用户信息', '系统说明', '版本更新']
+                menuItems: ['系统设置', '用户信息', '系统说明', '版本更新','数据管理']
             }
         },
         mounted() {
@@ -120,31 +92,6 @@
         methods: {
             menuSelect(index) {
                 this.menuIndex = index;
-                if (index == 1) {
-                    if (!this.$root.jnaToken) {
-                        this.bus.$emit('login');
-                        this.menuIndex = 0;
-                    } else {
-                        let self = this;
-                        let fd = new FormData();
-                        fd.append("token", this.$root.jnaToken);
-                        window.xxmPost("https://jiaonia.com/Xxm/GetUserInfoByToken", fd, rt => {
-                            self.userInfo = JSON.parse(rt).data;
-                        })
-                    }
-                }
-            },
-            logout() {
-                this.$root.jnaToken = null;
-                this.$root.userInfo = null;
-                this.setting.jna_token = null;
-                this.db("settings").update({
-                    "jna_token": null
-                }).then();
-                this.menuIndex = 0;
-            },
-            gotoJna(url) {
-                electron.remote.shell.openExternal(url);
             },
             save() {
                 this.db("settings")
