@@ -224,6 +224,7 @@ export default {
       };
       let row = await this.db("tags").insert(tag);
       tag.id = row[0];
+      this.$root.tags.unshift(tag);
       this.tagEles.unshift(tag);
       this.tagSelect(tag,0);
       this.tagInputText = "";

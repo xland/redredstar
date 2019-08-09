@@ -33,7 +33,7 @@ export default {
       fs.remove(destPath);
       var unzip = new adm_zip(fullFileName);
       unzip.extractAllTo(destPath, true);
-      swal({ icon: "info", text: "数据导入成功,2秒后刷新数据" });
+      swal({ icon: "info", text: "数据导入成功,请重启应用" });
       setTimeout(function() {
         window.location.reload();
       }, 3000);

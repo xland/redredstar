@@ -1,6 +1,6 @@
 {
     "name": "xiangxuema",
-    "version": "6.4.3",
+    "version": "6.4.4",
     "author": "liulun <412588801@qq.com>",
     "description": "xiangxuema",
     "license": "MIT",
@@ -34,12 +34,10 @@
         "files": [
             "dist/electron/**/*"
         ],
-        "publish": [
-            {
-                "provider": "generic",
-                "url": "http://xiangxuema.com/download"
-            }
-        ],
+        "publish": [{
+            "provider": "generic",
+            "url": "http://xiangxuema.com/download"
+        }],
         "nsis": {
             "oneClick": false,
             "perMachine": true,
@@ -49,8 +47,7 @@
             "runAfterFinish": true
         },
         "dmg": {
-            "contents": [
-                {
+            "contents": [{
                     "x": 410,
                     "y": 150,
                     "type": "link",
