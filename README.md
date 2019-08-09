@@ -13,10 +13,10 @@
 ## 下载地址
 
 * osx64: 
-<br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97-6.4.3.dmg
+<br />http://xiangxuema.com/download/latest.dmg
 
 * win64: 
-<br />http://xiangxuema.com/download/%E6%83%B3%E5%AD%A6%E5%90%97%20Setup%206.4.3.exe
+<br />http://xiangxuema.com/download/latest.exe
 
 * chrome插件(无需翻墙，需手动安装): 
 <br />http://xiangxuema.com/chrome_extension/xiangxuema.crx 
