@@ -103,28 +103,24 @@ export default {
       }
     },
     hookArticleRefresh() {
-      this.$root.articlePublushCb = obj => {
-        this.db("article_site")
+      //todo 此处是否可以重构
+      this.$root.articlePublushCb = async obj => {
+        let rows = await this.db("article_site")
           .where("article_id", this.article.id)
           .andWhere("site_id", obj.siteId)
-          .select("*")
-          .then(rows => {
-            let asObj = {
-              article_id: this.article.id,
-              site_id: obj.siteId,
-              edit_url: obj.url
-            };
-            if (rows.length < 1) {
-              this.db("article_site")
-                .insert(asObj)
-                .then();
-            } else {
-              this.db("article_site")
-                .update(asObj)
-                .where("id", rows[0].id)
-                .then();
-            }
-          });
+          .select("*");
+        let asObj = {
+          article_id: this.article.id,
+          site_id: obj.siteId,
+          edit_url: obj.url
+        };
+        if (rows.length < 1) {
+          await this.db("article_site").insert(asObj);
+        } else {
+          await this.db("article_site")
+            .update(asObj)
+            .where("id", rows[0].id);
+        }
         this.$refs.articleEditor.jnaPublish();
       };
     },

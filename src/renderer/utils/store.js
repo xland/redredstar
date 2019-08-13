@@ -18,7 +18,7 @@ const store = {
     curArticleMd: false,
     imgUploadCb: null,
     articlePublushCb: null,
-    init(setting) {
+    async init(setting) {
         this.tickStep = setting.autosave_interval * 1000;
         this.imgHight = setting.img_h;
         this.imgWidth = setting.img_w;
@@ -26,7 +26,7 @@ const store = {
         this.jnaSync = setting.jna_sync;
         this.jnaToken = setting.jna_token;
         if (!setting.jna_login_show) {
-            swal({
+            let value = await swal({
                 icon: "info",
                 text: "为了兼容未来更多酷炫的功能\n我们希望您先登陆",
                 closeOnClickOutside: false,
@@ -34,13 +34,10 @@ const store = {
                 buttons: [
                     "就想用单机版", "这就去扫码登陆"
                 ]
-            }).then((value) => {
-                this.$root.db("settings").update({
-                    "jna_login_show": true
-                }).then();
-                if (!value) return;
-                this.bus.$emit('login');
             });
+            await this.$root.db("settings").update({ "jna_login_show": true })
+            if (!value) return;
+            this.bus.$emit('login');
         }
     },
     async delNoReferTag(tagId) {
@@ -56,7 +53,7 @@ const store = {
         this.bus.$emit('removeTag', tagId);
         this.bus.$emit("tagCount");
     },
-    articleFromWebApp(e, message) {
+    async articleFromWebApp(e, message) {
         let article = {
             title: message.title,
             created_at: new Date(),
@@ -64,16 +61,15 @@ const store = {
             from_url: message.from_url,
             editor_type: "html",
         };
-        this.$root.db("articles").insert(article).then(rows => {
-            article.id = rows[0];
-            let aPath = path.join(remote.app.getPath('userData'), "/xxm/" + article.id);
-            fs.mkdirSync(aPath);
-            fs.writeFileSync(path.join(aPath, "/a.data"), message.content, this.$root.rwOption);
-            this.bus.$emit('articleCount');
-            this.bus.$emit('newItemAdd');
-        })
+        let [id] = await this.$root.db("articles").insert(article);
+        article.id = id;
+        let aPath = path.join(remote.app.getPath('userData'), "/xxm/" + article.id);
+        fs.mkdirSync(aPath);
+        fs.writeFileSync(path.join(aPath, "/a.data"), message.content, this.$root.rwOption);
+        this.bus.$emit('articleCount');
+        this.bus.$emit('newItemAdd');
     },
-    flowerFromWebApp(e, message) {
+    async flowerFromWebApp(e, message) {
         let now = new Date();
         let flower = {
             content: message.content,
@@ -81,13 +77,12 @@ const store = {
             updated_at: now,
             created_at: now
         };
-        this.$root.db("flowers").insert(flower).then(rows => {
-            this.bus.$emit('flowerCount');
-            this.bus.$emit('newItemAdd');
-        })
+        await this.$root.db("flowers").insert(flower);
+        this.bus.$emit('flowerCount');
+        this.bus.$emit('newItemAdd');
     },
-    updateVersion(e, message) {
-        swal({
+    async updateVersion(e, message) {
+        let value = await swal({
             icon: "info",
             text: "新版本已经为您准备好啦！\n现在升级？还是下次启动应用时再升级？",
             closeOnClickOutside: false,
@@ -95,10 +90,9 @@ const store = {
             buttons: [
                 "下次升级", "现在升级"
             ]
-        }).then((value) => {
-            if (!value) return;
-            ipcRenderer.send('updateMain');
         });
+        if (!value) return;
+        ipcRenderer.send('updateMain');
     },
     hookMsgFromMainProcess() {
         ipcRenderer.on('articlePublishMsgFromMain', (e, message) => this.articlePublushCb(message))

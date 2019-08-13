@@ -31,7 +31,7 @@
             }
         },
         methods: {
-            saveContent(cb) {
+            async saveContent(cb) {
                 if (!this.needSave) {
                     if (cb) cb();
                     return;
@@ -44,12 +44,12 @@
                 }
                 fs.writeFileSync(path.join(this.articlePath, "a.data"), this.articleContent, this.$root.rwOption);
                 this.needSave = false;
-                this.db("articles").update({
+                await this.db("articles").update({
                     title: this.$parent.article.title,
                     updated_at: new Date()
-                }).where("id", this.$parent.article.id).then(rows => {
-                    if (cb) cb();
-                });
+                }).where("id", this.$parent.article.id);
+                //todo 看看这个cb是否能换成await
+                if (cb) cb();
             },
             focus() {
                 if (this.$parent.article.editor_type == "html") {

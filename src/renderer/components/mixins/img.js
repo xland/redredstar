@@ -41,27 +41,6 @@ export default {
                 });
             }
         },
-        // imgCompress(fullName) {
-        //     let extIndex = fullName.lastIndexOf('.');
-        //     let tempName = fullName.substring(0, extIndex) + "_temp" + fullName.substring(extIndex);
-        //     if (this.$root.imgWidth > 0 && this.$root.imgHight > 0) {
-        //         sharp(fullName)
-        //             .resize(this.$root.imgWidth, this.$root.imgHight, {
-        //                 withoutEnlargement: true,
-        //                 fit: "inside"
-        //             })
-        //             .toFile(tempName)
-        //             .then(() => {
-        //                 fs.unlink(fullName, err => {
-        //                     if (!err) {
-        //                         fs.rename(tempName, fullName, err => {
-        //                             err && console.log(err);
-        //                         });
-        //                     }
-        //                 })
-        //             });
-        //     }
-        // },
         imgSaveBase64Obj(dom) {
             let id = "img" + new Date().getTime();
             let base64Data = dom.src.replace(/^data:([A-Za-z-+/]+);base64,/, '');

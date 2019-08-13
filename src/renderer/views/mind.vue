@@ -1,13 +1,16 @@
 <template>
   <div tabindex="1" id="mind" :class="['view',drag.ing?'drag':'']" v-if="node">
-    <tagslide refer="mind" :id="$route.params.id" ref="tagslide">
-    </tagslide>
+    <tagslide refer="mind" :id="$route.params.id" ref="tagslide"></tagslide>
     <recent refer="mind" :id="$route.params.id" ref="recent"></recent>
     <div class="tools">
       <div class="toolBtn" @click="$refs.tagslide.show=true">
         <i class="iconfont icon-biaoqian icon"></i>
       </div>
-      <div class="toolBtn" @mouseenter="$refs.recent.show=true" @mouseleave="$refs.recent.show=false">
+      <div
+        class="toolBtn"
+        @mouseenter="$refs.recent.show=true"
+        @mouseleave="$refs.recent.show=false"
+      >
         <i class="iconfont icon-zuijin icon"></i>
       </div>
       <div class="toolBtn" @click="showHelp">
@@ -17,12 +20,12 @@
     <div style="display: none">
       <div id="helpContainer">
         在画布空白处按住鼠标左键拖动画布；
-        <br>选中节点后，按Tab键增加子节点；
-        <br>选中节点后，按Del(Backspace)键删除节点；
-        <br>双击节点，修改节点内文字；
-        <br>按住Ctrl(⌘)键，滚动鼠标滚轮，放大或缩小画布；
-        <br>双击画布空白处，还原画布状态；
-        <br>
+        <br />选中节点后，按Tab键增加子节点；
+        <br />选中节点后，按Del(Backspace)键删除节点；
+        <br />双击节点，修改节点内文字；
+        <br />按住Ctrl(⌘)键，滚动鼠标滚轮，放大或缩小画布；
+        <br />双击画布空白处，还原画布状态；
+        <br />
       </div>
     </div>
     <svg
@@ -39,11 +42,11 @@
     >
       <defs>
         <symbol id="plus">
-          <circle cx="5" cy="5" r="4" fill="#00000000" stroke="#0084ff"></circle>
-          <path d="M5,1L5,9" stroke="#0084ff"></path>
+          <circle cx="5" cy="5" r="4" fill="#00000000" stroke="#0084ff" />
+          <path d="M5,1L5,9" stroke="#0084ff" />
         </symbol>
         <symbol id="subtract">
-          <circle cx="5" cy="5" r="4" fill="#00000000" stroke="#0084ff"></circle>
+          <circle cx="5" cy="5" r="4" fill="#00000000" stroke="#0084ff" />
         </symbol>
       </defs>
       <g
@@ -53,10 +56,15 @@
         :transform="`scale(${scale}) translate(${node.data.x},${node.data.y})`"
       >
         <g class="gChild">
-          <node @mousedown.stop :key="item.data.id" :prop-data="item" v-for="item in node.children"></node>
+          <node
+            @mousedown.stop
+            :key="item.data.id"
+            :prop-data="item"
+            v-for="item in node.children"
+          />
         </g>
         <g class="gRec">
-          <rect @click.stop="nodeClick" :width="node.data.w" :height="node.data.h"></rect>
+          <rect @click.stop="nodeClick" :width="node.data.w" :height="node.data.h" />
           <text @click.stop="nodeClick" transform="translate(12,20)">{{node.data.text||'[未命名]'}}</text>
           <foreignObject
             @mousedown.stop
@@ -67,7 +75,7 @@
             :width="node.data.w"
             :height="node.data.h"
           >
-            <input @change="titleChange" v-model="editTxt" class="svgInput" type="text"></input>
+            <input @change="titleChange" v-model="editTxt" class="svgInput" type="text" />
           </foreignObject>
         </g>
       </g>
@@ -143,16 +151,16 @@ export default {
       );
       this.needSave = false;
     },
-    titleChange() {
-      let id = this.$route.params.id;
-      this.db("minds")
-        .where("id", id)
+    async titleChange() {
+      await this.db("minds")
+        .where("id", this.$route.params.id)
         .update({
           title: this.editTxt
-        })
-        .then();
+        });
     },
-    showTag() {},
+    showTag() {
+      //todo: 这个方法有啥用？
+    },
     showHelp() {
       swal({
         content: document.getElementById("helpContainer"),

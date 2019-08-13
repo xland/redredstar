@@ -89,7 +89,7 @@ export default {
           .count("id as count")
           .first();
         this.tagCount = count;
-      })
+      });
       this.bus.$on("saving", () => {
         this.rotating = true;
         setTimeout(() => {
@@ -103,7 +103,7 @@ export default {
       let self = this;
       window.addEventListener(
         "message",
-        function(e) {
+        async function(e) {
           if (!e.data.refuse) {
             return;
           }
@@ -111,27 +111,23 @@ export default {
             return;
           } else {
             self.$root.jnaToken = e.data.sid;
-            self
-              .db("settings")
-              .update({
-                jna_token: e.data.sid
-              })
-              .then();
+            await self.db("settings").update({
+              jna_token: e.data.sid
+            });
             swal.close();
           }
         },
         false
       );
     },
-    showQrCode(id) {
+    async showQrCode(id) {
       this.qrCodeId = id;
-      swal({
+      await swal({
         width: 580,
         content: document.getElementById(id),
         buttons: false
-      }).then(() => {
-        this.qrCodeId = null;
       });
+      this.qrCodeId = null;
     },
     goto(url) {
       electron.remote.shell.openExternal(url);

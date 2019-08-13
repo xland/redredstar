@@ -1,6 +1,6 @@
 <template>
     <div class="tagContainer box">
-        <div :key="item.id" @click="tagClick(item)" class="tag tagIndex" v-for="(item,index) in $root.tags">
+        <div :key="item.id" @click="tagClick(item)" class="tag tagIndex" v-for="item in $root.tags">
             <div class="tagText">{{item.title}}</div>
         </div>
         <div class="noDataTip" v-if="$root.tags.length<1" style="font-size: 22px;">
@@ -34,11 +34,10 @@
                 this.$parent.search();
             }
         },
-        mounted() {
+        async mounted() {
             //todo 根据refer num 排序
-            this.db("tags").orderBy("created_at", "desc").then(rows => {
-                this.$root.tags = rows;
-            })
+            let rows = await this.db("tags").orderBy("created_at", "desc");
+            this.$root.tags = rows;
         }
     }
 </script>

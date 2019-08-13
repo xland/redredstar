@@ -27,6 +27,7 @@
 </template>
 <script>
     var electron = require('electron');
+    //todo 刚完成扫码登录之后，好像这个画面出现不了
 export default {
   data() {
     return {
@@ -47,15 +48,11 @@ export default {
     }
   },
   methods: {
-    logout() {
+    async logout() {
       this.$root.jnaToken = null;
       this.$root.userInfo = null;
       this.setting.jna_token = null;
-      this.db("settings")
-        .update({
-          jna_token: null
-        })
-        .then();
+      await this.db("settings").update({ jna_token: null });
       this.menuIndex = 0;
     },
     gotoJna(url) {
