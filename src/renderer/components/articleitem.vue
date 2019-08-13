@@ -43,7 +43,7 @@ export default {
         await this.db("article_tag")
           .where("id", v.id)
           .del();
-        this.$root.delNoReferTag(v.tag_id);
+        await this.$root.delNoReferTag(v.tag_id);
       });
       //删文章库
       await this.db("articles")
@@ -57,6 +57,7 @@ export default {
         fs.unlinkSync(path.join(dir, file));
       });
       fs.rmdirSync(dir);
+      this.bus.$emit("articleCount");
     }
   }
 };

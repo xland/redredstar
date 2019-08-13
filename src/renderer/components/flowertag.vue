@@ -33,8 +33,8 @@
                     .where("tag_id", item.id)
                     .andWhere("flower_id", this.$parent.item.id)
                     .del()
-                    .then(() => {
-                        this.$root.delNoReferTag(item.id)
+                    .then(async () => {
+                        await this.$root.delNoReferTag(item.id)
                     });
             },
             alert(str) {

@@ -44,8 +44,8 @@
                         .where("mind_id", mind.id)
                         .select("*").then(at_rows => {
                             at_rows.forEach(v => {
-                                this.db("mind_tag").where("id",v.id).del().then(() => {
-                                    this.$root.delNoReferTag(v.tag_id)
+                                this.db("mind_tag").where("id",v.id).del().then(async () => {
+                                   await this.$root.delNoReferTag(v.tag_id)
                                 });
                             })
                         });

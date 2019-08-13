@@ -16,6 +16,11 @@ export default {
     return {
       versions: [
         {
+          v: "6.4.5",
+          i: `解决删除文章、火花时，底部左下角相关统计数字不会更新的BUG；
+          `
+        },
+        {
           v: "6.4.4",
           i: `electron版本更新至6.0.1（底层为chrome 76）；
     移除原生图片处理组件sharp，换为更轻量的compressor.js，安装包体积更小；
