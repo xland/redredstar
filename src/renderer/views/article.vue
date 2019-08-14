@@ -70,19 +70,17 @@ export default {
       article: null
     };
   },
-  beforeRouteUpdate(to, from, next) {
+  async beforeRouteUpdate(to, from, next) {
     this.showSites = false;
-    this.$refs.articleEditor.saveContent(() => {
-      this.$refs.articleEditor.destroy();
-      next();
-    });
+    await this.$refs.articleEditor.saveContent();
+    this.$refs.articleEditor.destroy();
+    next();
   },
-  beforeRouteLeave(to, from, next) {
+  async beforeRouteLeave(to, from, next) {
     this.showSites = false;
-    this.$refs.articleEditor.saveContent(() => {
-      this.$refs.articleEditor.destroy();
-      next();
-    });
+    await this.$refs.articleEditor.saveContent();
+    this.$refs.articleEditor.destroy();
+    next();
   },
   mounted() {
     let articleId = this.$route.params.id;

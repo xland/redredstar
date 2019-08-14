@@ -23,12 +23,12 @@ export default {
             let self = this;
             let instans = window.CKEDITOR.instances.editorCk
             instans.addCommand('saveContent', {
-                exec: function (editor, data) {
-                    self.saveContent();
+                exec: async function(editor, data) {
+                    await self.saveContent();
                 }
             });
             instans.addCommand('findAndReplace', {
-                exec: function (editor, data) {
+                exec: function(editor, data) {
                     CKEDITOR.tools.callFunction(105, editor);
                 }
             });
@@ -44,10 +44,10 @@ export default {
         hook() {
             let self = this;
             self.saveKeyEventHook();
-            CKEDITOR.instances.editorCk.on("change", function () {
+            CKEDITOR.instances.editorCk.on("change", function() {
                 self.needSave = true;
             });
-            CKEDITOR.instances.editorCk.on("fileUploadRequest", function (evt) {
+            CKEDITOR.instances.editorCk.on("fileUploadRequest", function(evt) {
                 evt.stop();
                 self.saveImg(evt.data.fileLoader.file);
             });
@@ -57,7 +57,7 @@ export default {
             let self = this;
             window.CKEDITOR.replace('editorCk', {
                 on: {
-                    instanceReady: function () {
+                    instanceReady: function() {
                         self.hook();
                         self.needSave = false;
                         self.downloadInternetImg();
