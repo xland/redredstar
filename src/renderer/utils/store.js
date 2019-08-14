@@ -95,7 +95,9 @@ const store = {
         ipcRenderer.send('updateMain');
     },
     hookMsgFromMainProcess() {
-        ipcRenderer.on('articlePublishMsgFromMain', (e, message) => this.articlePublushCb(message))
+        //文章发布插件发布文章到目标平台后，触发articlePublishMsgFromMain，此时画面必然处于文章编辑状态
+        ipcRenderer.on('articlePublishMsgFromMain', (e, message) => this.articlePublushCb(message));
+        //文章发布插件上传文章内图片到目标平台后，触发imgUploadMsgFromMain，此时画面必然处于文章编辑状态
         ipcRenderer.on('imgUploadMsgFromMain', (e, message) => this.imgUploadCb(message));
         ipcRenderer.on("alertMsgFromMain", (e, message) => swal(message));
         ipcRenderer.on('articleFromWebApp', (e, message) => this.articleFromWebApp(e, message));

@@ -100,45 +100,49 @@ export default {
         this.$refs.articleEditor.downloadInternetImg();
       }
     },
+    //文章发布插件发布文章到目标平台后，经主线程触发该方法，更新文章发布的URL，以便于以后更新目标平台的文章
     hookArticleRefresh() {
-      //todo 此处是否可以重构
       this.$root.articlePublushCb = async obj => {
-        let rows = await this.db("article_site")
+        let articleSiteObj = await this.db("article_site")
           .where("article_id", this.article.id)
           .andWhere("site_id", obj.siteId)
-          .select("*");
+          .select("*")
+          .first();
         let asObj = {
           article_id: this.article.id,
           site_id: obj.siteId,
           edit_url: obj.url
         };
-        if (rows.length < 1) {
-          await this.db("article_site").insert(asObj);
-        } else {
+        if (articleSiteObj) {
           await this.db("article_site")
             .update(asObj)
-            .where("id", rows[0].id);
+            .where("id", articleSiteObj.id);
+        } else {
+          await this.db("article_site").insert(asObj);
         }
         this.$refs.articleEditor.jnaPublish();
       };
     },
+    //页面加载之初，获取文章详情，
     async getArticle(id) {
       this.article = await this.db("articles")
         .where("id", id)
         .select("*")
         .first();
+      this.hookArticleRefresh();
       this.$nextTick(() => {
         this.$refs.articleEditor.getContent();
-        this.hookArticleRefresh();
         window.document.getElementById("articleTitleInput").focus();
       });
     },
     titleTab() {
+      //todo 不清楚为什么，必须延迟一下才能focus
       setTimeout(() => {
         this.$refs.articleEditor.focus();
       }, 80);
     },
     async titleChange() {
+      console.log(1);
       await this.db("articles")
         .update({
           title: this.article.title,
