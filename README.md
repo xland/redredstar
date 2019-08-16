@@ -18,7 +18,7 @@
 * osx64: 
 <br />http://xiangxuema.com/download/latest.dmg
 
-* linux: 
+* linux64: 
 <br />http://xiangxuema.com/download/latest.AppImage
 
 * chrome插件(无需翻墙，需手动安装): 
