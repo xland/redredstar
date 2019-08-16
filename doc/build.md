@@ -14,6 +14,8 @@
 - npm run dev
 - 如果编译不成功，你可能要尝试删掉package-lock.json；尝试npm cache clean -f;
 
-## 求助
+## For linux
 
-- 我在ubuntu下编译一直编译不成功，如果有网友愿意帮忙，请不吝赐教，我QQ：412588801
+- aptitude install build-essential  （安装g++环境）
+- npm install sqlite3 --build-from-source --runtime=electron --target=6.0.2 --dist-url=https://atom.io/download/electron
+- npm run dev

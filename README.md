@@ -39,6 +39,7 @@
 * 文章发布到目标平台不夹带任何“尾巴”；
 * “想学吗”浏览器插件包括文章收集功能和思想火花收集功能，可以快速收集互联网的文章或简短的文字；
 * “想学吗”浏览器插件收集文章时，也会把文章内的图片下载到本地；
+* “想学吗”还提供思维导图的功能，可以快速梳理构建您脑海中的想法
 
 ## 其他说明：
 
@@ -46,6 +47,8 @@
 <br />&emsp;&emsp; /Users/[name]/Library/Application Support/xiangxuema/xxm
 * win数据存放目录：
 <br />&emsp;&emsp; C:\Users\[name]\AppData\Roaming\xiangxuema\xxm
+* linux数据存放目录： 
+<br />&emsp;&emsp; /home/[name]/.config/xiangxuema
 * 本地编译说明：
 <br />&emsp;&emsp; https://github.com/xland/xiangxuema/blob/master/doc/build.md
 * 责权声明：
@@ -110,5 +113,6 @@ markdown编辑器<br />
 *  <a href="http://xin-lai.com" target="_blank">湖南心莱信息科技有限公司</a>
 *  <a href="http://www.senparc.com/" target="_blank">苏州盛派网络科技有限公司</a>
 *  杭州软雅科技有限公司
+*  衡水浩伦科技有限公司
 *  <a href="https://juejin.im/post/5c9c49d451882547e46dd6c3" target="_blank">公众号「 程序员的成长之路 」</a>
 *  Franky J ，<a href="https://www.cnblogs.com/asxinyu" target="_blank">数据之巅</a>
