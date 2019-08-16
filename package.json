@@ -34,10 +34,12 @@
         "files": [
             "dist/electron/**/*"
         ],
-        "publish": [{
-            "provider": "generic",
-            "url": "http://xiangxuema.com/download"
-        }],
+        "publish": [
+            {
+                "provider": "generic",
+                "url": "http://xiangxuema.com/download"
+            }
+        ],
         "nsis": {
             "oneClick": false,
             "perMachine": true,
@@ -47,7 +49,8 @@
             "runAfterFinish": true
         },
         "dmg": {
-            "contents": [{
+            "contents": [
+                {
                     "x": 410,
                     "y": 150,
                     "type": "link",
