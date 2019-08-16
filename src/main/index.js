@@ -32,15 +32,12 @@ function createWindow() {
     "height": 830,
     "minWidth": 980,
     "minHeight": 600,
-    "autoHideMenuBar": false,
+    "autoHideMenuBar": true,
     "webPreferences": {
       "nodeIntegration":true,
       "webSecurity": false,
     }
   });
-  if (process.platform != 'darwin') {
-    Menu.setApplicationMenu(null);
-  }
   mainWindow.loadURL(winURL);
   mainWindow.on('closed', () => {
     mainWindow = null

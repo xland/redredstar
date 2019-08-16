@@ -1,6 +1,6 @@
 {
     "name": "xiangxuema",
-    "version": "6.4.5",
+    "version": "6.4.6",
     "author": "liulun <412588801@qq.com>",
     "description": "xiangxuema",
     "license": "MIT",
@@ -20,12 +20,12 @@
     "build": {
         "npmRebuild": "false",
         "electronDownload": {
-            "version": "6.0.1",
+            "version": "6.0.2",
             "cache": "./cache",
             "mirror": "https://npm.taobao.org/mirrors/electron/",
             "arch": "x64"
         },
-        "electronVersion": "6.0.1",
+        "electronVersion": "6.0.2",
         "productName": "想学吗",
         "appId": "com.xiangxuema",
         "directories": {
@@ -70,7 +70,7 @@
             "icon": "build/icons/icon.ico"
         },
         "linux": {
-            "icon": "build/icons"
+            "icon": "build/icons/icon.png"
         }
     },
     "dependencies": {
@@ -102,11 +102,11 @@
         "css-loader": "^0.28.11",
         "del": "^3.0.0",
         "devtron": "^1.4.0",
-        "electron": "^6.0.1",
+        "electron": "^6.0.2",
         "electron-builder": "^21.2.0",
-        "electron-debug": "^1.5.0",
+        "electron-debug": "^3.0.1",
         "electron-devtools-installer": "^2.2.4",
-        "electron-rebuild": "^1.8.4",
+        "electron-rebuild": "^1.8.5",
         "file-loader": "^1.1.11",
         "html-webpack-plugin": "^3.2.0",
         "mini-css-extract-plugin": "0.4.0",
