@@ -12,11 +12,14 @@
 
 ## 下载地址
 
+* win64: 
+<br />http://xiangxuema.com/download/latest.exe
+
 * osx64: 
 <br />http://xiangxuema.com/download/latest.dmg
 
-* win64: 
-<br />http://xiangxuema.com/download/latest.exe
+* linux: 
+<br />http://xiangxuema.com/download/latest.AppImage
 
 * chrome插件(无需翻墙，需手动安装): 
 <br />http://xiangxuema.com/chrome_extension/xiangxuema.crx 
