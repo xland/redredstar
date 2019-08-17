@@ -18,25 +18,26 @@ export default {
             new tui.Editor({
                 el: document.querySelector('#editorMd'),
                 height: '100%',
-                //language:'zh_CN', //todo:会显示台湾的语言
+                language: 'zh_CN',
                 hideModeSwitch: true,
                 initialEditType: 'markdown',
                 previewStyle: 'vertical',
                 usageStatistics: false,
+                exts: ['scrollSync'],
                 events: {
-                    load: function (editor) {
+                    load: function(editor) {
                         window.editorMd = editor;
                         window.editorMd.setValue(self.articleContent);
                         setTimeout(() => {
                             self.needSave = false;
                         }, 86);
                     },
-                    change: function () {
+                    change: function() {
                         self.needSave = true;
                     }
                 },
                 hooks: {
-                    addImageBlobHook: function (file, cb, source) {
+                    addImageBlobHook: function(file, cb, source) {
                         self.imgSaveFileObj(file, (id, fullName, err) => {
                             let imgDom = '<img id="' + id + '" src="file://' + fullName + '" />';
                             window.editorMd.insertText(imgDom);

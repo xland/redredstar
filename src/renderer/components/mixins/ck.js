@@ -44,7 +44,8 @@ export default {
         hook() {
             let self = this;
             self.saveKeyEventHook();
-            CKEDITOR.instances.editorCk.on("change", function() {
+            CKEDITOR.instances.editorCk.on("key", function() {
+                console.log(1);
                 self.needSave = true;
             });
             CKEDITOR.instances.editorCk.on("fileUploadRequest", function(evt) {

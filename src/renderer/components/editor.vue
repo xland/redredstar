@@ -103,7 +103,9 @@ export default {
           this.initEditorCk();
         });
       } else {
-        this.initEditorMd();
+        this.$nextTick(() => {
+          this.initEditorMd();
+        });
       }
       this.tick = setInterval(
         async _ => await this.saveContent(),
