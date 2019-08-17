@@ -39,7 +39,23 @@
           </div>
         </div>
         <div style="flex: 1;"></div>
-        <div @click="newArticleBtnClick" class="btn">添加知识</div>
+        <div class="btn addBtn">
+          <div @click="newArticleBtnClick" class="addBtnText">添加知识 {{this.$root.editorType}}</div>
+          <div
+            @mouseleave="addBtnElesShow = false"
+            @mouseenter="addBtnElesShow = true"
+            class="addBtnDrop"
+          >
+            <i class="iconfont icon-xiala"></i>
+          </div>
+          <div
+            @click="newArticleBtnClick(false)"
+            @mouseenter="addBtnElesShow = true"
+            @mouseleave="addBtnElesShow = false"
+            v-show="addBtnElesShow"
+            class="addBtnMenu"
+          >添加知识 {{this.$root.editorType == 'html'?'markdown':'html'}}</div>
+        </div>
       </div>
       <div class="indexListContainer box" style="padding-top: 8px;">
         <div class="noDataTip" v-if="articles.length<1">
@@ -65,7 +81,8 @@ export default {
   data() {
     return {
       articles: [],
-      hoverIndex: -1
+      hoverIndex: -1,
+      addBtnElesShow: false
     };
   },
   methods: {
@@ -106,14 +123,17 @@ export default {
       if (result.length < 1) return;
       this.articles = this.articles.concat(result);
     },
-    async newArticleBtnClick() {
+    async newArticleBtnClick(flag = true) {
       let now = new Date();
+      let editor_type = this.$root.editorType;
+      if (!flag)
+        editor_type = this.$root.editorType == "html" ? "markdown" : "html";
       let article = {
         title: "",
         created_at: now,
         updated_at: now,
         visited_at: now,
-        editor_type: this.$root.editorType
+        editor_type
       };
       let [id] = await this.db("articles").insert(article);
       article.id = id;
@@ -130,4 +150,46 @@ export default {
 };
 </script>
 <style scoped lang="scss">
+#index {
+  .addBtn {
+    display: flex;
+    border: 1px solid #137ae3;
+    border-radius: 0px;
+    .addBtnText {
+      flex: 1;
+      padding-right: 8px;
+    }
+    .addBtnDrop {
+      width: 26px;
+      text-align: center;
+      margin-right: -8px;
+      background: #dcedfe;
+      color: #137ae3;
+      i {
+        font-size: 10px !important;
+      }
+    }
+    .addBtnDrop:hover {
+      background: #137ae3;
+      color: #fff;
+    }
+    .addBtnMenu {
+      position: absolute;
+      top: 45px;
+      right: 262px;
+      z-index: 999;
+      height: 32px;
+      line-height: 32px;
+      padding-left: 8px;
+      padding-right: 8px;
+      background: #fff;
+      color: #137ae3;
+      border: 1px solid #137ae3;
+    }
+    .addBtnMenu:hover {
+      background: #dcedfe;
+      color: #137ae3;
+    }
+  }
+}
 </style>
