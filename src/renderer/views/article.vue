@@ -57,6 +57,7 @@ import recent from "../components/recent";
 const fs = require("fs");
 const path = require("path");
 const { remote } = require("electron");
+const log = require('electron-log');
 export default {
   components: {
     sites,
@@ -72,14 +73,34 @@ export default {
   },
   async beforeRouteUpdate(to, from, next) {
     this.showSites = false;
+    log.info(
+      `leaving:id:${this.article.id};  title:${
+        this.article.title
+      }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
+    );
     await this.$refs.articleEditor.saveContent();
     this.$refs.articleEditor.destroy();
+    log.info(
+      `leaved:id:${this.article.id};  title:${
+        this.article.title
+      }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
+    );
     next();
   },
   async beforeRouteLeave(to, from, next) {
     this.showSites = false;
+    log.info(
+      `leaving:id:${this.article.id};  title:${
+        this.article.title
+      }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
+    );
     await this.$refs.articleEditor.saveContent();
     this.$refs.articleEditor.destroy();
+    log.info(
+      `leaved:id:${this.article.id};  title:${
+        this.article.title
+      }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
+    );
     next();
   },
   mounted() {
@@ -129,6 +150,11 @@ export default {
         .where("id", id)
         .select("*")
         .first();
+      log.info(
+        `entering:id:${this.article.id};  title:${
+          this.article.title
+        };`
+      );
       this.hookArticleRefresh();
       this.$nextTick(() => {
         this.$refs.articleEditor.getContent();

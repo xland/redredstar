@@ -7,10 +7,10 @@ import store from './utils/store'
 import router from './utils/router'
 import app from './app'
 const {
-  ipcRenderer
+    ipcRenderer
 } = require('electron');
 import {
-  ebtRenderer
+    ebtRenderer
 } from 'electron-baidu-tongji'
 const BAIDU_SITE_ID = '75bf2b763da29b214e586f7dfa74403c'
 ebtRenderer(ipcRenderer, BAIDU_SITE_ID, router)
@@ -18,16 +18,17 @@ ebtRenderer(ipcRenderer, BAIDU_SITE_ID, router)
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.config.productionTip = false;
 dbInitializer.init(db => {
-  new Vue({
-    data: store,
-    components: {
-      app
-    },
-    router,
-    beforeCreate() {
-      Vue.prototype.bus = this;
-      Vue.prototype.db = db;
-    },
-    template: '<app/>'
-  }).$mount('#app')
-})
+        new Vue({
+            data: store,
+            components: {
+                app
+            },
+            router,
+            beforeCreate() {
+                Vue.prototype.bus = this;
+                Vue.prototype.db = db;
+            },
+            template: '<app/>'
+        }).$mount('#app')
+    })
+    //todo html editor 公式弹窗内有个帮助的链接，需要改一下

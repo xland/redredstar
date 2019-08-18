@@ -17,6 +17,7 @@ import ck from "./mixins/ck";
 import jna from "./mixins/jna";
 import { Promise, reject } from "bluebird";
 const { ipcRenderer, remote } = require("electron");
+const log = require('electron-log');
 export default {
   mixins: [img, md, ck, jna],
   data() {
@@ -40,18 +41,20 @@ export default {
         } else {
           this.articleContent = window.editorMd.getValue();
         }
+        log.info(`saving:id:${this.$parent.article.id}; title:${this.$parent.article.title}; content:${this.articleContent.substr(0,20)}`);
         fs.writeFileSync(
           path.join(this.articlePath, "a.data"),
           this.articleContent,
           this.$root.rwOption
         );
-        this.needSave = false;
         await this.db("articles")
           .update({
             title: this.$parent.article.title,
             updated_at: new Date()
           })
           .where("id", this.$parent.article.id);
+        this.needSave = false;
+        log.info(`saved:id:${this.$parent.article.id};  title:${this.$parent.article.title}; content:${this.articleContent.substr(0,20)}`);
         resolve();
       });
     },
@@ -97,6 +100,9 @@ export default {
       this.articleContent = fs.readFileSync(
         path.join(this.articlePath, "a.data"),
         this.$root.rwOption
+      );
+      log.info(
+        `entered:id:${this.$parent.article.id};  content:${this.articleContent.substr(0, 20)}`
       );
       if (this.$parent.article.editor_type == "html") {
         this.$nextTick(() => {
