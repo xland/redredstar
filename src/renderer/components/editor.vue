@@ -41,7 +41,7 @@ export default {
         } else {
           this.articleContent = window.editorMd.getValue();
         }
-        log.info(`saving:id:${this.$parent.article.id}; title:${this.$parent.article.title}; content:${this.articleContent.substr(0,20)}`);
+        // log.info(`saving:id:${this.$parent.article.id}; title:${this.$parent.article.title}; content:${this.articleContent.substr(0,20)}`);
         fs.writeFileSync(
           path.join(this.articlePath, "a.data"),
           this.articleContent,
@@ -54,7 +54,7 @@ export default {
           })
           .where("id", this.$parent.article.id);
         this.needSave = false;
-        log.info(`saved:id:${this.$parent.article.id};  title:${this.$parent.article.title}; content:${this.articleContent.substr(0,20)}`);
+        // log.info(`saved:id:${this.$parent.article.id};  title:${this.$parent.article.title}; content:${this.articleContent.substr(0,20)}`);
         resolve();
       });
     },
@@ -101,9 +101,9 @@ export default {
         path.join(this.articlePath, "a.data"),
         this.$root.rwOption
       );
-      log.info(
-        `entered:id:${this.$parent.article.id};  content:${this.articleContent.substr(0, 20)}`
-      );
+      // log.info(
+      //   `entered:id:${this.$parent.article.id};  content:${this.articleContent.substr(0, 20)}`
+      // );
       if (this.$parent.article.editor_type == "html") {
         this.$nextTick(() => {
           this.initEditorCk();

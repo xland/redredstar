@@ -73,34 +73,36 @@ export default {
   },
   async beforeRouteUpdate(to, from, next) {
     this.showSites = false;
-    log.info(
-      `leaving:id:${this.article.id};  title:${
-        this.article.title
-      }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
-    );
+    // log.info(
+    //   `leaving:id:${this.article.id};  title:${
+    //     this.article.title
+    //   }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
+    // );
     await this.$refs.articleEditor.saveContent();
     this.$refs.articleEditor.destroy();
-    log.info(
-      `leaved:id:${this.article.id};  title:${
-        this.article.title
-      }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
-    );
+    // log.info(
+    //   `leaved:id:${this.article.id};  title:${
+    //     this.article.title
+    //   }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
+    // );
+    this.article = null;
     next();
   },
   async beforeRouteLeave(to, from, next) {
     this.showSites = false;
-    log.info(
-      `leaving:id:${this.article.id};  title:${
-        this.article.title
-      }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
-    );
+    // log.info(
+    //   `leaving:id:${this.article.id};  title:${
+    //     this.article.title
+    //   }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
+    // );
     await this.$refs.articleEditor.saveContent();
     this.$refs.articleEditor.destroy();
-    log.info(
-      `leaved:id:${this.article.id};  title:${
-        this.article.title
-      }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
-    );
+    // log.info(
+    //   `leaved:id:${this.article.id};  title:${
+    //     this.article.title
+    //   }; content:${this.$refs.articleEditor.articleContent.substr(0, 20)}`
+    // );
+    this.article = null;
     next();
   },
   mounted() {
@@ -150,11 +152,11 @@ export default {
         .where("id", id)
         .select("*")
         .first();
-      log.info(
-        `entering:id:${this.article.id};  title:${
-          this.article.title
-        };`
-      );
+      // log.info(
+      //   `entering:id:${this.article.id};  title:${
+      //     this.article.title
+      //   };`
+      // );
       this.hookArticleRefresh();
       this.$nextTick(() => {
         this.$refs.articleEditor.getContent();
@@ -168,7 +170,6 @@ export default {
       }, 80);
     },
     async titleChange() {
-      console.log(1);
       await this.db("articles")
         .update({
           title: this.article.title,
