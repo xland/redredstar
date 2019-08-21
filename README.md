@@ -46,7 +46,7 @@
 * osx数据存放目录： 
 <br />&emsp;&emsp; /Users/[name]/Library/Application Support/xiangxuema/xxm
 * win数据存放目录：
-<br />&emsp;&emsp; C:\Users\[name]\AppData\Roaming\xiangxuema\xxm
+<br />&emsp;&emsp; C:\Users\\[name]\AppData\Roaming\xiangxuema\xxm
 * linux数据存放目录： 
 <br />&emsp;&emsp; /home/[name]/.config/xiangxuema
 * 本地编译说明：

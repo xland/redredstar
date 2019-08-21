@@ -16,7 +16,10 @@
 </template>
 <script>
 export default {
-    //滚动条滚动，下方出现border或阴影
+    //todo:顶部菜单栏，当滚动条滚动时，下方出现border或阴影
+    //todo:加一个3D轮播的图片，markdown编辑器
+    //todo:顶部菜单栏右侧菜单还没做
+    //todo:官网里没地方下载浏览器插件
 }
 </script>
 <style lang="scss" scoped>
