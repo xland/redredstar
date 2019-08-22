@@ -7,7 +7,7 @@
       <div @click="download('dmg')" :class="{cur:osType == 'mac'}">下载 Mac版</div>
       <div @click="download('AppImage')" :class="{cur:osType == 'linux'}">下载 Linux版</div>
     </div>
-    <div class="version">当前最新版本：6.4.8（注意所有操作系统只支持64位版本）</div>
+    <div class="version">注意所有操作系统只支持64位版本，不保证支持win7及更早版本的windows</div>
   </div>
 </template>
 <script>

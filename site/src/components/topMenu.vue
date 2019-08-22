@@ -7,10 +7,10 @@
       <div class="logoTitle">想学吗</div>
     </div>
     <div class="menu">
-      <div>功能介绍</div>
-      <div>免责声明</div>
-      <div>二开说明</div>
-      <div>联系方式</div>
+      <a href="#funcList">功能介绍</a>
+      <a href="#funcsPermissions">免责声明</a>
+      <a href="#platform">支持媒体</a>
+      <a href="#funcsPermissions">联系方式</a>
     </div>
   </div>
 </template>
@@ -59,13 +59,15 @@ export default {
   .menu {
     flex: 1;
   }
-  .menu div {
+  .menu a {
+    display: block;
     float: right;
     padding-left: 16px;
     padding-right: 16px;
     color: #555;
+    text-decoration: none;
   }
-  .menu div:hover {
+  .menu a:hover {
     color: #0084ff;
     cursor: pointer;
   }

@@ -5,7 +5,7 @@
     <titleContent></titleContent>
     <imgSwitch></imgSwitch>
     <publishSites />
-    <div class="funcList">
+    <div id="funcList" class="funcList">
       <div class="gifBox">
         <img src="http://www.xiangxuema.com/doc/search.gif" alt />
       </div>
@@ -60,7 +60,7 @@
         </div>
       </div>
     </div>
-    <div class="textBox">
+    <div id="funcsPermissions" class="textBox">
       <div class="textTitle">功能及责权说明</div>
       <div class="textDesc">
         <ul>
@@ -76,8 +76,21 @@
           <li>“想学吗”还提供思维导图的功能，可以快速梳理构建您脑海中的想法</li>
         </ul>
       </div>
-      <div class="textDesc" style="margin-top:18px;text-align:center;">
-          本软件为非盈利、开源软件，任何责任与义务均由使用者承担，与开发者无关；
+      <div
+        class="textDesc"
+        style="margin-top:18px;text-align:center;"
+      >本软件为非盈利、开源软件，任何责任与义务均由使用者承担，与开发者无关；</div>
+    </div>
+    <div class="footer">
+      <div class="footerTop">
+        合作伙伴：
+        <br />湖南心莱信息科技有限公司 &nbsp;&nbsp;&nbsp;&nbsp;
+        苏州盛派网络科技有限公司 &nbsp;&nbsp;&nbsp;&nbsp;
+        衡水浩伦科技有限公司 &nbsp;&nbsp;&nbsp;&nbsp;
+      </div>
+      <div class="footerBottom">
+        <div style="text-align:left">杭州软雅科技有限公司 © 2019 All Rights Reserved.</div>
+        <div style="text-align:right">浙ICP备07001688号 ya-soft ®</div>
       </div>
     </div>
   </div>
@@ -110,6 +123,29 @@ body {
 }
 </style>
 <style lang="scss" scoped>
+.footer {
+  background: #333;
+  color: #888;
+  padding-left: 16%;
+  padding-right: 16%;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  font-size: 15px;
+  .footerTop {
+    border-bottom: 1px solid #555;
+    text-align: left;
+    line-height: 36px;
+    padding-bottom: 12px;
+  }
+  .footerBottom {
+    display: flex;
+    padding-top: 18px;
+    padding-bottom: 12px;
+    div{
+      flex: 1;
+    }
+  }
+}
 .top {
   height: 8000px;
   width: 8000px;

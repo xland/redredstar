@@ -1,5 +1,5 @@
 <template>
-  <div class="platform">
+  <div id="platform" class="platform">
     <div class="title">“想学吗”应用内的文章支持一键发布到如下平台</div>
     <div class="siteBox">
       <div class="siteItem" :key="item.code" v-for="item in mediaSites">
