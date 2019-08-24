@@ -45,6 +45,7 @@ let imgProcessor = {
             setTimeout(() => {
                 clipboard.writeText(this.title);
                 win.webContents.paste();
+                base.clearMask();
             }, 380);
         }, 880);
         editor.__quill.clipboard.dangerouslyPasteHTML(this.doc.body.innerHTML);
@@ -57,6 +58,7 @@ let imgProcessor = {
         })
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
             if (this.type == 'new') {
                 delete v.dataset[this.siteId];
@@ -79,8 +81,8 @@ let imgProcessor = {
         this.start();
     }
 }
-var waitForReady = function (cb) {
-    setTimeout(function () {
+var waitForReady = function(cb) {
+    setTimeout(function() {
         if (!document.querySelector(".ql-editor")) {
             waitForReady(cb);
             return;
@@ -95,7 +97,7 @@ ipcRenderer.on('message', (event, article) => {
         window.location.href = article.url;
         return;
     }
-    waitForReady(function () {
+    waitForReady(function() {
         imgProcessor.init(article);
     })
     return;

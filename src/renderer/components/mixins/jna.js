@@ -9,7 +9,7 @@ export default {
         return {
             jnaGard: 0,
             jnaUrl: 'https://jiaonia.com',
-            //jnaUrl:'http://localhost:52081',
+            //jnaUrl: 'http://localhost:912',
         }
     },
     methods: {

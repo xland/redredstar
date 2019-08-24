@@ -42,7 +42,9 @@ export default {
       let self = this;
       let fd = new FormData();
       fd.append("token", this.$root.jnaToken);
-      window.xxmPost("https://jiaonia.com/Xxm/GetUserInfoByToken", fd, rt => {
+      //'http://localhost:912/Xxm/GetUserInfoByToken'; //
+      let url = "https://jiaonia.com/Xxm/GetUserInfoByToken";
+      window.xxmPost(url, fd, rt => {
         self.userInfo = JSON.parse(rt).data;
       });
     }

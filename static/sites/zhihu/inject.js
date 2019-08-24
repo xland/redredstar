@@ -72,11 +72,11 @@ let imgProcessor = {
                 win.webContents.paste();
             }, 380);
         }, 880);
-        setTimeout(function () {
+        setTimeout(function() {
             win.focus();
             let editorDoc = document.querySelector(".public-DraftStyleDefault-block");
             editorDoc.click();
-            setTimeout(function () {
+            setTimeout(function() {
                 //this.cleanContent(win);
                 const selection = window.getSelection();
                 const range = document.createRange();
@@ -85,6 +85,7 @@ let imgProcessor = {
                 selection.addRange(range);
                 clipboard.writeHTML(this.doc.body.innerHTML);
                 win.webContents.paste();
+                base.clearMask();
                 ipcRenderer.send('articlePublishMain', {
                     siteId: 'zhihu',
                     url: window.location.href
@@ -93,6 +94,7 @@ let imgProcessor = {
         }.bind(this), 1600);
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
             if (this.type == 'new') {
                 delete v.dataset[this.siteId];

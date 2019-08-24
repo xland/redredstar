@@ -43,12 +43,13 @@ const initializer = {
             table.integer('article_id');
         }).createTable('settings', (table) => {
             table.increments('id');
-            table.integer('autosave_interval');
-            table.integer('img_w');
-            table.integer('img_h');
+            table.integer('autosave_interval').defaultTo(8);
+            table.integer('img_w').defaultTo(1300);
+            table.integer('img_h').defaultTo(800);
             table.string("editor_type").defaultTo("html");
             table.boolean('jna_sync').defaultTo(true);
             table.string('jna_token');
+            table.string('win_size').defaultTo('1216*830');
             table.boolean('jna_login_show').defaultTo(false);
             table.datetime('created_at').defaultTo(knex.fn.now());
         }).createTable('article_site', (table) => {
@@ -80,51 +81,13 @@ const initializer = {
         })
     },
     async initDefaultData() {
-        let defaultSetting = {
-            autosave_interval: 8,
-            img_w: 1300,
-            img_h: 800,
-            editor_type: 'html',
-            jna_sync: true,
-        };
-        await knex.insert(defaultSetting).into("settings");
+        await knex.insert({}).into("settings");
     },
     async extarColumns() {
-        let flag = await knex.schema.hasColumn("articles", "visited_at");
+        let flag = await knex.schema.hasColumn("settings", "win_size");
         if (flag) return;
-        await knex.schema.alterTable('articles', table => {
-            table.datetime('visited_at');
-        });
-        flag = knex.schema.hasColumn("articles", "from_url");
-        if (flag) return;
-        await knex.schema.alterTable('articles', table => {
-            table.string('from_url');
-        });
-        flag = knex.schema.hasTable('flowers');
-        if (flag) return
-        await knex.schema.createTable('flowers', function(table) {
-            table.increments('id');
-            table.integer('content');
-            table.string('from_url');
-            table.datetime('updated_at').defaultTo(knex.fn.now());
-            table.datetime('created_at').defaultTo(knex.fn.now());
-        }).createTable('flower_tag', table => {
-            table.increments('id');
-            table.integer('tag_id');
-            table.integer('flower_id');
-        });
-        flag = knex.schema.hasTable('minds');
-        if (flag) return
-        await knex.schema.createTable('minds', table => {
-            table.increments('id');
-            table.string('title');
-            table.datetime('created_at').defaultTo(knex.fn.now());
-            table.datetime('updated_at').defaultTo(knex.fn.now());
-            table.datetime('visited_at').defaultTo(knex.fn.now());
-        }).createTable('mind_tag', table => {
-            table.increments('id');
-            table.integer('tag_id');
-            table.integer('mind_id');
+        await knex.schema.alterTable('settings', table => {
+            table.string('win_size').defaultTo('1216*830');
         });
     },
     async init(cb) {
@@ -140,3 +103,4 @@ const initializer = {
 }
 
 export default initializer;
+//todo:  sqlite是有rowid的，不需要再搞个ID出来

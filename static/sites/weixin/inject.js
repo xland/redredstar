@@ -56,17 +56,18 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
-            if(v.dataset[this.siteId]){
+            if (v.dataset[this.siteId]) {
                 v.src = v.dataset[this.siteId];
             }
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
         });
-        setTimeout(()=>{
+        setTimeout(() => {
             UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
             document.getElementById("title").value = this.title;
-        },600);
+            base.clearMask();
+        }, 600);
         base.ajaxInjector(obj => {
             if (obj && obj.appMsgId) {
                 let url = 'https://mp.weixin.qq.com/?appmsgid=' + obj.appMsgId;
@@ -78,8 +79,9 @@ let imgProcessor = {
         })
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
-            if(this.type == 'new'){
+            if (this.type == 'new') {
                 delete v.dataset[this.siteId];
             }
             if (!v.dataset[this.siteId]) {
@@ -101,8 +103,8 @@ let imgProcessor = {
     }
 }
 
-var waitForReady = function (cb) {
-    setTimeout(function () {
+var waitForReady = function(cb) {
+    setTimeout(function() {
         if (!document.getElementById("ueditor_0")) {
             waitForReady(cb);
             return;
@@ -130,7 +132,7 @@ ipcRenderer.on('message', (event, article) => {
         return;
     }
     if (token && type == "10") {
-        waitForReady(function () {
+        waitForReady(function() {
             imgProcessor.init(article);
         });
     }

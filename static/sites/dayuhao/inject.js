@@ -45,16 +45,18 @@ let imgProcessor = {
         });
         UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
         document.querySelector("#title").value = this.title;
-        base.ajaxInjector((obj,url) => {
+        base.ajaxInjector((obj, url) => {
             if (obj && obj.data && obj.data._id && url.includes("save-draft")) {
                 ipcRenderer.send('articlePublishMain', {
                     siteId: this.siteId,
                     url: 'https://mp.dayu.com/dashboard/article/write?draft_id=' + obj.data._id
                 });
             }
-        })
+        });
+        base.clearMask();
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
             if (this.type == 'new') {
                 delete v.dataset[this.siteId];
@@ -78,8 +80,8 @@ let imgProcessor = {
     }
 }
 
-var waitForReady = function (cb) {
-    setTimeout(function () {
+var waitForReady = function(cb) {
+    setTimeout(function() {
         if (!document.getElementById("ueditor_0")) {
             waitForReady(cb);
             return;

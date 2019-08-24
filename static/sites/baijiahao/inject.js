@@ -36,7 +36,7 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
-            if(v.dataset[this.siteId]){
+            if (v.dataset[this.siteId]) {
                 v.src = v.dataset[this.siteId];
             }
             Object.keys(v.dataset).forEach(ds => {
@@ -52,7 +52,6 @@ let imgProcessor = {
         titleTb.value = "";
         clipboard.writeText(this.title);
         win.webContents.paste();
-
         base.ajaxInjector(obj => {
             if (obj && obj.ret) {
                 let id = obj.ret.article_id;
@@ -61,11 +60,13 @@ let imgProcessor = {
                     url: 'https://baijiahao.baidu.com/builder/rc/edit?type=news&article_id=' + id
                 });
             }
-        })
+        });
+        base.clearMask();
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
-            if(this.type == 'new'){
+            if (this.type == 'new') {
                 delete v.dataset[this.siteId];
             }
             if (!v.dataset[this.siteId]) {
@@ -87,8 +88,8 @@ let imgProcessor = {
     }
 }
 
-var waitForReady = function (cb) {
-    setTimeout(function () {
+var waitForReady = function(cb) {
+    setTimeout(function() {
         if (!document.getElementById("ueditor_0")) {
             waitForReady(cb);
             return;

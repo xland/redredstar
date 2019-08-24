@@ -33,7 +33,7 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
-            if(v.dataset[this.siteId]){
+            if (v.dataset[this.siteId]) {
                 v.src = v.dataset[this.siteId];
             }
             Object.keys(v.dataset).forEach(ds => {
@@ -41,10 +41,12 @@ let imgProcessor = {
             })
         });
         CKEDITOR.instances["body"].setData(this.doc.body.innerHTML);
+        base.clearMask();
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
-            if(this.type == 'new'){
+            if (this.type == 'new') {
                 delete v.dataset[this.siteId];
             }
             if (!v.dataset[this.siteId]) {
@@ -71,9 +73,9 @@ ipcRenderer.on('message', (event, article) => {
     let url = window.location.href;
     let userId = $(".go-inbox").find("a").attr("href");
     let baseUrl = "";
-    if(userId){
-        baseUrl = userId.replace("/admin/inbox",'');
-        userId = baseUrl.substr(baseUrl.lastIndexOf('/')+1);
+    if (userId) {
+        baseUrl = userId.replace("/admin/inbox", '');
+        userId = baseUrl.substr(baseUrl.lastIndexOf('/') + 1);
     }
     //如果没登录，那么就去登录
     if (!url.includes('/blog/write') && !userId && !url.includes("/home/login")) {
@@ -105,14 +107,14 @@ ipcRenderer.on('message', (event, article) => {
         return;
     }
     if ($("input[name='title']")[0]) {
-        if(!CKEDITOR.instances["body"]){
+        if (!CKEDITOR.instances["body"]) {
             alert("抱歉：目前暂不支持osc的markdown编辑器");
             return;
         }
-        setTimeout(function(){
+        setTimeout(function() {
             imgProcessor.init(article);
             $("input[name='title']").val(article.title);
-        },980);
+        }, 980);
         return;
     }
 })

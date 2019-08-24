@@ -1,10 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const {
-    clipboard,
-    ipcRenderer,
-    remote
-} = require('electron');
+const { clipboard, ipcRenderer, remote } = require('electron');
 const base = require('../base');
 
 let imgProcessor = {
@@ -32,7 +28,7 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
-            if(v.dataset[this.siteId]){
+            if (v.dataset[this.siteId]) {
                 v.src = v.dataset[this.siteId];
             }
             Object.keys(v.dataset).forEach(ds => {
@@ -40,10 +36,12 @@ let imgProcessor = {
             })
         });
         blogEditor.setContent(this.doc.body.innerHTML);
+        base.clearMask();
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
-            if(this.type == 'new'){
+            if (this.type == 'new') {
                 delete v.dataset[this.siteId];
             }
             if (!v.dataset[this.siteId]) {

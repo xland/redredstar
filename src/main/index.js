@@ -1,16 +1,6 @@
-import {
-    app,
-    BrowserWindow,
-    ipcMain,
-    Menu
-} from 'electron'
-import {
-    ebtMain
-} from 'electron-baidu-tongji'
-import {
-    autoUpdater
-} from 'electron-updater'
-//autoUpdater.autoInstallOnAppQuit = false;
+import { app, BrowserWindow, ipcMain } from 'electron'
+import { ebtMain } from 'electron-baidu-tongji'
+import { autoUpdater } from 'electron-updater'
 import host from './host';
 ebtMain(ipcMain)
 
@@ -39,15 +29,11 @@ function createWindow() {
         }
     });
     mainWindow.loadURL(winURL);
-    mainWindow.on('closed', () => {
-        mainWindow = null
-    });
+    mainWindow.on('closed', () => { mainWindow = null });
     host.start(mainWindow);
-    setTimeout(() => {
-        if (process.env.NODE_ENV === 'production') {
-            autoUpdater.checkForUpdates();
-        }
-    }, 6000);
+    if (process.env.NODE_ENV === 'production') {
+        autoUpdater.checkForUpdates();
+    }
 }
 
 app.on('ready', createWindow)

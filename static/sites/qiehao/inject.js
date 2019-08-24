@@ -62,8 +62,10 @@ let imgProcessor = {
                 });
             }
         })
+        base.clearMask();
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
             if (this.type == 'new') {
                 delete v.dataset[this.siteId];
@@ -87,8 +89,8 @@ let imgProcessor = {
     }
 }
 
-var waitForReady = function (cb) {
-    setTimeout(function () {
+var waitForReady = function(cb) {
+    setTimeout(function() {
         if (!document.getElementById("ueditor_0")) {
             waitForReady(cb);
             return;

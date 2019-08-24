@@ -20,12 +20,12 @@
     "build": {
         "npmRebuild": "false",
         "electronDownload": {
-            "version": "6.0.2",
+            "version": "6.0.3",
             "cache": "./cache",
             "mirror": "https://npm.taobao.org/mirrors/electron/",
             "arch": "x64"
         },
-        "electronVersion": "6.0.2",
+        "electronVersion": "6.0.3",
         "productName": "想学吗",
         "appId": "com.xiangxuema",
         "directories": {
@@ -100,7 +100,7 @@
         "css-loader": "^0.28.11",
         "del": "^3.0.0",
         "devtron": "^1.4.0",
-        "electron": "^6.0.2",
+        "electron": "^6.0.3",
         "electron-builder": "^21.2.0",
         "electron-debug": "^3.0.1",
         "electron-devtools-installer": "^2.2.4",

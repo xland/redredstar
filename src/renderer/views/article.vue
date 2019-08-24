@@ -118,6 +118,8 @@ export default {
       });
     },
     showSitesClick() {
+      // this.$refs.articleEditor.jnaPublish();
+      // return;
       this.showSites = true;
       if (this.article.editor_type == "html") {
         this.$refs.articleEditor.downloadInternetImg();

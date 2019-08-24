@@ -57,9 +57,11 @@ let imgProcessor = {
                     url: firstStr + 'graphic/publish/?pgc_id=' + id
                 });
             }
-        })
+        });
+        base.clearMask();
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
             if (this.type == 'new') {
                 delete v.dataset[this.siteId];
@@ -83,8 +85,8 @@ let imgProcessor = {
     }
 }
 
-var waitForReady = function (cb) {
-    setTimeout(function () {
+var waitForReady = function(cb) {
+    setTimeout(function() {
         if (typeof editor == "undefined") {
             waitForReady(cb);
             return;
@@ -92,8 +94,8 @@ var waitForReady = function (cb) {
         cb();
     }, 280);
 }
-var waitForIndex = function (cb) {
-    setTimeout(function () {
+var waitForIndex = function(cb) {
+    setTimeout(function() {
         let goBtn = document.querySelector(".home-go-write");
         if (!goBtn) {
             waitForIndex(cb);

@@ -61,10 +61,12 @@ let imgProcessor = {
             setTimeout(() => {
                 clipboard.writeHTML(this.doc.body.innerHTML);
                 win.webContents.paste();
+                base.clearMask();
             }, 680)
         }, 680);
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
             if (this.type == 'new') {
                 delete v.dataset[this.siteId];
@@ -88,8 +90,8 @@ let imgProcessor = {
     }
 }
 
-var waitForReady = function (cb) {
-    setTimeout(function () {
+var waitForReady = function(cb) {
+    setTimeout(function() {
         if (!Draft && !Draft.Editor) {
             waitForReady(cb);
             return;

@@ -54,16 +54,18 @@ let imgProcessor = {
         });
         UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
         document.querySelector(".editorTitle input").value = this.title;
-        base.ajaxInjector((obj,url) => {
+        base.ajaxInjector((obj, url) => {
             if (obj && obj.data && obj.msg && url.includes("save_draft")) {
                 ipcRenderer.send('articlePublishMain', {
                     siteId: this.siteId,
-                    url: 'https://mp.iqiyi.com/publish/content/article?id='+obj.data+'&status=4&source=ap'
+                    url: 'https://mp.iqiyi.com/publish/content/article?id=' + obj.data + '&status=4&source=ap'
                 });
             }
-        })
+        });
+        base.clearMask();
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
             if (this.type == 'new') {
                 delete v.dataset[this.siteId];
@@ -87,8 +89,8 @@ let imgProcessor = {
     }
 }
 
-var waitForReady = function (cb) {
-    setTimeout(function () {
+var waitForReady = function(cb) {
+    setTimeout(function() {
         if (typeof UE == "undefined" || typeof UE.instants == "undefined") {
             waitForReady(cb);
             return;
@@ -96,8 +98,8 @@ var waitForReady = function (cb) {
         cb();
     }, 380);
 }
-var waitForIndex = function (cb) {
-    setTimeout(function () {
+var waitForIndex = function(cb) {
+    setTimeout(function() {
         let goBtn = document.querySelector(".home-go-write");
         if (!goBtn) {
             waitForIndex(cb);

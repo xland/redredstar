@@ -40,7 +40,7 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
-            if(v.dataset[this.siteId]){
+            if (v.dataset[this.siteId]) {
                 v.src = v.dataset[this.siteId];
             }
             Object.keys(v.dataset).forEach(ds => {
@@ -54,17 +54,19 @@ let imgProcessor = {
         contentDom.innerHTML = "";
         contentDom.focus();
         win.webContents.paste();
-        setTimeout(function () {
+        setTimeout(function() {
             var titleTb = document.getElementsByClassName("_24i7u")[0];
             titleTb.focus();
             titleTb.value = "";
             clipboard.writeText(this.title);
             win.webContents.paste();
+            base.clearMask();
         }.bind(this), 960)
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
-            if(this.type == 'new'){
+            if (this.type == 'new') {
                 delete v.dataset[this.siteId];
             }
             if (!v.dataset[this.siteId]) {
@@ -91,8 +93,8 @@ let imgProcessor = {
     }
 }
 
-var waitForReady = function (cb) {
-    setTimeout(function () {
+var waitForReady = function(cb) {
+    setTimeout(function() {
         var titleTb = document.getElementsByClassName("_24i7u")[0];
         var str = window.getSelection().toString()
         if (!titleTb || !str) {
@@ -102,8 +104,8 @@ var waitForReady = function (cb) {
         cb(titleTb);
     }, 380);
 }
-var waitForEdit = function (cb) {
-    setTimeout(function () {
+var waitForEdit = function(cb) {
+    setTimeout(function() {
         var titleTb = document.getElementsByClassName("_24i7u")[0];
         if (!titleTb) {
             waitForEdit(cb);
@@ -112,8 +114,8 @@ var waitForEdit = function (cb) {
         cb(titleTb);
     }, 380);
 }
-var waitForSave = function () {
-    setTimeout(function () {
+var waitForSave = function() {
+    setTimeout(function() {
         var str = document.getElementsByClassName('_3-3KB')[0].innerHTML;
         if (str == "已保存") {
             ipcRenderer.send('articlePublishMain', {
