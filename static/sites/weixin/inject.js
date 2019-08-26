@@ -15,6 +15,7 @@ let imgProcessor = {
         let urlParams = {
             action: 'upload_material',
             f: 'json',
+            scene: 8,
             writetype: 'doublewrite',
             groupid: 3,
             ticket_id: '',
@@ -23,7 +24,8 @@ let imgProcessor = {
         }
         let postUrl = 'https://mp.weixin.qq.com/cgi-bin/filetransfer?'
         remote.session.defaultSession.cookies.get({}, (error, cookies) => {
-            urlParams.ticket_id = cookies.find(v => v.name == "ticket_id").value;
+            let cookieTid = cookies.find(v => v.name == "ticket_id") || cookies.find(v => v.name == "slave_user")
+            urlParams.ticket_id = cookieTid.value;
             Object.keys(urlParams).forEach(key => {
                 postUrl += key + '=' + urlParams[key] + "&";
             });
@@ -105,6 +107,10 @@ let imgProcessor = {
 
 var waitForReady = function(cb) {
     setTimeout(function() {
+        if (document.querySelector('.icon_page_error')) {
+            window.location.href = 'https://mp.weixin.qq.com/';
+            return;
+        }
         if (!document.getElementById("ueditor_0")) {
             waitForReady(cb);
             return;

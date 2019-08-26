@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { ebtMain } from 'electron-baidu-tongji'
 import { autoUpdater } from 'electron-updater'
 import host from './host';
@@ -34,6 +34,11 @@ function createWindow() {
     if (process.env.NODE_ENV === 'production') {
         autoUpdater.checkForUpdates();
     }
+    //todo 打开的提交窗口，windows系统不应该有菜单
+    globalShortcut.register('CommandOrControl+Shift+I', () => {
+        let focusWin = BrowserWindow.getFocusedWindow()
+        focusWin && focusWin.toggleDevTools()
+    });
 }
 
 app.on('ready', createWindow)
