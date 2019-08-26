@@ -1,4 +1,4 @@
-<h2 align="center">“想学吗”个人知识管理与自媒体营销工具</h2>
+<h1 align="center">“想学吗”个人知识管理工具</h1>
 
 ## 程序简介
 
@@ -113,6 +113,7 @@ markdown编辑器<br />
 *  <a href="http://xin-lai.com" target="_blank">湖南心莱信息科技有限公司</a>
 *  <a href="http://www.senparc.com/" target="_blank">苏州盛派网络科技有限公司</a>
 *  杭州软雅科技有限公司
+*  Franky J ，<a href="https://www.cnblogs.com/asxinyu" target="_blank">数据之巅</a>
 *  衡水浩伦科技有限公司
 *  <a href="https://juejin.im/post/5c9c49d451882547e46dd6c3" target="_blank">公众号「 程序员的成长之路 」</a>
 *  Franky J ，<a href="https://www.cnblogs.com/asxinyu" target="_blank">数据之巅</a>
