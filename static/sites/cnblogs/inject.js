@@ -1,15 +1,10 @@
 const fs = require('fs');
 const path = require('path');
-const {
-    clipboard,
-    ipcRenderer,
-    remote
-} = require('electron');
+const { clipboard, ipcRenderer, remote } = require('electron');
 const base = require('../base');
 
 let imgProcessor = {
     imgs: null,
-    siteId: null,
     doc: null,
     guard: 0,
     uploadImg(dom, file) {
@@ -33,23 +28,25 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
+            if (v.dataset[this.siteId]) {
+                v.src = v.dataset[this.siteId];
+            }
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
         });
         blogEditor.setContent(this.doc.body.innerHTML);
+        base.clearMask();
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
+            if (this.type == 'new') {
+                delete v.dataset[this.siteId];
+            }
             if (!v.dataset[this.siteId]) {
                 this.guard += 1;
-                var pathIndex = remote.process.platform == "win32" ? 8 : 7
-                var filePath = decodeURI(v.src).substr(pathIndex);
-                var extname = path.extname(filePath).substr(1);
-                var buffer = fs.readFileSync(filePath);
-                var file = new window.File([new Uint8Array(buffer)], path.basename(filePath), {
-                    type: base.mime[extname]
-                });
+                let file = base.getFileObjByLocalUrl(v.src);
                 this.uploadImg(v, file);
             }
         });
@@ -61,18 +58,13 @@ let imgProcessor = {
         var parser = new DOMParser();
         this.doc = parser.parseFromString(article.content, "text/html");
         this.imgs = this.doc.querySelectorAll('img');
-        this.siteId = article.siteId;
-        this.winId = article.winId;
-        if (this.imgs.length > 0) {
-            this.start();
-        } else {
-            blogEditor.setContent(this.doc.body.innerHTML);
-        }
+        Object.assign(this, article);
+        this.start();
     }
 }
 
 ipcRenderer.on('message', (event, article) => {
-    window.onbeforeunload = null;
+    base.removeBeforUnload();
     if (window.location.href.startsWith('https://i.cnblogs.com/PostDone.aspx')) {
         var url = document.getElementById("TipsPanel_LinkEdit").href
         ipcRenderer.send('articlePublishMain', {

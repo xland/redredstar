@@ -9,10 +9,8 @@ const base = require('../base');
 
 let imgProcessor = {
     imgs: null,
-    siteId: null,
     doc: null,
     guard: 0,
-    title: '',
     uploadImg(dom, file) {
         let getUrl = 'https://www.jianshu.com/upload_images/token.json?filename=' + file.name;
         let postUrl = 'https://upload.qiniup.com/';
@@ -23,7 +21,7 @@ let imgProcessor = {
             fd.append("key", r.key);
             fd.append("file", file);
             fd.append("x:protocol", 'https');
-            base.post(postUrl, fd, (rt2) => {
+            base.post(postUrl, fd, rt2 => {
                 var imgObj = JSON.parse(rt2);
                 dom.src = imgObj.url;
                 ipcRenderer.send('imgUploadMain', {
@@ -42,6 +40,9 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
+            if (v.dataset[this.siteId]) {
+                v.src = v.dataset[this.siteId];
+            }
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
@@ -53,25 +54,24 @@ let imgProcessor = {
         contentDom.innerHTML = "";
         contentDom.focus();
         win.webContents.paste();
-        setTimeout(function () {
+        setTimeout(function() {
             var titleTb = document.getElementsByClassName("_24i7u")[0];
             titleTb.focus();
             titleTb.value = "";
             clipboard.writeText(this.title);
             win.webContents.paste();
-        }.bind(this), 1200)
+            base.clearMask();
+        }.bind(this), 960)
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
-            if (!v.dataset[this.siteId] && v.src.startsWith("file")) {
+            if (this.type == 'new') {
+                delete v.dataset[this.siteId];
+            }
+            if (!v.dataset[this.siteId]) {
                 this.guard += 1;
-                var pathIndex = remote.process.platform == "win32" ? 8 : 7
-                var filePath = decodeURI(v.src).substr(pathIndex);
-                var extname = path.extname(filePath).substr(1);
-                var buffer = fs.readFileSync(filePath);
-                var file = new window.File([new Uint8Array(buffer)], path.basename(filePath), {
-                    type: base.mime[extname]
-                });
+                let file = base.getFileObjByLocalUrl(v.src);
                 this.uploadImg(v, file);
             }
         });
@@ -88,19 +88,13 @@ let imgProcessor = {
         var parser = new DOMParser();
         this.doc = parser.parseFromString(article.content, "text/html");
         this.imgs = this.doc.querySelectorAll('img');
-        this.title = article.title;
-        this.siteId = article.siteId;
-        this.winId = article.winId;
-        if (this.imgs.length > 0) {
-            this.start();
-        } else {
-            this.end();
-        }
+        Object.assign(this, article);
+        this.start();
     }
 }
 
-var waitForReady = function (cb) {
-    setTimeout(function () {
+var waitForReady = function(cb) {
+    setTimeout(function() {
         var titleTb = document.getElementsByClassName("_24i7u")[0];
         var str = window.getSelection().toString()
         if (!titleTb || !str) {
@@ -108,20 +102,20 @@ var waitForReady = function (cb) {
             return;
         }
         cb(titleTb);
-    }, 600);
+    }, 380);
 }
-var waitForEdit = function (cb) {
-    setTimeout(function () {
+var waitForEdit = function(cb) {
+    setTimeout(function() {
         var titleTb = document.getElementsByClassName("_24i7u")[0];
         if (!titleTb) {
             waitForEdit(cb);
             return;
         }
         cb(titleTb);
-    }, 600);
+    }, 380);
 }
-var waitForSave = function () {
-    setTimeout(function () {
+var waitForSave = function() {
+    setTimeout(function() {
         var str = document.getElementsByClassName('_3-3KB')[0].innerHTML;
         if (str == "已保存") {
             ipcRenderer.send('articlePublishMain', {
@@ -131,10 +125,11 @@ var waitForSave = function () {
         } else {
             waitForSave();
         }
-    }, 600);
+    }, 380);
 }
 
 ipcRenderer.on('message', (event, article) => {
+    base.removeBeforUnload();
     var url = window.location.href;
     if (url == 'https://www.jianshu.com/sign_in') {
         return;

@@ -1,19 +1,17 @@
 <template>
     <div class="tagContainer box">
-        <div @click="tagClick(item)" class="tag tagIndex" v-for="(item,index) in tags">
+        <div :key="item.id" @click="tagClick(item)" class="tag tagIndex" v-for="item in $root.tags">
             <div class="tagText">{{item.title}}</div>
         </div>
-        <div class="noDataTip" v-if="tags.length<1" style="font-size: 22px;">
-            还没有知识标签
+        <div class="noDataTip" v-if="$root.tags.length<1" style="font-size: 22px;">
+	    标签库空空如也...
         </div>
     </div>
 </template>
 <script>
     export default {
         data() {
-            return {
-                tags: []
-            }
+            return {}
         },
         methods: {
             tagClick(tag) {
@@ -34,31 +32,20 @@
                 }
                 this.$parent.searchTags.push(tag);
                 this.$parent.search();
-            },
+            }
         },
-        mounted() {
-            this.db("tags").select("*").then(rows => {
-                this.tags = rows;
-            })
-            this.bus.$on('removeTag', tagId => {
-                let index = this.tags.findIndex(v => v.id == tagId);
-                this.tags.splice(index, 1);
-                this.db("tags").where({
-                    id: tagId
-                }).del().then();
-            });
+        async mounted() {
+            //todo 根据refer num 排序
+            let rows = await this.db("tags").orderBy("created_at", "desc");
+            this.$root.tags = rows;
         }
     }
 </script>
 <style scoped>
     .tagContainer {
         overflow-y: auto;
-        margin-top: 0px;
-        margin-bottom: 8px;
-        padding-right: 8px;
-        flex: 1;
-        padding-top: 11px;
-        padding-bottom: 6px;
+        padding: 8px;
+        height: calc(100% - 24px);
     }
 
     .tagIndex {

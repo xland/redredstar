@@ -2,44 +2,104 @@
 
 ## 程序简介
 
- “想学吗”是一个更快的、私有化的、标签式的、持续演进的个人知识管理工具；
+ “想学吗”是一个更快的、私有化的、标签式的、持续演进的个人知识管理与自媒体营销工具；
+
+ 目前支持把文章发布到：
+ 
+ 博客平台：博客园、开源中国、知乎、CSDN、简书、豆瓣
+
+ 自媒体平台：百家号、企鹅号、头条号、奇艺号、大鱼号、搜狐号、微信公众号
 
 ## 下载地址
 
-* 当前版本：6.2.2
-* mac64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.dmg
-* win64: http://xiangxuema.com/%E6%83%B3%E5%AD%A6%E5%90%97.exe
+* win64: 
+<br />http://xiangxuema.com/download/latest.exe
+
+* osx64: 
+<br />http://xiangxuema.com/download/latest.dmg
+
+* linux64: 
+<br />http://xiangxuema.com/download/latest.AppImage
+
+* chrome插件(无需翻墙，需手动安装): 
+<br />http://xiangxuema.com/chrome_extension/xiangxuema.crx 
+
+* chrome插件(需翻墙，自动安装): 
+<br />https://chrome.google.com/webstore/detail/%E6%83%B3%E5%AD%A6%E5%90%97/baccnbdhpfeckhhcfekgeheghodgnnpm?hl=zh-CN
+
 
 ## 功能说明
 
 * 您通过“想学吗”编辑的知识，以及知识内部的图片、个人设置等数据均保存在本地；
-* 您的知识，可以自由的发布到“微信公众号”、“简书”、“博客园”、“开源中国”等知名网站（需拥有相应网站的账号）；
+* 您的知识，可以自由的发布到“微信公众号”、“博客园”、“开源中国”等十几个知名网站（需拥有相应网站的账号）；
 * 发布知识时，知识内部的图片也会上传到对应的网站上；
 * 修改知识后，再次发布该知识，不会导致图片重复上传；
 * 在文章中删除图片，本地目录中的图片也会被删除，不会留有垃圾数据；
-* 到目前为止“想学吗”不会保存您的任何账号数据；
-* 文章发布到目标平台不夹带任何“尾巴”
+*  “想学吗”不会保存您任何博客平台的账号数据；
+* 文章发布到目标平台不夹带任何“尾巴”；
+* “想学吗”浏览器插件包括文章收集功能和思想火花收集功能，可以快速收集互联网的文章或简短的文字；
+* “想学吗”浏览器插件收集文章时，也会把文章内的图片下载到本地；
+* “想学吗”还提供思维导图的功能，可以快速梳理构建您脑海中的想法
 
 ## 其他说明：
 
-* mac数据存放目录： 
-<br />&emsp;&emsp; /Users/[your user name]/Library/Application Support/xiangxuema/xxm
+* osx数据存放目录： 
+<br />&emsp;&emsp; /Users/[name]/Library/Application Support/xiangxuema/xxm
 * win数据存放目录：
-<br />&emsp;&emsp; C:\Users\[your user name]\AppData\Roaming\xiangxuema\xxm
+<br />&emsp;&emsp; C:\Users\\[name]\AppData\Roaming\xiangxuema\xxm
+* linux数据存放目录： 
+<br />&emsp;&emsp; /home/[name]/.config/xiangxuema
 * 本地编译说明：
 <br />&emsp;&emsp; https://github.com/xland/xiangxuema/blob/master/doc/build.md
-* 开发计划：
-<br />&emsp;&emsp; https://github.com/xland/xiangxuema/blob/master/doc/todo
 * 责权声明：
 <br />&emsp;&emsp; 本软件为非盈利、开源软件，任何责任与义务均由使用者承担，与开发者无关；
 
 ## 界面截图
 
-> <img width="680" src="/doc/imgs/mac_index.jpg" >
-> <img width="680" src="/doc/imgs/mac_edit.jpg" >
-> <img width="680" src="/doc/imgs/sites.jpg" >
-> <img width="680" src="/doc/imgs/formula.jpg" >
-> <img width="680" src="/doc/imgs/md.jpg" >
+<p align="center">
+对接的平台<br />
+<img width="680" src="/doc/imgs/site.png" />
+</p>
+
+<p align="center">
+知识检索<br />
+<img width="680" src="http://www.xiangxuema.com/doc/search.gif" />
+</p>
+
+<p align="center">
+知识编辑<br />
+<img width="680" src="http://www.xiangxuema.com/doc/edit.gif" />
+</p>
+
+<p align="center">
+知识编辑插入图片、最近打开的知识与知识发布<br />
+<img width="680" src="http://www.xiangxuema.com/doc/publish.gif" />
+</p>
+
+<p align="center">
+思想火花的编辑与删除<br />
+<img width="680" src="http://www.xiangxuema.com/doc/flower.gif" />
+</p>
+
+<p align="center">
+浏览器插件收集知识<br />
+<img width="680" src="http://www.xiangxuema.com/doc/extension_article.gif" />
+</p>
+
+<p align="center">
+浏览器插件收集思想火花<br />
+<img width="680" src="http://www.xiangxuema.com/doc/extension_flower.gif" />
+</p>
+
+<p align="center">
+markdown编辑器<br />
+<img width="680" src="/doc/imgs/markdown.jpg" />
+</p>
+
+<p align="center">
+脑图<br />
+<img width="680" src="/doc/imgs/mind.png" />
+</p>
 
 ## 联系方式
 
@@ -53,4 +113,7 @@
 *  <a href="http://xin-lai.com" target="_blank">湖南心莱信息科技有限公司</a>
 *  <a href="http://www.senparc.com/" target="_blank">苏州盛派网络科技有限公司</a>
 *  杭州软雅科技有限公司
+*  Franky J ，<a href="https://www.cnblogs.com/asxinyu" target="_blank">数据之巅</a>
+*  衡水浩伦科技有限公司
+*  <a href="https://juejin.im/post/5c9c49d451882547e46dd6c3" target="_blank">公众号「 程序员的成长之路 」</a>
 *  Franky J ，<a href="https://www.cnblogs.com/asxinyu" target="_blank">数据之巅</a>

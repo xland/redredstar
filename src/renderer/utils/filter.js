@@ -1,6 +1,6 @@
 import Vue from 'vue'
 
-Vue.filter("getSimpleTime", function (timeStamp) {
+Vue.filter("getSimpleTime", timeStamp => {
     var dateTime = new Date(timeStamp);
     var now = new Date();
     var milliseconds = now - dateTime;

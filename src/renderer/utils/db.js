@@ -1,17 +1,20 @@
 const electron = require('electron');
 const fs = require('fs-extra')
 const path = require('path');
-const basePath = path.join(electron.remote.app.getPath('userData'), "/xxm");
-import swal from 'sweetalert';
-var alertText = "为了更好的兼容未来的新功能\n我得好好练练内功";
-if (!fs.existsSync(basePath)) {
-    fs.mkdirSync(basePath);
-    alertText = "初次见面\n请容我稍事整理"
+const basePath = electron.remote.app.getPath('userData');
+var firstTime = false;
+if (fs.existsSync(path.join(basePath, 'xxm_import'))) {
+    fs.removeSync(path.join(basePath, 'xxm'));
+    fs.renameSync(path.join(basePath, 'xxm_import'), path.join(basePath, 'xxm'));
+} else if (!fs.existsSync(path.join(basePath, 'xxm'))) {
+    firstTime = true;
+    fs.mkdirSync(path.join(basePath, 'xxm'));
 }
 const knex = require('knex')({
     client: 'sqlite3',
+    useNullAsDefault: true,
     connection: {
-        filename: path.join(basePath, "db")
+        filename: path.join(basePath, 'xxm', "db")
     },
     log: {
         info(message) {
@@ -19,259 +22,85 @@ const knex = require('knex')({
         }
     }
 });
-const rwOption = {
-    encoding: 'utf8'
-}
 
 const initializer = {
-    processArticle(rows) {
-        rows.forEach(v => {
-            let oldPath = path.join(basePath, v.temp_id.toString());
-            let docPath = path.join(oldPath, "a.data");
-            let content = fs.readFileSync(docPath, rwOption);
-            content = content.replace(/\/xxm\/\d+\/img(?=\d+\.)/g, '/xxm/' + v.id + '/img');
-            fs.writeFileSync(docPath, content, rwOption)
-            let newPath = path.join(basePath, v.id.toString());
-            fs.renameSync(oldPath, newPath);
-        })
-    },
-    setArticleData(articles, cb) {
-        knex.schema.createTable('articles', function (table) {
+    async initTable() {
+        await knex.schema.createTable('articles', table => {
             table.increments('id');
             table.string('title');
-            table.bigInteger('temp_id');
+            table.string('from_url');
             table.datetime('created_at').defaultTo(knex.fn.now());
             table.datetime('updated_at').defaultTo(knex.fn.now());
+            table.datetime('visited_at').defaultTo(knex.fn.now());
             table.string('editor_type').defaultTo("html");
-        }).then(function () {
-            if (articles.length < 1) {
-                return;
-            }
-            let arr = articles.map(v => {
-                return {
-                    title: v.title ? v.title : '[未命名]',
-                    temp_id: v.id,
-                    created_at: new Date(v.id),
-                    updated_at: new Date(v.update)
-                }
-            })
-            return knex("articles").insert(arr);
-        }).then((rows) => {
-            cb();
-        }).catch(e => {
-            console.log(e);
-        });;
-    },
-    setTagData(tags, cb) {
-        knex.schema.createTable('tags', function (table) {
+        }).createTable('tags', table => {
             table.increments('id');
             table.string('title');
-            table.bigInteger('temp_id');
             table.datetime('created_at').defaultTo(knex.fn.now());
-        }).then(function () {
-            if (tags.length < 1) {
-                return;
-            }
-            let arr = tags.map(v => {
-                return {
-                    title: v.text,
-                    temp_id: v.id,
-                    created_at: new Date(v.id),
-                }
-            })
-            return knex("tags").insert(arr);
-        }).then(() => {
-            cb();
-        }).catch(function (e) {
-            console.log(e);
-        });;
-    },
-    setTagReferData(refers, cb) {
-        knex.schema.createTable('article_tag', function (table) {
+        }).createTable('article_tag', table => {
             table.increments('id');
             table.integer('tag_id');
             table.integer('article_id');
-            table.datetime('created_at').defaultTo(knex.fn.now());
-        }).then(function () {
-            if (refers.length < 1) {
-                return;
-            }
-            return knex("article_tag").insert(refers);
-        }).then(() => {
-            cb();
-        }).catch(e => {
-            console.log(e);
-        });
-    },
-    getTagReferData(tags, cb) {
-        let result = [];
-        knex('tags').select("id", "temp_id").then(tagRows => {
-            knex('articles').select("id", "temp_id").then(articleRows => {
-                this.processArticle(articleRows);
-                tags.forEach(tag => {
-                    var tagRow = tagRows.find(v => v.temp_id == tag.id);
-                    tag.articleIds.forEach(articleId => {
-                        var articleRow = articleRows.find(v => v.temp_id == articleId);
-                        var obj = {
-                            tag_id: tagRow.id,
-                            article_id: articleRow.id
-                        }
-                        result.push(obj);
-                    })
-                });
-                cb(result);
-            })
-        });
-    },
-    setUserData(uObj, cb) {
-        knex.schema.createTable('settings', (table) => {
+        }).createTable('settings', (table) => {
             table.increments('id');
-            table.integer('autosave_interval');
-            table.integer('img_w');
-            table.integer('img_h');
+            table.integer('autosave_interval').defaultTo(8);
+            table.integer('img_w').defaultTo(1300);
+            table.integer('img_h').defaultTo(800);
             table.string("editor_type").defaultTo("html");
+            table.boolean('jna_sync').defaultTo(true);
+            table.string('jna_token');
+            table.string('win_size').defaultTo('1216*830');
+            table.boolean('jna_login_show').defaultTo(false);
             table.datetime('created_at').defaultTo(knex.fn.now());
-        }).then(function () {
-            let setting = {
-                autosave_interval: uObj.autoSaveIntervalSeconds || 8,
-                img_w: 1300,
-                img_h: 800,
-                editor_type: 'html',
-                created_at: uObj.createAt ? new Date(uObj.createAt) : new Date()
-            }
-            return knex('settings').insert(setting);
-        }).then(() => {
-            cb();
-        }).catch(e => {
-            console.error(e);
-        });
-    },
-    setTabData(tabs, tabIndex, cb) {
-        knex.schema.createTable('tabs', (table) => {
-            table.increments('id');
-            table.string('title');
-            table.string('url');
-            table.integer('order_num');
-            table.boolean('selected')
-            table.datetime('created_at').defaultTo(knex.fn.now());
-        }).then(function () {
-            if (!tabs) {
-                tabs = [{
-                    text: "我的知识",
-                    url: '/'
-                }]
-            }
-            let arr = tabs.map((v, index) => {
-                var obj = {
-                    title: v.text,
-                    url: v.url,
-                    order_num: index,
-                    selected: false
-                }
-                if (obj.url == '/') {
-                    obj.selected = true
-                }
-                return obj
-            });
-            return knex('tabs').insert(arr);
-        }).then(() => {
-            cb();
-        }).catch(e => {
-            console.error(e);
-        });
-    },
-    setArticleSite(cb) {
-        knex.schema.createTable('article_site', (table) => {
+        }).createTable('article_site', (table) => {
             table.increments('id');
             table.integer('article_id');
             table.integer('site_id');
             table.integer('edit_url');
             table.datetime('created_at').defaultTo(knex.fn.now());
-        }).then(function () {
-            cb();
+        }).createTable('flowers', (table) => {
+            table.increments('id');
+            table.integer('content');
+            table.integer('from_url');
+            table.datetime('updated_at').defaultTo(knex.fn.now());
+            table.datetime('created_at').defaultTo(knex.fn.now());
+        }).createTable('flower_tag', table => {
+            table.increments('id');
+            table.integer('tag_id');
+            table.integer('flower_id');
+        }).createTable('minds', table => {
+            table.increments('id');
+            table.string('title');
+            table.datetime('created_at').defaultTo(knex.fn.now());
+            table.datetime('updated_at').defaultTo(knex.fn.now());
+            table.datetime('visited_at').defaultTo(knex.fn.now());
+        }).createTable('mind_tag', table => {
+            table.increments('id');
+            table.integer('tag_id');
+            table.integer('mind_id');
         })
     },
-    getObj(name) {
-        let fullName = path.join(basePath, name + ".data");
-        if (fs.existsSync(fullName)) {
-            let str = fs.readFileSync(fullName, rwOption);
-            let result = JSON.parse(str);
-            fs.unlink(fullName, (err) => {})
-            return result;
-        } else {
-            return null;
-        }
+    async initDefaultData() {
+        await knex.insert({}).into("settings");
     },
-
-    extraColumn(cb){
-        knex.schema.hasColumn("settings", "editor_type").then(flag => {
-            if (flag) {
-                return;
-            }
-            knex.schema.alterTable('settings', table => {
-                table.string('editor_type').defaultTo("html");
-            }).then(()=>{
-                knex("settings").update({
-                    "editor_type": "html"
-                }).then();
-            });
-            knex.schema.alterTable('articles', table => {
-                table.string('editor_type').defaultTo("html");
-            }).then(()=>{
-                knex("articles").update({
-                    "editor_type": "html"
-                }).then();
-            })
-        })
-        cb(knex);
+    async extarColumns() {
+        let flag = await knex.schema.hasColumn("settings", "win_size");
+        if (flag) return;
+        await knex.schema.alterTable('settings', table => {
+            table.string('win_size').defaultTo('1216*830');
+        });
     },
-
-    init(cb) {
-        //todo: 在6.2.x的时候删掉此目录
-        let bakDir = path.join(electron.remote.app.getPath('userData'), "/xxm_bak");
-        if (fs.existsSync(bakDir)) {
-            this.extraColumn(cb);
+    async init(cb) {
+        if (!firstTime) {
+            cb(knex);
+            this.extarColumns();
             return;
         }
-        swal({
-            icon: "info",
-            title: '请稍后',
-            text: alertText,
-            closeOnClickOutside: false,
-            closeOnEsc: false,
-            timer: 6000,
-            buttons: false,
-        })
-        fs.copySync(basePath, bakDir)
-        let a = this.getObj("a") || [];
-        let t = this.getObj("t") || [];
-        let u = this.getObj("u") || {};
-        this.setArticleData(a, () => {
-            this.setTagData(t, () => {
-                this.getTagReferData(t, (refers) => {
-                    this.setTagReferData(refers, () => {
-                        this.setUserData(u, () => {
-                            this.setTabData(u.tabs, u.tabIndex, () => {
-                                this.setArticleSite(() => {
-                                    cb(knex);
-                                    knex.schema.table("tags", t => {
-                                        t.dropColumn("temp_id");
-                                    }).catch(e => {
-                                        console.error(e);
-                                    });
-                                    knex.schema.table("articles", t => {
-                                        t.dropColumn("temp_id");
-                                    }).catch(e => {
-                                        console.error(e);
-                                    });
-                                })
-                            });
-                        });
-                    })
-                });
-            })
-        });
+        await this.initTable();
+        await this.initDefaultData();
+        cb(knex)
     }
 }
 
 export default initializer;
+//todo:  sqlite是有rowid的，不需要再搞个ID出来

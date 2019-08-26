@@ -9,7 +9,6 @@ const base = require('../base');
 
 let imgProcessor = {
     imgs: null,
-    siteId: null,
     doc: null,
     guard: 0,
     uploadImg(dom, file) {
@@ -34,23 +33,25 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
+            if (v.dataset[this.siteId]) {
+                v.src = v.dataset[this.siteId];
+            }
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
         });
         CKEDITOR.instances["body"].setData(this.doc.body.innerHTML);
+        base.clearMask();
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
+            if (this.type == 'new') {
+                delete v.dataset[this.siteId];
+            }
             if (!v.dataset[this.siteId]) {
                 this.guard += 1;
-                var pathIndex = remote.process.platform == "win32" ? 8 : 7
-                var filePath = decodeURI(v.src).substr(pathIndex);
-                var extname = path.extname(filePath).substr(1);
-                var buffer = fs.readFileSync(filePath);
-                var file = new window.File([new Uint8Array(buffer)], path.basename(filePath), {
-                    type: base.mime[extname]
-                });
+                let file = base.getFileObjByLocalUrl(v.src);
                 this.uploadImg(v, file);
             }
         });
@@ -62,24 +63,19 @@ let imgProcessor = {
         var parser = new DOMParser();
         this.doc = parser.parseFromString(article.content, "text/html");
         this.imgs = this.doc.querySelectorAll('img');
-        this.siteId = article.siteId;
-        this.winId = article.winId;
-        if (this.imgs.length > 0) {
-            this.start();
-        } else {
-            this.end();
-        }
+        Object.assign(this, article);
+        this.start();
     }
 }
 
 ipcRenderer.on('message', (event, article) => {
-    window.onbeforeunload = null;
+    base.removeBeforUnload();
     let url = window.location.href;
     let userId = $(".go-inbox").find("a").attr("href");
     let baseUrl = "";
-    if(userId){
-        baseUrl = userId.replace("/admin/inbox",'');
-        userId = baseUrl.substr(baseUrl.lastIndexOf('/')+1);
+    if (userId) {
+        baseUrl = userId.replace("/admin/inbox", '');
+        userId = baseUrl.substr(baseUrl.lastIndexOf('/') + 1);
     }
     //如果没登录，那么就去登录
     if (!url.includes('/blog/write') && !userId && !url.includes("/home/login")) {
@@ -111,14 +107,14 @@ ipcRenderer.on('message', (event, article) => {
         return;
     }
     if ($("input[name='title']")[0]) {
-        if(!CKEDITOR.instances["body"]){
+        if (!CKEDITOR.instances["body"]) {
             alert("抱歉：目前暂不支持osc的markdown编辑器");
             return;
         }
-        setTimeout(function(){
+        setTimeout(function() {
             imgProcessor.init(article);
             $("input[name='title']").val(article.title);
-        },980);
+        }, 980);
         return;
     }
 })

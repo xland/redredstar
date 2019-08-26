@@ -1,3 +1,8 @@
+const fs = require('fs');
+const path = require('path');
+const {
+    remote
+} = require('electron');
 module.exports = {
     mime: {
         "jpeg": "image/jpeg",
@@ -9,13 +14,18 @@ module.exports = {
     },
     ajaxInjector(cb) {
         var open = window.XMLHttpRequest.prototype.open;
-        window.XMLHttpRequest.prototype.open = function (method, url, async, user, pass) {
-            this.addEventListener("readystatechange", function () {
+        window.XMLHttpRequest.prototype.open = function(method, url, async, user, pass) {
+            this.addEventListener("readystatechange", function() {
                 if (this.readyState === 4) {
                     try {
-                        var obj = JSON.parse(this.responseText);
-                        cb(obj);
-                    } catch(error) {
+                        var obj = null;
+                        if (this.responseType == "json") {
+                            obj = this.response;
+                        } else {
+                            obj = JSON.parse(this.responseText);
+                        }
+                        cb(obj, this.responseURL);
+                    } catch (error) {
                         cb(null);
                     }
                 }
@@ -73,5 +83,36 @@ module.exports = {
         let filter = new RegExp(name + "=([^;]*)(;|$)");
         let matches = cookie.match(filter);
         return matches ? matches[1] : null;
+    },
+    getFileObjByLocalUrl(url) {
+        let pathIndex = remote.process.platform == "win32" ? 8 : 7
+        let filePath = decodeURI(url).substr(pathIndex);
+        let extname = path.extname(filePath).substr(1);
+        let buffer = fs.readFileSync(filePath);
+        let file = new window.File([Uint8Array.from(buffer)], path.basename(filePath), {
+            type: this.mime[extname]
+        });
+        return file;
+    },
+    removeBeforUnload() {
+        var wc = remote.getCurrentWebContents();
+        wc.on('will-prevent-unload', event => {
+            var win = remote.BrowserWindow.fromWebContents(wc);
+            win.destroy();
+        })
+    },
+    maskPage() {
+        let temp = document.createElement("div");　　
+        temp.innerHTML = `<div id="xxm__post__mask"
+        style="position:absolute;left:0px;right:0px;bottom:0px;top:0px;z-index:99999999;background:rgba(0,0,0,0.8);text-align:center;color:#fff;"
+      >
+        <div style="font-size:46px;padding-top:160px;font-weight:600;">正在提交...</div>
+        <div style="font-size:22px;padding-top:20px;">目标平台编辑器需设置为HTML编辑器</div>
+      </div>`;
+        document.body.appendChild(temp.children[0]);
+    },
+    clearMask() {
+        let dom = document.querySelector("#xxm__post__mask");
+        if (dom) document.body.removeChild(dom);
     }
 }

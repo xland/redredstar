@@ -9,19 +9,21 @@ const base = require('../base');
 
 let imgProcessor = {
     imgs: null,
-    siteId: null,
     doc: null,
     guard: 0,
-    title: '',
     uploadImg(dom, file) {
-        let token = CKEDITOR.tools.getCsrfToken();
         let fd = new FormData();
-        fd.append('upload', file);
-        fd.append("ckCsrfToken", token);
-        let url = "https://mp.csdn.net/" + CKEDITOR.instances["editor"].config.imageUploadUrl;
+        fd.append("subModule", "normal_zhengwen");
+        fd.append("id", "WU_FILE_" + this.guard);
+        fd.append("name", file.name);
+        fd.append("type", file.type);
+        fd.append('lastModifiedDate', new Date());
+        fd.append('Filename', file.name);
+        fd.append("Filedata", file);
+        let url = "https://om.qq.com/image/archscaleupload?isRetImgAttr=1&relogin=1";
         base.post(url, fd, (r) => {
             var imgObj = JSON.parse(r);
-            dom.src = imgObj.url;
+            dom.src = imgObj.data.url.size['641'].imgurl;
             ipcRenderer.send('imgUploadMain', {
                 id: dom.id,
                 siteId: this.siteId,
@@ -35,37 +37,42 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
+            if (v.dataset[this.siteId]) {
+                v.src = v.dataset[this.siteId];
+            }
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
         });
-        window.onbeforeunload = null;
-        CKEDITOR.instances["editor"].setData(this.doc.body.innerHTML)
-        document.getElementById("txtTitle").value = this.title;
+        let iframe = document.getElementById("ueditor_0").contentWindow
+        iframe.editor.setContent(this.doc.body.innerHTML);
+        var win = remote.BrowserWindow.fromId(this.winId);
+        win.focus();
+        let titleTb = document.querySelector("label.input-control-title").children[0];
+        titleTb.focus();
+        titleTb.value = "";
+        clipboard.writeText(this.title);
+        win.webContents.paste();
         base.ajaxInjector(obj => {
-            if (obj && obj.data) {
-                let id = obj.data.substr(obj.data.lastIndexOf('/') + 1);
-                if (!id) {
-                    return;
-                }
+            if (obj && obj.response && obj.response.msg == "Save success" && obj.data) {
+                let id = obj.data.articleId;
                 ipcRenderer.send('articlePublishMain', {
-                    siteId: 'csdn',
-                    url: 'https://mp.csdn.net/postedit/' + id
+                    siteId: this.siteId,
+                    url: 'https://om.qq.com/article/articlePublish?articleId=' + id + '&atype=0'
                 });
             }
         })
+        base.clearMask();
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
+            if (this.type == 'new') {
+                delete v.dataset[this.siteId];
+            }
             if (!v.dataset[this.siteId]) {
                 this.guard += 1;
-                var pathIndex = remote.process.platform == "win32" ? 8 : 7
-                var filePath = decodeURI(v.src).substr(pathIndex);
-                var extname = path.extname(filePath).substr(1);
-                var buffer = fs.readFileSync(filePath);
-                var file = new window.File([new Uint8Array(buffer)], path.basename(filePath), {
-                    type: base.mime[extname]
-                });
+                let file = base.getFileObjByLocalUrl(v.src);
                 this.uploadImg(v, file);
             }
         });
@@ -77,29 +84,36 @@ let imgProcessor = {
         var parser = new DOMParser();
         this.doc = parser.parseFromString(article.content, "text/html");
         this.imgs = this.doc.querySelectorAll('img');
-        this.siteId = article.siteId;
-        this.winId = article.winId;
-        this.title = article.title;
-        if (this.imgs.length > 0) {
-            this.start();
-        } else {
-            this.end();
-        }
+        Object.assign(this, article);
+        this.start();
     }
 }
 
-//UE.instants.ueditorInstant0.setContent("allen");
-//https://om.qq.com/image/archscaleupload?isRetImgAttr=1&relogin=1
-//img up response {"response":{"code":0,"msg":"success!","cost":"290ms"},"data":{"url":{"url":"http:\/\/inews.gtimg.com\/newsapp_bt\/0\/80214
+var waitForReady = function(cb) {
+    setTimeout(function() {
+        if (!document.getElementById("ueditor_0")) {
+            waitForReady(cb);
+            return;
+        }
+        let win = document.getElementById("ueditor_0").contentWindow;
+        if (!win.editor) {
+            waitForReady(cb);
+            return;
+        }
+        cb();
+    }, 280);
+}
 ipcRenderer.on('message', (event, article) => {
-    window.onbeforeunload = null;
+    base.removeBeforUnload();
     let url = window.location.href;
-    if (url.startsWith('https://mp.csdn.net/postedit')) {
-        setTimeout(()=>{
-            if(!document.getElementById("cke_editor")){
-                alert("抱歉：目前暂不支持csdn的markdown编辑器")
-            }
-            imgProcessor.init(article);
-        },960)
+    if (url == "https://om.qq.com/userAuth/index") {
+        return;
     }
+    if (!url.startsWith('https://om.qq.com/article/articlePublish')) {
+        window.location.href = article.url
+        return;
+    }
+    waitForReady(() => {
+        imgProcessor.init(article);
+    })
 })

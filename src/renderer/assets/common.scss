@@ -24,6 +24,7 @@
     height: 100%;
     font-size: 13px;
     background: transparent;
+    resize: none;
 }
 
 .btn {
@@ -54,7 +55,10 @@
     box-shadow: 0 1px 3px rgba(26, 26, 26, 0.2);
     background: #fff;
 }
-
+.searchTagContainer{
+    max-width: 386px;overflow-x: auto;padding-top: 3px;
+    padding-left: 6px;
+}
 .tag {
     display: inline-block;
     background: #e7f3ff;
@@ -64,14 +68,18 @@
     font-size: 12px;
     padding-left: 6px;
     padding-right: 16px;
-    margin-left: 8px;
     cursor: pointer;
     border: 1px solid #0084FF;
     max-width: 126px;
     overflow: hidden;
     height: 22px;
     white-space: nowrap;
-    position: relative;
+    position: relative;  
+
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 .tagClose {
@@ -84,84 +92,55 @@
 }
 
 .tagText {
-    max-width: 82px;
+    max-width: 72px;
     display: inline-block;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
 }
 
-.swal-text {
-    text-align: center !important;
-}
-
 .tagClose:hover {
     color: #ee4242;
 }
-
-.swal-button--confirm {
-    background: #e7f3ff;
-    color: #1787fb;
-}
-
-.swal-footer {
-    text-align: center;
-}
-
-.swal-button:focus {
-    box-shadow: none;
-}
-
-.tui-editor-defaultUI {
-    border: none !important;
-}
-
-.CodeMirror-vscrollbar {
-    outline: none;
-    user-select: none;
-}
-
-.tui-editor-defaultUI-toolbar {
-    padding: 0 6px;
-    background: #eee;
-}
-
-.tui-editor-defaultUI-toolbar button {
-    background-color: #eee;
-    border-color: #eee;
-}
-
 .noDataTip {
-    margin-top: 12%;
+    margin-top: 22%;
     text-align: center;
     font-size: 32px;
     line-height: 66px;
     color: #bbb;
 }
-
-#edui1 {
-    height: 100% !important;
+.maskExceptMenu {
+    position: absolute;
+    top: 8px;
+    left: 36px;
+    right: 8px;
+    border-radius: 3px;
+    bottom: 34px;
+    background: #ccc;
+    z-index: 99;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
-
-#edui1_iframeholder {
-    flex: 1;
+.rightContainer {
+    float: right;
+    width: 238px;
+    height: 100%;
+    padding-bottom: 8px;
+    margin-right: 8px;
+    display: flex;
+    flex-flow: column;
 }
-
-.edui-notadd .edui-editor {
-    border: none !important;
+.leftContainer {
+    margin-right: 246px;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
 }
-
-.edui-editor-bottomContainer .edui-notadd {
-    display: none !important;
-}
-
-.edui-notadd .edui-editor-toolbarbox {
-    border-top-left-radius: 0px !important;
-    border-top-right-radius: 0px !important;
-}
-
-.edui-notadd .edui-editor-bottomContainer {
-    display: none !important;
-}
+  #helpContainer {
+    text-align: left;
+    padding-left: 12px;
+    padding-right: 12px;
+    line-height: 32px;
+  }

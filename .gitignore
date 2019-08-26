@@ -1,5 +1,6 @@
 .DS_Store
 dist/electron/*
+browser_extension/hui/*
 dist/web/*
 build/*
 !build/icons
@@ -7,6 +8,15 @@ node_modules/
 npm-debug.log
 npm-debug.log.*
 thumbs.db
+doc/sign/*
+cache/*
 !.gitkeep
 bak
 *.mine
+*.bak
+*.bin
+package-lock.json
+package-lock.json
+package-lock.json
+src/renderer/test.js
+src/renderer/test.js

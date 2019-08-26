@@ -8,10 +8,8 @@ const base = require('../base');
 
 let imgProcessor = {
     imgs: null,
-    siteId: null,
     doc: null,
     guard: 0,
-    title: '',
     uploadImg(dom, file) {
         let token = CKEDITOR.tools.getCsrfToken();
         let fd = new FormData();
@@ -34,11 +32,13 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
+            if (v.dataset[this.siteId]) {
+                v.src = v.dataset[this.siteId];
+            }
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
         });
-        window.onbeforeunload = null;
         CKEDITOR.instances["editor"].setData(this.doc.body.innerHTML)
         document.getElementById("txtTitle").value = this.title;
         base.ajaxInjector(obj => {
@@ -52,19 +52,18 @@ let imgProcessor = {
                     url: 'https://mp.csdn.net/postedit/' + id
                 });
             }
-        })
+        });
+        base.clearMask();
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
+            if (this.type == 'new') {
+                delete v.dataset[this.siteId];
+            }
             if (!v.dataset[this.siteId]) {
                 this.guard += 1;
-                var pathIndex = remote.process.platform == "win32" ? 8 : 7
-                var filePath = decodeURI(v.src).substr(pathIndex);
-                var extname = path.extname(filePath).substr(1);
-                var buffer = fs.readFileSync(filePath);
-                var file = new window.File([new Uint8Array(buffer)], path.basename(filePath), {
-                    type: base.mime[extname]
-                });
+                let file = base.getFileObjByLocalUrl(v.src);
                 this.uploadImg(v, file);
             }
         });
@@ -76,28 +75,25 @@ let imgProcessor = {
         var parser = new DOMParser();
         this.doc = parser.parseFromString(article.content, "text/html");
         this.imgs = this.doc.querySelectorAll('img');
-        this.siteId = article.siteId;
-        this.winId = article.winId;
-        this.title = article.title;
-        if (this.imgs.length > 0) {
-            this.start();
-        } else {
-            this.end();
-        }
+        Object.assign(this, article);
+        this.start();
     }
 }
 
 
 ipcRenderer.on('message', (event, article) => {
-    window.onbeforeunload = null;
+    base.removeBeforUnload();
     let url = window.location.href;
+    if (url.startsWith("https://mp.csdn.net/mdeditor")) {
+        alert("抱歉：目前暂不支持csdn的markdown编辑器,请修改默认编辑器");
+        return;
+    }
     if (url.startsWith('https://mp.csdn.net/postedit')) {
-        setTimeout(()=>{
-            //window.onbeforeunload = null;
-            if(!document.getElementById("cke_editor")){
-                alert("抱歉：目前暂不支持csdn的markdown编辑器")
+        setTimeout(() => {
+            if (!document.getElementById("cke_editor")) {
+                alert("抱歉：目前暂不支持csdn的markdown编辑器");
             }
             imgProcessor.init(article);
-        },960)
+        }, 960)
     }
 })

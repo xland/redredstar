@@ -9,14 +9,13 @@ const base = require('../base');
 
 let imgProcessor = {
     imgs: null,
-    siteId: null,
     doc: null,
     guard: 0,
-    title: '',
     getUploadUrl(cb) {
         let urlParams = {
             action: 'upload_material',
             f: 'json',
+            scene: 8,
             writetype: 'doublewrite',
             groupid: 3,
             ticket_id: '',
@@ -25,7 +24,8 @@ let imgProcessor = {
         }
         let postUrl = 'https://mp.weixin.qq.com/cgi-bin/filetransfer?'
         remote.session.defaultSession.cookies.get({}, (error, cookies) => {
-            urlParams.ticket_id = cookies.find(v => v.name == "ticket_id").value;
+            let cookieTid = cookies.find(v => v.name == "ticket_id") || cookies.find(v => v.name == "slave_user")
+            urlParams.ticket_id = cookieTid.value;
             Object.keys(urlParams).forEach(key => {
                 postUrl += key + '=' + urlParams[key] + "&";
             });
@@ -58,15 +58,18 @@ let imgProcessor = {
     },
     end() {
         this.imgs.forEach(v => {
+            if (v.dataset[this.siteId]) {
+                v.src = v.dataset[this.siteId];
+            }
             Object.keys(v.dataset).forEach(ds => {
                 delete v.dataset[ds];
             })
         });
-        setTimeout(()=>{
-            window.onbeforeunload = null;
+        setTimeout(() => {
             UE.instants.ueditorInstant0.setContent(this.doc.body.innerHTML);
             document.getElementById("title").value = this.title;
-        },600);
+            base.clearMask();
+        }, 600);
         base.ajaxInjector(obj => {
             if (obj && obj.appMsgId) {
                 let url = 'https://mp.weixin.qq.com/?appmsgid=' + obj.appMsgId;
@@ -78,16 +81,14 @@ let imgProcessor = {
         })
     },
     start() {
+        base.maskPage();
         this.imgs.forEach(v => {
+            if (this.type == 'new') {
+                delete v.dataset[this.siteId];
+            }
             if (!v.dataset[this.siteId]) {
                 this.guard += 1;
-                var pathIndex = remote.process.platform == "win32" ? 8 : 7
-                var filePath = decodeURI(v.src).substr(pathIndex);
-                var extname = path.extname(filePath).substr(1);
-                var buffer = fs.readFileSync(filePath);
-                var file = new window.File([new Uint8Array(buffer)], path.basename(filePath), {
-                    type: base.mime[extname]
-                });
+                let file = base.getFileObjByLocalUrl(v.src);
                 this.uploadImg(v, file);
             }
         });
@@ -99,30 +100,27 @@ let imgProcessor = {
         var parser = new DOMParser();
         this.doc = parser.parseFromString(article.content, "text/html");
         this.imgs = this.doc.querySelectorAll('img');
-        this.siteId = article.siteId;
-        this.winId = article.winId;
-        this.title = article.title;
-        if (this.imgs.length > 0) {
-            this.start();
-        } else {
-            this.end();
-        }
+        Object.assign(this, article);
+        this.start();
     }
 }
 
-var waitForReady = function (cb) {
-    setTimeout(function () {
+var waitForReady = function(cb) {
+    setTimeout(function() {
+        if (document.querySelector('.icon_page_error')) {
+            window.location.href = 'https://mp.weixin.qq.com/';
+            return;
+        }
         if (!document.getElementById("ueditor_0")) {
-            console.log('wait');
             waitForReady(cb);
             return;
         }
-        console.log('go');
         cb();
     }, 280);
 }
 
 ipcRenderer.on('message', (event, article) => {
+    base.removeBeforUnload();
     let url = window.location.href;
     let token = base.getUrlParam(url, "token");
     let type = base.getUrlParam(url, "type");
@@ -140,8 +138,7 @@ ipcRenderer.on('message', (event, article) => {
         return;
     }
     if (token && type == "10") {
-        waitForReady(function () {
-            window.onbeforeunload = null;
+        waitForReady(function() {
             imgProcessor.init(article);
         });
     }
