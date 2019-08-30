@@ -24,6 +24,9 @@
       <div @click="logout()" class="btn" style="background: #ccc;">退出登录</div>
     </div>
   </div>
+  <div style="font-size:58px;font-weight:bold;padding-top:160px;text-align:center;color:#CCC" v-else>
+    未登录
+  </div>
 </template>
 <script>
     var electron = require('electron');
@@ -35,6 +38,7 @@ export default {
     };
   },
   mounted() {
+    console.log(1);
     if (!this.$root.jnaToken) {
       this.bus.$emit("login");
       this.menuIndex = 0;
@@ -53,9 +57,9 @@ export default {
     async logout() {
       this.$root.jnaToken = null;
       this.$root.userInfo = null;
-      this.setting.jna_token = null;
+      this.$parent.setting.jna_token = null;
       await this.db("settings").update({ jna_token: null });
-      this.menuIndex = 0;
+      this.$parent.menuIndex = 0;
     },
     gotoJna(url) {
       electron.remote.shell.openExternal(url);

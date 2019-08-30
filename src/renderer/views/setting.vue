@@ -56,7 +56,7 @@
         <div @click="save" class="btn" style="margin-left: 0px;">保存系统设置</div>
       </div>
     </div>
-    <div v-show="menuIndex == 1" class="content">
+    <div v-if="menuIndex == 1" class="content">
       <user />
     </div>
     <div v-show="menuIndex == 2" class="content">
