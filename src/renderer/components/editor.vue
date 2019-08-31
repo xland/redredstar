@@ -9,6 +9,7 @@
 //todo:图片放大缩小需要按比例
 //todo  黏贴过来的文章，下载图片；
 //todo 新建知识右边来一个箭头，可以选编辑器
+//todo 去掉scroller on
 const fs = require("fs");
 const path = require("path");
 import img from "./mixins/img";

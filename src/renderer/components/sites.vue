@@ -67,7 +67,7 @@ export default {
           site_id: item.id
         })
         .first();
-      if (row) this.editUrl = rows.edit_url;
+      if (row) this.editUrl = row.edit_url;
       return false;
     },
     makeWin(item, articleMsg) {
