@@ -47,7 +47,7 @@ let imgProcessor = {
         iframe.editor.setContent(this.doc.body.innerHTML);
         var win = remote.BrowserWindow.fromId(this.winId);
         win.focus();
-        let titleTb = document.querySelector("input.ant-input");
+        let titleTb = document.querySelector("textarea.ant-input");
         titleTb.focus();
         titleTb.value = "";
         clipboard.writeText(this.title);
@@ -106,6 +106,7 @@ var waitForReady = function(cb) {
 //editor.setContent("allen");
 //https://baijiahao.baidu.com/builderinner/api/content/file/upload
 //img up response success","ret":{"app_id":1587171278593857,"bos_url":"http:\/\/pic.rmb.bdstatic.com\
+"https://baijiahao.baidu.com/builder/rc/edit?type=news&app_id=1643526549649285"
 ipcRenderer.on('message', (event, article) => {
     base.removeBeforUnload();
     let url = window.location.href;
@@ -117,5 +118,7 @@ ipcRenderer.on('message', (event, article) => {
         waitForReady(() => {
             imgProcessor.init(article);
         })
+    } else if (url.startsWith('https://baijiahao.baidu.com/?source=inner')) {
+        window.location.href = article.url
     }
 })
