@@ -5,6 +5,7 @@
 如果你是自媒体作者，我建议你使用“赤星”自媒体内容管理工具来替代本产品；
 
 windows版本：   http://download.redredstar.com/latest.exe
+
 mac版本：       http://download.redredstar.com/latest.dmg
 
 
