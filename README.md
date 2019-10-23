@@ -1,5 +1,13 @@
 <h1 align="center">“想学吗”个人知识管理工具</h1>
 
+## 重要声明
+
+如果你是自媒体作者，我建议你使用“赤星”自媒体内容管理工具来替代本产品；
+
+windows版本：   http://download.redredstar.com/latest.exe
+mac版本：       http://download.redredstar.com/latest.dmg
+
+
 ## 程序简介
 
  “想学吗”是一个更快的、私有化的、标签式的、持续演进的个人知识管理与自媒体营销工具；
