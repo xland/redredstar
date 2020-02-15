@@ -4,6 +4,12 @@
 #include <QMainWindow>
 #include "iconhelper.h"
 #include <QStandardPaths>
+#include <QDebug>
+#include <QDir>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

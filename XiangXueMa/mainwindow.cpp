@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QDebug>
+
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -17,20 +17,21 @@ MainWindow::MainWindow(QWidget *parent)
 
     IconHelper::Instance()->SetIcon(ui->pushButton,QChar(0xe600),16);
     QStringList strs = QStandardPaths::standardLocations(QStandardPaths::AppConfigLocation);
-    bool isDirExist(QString fullPath)
-    {
-        QDir dir(fullPath);
-        if(dir.exists())
-        {
-          return true;
-        }
-        else
-        {
-           bool ok = dir.mkpath(fullPath);//创建多级目录
-           return ok;
-        }
-    }
+    QDir dir(strs.at(0));
+    dir.mkpath(strs.at(0));//创建多级目录
     qDebug(qPrintable(strs.at(0)));
+
+    QSqlDatabase database;
+    database = QSqlDatabase::addDatabase("QSQLITE");
+    database.setDatabaseName(strs.at(0)+"//MyDataBase.db");
+    if (!database.open())
+    {
+        qDebug() << "Error: Failed to connect database." << database.lastError();
+    }
+    else
+    {
+        qDebug() << "Succeed to connect database." ;
+    }
 }
 
 MainWindow::~MainWindow()
