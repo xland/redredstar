@@ -77,7 +77,7 @@
         "electron-log": "^3.0.7",
         "electron-updater": "^4.1.2",
         "fs-extra": "^7.0.1",
-        "knex": "^0.16.3",
+        "knex": "^0.20.0",
         "sqlite3": "^4.1.0",
         "sweetalert": "^2.1.2",
         "vue": "^2.5.16",
