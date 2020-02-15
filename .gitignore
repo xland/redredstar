@@ -1,6 +1,5 @@
 .DS_Store
 dist/electron/*
-static/sites_sec/*
 browser_extension/hui/*
 dist/web/*
 build/*
