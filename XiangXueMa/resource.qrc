@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>font/iconfont.ttf</file>
+        <file>db/db.db</file>
     </qresource>
 </RCC>

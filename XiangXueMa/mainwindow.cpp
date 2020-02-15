@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QFile>
 
 
 
@@ -21,17 +22,19 @@ MainWindow::MainWindow(QWidget *parent)
     dir.mkpath(strs.at(0));//创建多级目录
     qDebug(qPrintable(strs.at(0)));
 
-    QSqlDatabase database;
-    database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName(strs.at(0)+"//MyDataBase.db");
-    if (!database.open())
-    {
-        qDebug() << "Error: Failed to connect database." << database.lastError();
-    }
-    else
-    {
-        qDebug() << "Succeed to connect database." ;
-    }
+    QFile::copy(":/db/db.db", strs.at(0)+"/db.db");
+
+    //    QSqlDatabase database;
+    //    database = QSqlDatabase::addDatabase("QSQLITE");
+    //    database.setDatabaseName(strs.at(0)+"//MyDataBase.db");
+    //    if (!database.open())
+    //    {
+    //        qDebug() << "Error: Failed to connect database." << database.lastError();
+    //    }
+    //    else
+    //    {
+    //        qDebug() << "Succeed to connect database." ;
+    //    }
 }
 
 MainWindow::~MainWindow()
