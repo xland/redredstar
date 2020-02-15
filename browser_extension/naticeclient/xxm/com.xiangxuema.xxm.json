@@ -1,9 +1,0 @@
-{
-  "name": "com.xiangxuema.xxm",
-  "description": "Xxm Native Messaging API",
-  "path": "/Users/xiaolunliu/Library/Application Support/Google/Chrome/NativeMessagingHosts/xxm",
-  "type": "stdio",
-  "allowed_origins": [
-    "chrome-extension://jbbbdknchglmkbblaanihdhlplkomojh/"
-  ]
-}
