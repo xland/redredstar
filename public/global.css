@@ -22,3 +22,13 @@ input, button, select, textarea {
 	border: 1px solid #ccc;
 	border-radius: 2px;
 }
+.ck.ck-toolbar{
+	border: none !important;
+}
+.ck.ck-editor__editable_inline{
+	border: none !important;
+	border-top: 1px solid rgb(230, 231, 232) !important;	
+}
+.ck-focused{
+	box-shadow: none !important;
+}

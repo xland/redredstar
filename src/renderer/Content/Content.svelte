@@ -17,7 +17,15 @@
         ],
       },
     };
-    let instance = await ClassicEditor.create(editorElement, config);
+    let editor = await ClassicEditor.create(editorElement, config);
+    editor.editing.view.change((writer) => {
+      console;
+      writer.setStyle(
+        "height",
+        `${window.innerHeight - 80}px`,
+        editor.editing.view.document.getRoot()
+      );
+    });
   });
 </script>
 
@@ -46,5 +54,8 @@
   }
   .articleContent {
     flex: 1;
+  }
+  #ckEditor {
+    height: 100%;
   }
 </style>
