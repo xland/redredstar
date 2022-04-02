@@ -1,128 +1,109 @@
-<h1 align="center">“想学吗”个人知识管理工具</h1>
+*Psst — looking for a more complete solution? Check out [SvelteKit](https://kit.svelte.dev), the official framework for building web applications of all sizes, with a beautiful development experience and flexible filesystem-based routing.*
 
-## 重要声明
+*Looking for a shareable component template instead? You can [use SvelteKit for that as well](https://kit.svelte.dev/docs#packaging) or the older [sveltejs/component-template](https://github.com/sveltejs/component-template)*
 
-如果你是自媒体作者，我建议你使用“赤星”自媒体内容管理工具来替代本产品；
+---
 
-windows版本：   http://download.redredstar.com/latest.exe
+# svelte app
 
-mac版本：       http://download.redredstar.com/latest.dmg
+This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
 
+To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
 
-## 程序简介
+```bash
+npx degit sveltejs/template svelte-app
+cd svelte-app
+```
 
- “想学吗”是一个更快的、私有化的、标签式的、持续演进的个人知识管理与自媒体营销工具；
-
- 目前支持把文章发布到：
- 
- 博客平台：博客园、开源中国、知乎、CSDN、简书、豆瓣
-
- 自媒体平台：百家号、企鹅号、头条号、奇艺号、大鱼号、搜狐号、微信公众号
-
-## 下载地址
-
-* win64: 
-<br />http://xiangxuema.com/download/latest.exe
-
-* osx64: 
-<br />http://xiangxuema.com/download/latest.dmg
-
-* linux64: 
-<br />http://xiangxuema.com/download/latest.AppImage
-
-* chrome插件(无需翻墙，需手动安装): 
-<br />http://xiangxuema.com/chrome_extension/xiangxuema.crx 
-
-* chrome插件(需翻墙，自动安装): 
-<br />https://chrome.google.com/webstore/detail/%E6%83%B3%E5%AD%A6%E5%90%97/baccnbdhpfeckhhcfekgeheghodgnnpm?hl=zh-CN
+*Note that you will need to have [Node.js](https://nodejs.org) installed.*
 
 
-## 功能说明
+## Get started
 
-* 您通过“想学吗”编辑的知识，以及知识内部的图片、个人设置等数据均保存在本地；
-* 您的知识，可以自由的发布到“微信公众号”、“博客园”、“开源中国”等十几个知名网站（需拥有相应网站的账号）；
-* 发布知识时，知识内部的图片也会上传到对应的网站上；
-* 修改知识后，再次发布该知识，不会导致图片重复上传；
-* 在文章中删除图片，本地目录中的图片也会被删除，不会留有垃圾数据；
-*  “想学吗”不会保存您任何博客平台的账号数据；
-* 文章发布到目标平台不夹带任何“尾巴”；
-* “想学吗”浏览器插件包括文章收集功能和思想火花收集功能，可以快速收集互联网的文章或简短的文字；
-* “想学吗”浏览器插件收集文章时，也会把文章内的图片下载到本地；
-* “想学吗”还提供思维导图的功能，可以快速梳理构建您脑海中的想法
+Install the dependencies...
 
-## 其他说明：
+```bash
+cd svelte-app
+npm install
+```
 
-* osx数据存放目录： 
-<br />&emsp;&emsp; /Users/[name]/Library/Application Support/xiangxuema/xxm
-* win数据存放目录：
-<br />&emsp;&emsp; C:\Users\\[name]\AppData\Roaming\xiangxuema\xxm
-* linux数据存放目录： 
-<br />&emsp;&emsp; /home/[name]/.config/xiangxuema
-* 本地编译说明：
-<br />&emsp;&emsp; https://github.com/xland/xiangxuema/blob/master/doc/build.md
-* 责权声明：
-<br />&emsp;&emsp; 本软件为非盈利、开源软件，任何责任与义务均由使用者承担，与开发者无关；
+...then start [Rollup](https://rollupjs.org):
 
-## 界面截图
+```bash
+npm run dev
+```
 
-<p align="center">
-对接的平台<br />
-<img width="680" src="/doc/imgs/site.png" />
-</p>
+Navigate to [localhost:8080](http://localhost:8080). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
 
-<p align="center">
-知识检索<br />
-<img width="680" src="http://www.xiangxuema.com/doc/search.gif" />
-</p>
+By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
 
-<p align="center">
-知识编辑<br />
-<img width="680" src="http://www.xiangxuema.com/doc/edit.gif" />
-</p>
+If you're using [Visual Studio Code](https://code.visualstudio.com/) we recommend installing the official extension [Svelte for VS Code](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode). If you are using other editors you may need to install a plugin in order to get syntax highlighting and intellisense.
 
-<p align="center">
-知识编辑插入图片、最近打开的知识与知识发布<br />
-<img width="680" src="http://www.xiangxuema.com/doc/publish.gif" />
-</p>
+## Building and running in production mode
 
-<p align="center">
-思想火花的编辑与删除<br />
-<img width="680" src="http://www.xiangxuema.com/doc/flower.gif" />
-</p>
+To create an optimised version of the app:
 
-<p align="center">
-浏览器插件收集知识<br />
-<img width="680" src="http://www.xiangxuema.com/doc/extension_article.gif" />
-</p>
+```bash
+npm run build
+```
 
-<p align="center">
-浏览器插件收集思想火花<br />
-<img width="680" src="http://www.xiangxuema.com/doc/extension_flower.gif" />
-</p>
+You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
 
-<p align="center">
-markdown编辑器<br />
-<img width="680" src="/doc/imgs/markdown.jpg" />
-</p>
 
-<p align="center">
-脑图<br />
-<img width="680" src="/doc/imgs/mind.png" />
-</p>
+## Single-page app mode
 
-## 联系方式
+By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
 
-* 联系方式：412588801@qq.com
-* QQ群：178778455（网友：Franky J维护）
-* 征集赞助或推广的伙伴，接受资金赞助，接受任何形式的推广支持
-* 如果需要，我可以为赞助或推广的伙伴，在本页面提供一个sponser位置
+If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
 
-## 赞助商
+```js
+"start": "sirv public --single"
+```
 
-*  <a href="http://xin-lai.com" target="_blank">湖南心莱信息科技有限公司</a>
-*  <a href="http://www.senparc.com/" target="_blank">苏州盛派网络科技有限公司</a>
-*  杭州软雅科技有限公司
-*  Franky J ，<a href="https://www.cnblogs.com/asxinyu" target="_blank">数据之巅</a>
-*  衡水浩伦科技有限公司
-*  <a href="https://juejin.im/post/5c9c49d451882547e46dd6c3" target="_blank">公众号「 程序员的成长之路 」</a>
-*  Franky J ，<a href="https://www.cnblogs.com/asxinyu" target="_blank">数据之巅</a>
+## Using TypeScript
+
+This template comes with a script to set up a TypeScript development environment, you can run it immediately after cloning the template with:
+
+```bash
+node scripts/setupTypeScript.js
+```
+
+Or remove the script via:
+
+```bash
+rm scripts/setupTypeScript.js
+```
+
+If you want to use `baseUrl` or `path` aliases within your `tsconfig`, you need to set up `@rollup/plugin-alias` to tell Rollup to resolve the aliases. For more info, see [this StackOverflow question](https://stackoverflow.com/questions/63427935/setup-tsconfig-path-in-svelte).
+
+## Deploying to the web
+
+### With [Vercel](https://vercel.com)
+
+Install `vercel` if you haven't already:
+
+```bash
+npm install -g vercel
+```
+
+Then, from within your project folder:
+
+```bash
+cd public
+vercel deploy --name my-project
+```
+
+### With [surge](https://surge.sh/)
+
+Install `surge` if you haven't already:
+
+```bash
+npm install -g surge
+```
+
+Then, from within your project folder:
+
+```bash
+npm run build
+surge public my-project.surge.sh
+```
