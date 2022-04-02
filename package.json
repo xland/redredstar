@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "runSvelte": "rollup -c -w",
+    "runSvelte": "rollup -c ./script/renderer.config.js -w",
     "buildMain": "rollup --config rollup.main.config.js",
-    "runElectron": "electron ./public/build/main.js",
+    "runElectron": "electron ./public/main.js",
     "watchPublic": "sirv public --no-clear",
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "concurrently \"npm run runSvelte\" \"npm run buildMain\" \"npm run runElectron\"",
+    "prestart": "rollup --config ./script/main.config.js",
+    "start": "concurrently \"npm run runSvelte\" \"npm run runElectron\"",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {

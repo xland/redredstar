@@ -6,6 +6,7 @@ import { terser } from "rollup-plugin-terser";
 import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
+const external = require("./external");
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -35,7 +36,7 @@ function serve() {
 }
 
 export default {
-  input: "src/main.ts",
+  input: "src/renderer/rendererEntry.ts",
   output: {
     sourcemap: true,
     format: "cjs",
@@ -84,4 +85,5 @@ export default {
   watch: {
     clearScreen: false,
   },
+  external,
 };
