@@ -2,14 +2,14 @@
   import TopBar from "./TopBar/TopBar.svelte";
   import { ipcRenderer } from "electron";
   import { onMount } from "svelte";
-  import "./icon/iconfont.css";
-  export let name: string;
+  import Content from "./Content/Content.svelte";
   onMount(() => {
     ipcRenderer.invoke("maxmizeWindow");
   });
 </script>
 
 <TopBar />
+<Content />
 
 <style lang="scss">
 </style>

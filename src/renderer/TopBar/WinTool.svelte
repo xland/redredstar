@@ -49,6 +49,7 @@
   .winTool {
     height: 100%;
     display: flex;
+    -webkit-app-region: no-drag;
   }
   .winTool div {
     height: 100%;

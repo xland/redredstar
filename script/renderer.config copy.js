@@ -7,44 +7,30 @@ import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
 const external = require("./external");
-let sirv = require("sirv");
 
 const production = !process.env.ROLLUP_WATCH;
 
-function startElectron() {
-  let electronProcess = require("child_process").spawn(
-    require("electron").toString(),
-    ["./public/main.js"],
-    {
-      cwd: process.cwd(),
-    }
-  );
-  electronProcess.on("close", () => {
-    this.electronProcess.kill(0);
-    process.exit();
-  });
-  electronProcess.stdout.on("error", (data) => {
-    data = data.toString();
-    console.log(data);
-    console.log("error");
-  });
-  electronProcess.stdout.on("data", (data) => {
-    data = data.toString();
-    console.log(data);
-  });
-}
-
 function serve() {
   let server;
+
+  function toExit() {
+    if (server) server.kill(0);
+  }
+
   return {
     writeBundle() {
       if (server) return;
-      let fn = sirv("public", { dev: true });
-      server = require("http").createServer(fn);
-      server.listen(5916, "localhost", (err) => {
-        if (err) throw err;
-        startElectron();
-      });
+      server = require("child_process").spawn(
+        "npm",
+        ["run", "watchPublic", "--", "--dev"],
+        {
+          stdio: ["ignore", "inherit", "inherit"],
+          shell: true,
+        }
+      );
+
+      process.on("SIGTERM", toExit);
+      process.on("exit", toExit);
     },
   };
 }

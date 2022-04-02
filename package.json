@@ -9,8 +9,9 @@
     "watchPublic": "sirv public --no-clear",
     "build": "rollup -c",
     "dev": "rollup -c -w",
+    "start1": "concurrently \"npm run runSvelte\" \"npm run runElectron\"",
     "prestart": "rollup --config ./script/main.config.js",
-    "start": "concurrently \"npm run runSvelte\" \"npm run runElectron\"",
+    "start": "rollup -c ./script/renderer.config.js -w",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
@@ -18,6 +19,7 @@
     "@rollup/plugin-node-resolve": "^11.0.0",
     "@rollup/plugin-typescript": "^8.0.0",
     "@tsconfig/svelte": "^2.0.0",
+    "@types/ckeditor__ckeditor5-build-classic": "^29.0.1",
     "concurrently": "^7.0.0",
     "electron": "^18.0.1",
     "rollup": "^2.3.4",
@@ -25,13 +27,17 @@
     "rollup-plugin-livereload": "^2.0.0",
     "rollup-plugin-svelte": "^7.0.0",
     "rollup-plugin-terser": "^7.0.0",
+    "sass": "^1.49.11",
     "sirv-cli": "^2.0.0",
     "svelte": "^3.0.0",
     "svelte-check": "^2.0.0",
     "svelte-preprocess": "^4.0.0",
     "tslib": "^2.0.0",
-    "sass": "^1.49.11",
     "typescript": "^4.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^33.0.0",
+    "better-sqlite3": "^7.5.0",
+    "knex": "^1.0.4"
+  }
 }

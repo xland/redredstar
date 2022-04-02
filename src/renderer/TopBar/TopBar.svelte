@@ -14,6 +14,7 @@
     line-height: 38px;
     background: #eee;
     width: 100%;
+    -webkit-app-region: drag;
   }
   .winTitle {
     flex: 1;

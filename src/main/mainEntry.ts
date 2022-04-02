@@ -7,7 +7,7 @@ let mainWindow;
 app.on("ready", () => {
   let config = new ConfigWindow();
   mainWindow = new BrowserWindow(config);
-  mainWindow.loadURL("http://localhost:8080");
+  mainWindow.loadURL("http://localhost:5916");
   mainWindow.webContents.openDevTools();
   CommonWindowEvent.listen();
 });
