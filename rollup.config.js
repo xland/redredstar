@@ -21,7 +21,7 @@ function serve() {
       if (server) return;
       server = require("child_process").spawn(
         "npm",
-        ["run", "start", "--", "--dev"],
+        ["run", "watchPublic", "--", "--dev"],
         {
           stdio: ["ignore", "inherit", "inherit"],
           shell: true,
@@ -38,7 +38,7 @@ export default {
   input: "src/main.ts",
   output: {
     sourcemap: true,
-    format: "iife",
+    format: "cjs",
     name: "app",
     file: "public/build/bundle.js",
   },

@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "runSvelte": "rollup -c -w",
+    "buildMain": "rollup --config rollup.main.config.js",
+    "runElectron": "electron ./public/build/main.js",
+    "watchPublic": "sirv public --no-clear",
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "start": "sirv public --no-clear",
+    "start": "concurrently \"npm run runSvelte\" \"npm run buildMain\" \"npm run runElectron\"",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {
@@ -24,9 +28,8 @@
     "svelte-check": "^2.0.0",
     "svelte-preprocess": "^4.0.0",
     "tslib": "^2.0.0",
-    "typescript": "^4.0.0"
-  },
-  "dependencies": {
+    "typescript": "^4.0.0",
     "sirv-cli": "^2.0.0"
-  }
+  },
+  "dependencies": {}
 }
