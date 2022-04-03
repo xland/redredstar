@@ -1,45 +1,41 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
-  import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-  import CKEditorInspector from '@ckeditor/ckeditor5-inspector'
-  let editor: ClassicEditor
-  onMount(async () => {
-    let editorElement = document.getElementById('ckEditor')
-    let config = {
-      toolbar: {
-        items: ['heading', '|', 'fontFamily', 'fontSize', 'bold', 'italic', 'underline'],
-      },
-    }
-    editor = await ClassicEditor.create(editorElement, config)
-  })
-  let contentClick = () => {
-    editor.focus()
-  }
+  import CategoryTool from './Category/CategoryTool.svelte'
+  import CategoryTree from './Category/CategoryTree.svelte'
+  import TitleTool from './Title/TitleTool.svelte'
+  import TitleList from './Title/TitleList.svelte'
+  import Editor from './Editor.svelte'
+  import { globalObjs } from '../Store/globalObjs'
 </script>
 
 <div class="content">
-  <div class="category">1</div>
-  <div class="titleList">2</div>
-  <div on:click={contentClick} class="articleContent">
-    <div id="ckEditor" />
+  <div class="category">
+    <CategoryTool />
+    <CategoryTree />
+  </div>
+  <div class="titleList">
+    <TitleTool />
+    <TitleList />
+  </div>
+  <div on:click={() => globalObjs.editor.focus()} class="articleContent">
+    <Editor />
   </div>
 </div>
 
 <style lang="scss">
-  .content {
-    display: flex;
-    height: calc(100% - 38px);
-    overflow: hidden;
-  }
   .category {
     width: 180px;
-    background: rgb(241, 248, 255);
-    border-right: 1px solid rgb(220, 228, 235);
+    display: flex;
+    flex-direction: column;
+  }
+  .content {
+    display: flex;
+    height: calc(100% - 68px);
+    overflow: hidden;
   }
   .titleList {
+    display: flex;
+    flex-direction: column;
     width: 320px;
-    background: rgb(250, 251, 252);
-    border-right: 1px solid rgb(230, 231, 232);
   }
   .articleContent {
     flex: 1;

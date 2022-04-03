@@ -3,13 +3,15 @@
   import { ipcRenderer } from 'electron'
   import { onMount } from 'svelte'
   import Content from './Content/Content.svelte'
+  import StatusBar from './StatusBar/StatusBar.svelte'
   onMount(() => {
-    ipcRenderer.invoke('showWindow')
+    ipcRenderer.invoke('maxmizeWindow')
   })
 </script>
 
 <TopBar />
 <Content />
+<StatusBar />
 
 <style lang="scss">
 </style>

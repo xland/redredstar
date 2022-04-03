@@ -1,9 +1,9 @@
 <script lang="ts">
-  import WinTool from "./WinTool.svelte";
+  import WinTool from './WinTool.svelte'
 </script>
 
 <div class="topBar">
-  <div class="winTitle">标题</div>
+  <div class="winTitle">RedRedStar 个人知识管理工具</div>
   <WinTool />
 </div>
 
@@ -18,5 +18,6 @@
   }
   .winTitle {
     flex: 1;
+    padding-left: 12px;
   }
 </style>
