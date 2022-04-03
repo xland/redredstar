@@ -1,38 +1,26 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
+  import { onMount } from 'svelte'
+  import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
+  import CKEditorInspector from '@ckeditor/ckeditor5-inspector'
+  let editor: ClassicEditor
   onMount(async () => {
-    let editorElement = document.getElementById("ckEditor");
+    let editorElement = document.getElementById('ckEditor')
     let config = {
       toolbar: {
-        items: [
-          "heading",
-          "|",
-          "fontFamily",
-          "fontSize",
-          "bold",
-          "italic",
-          "underline",
-        ],
+        items: ['heading', '|', 'fontFamily', 'fontSize', 'bold', 'italic', 'underline'],
       },
-    };
-    let editor = await ClassicEditor.create(editorElement, config);
-    editor.editing.view.change((writer) => {
-      console;
-      writer.setStyle(
-        "height",
-        `${window.innerHeight - 80}px`,
-        editor.editing.view.document.getRoot()
-      );
-    });
-  });
+    }
+    editor = await ClassicEditor.create(editorElement, config)
+  })
+  let contentClick = () => {
+    editor.focus()
+  }
 </script>
 
 <div class="content">
   <div class="category">1</div>
   <div class="titleList">2</div>
-  <div class="articleContent">
+  <div on:click={contentClick} class="articleContent">
     <div id="ckEditor" />
   </div>
 </div>
@@ -41,6 +29,7 @@
   .content {
     display: flex;
     height: calc(100% - 38px);
+    overflow: hidden;
   }
   .category {
     width: 180px;
@@ -54,8 +43,6 @@
   }
   .articleContent {
     flex: 1;
-  }
-  #ckEditor {
-    height: 100%;
+    cursor: text;
   }
 </style>
