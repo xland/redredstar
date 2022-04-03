@@ -27,12 +27,13 @@
     line-height: 26px;
     text-align: center;
     border-radius: 3px;
+    color: rgb(40, 167, 69);
     i {
       font-size: 14px;
     }
   }
   .addBtn:hover {
-    background-color: rgb(33, 136, 255);
+    background-color: rgb(40, 167, 69);
     color: #fff;
   }
 </style>
