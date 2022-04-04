@@ -33,7 +33,6 @@
     }
   }
   .addBtn:hover {
-    background-color: rgb(40, 167, 69);
-    color: #fff;
+    background-color: rgb(205, 255, 216);
   }
 </style>
