@@ -4,9 +4,12 @@
   let spliterDraging = (e: MouseEvent) => {
     let parent = spliter.parentElement
     if (parent.classList.contains('category')) {
+      if (e.clientX < 96) return
       parent.setAttribute('style', `width:${e.clientX}px`)
     } else {
-      parent.setAttribute('style', `width:${e.clientX - parent.offsetLeft}px`)
+      let w = e.clientX - parent.offsetLeft
+      if (w < 180) return
+      parent.setAttribute('style', `width:${w}px`)
     }
   }
   let spliterDragEnd = () => {

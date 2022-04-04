@@ -5,4 +5,8 @@ export class Category {
   order: number
   createTime: number
   updateTime: number
+  subCategory: Category[]
+  level: number
+  isExpanded: boolean
+  isSelected: boolean
 }

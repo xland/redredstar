@@ -33,3 +33,28 @@ input, button, select, textarea {
 .ck-focused{
 	box-shadow: none !important;
 }
+
+::-webkit-scrollbar {
+	width: 7px;
+	height: 7px;
+  }
+  ::-webkit-scrollbar-button {
+	width: 0;
+	height: 0;
+  }
+  ::-webkit-scrollbar-thumb {
+	background-color: rgba(0, 0, 0, 0.1);
+	border-radius: 3px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+	background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  ::-webkit-scrollbar-thumb:active {
+	background-color: rgba(0, 0, 0, 0.3);
+  }
+  
+  ::-webkit-scrollbar-corner {
+	background-color: transparent;
+  }
