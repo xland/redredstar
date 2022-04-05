@@ -1,25 +1,22 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-
-  import { Article } from '../../../model/Article'
-
-  let articles: Article[] = []
-  onMount(() => {
-    for (let i = 0; i < 60; i++) {
-      let article = new Article()
-      article.id = i.toString()
-      article.categoryId = i.toString()
-      article.content = ''
-      article.title = `文章标题文章标题文章标题${i}`
-      articles.push(article)
-      articles = articles
-    }
-  })
+  import type { ArticleModel } from '../../../model/ArticleModel'
+  import { articleStore } from '../../Store/articleStore'
+  let titleClick = (article: ArticleModel) => {
+    if (article.isSelected) return
+    articleStore.update((articles) => {
+      articles.forEach((v) => {
+        v.isSelected = v.id === article.id
+      })
+      return articles
+    })
+  }
+  onMount(() => {})
 </script>
 
 <div class="titleList">
-  {#each articles as article (article.id)}
-    <div class="articleTitle">{article.title}</div>
+  {#each $articleStore as article (article.id)}
+    <div on:click={() => titleClick(article)} class={`articleTitle ${article.isSelected ? 'selected' : ''}`}>{article.title}</div>
   {/each}
 </div>
 
@@ -38,7 +35,10 @@
     padding-left: 12px;
   }
   .articleTitle:hover {
-    background: rgb(33, 136, 255);
+    background: rgba(33, 136, 255, 0.2);
+  }
+  .selected {
+    background: rgb(33, 136, 255) !important;
     color: #fff;
   }
 </style>

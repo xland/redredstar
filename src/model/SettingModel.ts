@@ -1,4 +1,4 @@
-export class Setting {
+export class SettingModel {
   id: string
   categoryWidth: number
   titleListWidth: number

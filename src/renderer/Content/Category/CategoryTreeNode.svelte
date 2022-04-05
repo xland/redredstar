@@ -1,14 +1,30 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import type { Category } from '../../../model/Category'
-  export let category: Category
+  import type { CategoryModel } from '../../../model/CategoryModel'
+  import { categoryStore } from '../../Store/categoryStore'
+  export let category: CategoryModel
+  let eachCategory = (categorys: CategoryModel[]) => {
+    for (let element of categorys) {
+      if (element.isSelected && element.id != category.id) element.isSelected = false
+      if (!element.subCategory || element.subCategory.length < 1) continue
+      eachCategory(element.subCategory)
+    }
+  }
+  let categoryClick = () => {
+    if (category.isSelected) return
+    category.isSelected = true
+    categoryStore.update((categorys) => {
+      eachCategory(categorys)
+      return categorys
+    })
+  }
   onMount(() => {})
 </script>
 
 <div class="categoryItem">
   <div class="line" style={`left:${category.level * 12 + 5}px`} />
-  <div class={`categoryTitle ${category.isSelected ? 'selected' : ''}`} style={`padding-left:${category.level * 12}px`}>
-    <div on:click={() => (category.isExpanded = !category.isExpanded)} class="expandBtn">
+  <div on:click|preventDefault|stopPropagation={categoryClick} class={`categoryTitle ${category.isSelected ? 'selected' : ''}`} style={`padding-left:${category.level * 12}px`}>
+    <div on:click|preventDefault|stopPropagation={() => (category.isExpanded = !category.isExpanded)} class="expandBtn">
       <i class={`icon ${category.isExpanded ? 'iconremoveRect' : 'iconaddRect'}`} />
     </div>
     <div>{category.title}</div>
@@ -51,11 +67,10 @@
     }
   }
   .categoryTitle:hover {
-    background: rgb(121, 184, 255);
-    color: #fff;
+    background: rgba(121, 184, 255, 0.3);
   }
   .selected {
-    background: rgb(121, 184, 255);
+    background: rgb(121, 184, 255) !important;
     color: #fff;
   }
 </style>
