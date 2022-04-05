@@ -4,6 +4,7 @@
   import { onMount } from 'svelte'
   import Content from './Content/Content.svelte'
   import StatusBar from './StatusBar/StatusBar.svelte'
+  import ContextMenu from './Component/ContextMenu.svelte'
   onMount(() => {
     ipcRenderer.invoke('maxmizeWindow')
   })
@@ -12,6 +13,7 @@
 <TopBar />
 <Content />
 <StatusBar />
+<ContextMenu />
 
 <style lang="scss">
 </style>
