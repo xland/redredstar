@@ -23,16 +23,19 @@
     })
   }
   let showContextMenu = (e: MouseEvent) => {
-    console.log(e)
-
     contextMenuStore.update((menus) => {
       menus = []
       let menu1 = new ContextMenuModel()
       menu1.title = '增加子分类'
+      menu1.onClick = () => {
+        alert(1)
+      }
       let menu2 = new ContextMenuModel()
       menu2.title = '增加同级分类'
+      menu2.onClick = () => {}
       let menu3 = new ContextMenuModel()
       menu3.title = '删除该分类'
+      menu3.onClick = () => {}
       menus.push(menu1)
       menus.push(menu2)
       menus.push(menu3)
@@ -50,7 +53,7 @@
 
 <div class="categoryItem">
   <div class="line" style={`left:${category.level * 12 + 5}px`} />
-  <div on:contextmenu={showContextMenu} on:click|preventDefault={categoryClick} class={`categoryTitle ${category.isSelected ? 'selected' : ''}`} style={`padding-left:${category.level * 12}px`}>
+  <div on:contextmenu={showContextMenu} on:mousedown={categoryClick} class={`categoryTitle ${category.isSelected ? 'selected' : ''}`} style={`padding-left:${category.level * 12}px`}>
     <div on:click|preventDefault={() => (category.isExpanded = !category.isExpanded)} class="expandBtn">
       <i class={`icon ${category.isExpanded ? 'iconremoveRect' : 'iconaddRect'}`} />
     </div>

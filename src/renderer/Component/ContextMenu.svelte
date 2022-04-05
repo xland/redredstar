@@ -6,6 +6,14 @@
   let top: number
   let menus: ContextMenuModel[]
   contextMenuStore.subscribe((v) => (menus = v))
+  let hideContextMenu = (e) => {
+    console.log(e)
+    contextMenuConfigStore.update((config) => {
+      config.visible = false
+      return config
+    })
+    document.removeEventListener('mousedown', hideContextMenu)
+  }
   contextMenuConfigStore.subscribe((v) => {
     left = v.clientX
     let totalHeight = menus.length * 30
@@ -14,21 +22,19 @@
     } else {
       top = v.clientY
     }
-    let hideContextMenu = () => {
-      contextMenuConfigStore.update((config) => {
-        config.visible = false
-        return config
-      })
-      document.removeEventListener('mousedown', hideContextMenu)
+    if (v.visible) {
+      document.addEventListener('mousedown', hideContextMenu)
     }
-    document.addEventListener('mousedown', hideContextMenu)
   })
+  let menuClick = (menu: ContextMenuModel) => {}
 </script>
 
 {#if $contextMenuConfigStore.visible}
   <div style={`left:${left}px;top:${top}px`} class="contextMenuBox">
     {#each menus as menu}
-      <div class="menuItem">{menu.title}</div>
+      <div on:mousedown={() => menuClick(menu)} class="menuItem">
+        {menu.title}
+      </div>
     {/each}
   </div>
 {/if}

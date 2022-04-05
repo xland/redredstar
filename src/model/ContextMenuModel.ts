@@ -1,4 +1,5 @@
 export class ContextMenuModel {
   title: string
-  subMenu: ContextMenuModel[]
+  subMenu?: ContextMenuModel[]
+  onClick?: (e: MouseEvent) => void
 }
