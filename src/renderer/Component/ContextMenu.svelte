@@ -32,7 +32,7 @@
 {#if $contextMenuConfigStore.visible}
   <div style={`left:${left}px;top:${top}px`} class="contextMenuBox">
     {#each menus as menu}
-      <div on:mousedown={() => menuClick(menu)} class="menuItem">
+      <div on:mousedown={menu.onClick} class="menuItem">
         {menu.title}
       </div>
     {/each}
