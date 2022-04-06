@@ -1,69 +1,100 @@
 <script lang="ts">
-  import type { ContextMenuEvent } from 'electron'
-
   import { onMount } from 'svelte'
-  import type { CategoryModel } from '../../../model/CategoryModel'
-  import { ContextMenuModel } from '../../../model/ContextMenuModel'
-  import { categoryStore } from '../../Store/categoryStore'
-  import { contextMenuConfigStore, contextMenuStore } from '../../Store/contextMenuStore'
+  import { CategoryModel } from '../../../model/CategoryModel'
+  import { eventer } from '../../../common/eventer'
   export let category: CategoryModel
-  let eachCategory = (categorys: CategoryModel[]) => {
-    for (let element of categorys) {
-      if (element.isSelected && element.id != category.id) element.isSelected = false
-      if (!element.subCategory || element.subCategory.length < 1) continue
-      eachCategory(element.subCategory)
+  let categorys: CategoryModel[] = []
+  let inputElement: HTMLElement
+  let categoryClick = () => {
+    eventer.emit('categorySelected', category.id)
+  }
+  eventer.on('categorySelected', (id) => {
+    if (category.id != id) category.isSelected = false
+    else category.isSelected = true
+  })
+  eventer.on('addCategory', (categoryNew) => {
+    if (!category.isSelected) return
+    category.isExpanded = true
+    categoryNew.level = category.level + 1
+    categorys.splice(0, 0, categoryNew)
+    categorys = categorys
+  })
+  eventer.on('finishNewCategory', () => {
+    let index = categorys.findIndex((v) => v.isNew)
+    if (index > -1) {
+      categorys.splice(index, 1)
+      categorys = categorys
+    }
+  })
+  let expandBtnVisible = (category: CategoryModel) => {
+    if (!category.hasChild) {
+      return 'iconremoveRect'
+    }
+    if (category.isExpanded) {
+      return 'iconremoveRect'
+    } else {
+      return 'iconaddRect'
     }
   }
-  let categoryClick = () => {
-    if (category.isSelected) return
-    category.isSelected = true
-    categoryStore.update((categorys) => {
-      eachCategory(categorys)
-      return categorys
-    })
+  let initCategorys = () => {
+    if (!category.isExpanded) return
+    for (let x = 0; x < 6; x++) {
+      let item = new CategoryModel()
+      item.id = `${category.id}_${x}`
+      item.title = `分类${item.id}`
+      item.order = x
+      item.level = category.level + 1
+      categorys.push(item)
+    }
+    categorys = categorys
   }
-  let showContextMenu = (e: MouseEvent) => {
-    contextMenuStore.update((menus) => {
-      menus = []
-      let menu1 = new ContextMenuModel()
-      menu1.title = '增加子分类'
-      menu1.onClick = () => {
-        alert(1)
-      }
-      let menu2 = new ContextMenuModel()
-      menu2.title = '增加同级分类'
-      menu2.onClick = () => {}
-      let menu3 = new ContextMenuModel()
-      menu3.title = '删除该分类'
-      menu3.onClick = () => {}
-      menus.push(menu1)
-      menus.push(menu2)
-      menus.push(menu3)
-      return menus
-    })
-    contextMenuConfigStore.update((config) => {
-      config.visible = true
-      config.clientX = e.clientX
-      config.clientY = e.clientY
-      return config
-    })
+  let expandCategory = () => {
+    category.isExpanded = !category.isExpanded
+    if (category.isExpanded) {
+      initCategorys()
+    } else {
+      categorys = []
+    }
   }
-  onMount(() => {})
+  let categoryTitleInputBlur = (e: FocusEvent) => {
+    console.log(1)
+    let title = category.title.replaceAll(' ', '')
+    if (title.length > 0) {
+      category.isNew = false
+    }
+    eventer.emit('finishNewCategory')
+    inputElement.removeEventListener('blur', categoryTitleInputBlur)
+  }
+  let categoryTitleInputFocus = () => {
+    inputElement.addEventListener('blur', categoryTitleInputBlur)
+  }
+  onMount(() => {
+    initCategorys()
+    if (inputElement) {
+      setTimeout(() => {
+        inputElement.focus()
+      }, 500)
+    }
+  })
 </script>
 
 <div class="categoryItem">
   <div class="line" style={`left:${category.level * 12 + 5}px`} />
-  <div on:contextmenu={showContextMenu} on:mousedown={categoryClick} class={`categoryTitle ${category.isSelected ? 'selected' : ''}`} style={`padding-left:${category.level * 12}px`}>
-    <div on:click|preventDefault={() => (category.isExpanded = !category.isExpanded)} class="expandBtn">
-      <i class={`icon ${category.isExpanded ? 'iconremoveRect' : 'iconaddRect'}`} />
+  <div on:mousedown={categoryClick} class={`categoryTitle ${category.isSelected ? 'selected' : ''}`} style={`padding-left:${category.level * 12}px`}>
+    <div on:mousedown|stopPropagation|preventDefault={expandCategory} class="expandBtn">
+      <i class={`icon ${expandBtnVisible(category)}`} />
     </div>
-    <div class="titleBox">{category.title}</div>
+    {#if category.isNew}
+      <div on:mousedown|stopPropagation|preventDefault={() => false} class="titleInput">
+        <input bind:this={inputElement} on:focus={categoryTitleInputFocus} bind:value={category.title} type="text" />
+      </div>
+    {:else}
+      <div class="titleBox">{category.title}</div>
+    {/if}
   </div>
-  {#if category.subCategory && category.isExpanded}
-    {#each category.subCategory as subCategory (subCategory.id)}
-      <svelte:self category={subCategory} />
-    {/each}
-  {/if}
+  {#each categorys as subCategory (subCategory.id)}
+    <svelte:self category={subCategory} />
+  {/each}
 </div>
 
 <style lang="scss">
@@ -106,5 +137,21 @@
   .selected {
     background: rgb(121, 184, 255) !important;
     color: #fff;
+  }
+  .titleInput {
+    flex: 1;
+    position: relative;
+    input {
+      position: absolute;
+      z-index: 2;
+      border: 1px solid rgb(33, 136, 255);
+      outline: none;
+      height: 22px;
+      left: 2px;
+      right: 6px;
+      top: 2px;
+      display: block;
+      padding: 0px 3px;
+    }
   }
 </style>

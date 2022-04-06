@@ -1,12 +1,13 @@
 export class CategoryModel {
-  title: string
+  title: string = ''
   id: string
   parentId: string
   order: number
   createTime: number
   updateTime: number
-  subCategory: CategoryModel[]
   level: number
-  isExpanded: boolean
-  isSelected: boolean
+  isExpanded: boolean = false
+  hasChild: boolean = false
+  isSelected: boolean = false
+  isNew: boolean = false
 }

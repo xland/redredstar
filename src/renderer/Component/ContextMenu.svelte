@@ -1,35 +1,33 @@
 <script lang="ts">
-  import type { ContextMenuModel } from '../../model/ContextMenuModel'
-
-  import { contextMenuStore, contextMenuConfigStore } from '../Store/contextMenuStore'
+  import { onMount } from 'svelte'
+  import { eventer } from '../../common/eventer'
   let left: number
   let top: number
-  let menus: ContextMenuModel[]
-  contextMenuStore.subscribe((v) => (menus = v))
-  let hideContextMenu = (e) => {
-    console.log(e)
-    contextMenuConfigStore.update((config) => {
-      config.visible = false
-      return config
-    })
-    document.removeEventListener('mousedown', hideContextMenu)
-  }
-  contextMenuConfigStore.subscribe((v) => {
-    left = v.clientX
-    let totalHeight = menus.length * 30
-    if (v.clientY + totalHeight > window.innerHeight) {
-      top = v.clientY - totalHeight
+  let visible = false
+  let menus = []
+  eventer.on('showContextMenu', (menuArr, position) => {
+    let totalHeight = menuArr.length * 30
+    if (position.y + totalHeight > window.innerHeight) {
+      top = position.y - totalHeight
     } else {
-      top = v.clientY
+      top = position.y
     }
-    if (v.visible) {
-      document.addEventListener('mousedown', hideContextMenu)
+    if (position.x + 158 > window.innerWidth) {
+      left = position.x - 158
+    } else {
+      left = position.x
     }
+    menus = menuArr
+    visible = true
   })
-  let menuClick = (menu: ContextMenuModel) => {}
+  onMount(() => {
+    document.addEventListener('mousedown', () => {
+      visible = false
+    })
+  })
 </script>
 
-{#if $contextMenuConfigStore.visible}
+{#if visible}
   <div style={`left:${left}px;top:${top}px`} class="contextMenuBox">
     {#each menus as menu}
       <div on:mousedown={menu.onClick} class="menuItem">
@@ -43,7 +41,7 @@
   .contextMenuBox {
     position: absolute;
     box-shadow: 0px 0px 3px #bbb;
-    width: 128px;
+    width: 158px;
     background: #fff;
     border-radius: 2px;
     z-index: 2;
