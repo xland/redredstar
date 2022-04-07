@@ -46,7 +46,7 @@
   }
   let initCategorys = async () => {
     let db = dataBase.get()
-    categorys = await db('Category').orderBy('order', 'desc')
+    categorys = await db('Category').where({ parentId: null }).orderBy('order', 'desc')
   }
   onMount(() => {
     initCategorys()
