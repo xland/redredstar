@@ -12,7 +12,8 @@
     "start1": "concurrently \"npm run runSvelte\" \"npm run runElectron\"",
     "prestart": "rollup --config ./script/main.config.js",
     "start": "rollup -c ./script/renderer.config.js -w",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "rebuild": "electron-rebuild -f -w better-sqlite3"
   },
   "devDependencies": {
     "@ckeditor/ckeditor5-inspector": "^3.1.1",
@@ -34,10 +35,11 @@
     "svelte-check": "^2.0.0",
     "svelte-preprocess": "^4.0.0",
     "tslib": "^2.0.0",
-    "typescript": "^4.0.0"
+    "typescript": "^4.0.0",
+    "electron-rebuild": "^3.2.7",
+    "@ckeditor/ckeditor5-build-classic": "^33.0.0"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^33.0.0",
     "better-sqlite3": "^7.5.0",
     "knex": "^1.0.4"
   }

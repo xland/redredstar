@@ -10,7 +10,7 @@
     categoryTreeMaskVisible = true
     let categoryNew = new CategoryModel()
     categoryNew.id = Math.random().toString()
-    categoryNew.isNew = true
+    categoryNew._isNew = true
     if (isContextMenuOnNode) {
       eventer.emit('addCategory', categoryNew)
     } else {

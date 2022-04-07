@@ -1,4 +1,6 @@
-export class CategoryModel {
+import { BaseModel } from './BaseModel'
+
+export class CategoryModel extends BaseModel {
   title: string = ''
   id: string
   parentId: string
@@ -9,5 +11,5 @@ export class CategoryModel {
   isExpanded: boolean = false
   hasChild: boolean = false
   isSelected: boolean = false
-  isNew: boolean = false
+  _isNew: boolean = false
 }

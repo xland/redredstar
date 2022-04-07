@@ -1,31 +1,34 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { CategoryModel } from '../../../model/CategoryModel'
   import { eventer } from '../../../common/eventer'
+  import { dataBase } from '../../../common/dataBase'
   export let category: CategoryModel
   let categorys: CategoryModel[] = []
   let inputElement: HTMLElement
   let categoryClick = () => {
     eventer.emit('categorySelected', category.id)
   }
-  eventer.on('categorySelected', (id) => {
+  let categorySelected = (id) => {
     if (category.id != id) category.isSelected = false
     else category.isSelected = true
-  })
-  eventer.on('addCategory', (categoryNew) => {
+  }
+  let addCategory = (categoryNew) => {
     if (!category.isSelected) return
     category.isExpanded = true
+    categoryNew.parentId = category.id
     categoryNew.level = category.level + 1
     categorys.splice(0, 0, categoryNew)
     categorys = categorys
-  })
-  eventer.on('finishNewCategory', () => {
-    let index = categorys.findIndex((v) => v.isNew)
+  }
+
+  let finishNewCategory = () => {
+    let index = categorys.findIndex((v) => v._isNew)
     if (index > -1) {
       categorys.splice(index, 1)
       categorys = categorys
     }
-  })
+  }
   let expandBtnVisible = (category: CategoryModel) => {
     if (!category.hasChild) {
       return 'iconremoveRect'
@@ -56,11 +59,12 @@
       categorys = []
     }
   }
-  let categoryTitleInputBlur = (e: FocusEvent) => {
-    console.log(1)
+  let categoryTitleInputBlur = async (e: FocusEvent) => {
     let title = category.title.replaceAll(' ', '')
     if (title.length > 0) {
-      category.isNew = false
+      let db = dataBase.get()
+      await db('Category').insert(category.getData())
+      category._isNew = false
     }
     eventer.emit('finishNewCategory')
     inputElement.removeEventListener('blur', categoryTitleInputBlur)
@@ -68,7 +72,15 @@
   let categoryTitleInputFocus = () => {
     inputElement.addEventListener('blur', categoryTitleInputBlur)
   }
+  onDestroy(() => {
+    eventer.off('finishNewCategory', finishNewCategory)
+    eventer.off('addCategory', addCategory)
+    eventer.off('categorySelected', categorySelected)
+  })
   onMount(() => {
+    eventer.on('finishNewCategory', finishNewCategory)
+    eventer.on('addCategory', addCategory)
+    eventer.on('categorySelected', categorySelected)
     initCategorys()
     if (inputElement) {
       setTimeout(() => {
@@ -84,7 +96,7 @@
     <div on:mousedown|stopPropagation|preventDefault={expandCategory} class="expandBtn">
       <i class={`icon ${expandBtnVisible(category)}`} />
     </div>
-    {#if category.isNew}
+    {#if category._isNew}
       <div on:mousedown|stopPropagation|preventDefault={() => false} class="titleInput">
         <input bind:this={inputElement} on:focus={categoryTitleInputFocus} bind:value={category.title} type="text" />
       </div>

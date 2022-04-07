@@ -1,9 +1,8 @@
-export class ArticleModel {
-  id: string
+import { BaseModel } from './BaseModel'
+
+export class ArticleModel extends BaseModel {
   categoryId: string
   title: string
   content: string
-  createTime: number
-  updateTime: number
   isSelected: boolean
 }

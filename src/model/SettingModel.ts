@@ -1,5 +1,6 @@
-export class SettingModel {
-  id: string
+import { BaseModel } from './BaseModel'
+
+export class SettingModel extends BaseModel {
   categoryWidth: number
   titleListWidth: number
   curCategoryId: string
