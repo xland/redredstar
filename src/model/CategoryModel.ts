@@ -2,7 +2,6 @@ import { BaseModel } from './BaseModel'
 
 export class CategoryModel extends BaseModel {
   title: string = ''
-  id: string
   parentId: string
   order: number
   createTime: number
