@@ -9,7 +9,6 @@ class DataBase {
     } else {
       dbPath = path.join(process.execPath, '../../../../src/common/db.db')
     }
-    console.log(dbPath)
     return dbPath
   }
   get() {
@@ -21,12 +20,6 @@ class DataBase {
         filename,
       },
       useNullAsDefault: true,
-      wrapIdentifier: (value, origImpl, queryContext) => {
-        let result = origImpl(value)
-        if (value === 'isNew') return null
-        console.log(value, result)
-        return result
-      },
     })
     return this.db
   }

@@ -39,30 +39,24 @@
       return 'iconaddRect'
     }
   }
-  let initCategorys = () => {
-    if (!category.isExpanded) return
-    for (let x = 0; x < 6; x++) {
-      let item = new CategoryModel()
-      item.id = `${category.id}_${x}`
-      item.title = `分类${item.id}`
-      item.order = x
-      item.level = category.level + 1
-      categorys.push(item)
-    }
-    categorys = categorys
-  }
-  let expandCategory = () => {
-    category.isExpanded = !category.isExpanded
+  let initCategorys = async () => {
     if (category.isExpanded) {
-      initCategorys()
+      let db = dataBase.get()
+      categorys = await db('Category').where({ parentId: category.id }).orderBy('order', 'desc')
     } else {
       categorys = []
     }
+  }
+  let expandCategory = () => {
+    category.isExpanded = !category.isExpanded
+    initCategorys()
   }
   let categoryTitleInputBlur = async (e: FocusEvent) => {
     let title = category.title.replaceAll(' ', '')
     if (title.length > 0) {
       let db = dataBase.get()
+      category.createTime = Date.now()
+      category.updateTime = Date.now()
       await db('Category').insert(category.getData())
       category._isNew = false
     }
@@ -71,6 +65,11 @@
   }
   let categoryTitleInputFocus = () => {
     inputElement.addEventListener('blur', categoryTitleInputBlur)
+  }
+  let categoryTitleKeyDown = (e: KeyboardEvent) => {
+    if (e.code === 'Enter') {
+      inputElement.blur()
+    }
   }
   onDestroy(() => {
     eventer.off('finishNewCategory', finishNewCategory)
@@ -98,7 +97,7 @@
     </div>
     {#if category._isNew}
       <div on:mousedown|stopPropagation|preventDefault={() => false} class="titleInput">
-        <input bind:this={inputElement} on:focus={categoryTitleInputFocus} bind:value={category.title} type="text" />
+        <input bind:this={inputElement} on:keydown={categoryTitleKeyDown} on:focus={categoryTitleInputFocus} bind:value={category.title} type="text" />
       </div>
     {:else}
       <div class="titleBox">{category.title}</div>

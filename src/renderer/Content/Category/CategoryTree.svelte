@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { dataBase } from '../../../common/dataBase'
   import { eventer } from '../../../common/eventer'
   import { CategoryModel } from '../../../model/CategoryModel'
   import CategoryTreeNode from './CategoryTreeNode.svelte'
@@ -9,7 +10,6 @@
   let addCategory = (isContextMenuOnNode: boolean) => {
     categoryTreeMaskVisible = true
     let categoryNew = new CategoryModel()
-    categoryNew.id = Math.random().toString()
     categoryNew._isNew = true
     if (isContextMenuOnNode) {
       eventer.emit('addCategory', categoryNew)
@@ -44,19 +44,9 @@
     let mousePosition = { x: e.clientX, y: e.clientY }
     eventer.emit('showContextMenu', menus, mousePosition)
   }
-  let initCategorys = () => {
-    for (let x = 0; x < 6; x++) {
-      let category = new CategoryModel()
-      category.id = `${x}`
-      category.title = `分类${category.id}`
-      category.order = x
-      category.level = 1
-      category.isExpanded = x === 2
-      category.isSelected = x === 1
-      category.hasChild = true
-      categorys.push(category)
-    }
-    categorys = categorys
+  let initCategorys = async () => {
+    let db = dataBase.get()
+    categorys = await db('Category').orderBy('order', 'desc')
   }
   onMount(() => {
     initCategorys()
