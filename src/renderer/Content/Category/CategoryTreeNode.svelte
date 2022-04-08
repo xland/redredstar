@@ -17,6 +17,7 @@
     } else if (category.id === id && !category.isSelected) {
       category.isSelected = true
       await db('Category').update({ isSelected: true }).where({ id: category.id })
+      eventer.emit('initArticleList', category.id)
     }
   }
   let addCategory = (categoryNew) => {
@@ -116,14 +117,12 @@
       }
       eventer.emit('finishNewCategory')
     }
-
-    inputElement.removeEventListener('blur', categoryTitleInputBlur)
   }
   let categoryTitleInputFocus = () => {
     setTimeout(() => {
       if (!inputElement) return
       inputElement.onblur = categoryTitleInputBlur
-    }, 280)
+    }, 180)
   }
   let categoryTitleKeyDown = (e: KeyboardEvent) => {
     if (e.code === 'Enter') {

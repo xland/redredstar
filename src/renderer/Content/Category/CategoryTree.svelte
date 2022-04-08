@@ -44,6 +44,11 @@
   }
   eventer.on('finishNewCategory', () => {
     categoryTreeMaskVisible = false
+    let index = categorys.findIndex((v) => v._isNew)
+    if (index > -1) {
+      categorys.splice(index, 1)
+      categorys = categorys
+    }
   })
   eventer.on('finishEditCategory', () => {
     categoryTreeMaskVisible = false

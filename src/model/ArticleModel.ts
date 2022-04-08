@@ -6,4 +6,6 @@ export class ArticleModel extends BaseModel {
   isSelected: boolean
   createTime: number
   updateTime: number
+  _isNew = false
+  _isEdit = false
 }
