@@ -23,10 +23,10 @@
     if (!category.isSelected) return
     category.isExpanded = true
     categoryNew.parentId = category.id
-    categoryNew.level = category.level + 1
+    categoryNew.levelNum = category.levelNum + 1
     if (categorys.length > 0) {
-      let arr = categorys.map((v) => v.order)
-      categoryNew.order = Math.max(...arr) + 1
+      let arr = categorys.map((v) => v.orderNum)
+      categoryNew.orderNum = Math.max(...arr) + 1
     }
     categorys.splice(0, 0, categoryNew)
     categorys = categorys
@@ -74,7 +74,12 @@
   }
   let initCategorys = async () => {
     if (category.isExpanded) {
-      categorys = await db('Category').where({ parentId: category.id }).orderBy('order', 'desc')
+      categorys = await db('Category')
+        .where({ parentId: category.id })
+        .orderBy([
+          { column: 'orderNum', order: 'desc' },
+          { column: 'updateTime', order: 'desc' },
+        ])
     } else {
       categorys = []
     }
@@ -149,8 +154,8 @@
 </script>
 
 <div class="categoryItem">
-  <div class="line" style={`left:${category.level * 12 + 5}px`} />
-  <div on:mousedown={categoryClick} class={`categoryTitle ${category.isSelected ? 'selected' : ''}`} style={`padding-left:${category.level * 12}px`}>
+  <div class="line" style={`left:${category.levelNum * 12 + 5}px`} />
+  <div on:mousedown={categoryClick} class={`categoryTitle ${category.isSelected ? 'selected' : ''}`} style={`padding-left:${category.levelNum * 12}px`}>
     <div on:mousedown|stopPropagation|preventDefault={expandCategory} class="expandBtn">
       <i class={`icon ${expandBtnVisible(category)}`} />
     </div>

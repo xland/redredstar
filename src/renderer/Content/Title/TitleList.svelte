@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import type { ArticleModel } from '../../../model/ArticleModel'
-  import { articleStore } from '../../Store/articleStore'
+  let articles: ArticleModel[] = []
   let titleClick = (article: ArticleModel) => {
     if (article.isSelected) return
     articleStore.update((articles) => {
@@ -16,7 +16,7 @@
 </script>
 
 <div class="titleList">
-  {#each $articleStore as article (article.id)}
+  {#each articles as article (article.id)}
     <div on:contextmenu={showContextMenu} on:click={() => titleClick(article)} class={`articleTitle ${article.isSelected ? 'selected' : ''}`}>{article.title}</div>
   {/each}
 </div>

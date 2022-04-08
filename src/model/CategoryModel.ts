@@ -3,10 +3,10 @@ import { BaseModel } from './BaseModel'
 export class CategoryModel extends BaseModel {
   title: string = ''
   parentId: string
-  order = 1
+  orderNum = 1
   createTime: number
   updateTime: number
-  level: number
+  levelNum: number
   isExpanded: boolean = false
   hasChild: boolean = false
   isSelected: boolean = false

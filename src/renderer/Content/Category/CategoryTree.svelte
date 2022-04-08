@@ -15,10 +15,10 @@
     if (isContextMenuOnNode) {
       eventer.emit('addCategory', categoryNew)
     } else {
-      categoryNew.level = 1
+      categoryNew.levelNum = 1
       if (categorys.length > 0) {
-        let arr = categorys.map((v) => v.order)
-        categoryNew.order = Math.max(...arr) + 1
+        let arr = categorys.map((v) => v.orderNum)
+        categoryNew.orderNum = Math.max(...arr) + 1
       }
       categorys.splice(0, 0, categoryNew)
       categorys = categorys
@@ -75,7 +75,7 @@
     categorys = await db('Category')
       .where({ parentId: null })
       .orderBy([
-        { column: 'order', order: 'desc' },
+        { column: 'orderNum', order: 'desc' },
         { column: 'updateTime', order: 'desc' },
       ])
   }
