@@ -127,6 +127,9 @@
   let categoryTitleKeyDown = (e: KeyboardEvent) => {
     if (e.code === 'Enter') {
       inputElement.blur()
+    } else if (e.code === 'Escape') {
+      category.title = ''
+      inputElement.blur()
     }
   }
   onDestroy(() => {

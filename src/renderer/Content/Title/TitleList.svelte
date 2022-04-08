@@ -3,9 +3,11 @@
   import { db } from '../../../common/db'
   import { eventer } from '../../../common/eventer'
   import { ArticleModel } from '../../../model/ArticleModel'
+  import { globalObjs } from '../../Store/globalObjs'
   let articles: ArticleModel[] = []
   let inputElement: HTMLInputElement
   let titleMaskVisible = false
+  let categoryId: string
   let titleClick = (article: ArticleModel) => {
     if (article.isSelected) return
     article.isSelected = true
@@ -16,6 +18,7 @@
     articles.splice(0, 0, article)
     articles = articles
     titleMaskVisible = true
+    article.categoryId = categoryId
   }
   let editCategory = () => {}
   let deleteCategory = () => {}
@@ -42,16 +45,54 @@
     let mousePosition = { x: e.clientX, y: e.clientY }
     eventer.emit('showContextMenu', menus, mousePosition)
   }
-  let initArticleList = async (categoryId?: string) => {
-    if (!categoryId) {
+  let initArticleList = async (_categoryId?: string) => {
+    if (!_categoryId) {
       let category = await db('Category').where({ isSelected: true }).first()
       if (!category) return
       categoryId = category.id
+    } else {
+      categoryId = _categoryId
     }
     articles = await db('Article').where({ categoryId }).orderBy('updateTime', 'desc')
   }
-  let titleKeyDown = () => {}
-  let titleInputBlur = () => {}
+  let titleKeyDown = (e: KeyboardEvent) => {
+    if (e.code === 'Enter') {
+      inputElement.blur()
+    } else if (e.code === 'Escape') {
+      let index = articles.findIndex((v) => v._isNew || v._isEdit)
+      articles[index].title = ''
+      articles = articles
+      inputElement.blur()
+    }
+  }
+  let titleInputBlur = async () => {
+    let index = articles.findIndex((v) => v._isNew || v._isEdit)
+    let title = articles[index].title.replaceAll(' ', '')
+    if (articles[index]._isEdit) {
+      if (title.length < 1) {
+        alert('标题不允许为空')
+        articles[index].title = globalObjs.__tempArticleTitle
+      }
+      if (title != globalObjs.__tempArticleTitle) {
+        articles[index].title = title
+        await db('Article').update({ title, updateTime: Date.now() }).where({ id: articles[index].id })
+      }
+      articles[index]._isEdit = false
+      delete globalObjs.__tempCategoryTitle
+      articles = articles
+    } else if (articles[index]._isNew) {
+      if (title.length > 0) {
+        articles[index].createTime = Date.now()
+        articles[index].updateTime = Date.now()
+        articles[index].isSelected = true
+        articles[index]._isNew = false
+        await db('Article').insert(articles[index].getData())
+      } else {
+        articles.splice(index, 1)
+      }
+      articles = articles
+    }
+  }
   let titleInputFocus = () => {
     setTimeout(() => {
       if (!inputElement) return
