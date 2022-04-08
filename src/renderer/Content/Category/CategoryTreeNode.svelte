@@ -1,32 +1,65 @@
 <script lang="ts">
-  import { onDestroy, onMount } from 'svelte'
-  import { CategoryModel } from '../../../model/CategoryModel'
+  import { afterUpdate, onDestroy, onMount, tick } from 'svelte'
+  import type { CategoryModel } from '../../../model/CategoryModel'
   import { eventer } from '../../../common/eventer'
-  import { dataBase } from '../../../common/dataBase'
+  import { db } from '../../../common/db'
+  import { globalObjs } from '../../Store/globalObjs'
   export let category: CategoryModel
   let categorys: CategoryModel[] = []
   let inputElement: HTMLElement
   let categoryClick = () => {
     eventer.emit('categorySelected', category.id)
   }
-  let categorySelected = (id) => {
-    if (category.id != id) category.isSelected = false
-    else category.isSelected = true
+  let categorySelected = async (id) => {
+    if (category.id != id && category.isSelected) {
+      category.isSelected = false
+      await db('Category').update({ isSelected: false }).where({ id: category.id })
+    } else if (category.id === id && !category.isSelected) {
+      category.isSelected = true
+      await db('Category').update({ isSelected: true }).where({ id: category.id })
+    }
   }
   let addCategory = (categoryNew) => {
     if (!category.isSelected) return
     category.isExpanded = true
     categoryNew.parentId = category.id
     categoryNew.level = category.level + 1
+    if (categorys.length > 0) {
+      let arr = categorys.map((v) => v.order)
+      categoryNew.order = Math.max(...arr) + 1
+    }
     categorys.splice(0, 0, categoryNew)
     categorys = categorys
   }
 
+  let editCategory = () => {
+    if (!category.isSelected) return
+    category._isEdit = true
+    globalObjs.__tempCategoryTitle = category.title
+  }
+
+  let deleteCategory = async () => {
+    let index = categorys.findIndex((v) => v.isSelected)
+    if (index < 0) return
+    if (categorys[index].hasChild) {
+      alert('暂时不支持删除包含子类目的分类')
+      return
+    }
+    await db('Category').where({ id: categorys[index].id }).delete()
+    categorys.splice(index, 1)
+    categorys = categorys
+    if (categorys.length < 1) {
+      await db('Category').update({ hasChild: false }).where({ id: category.id })
+    }
+  }
   let finishNewCategory = () => {
     let index = categorys.findIndex((v) => v._isNew)
     if (index > -1) {
       categorys.splice(index, 1)
       categorys = categorys
+    }
+    if (categorys.length > 0) {
+      category.hasChild = true
     }
   }
   let expandBtnVisible = (category: CategoryModel) => {
@@ -41,30 +74,51 @@
   }
   let initCategorys = async () => {
     if (category.isExpanded) {
-      let db = dataBase.get()
       categorys = await db('Category').where({ parentId: category.id }).orderBy('order', 'desc')
     } else {
       categorys = []
     }
   }
-  let expandCategory = () => {
+  let expandCategory = async () => {
+    if (!category.hasChild) return
     category.isExpanded = !category.isExpanded
+    await db('Category').update({ isExpanded: category.isExpanded }).where({ id: category.id })
     initCategorys()
   }
   let categoryTitleInputBlur = async (e: FocusEvent) => {
     let title = category.title.replaceAll(' ', '')
-    if (title.length > 0) {
-      let db = dataBase.get()
-      category.createTime = Date.now()
-      category.updateTime = Date.now()
-      await db('Category').insert(category.getData())
-      category._isNew = false
+    if (category._isEdit) {
+      if (title.length < 1) {
+        alert('标题不允许为空')
+        category.title = globalObjs.__tempCategoryTitle
+      }
+      if (title != globalObjs.__tempCategoryTitle) {
+        category.title = title
+        await db('Category').update({ title, updateTime: Date.now() }).where({ id: category.id })
+      }
+      category._isEdit = false
+      delete globalObjs.__tempCategoryTitle
+      eventer.emit('finishEditCategory')
+    } else if (category._isNew) {
+      if (title.length > 0) {
+        category.createTime = Date.now()
+        category.updateTime = Date.now()
+        if (category.parentId) {
+          await db('Category').update({ hasChild: true, isExpanded: true }).where({ id: category.parentId })
+        }
+        await db('Category').insert(category.getData())
+        category._isNew = false
+      }
+      eventer.emit('finishNewCategory')
     }
-    eventer.emit('finishNewCategory')
+
     inputElement.removeEventListener('blur', categoryTitleInputBlur)
   }
   let categoryTitleInputFocus = () => {
-    inputElement.addEventListener('blur', categoryTitleInputBlur)
+    setTimeout(() => {
+      if (!inputElement) return
+      inputElement.onblur = categoryTitleInputBlur
+    }, 280)
   }
   let categoryTitleKeyDown = (e: KeyboardEvent) => {
     if (e.code === 'Enter') {
@@ -75,17 +129,22 @@
     eventer.off('finishNewCategory', finishNewCategory)
     eventer.off('addCategory', addCategory)
     eventer.off('categorySelected', categorySelected)
+    eventer.off('deleteCategory', deleteCategory)
+    eventer.off('editCategory', editCategory)
+    inputElement = null
+  })
+  afterUpdate(() => {
+    if (inputElement) {
+      inputElement.focus()
+    }
   })
   onMount(() => {
     eventer.on('finishNewCategory', finishNewCategory)
     eventer.on('addCategory', addCategory)
     eventer.on('categorySelected', categorySelected)
+    eventer.on('deleteCategory', deleteCategory)
+    eventer.on('editCategory', editCategory)
     initCategorys()
-    if (inputElement) {
-      setTimeout(() => {
-        inputElement.focus()
-      }, 500)
-    }
   })
 </script>
 
@@ -95,8 +154,8 @@
     <div on:mousedown|stopPropagation|preventDefault={expandCategory} class="expandBtn">
       <i class={`icon ${expandBtnVisible(category)}`} />
     </div>
-    {#if category._isNew}
-      <div on:mousedown|stopPropagation|preventDefault={() => false} class="titleInput">
+    {#if category._isEdit || category._isNew}
+      <div on:mousedown|stopPropagation|preventDefault={() => inputElement.focus()} class="titleInput">
         <input bind:this={inputElement} on:keydown={categoryTitleKeyDown} on:focus={categoryTitleInputFocus} bind:value={category.title} type="text" />
       </div>
     {:else}
@@ -132,7 +191,6 @@
       width: 16px;
       cursor: pointer;
       color: #999;
-      //
       i {
         font-size: 10px;
         background: rgb(219, 237, 255);

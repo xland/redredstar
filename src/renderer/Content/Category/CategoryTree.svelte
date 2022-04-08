@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { dataBase } from '../../../common/dataBase'
+  import { db } from '../../../common/db'
   import { eventer } from '../../../common/eventer'
   import { CategoryModel } from '../../../model/CategoryModel'
   import CategoryTreeNode from './CategoryTreeNode.svelte'
@@ -11,18 +11,41 @@
     categoryTreeMaskVisible = true
     let categoryNew = new CategoryModel()
     categoryNew._isNew = true
+    categoryNew.hasChild = false
     if (isContextMenuOnNode) {
       eventer.emit('addCategory', categoryNew)
     } else {
       categoryNew.level = 1
+      if (categorys.length > 0) {
+        let arr = categorys.map((v) => v.order)
+        categoryNew.order = Math.max(...arr) + 1
+      }
       categorys.splice(0, 0, categoryNew)
       categorys = categorys
     }
   }
-  let deleteCategory = () => {
-    eventer.emit('deleteCategory')
+  let editCategory = () => {
+    categoryTreeMaskVisible = true
+    eventer.emit('editCategory')
+  }
+  let deleteCategory = async () => {
+    let index = categorys.findIndex((v) => v.isSelected)
+    if (index > -1) {
+      if (categorys[index].hasChild) {
+        alert('暂时不支持删除包含子类目的分类')
+        return
+      }
+      await db('Category').where({ id: categorys[index].id }).delete()
+      categorys.splice(index, 1)
+      categorys = categorys
+    } else {
+      eventer.emit('deleteCategory')
+    }
   }
   eventer.on('finishNewCategory', () => {
+    categoryTreeMaskVisible = false
+  })
+  eventer.on('finishEditCategory', () => {
     categoryTreeMaskVisible = false
   })
   let showContextMenu = (e: MouseEvent) => {
@@ -37,6 +60,10 @@
     ]
     if (isContextMenuOnNode) {
       menus.push({
+        title: '修改分类',
+        onClick: editCategory,
+      })
+      menus.push({
         title: '删除分类',
         onClick: deleteCategory,
       })
@@ -45,8 +72,12 @@
     eventer.emit('showContextMenu', menus, mousePosition)
   }
   let initCategorys = async () => {
-    let db = dataBase.get()
-    categorys = await db('Category').where({ parentId: null }).orderBy('order', 'desc')
+    categorys = await db('Category')
+      .where({ parentId: null })
+      .orderBy([
+        { column: 'order', order: 'desc' },
+        { column: 'updateTime', order: 'desc' },
+      ])
   }
   onMount(() => {
     initCategorys()
