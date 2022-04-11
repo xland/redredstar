@@ -27,7 +27,7 @@
 <style lang="scss">
   .spliter {
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     width: 6px;
     height: 100%;
     right: -3px;

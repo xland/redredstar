@@ -2,15 +2,26 @@
   import { afterUpdate, onMount } from 'svelte'
   import { db } from '../../../common/db'
   import { eventer } from '../../../common/eventer'
+  import { ArticleContentModel } from '../../../model/ArticleContentModel'
   import { ArticleModel } from '../../../model/ArticleModel'
   import { globalObjs } from '../../Store/globalObjs'
   let articles: ArticleModel[] = []
   let inputElement: HTMLInputElement
   let titleMaskVisible = false
   let categoryId: string
-  let titleClick = (article: ArticleModel) => {
+  let titleClick = async (article: ArticleModel) => {
     if (article.isSelected) return
-    article.isSelected = true
+    articles.forEach(async (v) => {
+      if (v.isSelected && v.id != article.id) {
+        v.isSelected = false
+        await db('Article').update({ isSelected: false }).where({ id: v.id })
+      } else if (!v.isSelected && v.id == article.id) {
+        v.isSelected = true
+        await db('Article').update({ isSelected: true }).where({ id: v.id })
+      }
+    })
+    articles = articles
+    eventer.emit('articleChange', article.id)
   }
   let addArticle = () => {
     let article = new ArticleModel()
@@ -20,8 +31,22 @@
     titleMaskVisible = true
     article.categoryId = categoryId
   }
-  let editCategory = () => {}
-  let deleteCategory = () => {}
+  let editArticle = () => {
+    titleMaskVisible = true
+    let article = articles.find((v) => v.isSelected == true)
+    article._isEdit = true
+    articles = articles
+  }
+  let deleteArticle = async () => {
+    let flag = confirm('你确定要删除这篇文章吗')
+    if (!flag) return
+    let index = articles.findIndex((v) => v.isSelected == true)
+    await db('Article').where({ id: articles[index].id }).delete()
+    await db('ArticleContent').where({ articleId: articles[index].id }).delete()
+    articles.splice(index, 1)
+    await titleClick(articles[0])
+    articles = articles
+  }
   let showContextMenu = (e: MouseEvent) => {
     let target = e.target as HTMLElement
     if (target.classList.contains('categoryTreeMask')) return
@@ -35,11 +60,11 @@
     if (isContextMenuOnTitle) {
       menus.push({
         title: '修改标题',
-        onClick: editCategory,
+        onClick: editArticle,
       })
       menus.push({
         title: '删除知识',
-        onClick: deleteCategory,
+        onClick: deleteArticle,
       })
     }
     let mousePosition = { x: e.clientX, y: e.clientY }
@@ -61,7 +86,6 @@
     } else if (e.code === 'Escape') {
       let index = articles.findIndex((v) => v._isNew || v._isEdit)
       articles[index].title = ''
-      articles = articles
       inputElement.blur()
     }
   }
@@ -78,20 +102,25 @@
         await db('Article').update({ title, updateTime: Date.now() }).where({ id: articles[index].id })
       }
       articles[index]._isEdit = false
-      delete globalObjs.__tempCategoryTitle
-      articles = articles
+      delete globalObjs.__tempArticleTitle
     } else if (articles[index]._isNew) {
       if (title.length > 0) {
         articles[index].createTime = Date.now()
         articles[index].updateTime = Date.now()
-        articles[index].isSelected = true
         articles[index]._isNew = false
+        let content = new ArticleContentModel()
+        content.articleId = articles[index].id
+        content.articleContent = ''
+        //trans
         await db('Article').insert(articles[index].getData())
+        await db('ArticleContent').insert(content.getData())
+        titleClick(articles[index])
       } else {
         articles.splice(index, 1)
       }
-      articles = articles
     }
+    articles = articles
+    titleMaskVisible = false
   }
   let titleInputFocus = () => {
     setTimeout(() => {
@@ -117,7 +146,7 @@
         <input bind:this={inputElement} on:keydown={titleKeyDown} on:focus={titleInputFocus} bind:value={article.title} type="text" />
       </div>
     {:else}
-      <div on:click={() => titleClick(article)} class={`articleTitle ${article.isSelected ? 'selected' : ''}`}>{article.title}</div>
+      <div on:mousedown={() => titleClick(article)} class={`articleTitle ${article.isSelected ? 'selected' : ''}`}>{article.title}</div>
     {/if}
   {/each}
 

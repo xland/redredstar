@@ -7,7 +7,6 @@ let initArticle = () => {
     let article = new ArticleModel()
     article.id = i.toString()
     article.categoryId = i.toString()
-    article.content = ''
     article.title = `文章标题文章标题文章标题${i}`
     article.isSelected = i === 58
     articles.push(article)
