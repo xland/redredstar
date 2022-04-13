@@ -52,5 +52,7 @@
   .articleContent {
     flex: 1;
     cursor: text;
+    font-size: 14px;
+    color: #000;
   }
 </style>

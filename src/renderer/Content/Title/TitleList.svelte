@@ -79,6 +79,10 @@
       categoryId = _categoryId
     }
     articles = await db('Article').where({ categoryId }).orderBy('updateTime', 'desc')
+    let index = articles.findIndex((v) => v.isSelected)
+    if (index > -1) {
+      eventer.emit('articleChange', articles[index].id)
+    }
   }
   let titleKeyDown = (e: KeyboardEvent) => {
     if (e.code === 'Enter') {

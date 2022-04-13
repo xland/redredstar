@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
   let spliter: HTMLElement
   let spliterDraging = (e: MouseEvent) => {
     let parent = spliter.parentElement
