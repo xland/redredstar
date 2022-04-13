@@ -7,6 +7,7 @@
   import { globalObjs } from '../Store/globalObjs'
   import { onMount } from 'svelte'
   import Spliter from './Spliter.svelte'
+  import { eventer } from '../../common/eventer'
   onMount(() => {
     let categoryDom = document.querySelector('.category')
     categoryDom.setAttribute('style', 'width:200px')
@@ -26,7 +27,7 @@
     <TitleList />
     <Spliter />
   </div>
-  <div on:click={() => globalObjs.editor.focus()} class="articleContent">
+  <div on:click={() => eventer.emit('articleFocusEnd')} class="articleContent">
     <Editor />
   </div>
 </div>

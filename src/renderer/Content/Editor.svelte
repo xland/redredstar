@@ -35,7 +35,15 @@
     let config = {
       removePlugins: ['MediaEmbedToolbar'],
     }
+
     globalObjs.editor = await ClassicEditor.create(editorElement, config)
+    globalObjs.editor.model.change((writer) => {
+      console.log(2222)
+      eventer.on('articleFocusEnd', () => {
+        console.log(1111)
+        writer.setSelection(globalObjs.editor.model.document.getRoot(), 'end')
+      })
+    })
     setTimeout(autoSaveContent, changeTimerSpan)
     if (content && content.articleContent) {
       globalObjs.editor.setData(content.articleContent)
@@ -45,7 +53,6 @@
         isFirstTimeChange = false
         return
       }
-
       eventer.emit('articleContentNeedSave')
       isHasChangeData = true
     })
