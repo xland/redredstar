@@ -1,13 +1,13 @@
 <script lang="ts">
-  import type ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-  // import '@ckeditor/ckeditor5-build-classic/build/translations/zh-cn'
-  // import '@ckeditor/ckeditor5-word-count/build/word-count'
-  // import CKEditorInspector from '@ckeditor/ckeditor5-inspector'
   import { onMount } from 'svelte'
   import { db } from '../../common/db'
   import { eventer } from '../../common/eventer'
   import type { ArticleContentModel } from '../../model/ArticleContentModel'
   import { globalObjs } from '../Store/globalObjs'
+  import { schema } from 'prosemirror-schema-basic'
+  import { EditorState } from 'prosemirror-state'
+  import { EditorView } from 'prosemirror-view'
+  import 'prosemirror-view/style/prosemirror.css'
   let content: ArticleContentModel
   let isFirstTimeChange = true
   let isHasChangeData = false
@@ -31,38 +31,13 @@
     }
   })
   onMount(async () => {
-    let editorElement = document.getElementById('ckEditor')
-    let config = {
-      removePlugins: ['MediaEmbedToolbar'],
-    }
-
-    globalObjs.editor = await ClassicEditor.create(editorElement, config)
-    globalObjs.editor.model.change((writer) => {
-      console.log(2222)
-      eventer.on('articleFocusEnd', () => {
-        console.log(1111)
-        writer.setSelection(globalObjs.editor.model.document.getRoot(), 'end')
-      })
-    })
-    setTimeout(autoSaveContent, changeTimerSpan)
-    if (content && content.articleContent) {
-      globalObjs.editor.setData(content.articleContent)
-    }
-    globalObjs.editor.model.document.on('change:data', () => {
-      if (isFirstTimeChange) {
-        isFirstTimeChange = false
-        return
-      }
-      eventer.emit('articleContentNeedSave')
-      isHasChangeData = true
-    })
-    // console.log(Array.from(editor.ui.componentFactory.names()))
+    let editorElement = document.getElementById('articleEditorDiv')
+    let state = EditorState.create({ schema })
+    let view = new EditorView(editorElement, { state })
   })
 </script>
 
-<div id="ckEditor" />
+<div id="articleEditorDiv" />
 
 <style lang="scss">
-  #ckEditor {
-  }
 </style>
