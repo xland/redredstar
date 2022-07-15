@@ -33,7 +33,7 @@
     "rollup-plugin-terser": "^7.0.0",
     "sass": "^1.49.11",
     "sirv-cli": "^2.0.0",
-    "svelte": "^3.0.0",
+    "svelte": "^3.49.0",
     "svelte-check": "^2.0.0",
     "svelte-preprocess": "^4.0.0",
     "tslib": "^2.0.0",
