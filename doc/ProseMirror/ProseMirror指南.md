@@ -54,4 +54,72 @@ ProseMirror 要求您指定文档遵循的模式，因此它所做的第一件�
 
 ## 事务
 
-当用户输入数据或与视图交互时，它会生成“状态事务”。这意味着它不只是就地修改文档并以那种方式隐式更新其状态。相反，每一次更改都会导致创建一个事务，该事务描述对状态所做的更改，并可应用于创建一个新状态，然后使用该状态更新视图。
+当用户输入数据或与视图交互时，它会生成“状态事务”。这意味着它不只是就地修改文档并隐式更新数据状态。相反，每一次更改都会创建一个更改事务，该事务描述对状态所做的更改，并可用于创建一个新状态，然后使用该状态更新视图。
+
+默认情况下，这一切都发生在幕后，但你可以通过编写插件或配置视图钩子来获得这些数据状态。
+
+```js
+// (Imports omitted)
+
+let state = EditorState.create({ schema });
+let view = new EditorView(document.body, {
+  state,
+  dispatchTransaction(transaction) {
+    console.log(
+      "Document size went from",
+      transaction.before.content.size,
+      "to",
+      transaction.doc.content.size
+    );
+    let newState = view.state.apply(transaction);
+    view.updateState(newState);
+  },
+});
+```
+
+每个状态更新都必须经过 `updateState`，而每个正常的编辑更新都将分派一个事务`dispatchTransaction`。
+
+## 插件
+
+插件用于扩展编辑器的行为和数据状态，有些插件比较简单，比如 keymap 插件, 它用来绑定键盘输入操作。还有些插件相对复杂, 比如 history 插件, 它通过监视 transactions 和按照相反的顺序存储它们，以便用户完成 undo/redo 的功能。
+
+让我们将这两个插件添加到编辑器中，以获得撤销/重做功能:
+
+```js
+// (Omitted repeated imports)
+import { undo, redo, history } from "prosemirror-history";
+import { keymap } from "prosemirror-keymap";
+
+let state = EditorState.create({
+  schema,
+  plugins: [history(), keymap({ "Mod-z": undo, "Mod-y": redo })],
+});
+let view = new EditorView(document.body, { state });
+```
+
+我们在创建数据状态的时候注册插件(因为它们需要访问数据状态对象的 transactions 的权限). 现在你可以通过按 Ctrl+Z( Mac 下 Comand+Z) 撤销上一步操作。
+
+## 命令
+
+前面示例中绑定到键的 undo 和 redo 值是一种称为 commands 的特殊函数。大多数编辑操作都以命令的形式编写，可以绑定到按键或者菜单上，或以其他方式向用户公开。
+
+prosemror-commands 包提供了许多基本的编辑命令，以及一些必要的按键行为，以便在编辑器中正确执行 Enter 键和 Delete 键的按键操作。
+
+```js
+// (Omitted repeated imports)
+import { baseKeymap } from "prosemirror-commands";
+
+let state = EditorState.create({
+  schema,
+  plugins: [
+    history(),
+    keymap({ "Mod-z": undo, "Mod-y": redo }),
+    keymap(baseKeymap),
+  ],
+});
+let view = new EditorView(document.body, { state });
+```
+
+至此，您完成了一个有基础功能的编辑器。
+
+如果还想增加一个菜单，或者想增加一些按键绑定, 那么你应该看下 prosemirror-example-setup 这个包。这个包为您提供了一组设置基本编辑器的插件，但顾名思义，它更像是一个示例，而不是一个生产级库。对于真实的部署，您可能希望用定制代码替换它，以完全按照您想要的方式设置事情。
