@@ -1,6 +1,0 @@
-/node_modules/
-/public/build/
-/public/main.js
-
-.DS_Store
-src/common/db.db
