@@ -1,6 +1,6 @@
-> 本文档翻译自 ProseMirror 官方网站，版权属于 ProseMirror 官网，ProseMirror 官网如果对文档做了更新，我不负责更新本翻译文档。
->
-> 本文档并不是对官网文档逐字逐句的翻译，翻译过程中加入了我个人的理解，可能会有错误，你如果担心获得了错误的知识，请去官网看英文原文。
+> - 本文档翻译自 ProseMirror 官方网站，版权属于 ProseMirror 官网。
+> - 网上有其他网友的翻译，但翻译的较早，恐怕有些内容已经更新了，所以我这里又翻译了一次。
+> - 并不是逐字逐句的翻译，里面有我的理解。
 
 # ProseMirror 指南
 
@@ -52,7 +52,7 @@ ProseMirror 要求您指定文档遵循的模式，因此它所做的第一件�
 
 这个编辑器还不是很好用。例如，如果按下 Enter 键，什么也不会发生，因为我们并没有告诉和核心库该如何处理 Enter 键。我们马上就会讲到这个。
 
-## 事务
+## 事务 Transactions
 
 当用户输入数据或与视图交互时，它会生成“状态事务”。这意味着它不只是就地修改文档并隐式更新数据状态。相反，每一次更改都会创建一个更改事务，该事务描述对状态所做的更改，并可用于创建一个新状态，然后使用该状态更新视图。
 
@@ -79,7 +79,7 @@ let view = new EditorView(document.body, {
 
 每个状态更新都必须经过 `updateState`，而每个正常的编辑更新都将分派一个事务`dispatchTransaction`。
 
-## 插件
+## 插件 Plugins
 
 插件用于扩展编辑器的行为和数据状态，有些插件比较简单，比如 keymap 插件, 它用来绑定键盘输入操作。还有些插件相对复杂, 比如 history 插件, 它通过监视 transactions 和按照相反的顺序存储它们，以便用户完成 undo/redo 的功能。
 
@@ -99,7 +99,7 @@ let view = new EditorView(document.body, { state });
 
 我们在创建数据状态的时候注册插件(因为它们需要访问数据状态对象的 transactions 的权限). 现在你可以通过按 Ctrl+Z( Mac 下 Comand+Z) 撤销上一步操作。
 
-## 命令
+## 命令 Commands
 
 前面示例中绑定到键的 undo 和 redo 值是一种称为 commands 的特殊函数。大多数编辑操作都以命令的形式编写，可以绑定到按键或者菜单上，或以其他方式向用户公开。
 
@@ -122,4 +122,62 @@ let view = new EditorView(document.body, { state });
 
 至此，您完成了一个有基础功能的编辑器。
 
-如果还想增加一个菜单，或者想增加一些按键绑定, 那么你应该看下 prosemirror-example-setup 这个包。这个包为您提供了一组设置基本编辑器的插件，但顾名思义，它更像是一个示例，而不是一个生产级库。对于真实的部署，您可能希望用定制代码替换它，以完全按照您想要的方式设置事情。
+如果还想增加一个菜单，或者想增加一些按键绑定, 那么你应该看下 prosemirror-example-setup 这个包。这个包为您提供了一组设置基本编辑器的插件，但它更像是一个示例，而不是一个生产级库。如果要用于生产的话，你可能要写一些自己的代码来替换这个包里的部分内容。
+
+## 内容 Content
+
+一个数据状态对象 `state` 的 `doc` 属性的值就是文档对象`document`。文档对象是一个只读数据结构，有点像浏览器的 DOM，以树状层级结构描述文档信息。举个例子：一个简单的文档对象可能是一个`doc`节点包含两个`paragraph`节点，每个`paragraph`节点分别包含一个`text`节点。
+
+在初始化一个数据状态对象`state`时，您可以给它一个初始文档对象。在这种情况下，schema 字段是可选的，因为 schema 可以从文档中获取。（`EditorState.create`方法）
+
+接下来我们把一个 HTML 的 Dom 结构格式化为一个文档对象，然后用这个文档对象初始化数据状态对象 state，下面代码使用 DOM parser 把 HTML 的 Dom 对象序列化成 ProseMirror 的文档对象（schema 信息不用再提供了，可以从文档对象中得到）。
+
+```js
+import { DOMParser } from "prosemirror-model";
+import { EditorState } from "prosemirror-state";
+import { schema } from "prosemirror-schema-basic";
+
+let content = document.getElementById("content");
+let state = EditorState.create({
+  doc: DOMParser.fromSchema(schema).parse(content),
+});
+```
+
+# 文档
+
+ProseMirror 定义了自己的数据结构来表示文档内容。由于整个编辑器都是围绕文档构建的，所以了解文档的数据结构及工作原理是非常有价值的。
+
+## 数据结构 Structure
+
+一个 ProseMirror 的文档对象可以包含 0 个或多个子节点，这与 Html 的 Dom 对象非常相似，也是层级树状的。它与 Html 不同之处是：存储内联内容方式（inline content）。
+
+比如下面这段 HTML 代码
+
+```html
+<p>
+  This is <strong>strong text with <em>emphasis</em></strong>
+</p>
+```
+
+它的数据表现形式为：
+
+![](./img/htmlDoc.png)
+
+在 ProseMirror 中，这些数据被被扁平的放在一个数据结构中，使用元数据来描述数据的形式：
+
+![](./img/htmlDoc2.png)
+
+这更接近于我们思考和处理这类文本的方式。它允许我们使用字符偏移量而不是树中的路径来表示段落中的位置，这样就更容易完成拆分或更改样式等操作，而无需执行笨拙的树操作。
+
+这也意味着每个文档都有一个有效表示。具有相同标记集的相邻文本节点总是组合在一起，不允许空文本节点出现。schema 会决定标记出现的顺序。
+
+所以 ProseMirror 文档对象的大部分叶子节点都是文本节点，而且叶子节点可能包含多个拥有不同样式的文本。您还可以有纯空的叶子节点，用于放置水平线或视频元素。
+
+节点对象具有许多属性，这些属性反映了它们在文档中所扮演的角色:
+
+- isBlock 和 isInline 告诉你给定的节点是块节点还是内联节点。
+- inlineContent 值为 true 时，当前节点的子节点都是内联节点。
+- isTextblock 为 true 时，当前块节点的子节点都是内联节点。
+- isLeaf 标记着当前节点是否为叶子节点，叶子节点不允许再拥有子节点。
+
+因此，一般`paragraph`节点将是一个文本块，而 `blockquote` 可能是一个块节点（可能会包含其他块节点），文本、换行符和内联图像都是内联叶子节点，水平线节点是一个块状叶子节点。
