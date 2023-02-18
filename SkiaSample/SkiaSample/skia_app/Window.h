@@ -1,12 +1,4 @@
-/*
-* Copyright 2016 Google Inc.
-*
-* Use of this source code is governed by a BSD-style license that can be
-* found in the LICENSE file.
-*/
-
-#ifndef Window_DEFINED
-#define Window_DEFINED
+#pragma once
 
 #include "include/core/SkRect.h"
 #include "include/core/SkTypes.h"
@@ -56,36 +48,15 @@ public:
     virtual bool scaleContentToFit() const { return false; }
 
     enum BackendType {
-#ifdef SK_GL
         kNativeGL_BackendType,
-#endif
-#if SK_ANGLE && defined(SK_BUILD_FOR_WIN)
-        kANGLE_BackendType,
-#endif
-#ifdef SK_DAWN
-        kDawn_BackendType,
-#endif
-#ifdef SK_VULKAN
-        kVulkan_BackendType,
-#endif
-#ifdef SK_METAL
-        kMetal_BackendType,
-#ifdef SK_GRAPHITE_ENABLED
-        kGraphiteMetal_BackendType,
-#endif
-#endif
-#ifdef SK_DIRECT3D
-        kDirect3D_BackendType,
-#endif
         kRaster_BackendType,
-
         kLast_BackendType = kRaster_BackendType
     };
     enum {
         kBackendTypeCount = kLast_BackendType + 1
     };
 
-    virtual bool attach(BackendType) = 0;
+    virtual bool attach() = 0;
     void detach();
 
     // input handling
@@ -173,5 +144,4 @@ protected:
     bool signalLayers(std::function<bool(Layer*)> visitor);
 };
 
-}   // namespace sk_app
-#endif
+}

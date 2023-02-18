@@ -1,11 +1,4 @@
-/*
- * Copyright 2016 Google Inc.
- *
- * Use of this source code is governed by a BSD-style license that can be
- * found in the LICENSE file.
- */
-#ifndef WindowContext_DEFINED
-#define WindowContext_DEFINED
+#pragma once
 
 #include "include/core/SkRefCnt.h"
 #include "include/core/SkSurfaceProps.h"
@@ -14,12 +7,6 @@
 
 class GrDirectContext;
 class SkSurface;
-#ifdef SK_GRAPHITE_ENABLED
-namespace skgpu {
-class Context;
-class Recorder;
-}
-#endif
 
 namespace sk_app {
 
@@ -43,10 +30,6 @@ public:
     virtual void setDisplayParams(const DisplayParams& params) = 0;
 
     GrDirectContext* directContext() const { return fContext.get(); }
-#ifdef SK_GRAPHITE_ENABLED
-    skgpu::Context* graphiteContext() const { return fGraphiteContext.get(); }
-    skgpu::Recorder* graphiteRecorder() const { return fGraphiteRecorder.get(); }
-#endif
 
     int width() const { return fWidth; }
     int height() const { return fHeight; }
@@ -58,10 +41,6 @@ protected:
     virtual bool isGpuContext() { return true;  }
 
     sk_sp<GrDirectContext> fContext;
-#if SK_GRAPHITE_ENABLED
-    std::unique_ptr<skgpu::Context> fGraphiteContext;
-    std::unique_ptr<skgpu::Recorder> fGraphiteRecorder;
-#endif
 
     int               fWidth;
     int               fHeight;
@@ -74,6 +53,4 @@ protected:
     int               fStencilBits = 0;
 };
 
-}   // namespace sk_app
-
-#endif
+}

@@ -1,11 +1,4 @@
-/*
- * Copyright 2016 Google Inc.
- *
- * Use of this source code is governed by a BSD-style license that can be
- * found in the LICENSE file.
- */
-#ifndef DisplayParams_DEFINED
-#define DisplayParams_DEFINED
+#pragma once
 
 #include "include/core/SkImageInfo.h"
 #include "include/core/SkSurfaceProps.h"
@@ -34,6 +27,4 @@ struct DisplayParams {
     bool                fEnableBinaryArchive;
 };
 
-}   // namespace sk_app
-
-#endif
+}

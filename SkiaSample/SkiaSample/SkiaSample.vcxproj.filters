@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="skia_app\Application.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="skia_app\CommandSet.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -68,13 +65,13 @@
     <ClCompile Include="skia_app\win\GLWindowContext_win.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="skia_app\win\main_win.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="skia_app\win\Window_win.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="HelloWorld.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

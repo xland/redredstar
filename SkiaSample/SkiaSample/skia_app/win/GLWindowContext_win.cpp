@@ -1,34 +1,11 @@
-
-/*
- * Copyright 2015 Google Inc.
- *
- * Use of this source code is governed by a BSD-style license that can be
- * found in the LICENSE file.
- */
-
 #include "include/gpu/gl/GrGLInterface.h"
 #include "src/utils/win/SkWGL.h"
 #include "tools/sk_app/GLWindowContext.h"
 #include "tools/sk_app/win/WindowContextFactory_win.h"
-
 #include <Windows.h>
 #include <GL/gl.h>
-
 using sk_app::GLWindowContext;
 using sk_app::DisplayParams;
-
-#if defined(_M_ARM64)
-
-namespace sk_app {
-namespace window_context_factory {
-
-std::unique_ptr<WindowContext> MakeGLForWin(HWND, const DisplayParams&) { return nullptr; }
-
-}  // namespace window_context_factory
-}  // namespace sk_app
-
-#else
-
 namespace {
 
 class GLWindowContext_win : public GLWindowContext {
@@ -144,17 +121,15 @@ void GLWindowContext_win::onSwapBuffers() {
 }  // anonymous namespace
 
 namespace sk_app {
-namespace window_context_factory {
+    namespace window_context_factory {
 
-std::unique_ptr<WindowContext> MakeGLForWin(HWND wnd, const DisplayParams& params) {
-    std::unique_ptr<WindowContext> ctx(new GLWindowContext_win(wnd, params));
-    if (!ctx->isValid()) {
-        return nullptr;
-    }
-    return ctx;
-}
+        std::unique_ptr<WindowContext> MakeGLForWin(HWND wnd, const DisplayParams& params) {
+            std::unique_ptr<WindowContext> ctx(new GLWindowContext_win(wnd, params));
+            if (!ctx->isValid()) {
+                return nullptr;
+            }
+            return ctx;
+        }
 
-}  // namespace window_context_factory
+    }  // namespace window_context_factory
 }  // namespace sk_app
-
-#endif

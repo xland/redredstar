@@ -1,12 +1,4 @@
-
-/*
- * Copyright 2016 Google Inc.
- *
- * Use of this source code is governed by a BSD-style license that can be
- * found in the LICENSE file.
- */
-#ifndef GLWindowContext_DEFINED
-#define GLWindowContext_DEFINED
+#pragma once
 
 
 #include "include/gpu/gl/GrGLInterface.h"
@@ -48,6 +40,4 @@ protected:
     sk_sp<SkSurface>           fSurface;
 };
 
-}   // namespace sk_app
-
-#endif
+}

@@ -1,12 +1,4 @@
-/*
-* Copyright 2016 Google Inc.
-*
-* Use of this source code is governed by a BSD-style license that can be
-* found in the LICENSE file.
-*/
-
-#ifndef CommandSet_DEFINED
-#define CommandSet_DEFINED
+#pragma once
 
 #include "include/core/SkString.h"
 #include "tools/sk_app/Window.h"
@@ -112,6 +104,4 @@ private:
     HelpMode          fHelpMode;
 };
 
-}   // namespace sk_app
-
-#endif
+}

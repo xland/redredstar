@@ -1,10 +1,3 @@
-/*
-* Copyright 2016 Google Inc.
-*
-* Use of this source code is governed by a BSD-style license that can be
-* found in the LICENSE file.
-*/
-
 #include "tools/sk_app/win/Window_win.h"
 #include <tchar.h>
 #include <windows.h>
@@ -337,16 +330,10 @@ void Window_win::show() {
 }
 
 
-bool Window_win::attach(BackendType attachType) {
-    fBackend = attachType;
+bool Window_win::attach() {
     fInitializedBackend = true;
-    switch (attachType) {
-        case kNativeGL_BackendType:
-            fWindowContext = window_context_factory::MakeGLForWin(fHWnd, fRequestedDisplayParams);
-            break;
-    }
+    fWindowContext = window_context_factory::MakeGLForWin(fHWnd, fRequestedDisplayParams);
     this->onBackendCreated();
-
     return (SkToBool(fWindowContext));
 }
 
@@ -365,7 +352,7 @@ void Window_win::setRequestedDisplayParams(const DisplayParams& params, bool all
         this->closeWindow();
         this->init(fHInstance);
         if (fInitializedBackend) {
-            this->attach(fBackend);
+            this->attach();
         }
     }
 

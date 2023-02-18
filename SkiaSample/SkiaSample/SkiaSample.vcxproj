@@ -109,11 +109,14 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>zlib.lib;svg.lib;skunicode.lib;sktext.lib;skshaper.lib;sksg.lib;skresources.lib;skparagraph.lib;skottie.lib;skia.lib;pathkit.lib;particles.lib;libwebp_sse41.lib;libwebp.lib;libpng.lib;libjpeg.lib;icu.lib;harfbuzz.lib;expat.lib;compression_utils_portable.lib;OpenGL32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\sdk\skia\out\$(configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -128,17 +131,19 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>zlib.lib;svg.lib;skunicode.lib;sktext.lib;skshaper.lib;sksg.lib;skresources.lib;skparagraph.lib;skottie.lib;skia.lib;pathkit.lib;particles.lib;libwebp_sse41.lib;libwebp.lib;libpng.lib;libjpeg.lib;icu.lib;harfbuzz.lib;expat.lib;compression_utils_portable.lib;OpenGL32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>D:\sdk\skia\out\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="HelloWorld.h" />
-    <ClInclude Include="skia_app\Application.h" />
     <ClInclude Include="skia_app\CommandSet.h" />
     <ClInclude Include="skia_app\DisplayParams.h" />
     <ClInclude Include="skia_app\GLWindowContext.h" />
@@ -152,12 +157,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HelloWorld.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="skia_app\CommandSet.cpp" />
     <ClCompile Include="skia_app\GLWindowContext.cpp" />
     <ClCompile Include="skia_app\Window.cpp" />
     <ClCompile Include="skia_app\WindowContext.cpp" />
     <ClCompile Include="skia_app\win\GLWindowContext_win.cpp" />
-    <ClCompile Include="skia_app\win\main_win.cpp" />
     <ClCompile Include="skia_app\win\Window_win.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

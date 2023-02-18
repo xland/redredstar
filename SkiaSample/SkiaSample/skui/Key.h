@@ -1,7 +1,4 @@
-// Copyright 2019 Google LLC.
-// Use of this source code is governed by a BSD-style license that can be found in the LICENSE file.
-#ifndef skui_key_DEFINED
-#define skui_key_DEFINED
+#pragma once
 namespace skui {
 enum class Key {
     kNONE,    //corresponds to android's UNKNOWN
@@ -56,5 +53,4 @@ enum class Key {
     kPower,   //!< power button - same
     kCamera,  //!< camera       - same
 };
-}  // namespace skui
-#endif  // skui_key_DEFINED
+}

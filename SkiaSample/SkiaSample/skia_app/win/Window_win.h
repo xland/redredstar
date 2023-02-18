@@ -1,13 +1,4 @@
-/*
-* Copyright 2016 Google Inc.
-*
-* Use of this source code is governed by a BSD-style license that can be
-* found in the LICENSE file.
-*/
-
-#ifndef Window_win_DEFINED
-#define Window_win_DEFINED
-
+#pragma once
 #include "tools/sk_app/Window.h"
 
 #include <windows.h>
@@ -24,7 +15,7 @@ public:
     void setTitle(const char*) override;
     void show() override;
 
-    bool attach(BackendType) override;
+    bool attach() override;
 
     void onInval() override;
 
@@ -35,12 +26,9 @@ private:
 
     HINSTANCE   fHInstance;
     HWND        fHWnd;
-    BackendType fBackend;
     bool        fInitializedBackend = false;
 
     using INHERITED = Window;
 };
 
-}   // namespace sk_app
-
-#endif
+}
