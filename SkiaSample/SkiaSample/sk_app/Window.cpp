@@ -77,9 +77,7 @@ void Window::onPaint() {
         // TODO: try recreating testcontext
         return;
     }
-
     markInvalProcessed();
-
     // draw into the canvas of this surface
     this->visitLayers([](Layer* layer) { layer->onPrePaint(); });
     this->visitLayers([=](Layer* layer) { layer->onPaint(backbuffer.get()); });
