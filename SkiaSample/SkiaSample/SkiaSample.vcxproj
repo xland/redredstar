@@ -144,26 +144,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="HelloWorld.h" />
-    <ClInclude Include="skia_app\CommandSet.h" />
-    <ClInclude Include="skia_app\DisplayParams.h" />
-    <ClInclude Include="skia_app\GLWindowContext.h" />
-    <ClInclude Include="skia_app\Window.h" />
-    <ClInclude Include="skia_app\WindowContext.h" />
-    <ClInclude Include="skia_app\win\WindowContextFactory_win.h" />
-    <ClInclude Include="skia_app\win\Window_win.h" />
-    <ClInclude Include="skui\InputState.h" />
-    <ClInclude Include="skui\Key.h" />
-    <ClInclude Include="skui\ModifierKey.h" />
+    <ClInclude Include="sk_app\CommandSet.h" />
+    <ClInclude Include="sk_app\DisplayParams.h" />
+    <ClInclude Include="sk_app\GLWindowContext.h" />
+    <ClInclude Include="sk_app\Window.h" />
+    <ClInclude Include="sk_app\WindowContext.h" />
+    <ClInclude Include="sk_app\win\WindowContextFactory_win.h" />
+    <ClInclude Include="sk_app\win\Window_win.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HelloWorld.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="skia_app\CommandSet.cpp" />
-    <ClCompile Include="skia_app\GLWindowContext.cpp" />
-    <ClCompile Include="skia_app\Window.cpp" />
-    <ClCompile Include="skia_app\WindowContext.cpp" />
-    <ClCompile Include="skia_app\win\GLWindowContext_win.cpp" />
-    <ClCompile Include="skia_app\win\Window_win.cpp" />
+    <ClCompile Include="sk_app\CommandSet.cpp" />
+    <ClCompile Include="sk_app\GLWindowContext.cpp" />
+    <ClCompile Include="sk_app\Window.cpp" />
+    <ClCompile Include="sk_app\WindowContext.cpp" />
+    <ClCompile Include="sk_app\win\GLWindowContext_win.cpp" />
+    <ClCompile Include="sk_app\win\Window_win.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

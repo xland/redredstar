@@ -1,12 +1,8 @@
 #pragma once
-
-
 #include "include/gpu/gl/GrGLInterface.h"
-
 #include "include/core/SkRefCnt.h"
 #include "include/core/SkSurface.h"
-
-#include "tools/sk_app/WindowContext.h"
+#include "WindowContext.h"
 
 namespace sk_app {
 

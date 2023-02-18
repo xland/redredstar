@@ -1,7 +1,7 @@
 #include "include/gpu/gl/GrGLInterface.h"
 #include "src/utils/win/SkWGL.h"
-#include "tools/sk_app/GLWindowContext.h"
-#include "tools/sk_app/win/WindowContextFactory_win.h"
+#include "../GLWindowContext.h"
+#include "WindowContextFactory_win.h"
 #include <Windows.h>
 #include <GL/gl.h>
 using sk_app::GLWindowContext;

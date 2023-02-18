@@ -1,15 +1,13 @@
 #pragma once
-
 #include "include/core/SkRect.h"
 #include "include/core/SkTypes.h"
 #include "include/private/SkTDArray.h"
-#include "tools/sk_app/DisplayParams.h"
+#include "DisplayParams.h"
 #include "tools/skui/InputState.h"
 #include "tools/skui/Key.h"
 #include "tools/skui/ModifierKey.h"
-
 #include <functional>
-
+#include <Windows.h>
 class GrDirectContext;
 class SkCanvas;
 class SkSurface;
@@ -26,35 +24,17 @@ class WindowContext;
 
 class Window {
 public:
-    static Window* CreateNativeWindow(void* platformData);
-
+    static Window* CreateNativeWindow(HINSTANCE hInstance);
     virtual ~Window();
-
     virtual void setTitle(const char*) = 0;
     virtual void show() = 0;
-
-    // JSON-formatted UI state for Android. Do nothing by default
-    virtual void setUIState(const char*) {}
-
-    // Interface to the system clipboard. Only implemented on UNIX.
-    virtual const char* getClipboardText() { return nullptr; }
-    virtual void        setClipboardText(const char*) {}
+    virtual void setClipboardText(const char*) {}
 
     // Schedules an invalidation event for window if one is not currently pending.
     // Make sure that either onPaint or markInvalReceived is called when the client window consumes
     // the the inval event. They unset fIsContentInvalided which allow future onInval.
     void inval();
-
     virtual bool scaleContentToFit() const { return false; }
-
-    enum BackendType {
-        kNativeGL_BackendType,
-        kRaster_BackendType,
-        kLast_BackendType = kRaster_BackendType
-    };
-    enum {
-        kBackendTypeCount = kLast_BackendType + 1
-    };
 
     virtual bool attach() = 0;
     void detach();

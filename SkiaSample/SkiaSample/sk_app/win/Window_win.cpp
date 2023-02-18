@@ -1,22 +1,20 @@
-#include "tools/sk_app/win/Window_win.h"
+#include "Window_win.h"
 #include <tchar.h>
 #include <windows.h>
 #include <windowsx.h>
 #include "src/utils/SkUTF.h"
-#include "tools/sk_app/WindowContext.h"
-#include "tools/sk_app/win/WindowContextFactory_win.h"
+#include "../WindowContext.h"
+#include "WindowContextFactory_win.h"
 #include "tools/skui/ModifierKey.h"
 
 namespace sk_app {
-
 static int gWindowX = CW_USEDEFAULT;
 static int gWindowY = 0;
 static int gWindowWidth = CW_USEDEFAULT;
 static int gWindowHeight = 0;
 
-Window* Window::CreateNativeWindow(void* platformData) {
-    HINSTANCE hInstance = (HINSTANCE)platformData;
-
+Window* Window::CreateNativeWindow(HINSTANCE hInstance) 
+{
     Window_win* window = new Window_win();
     if (!window->init(hInstance)) {
         delete window;

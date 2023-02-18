@@ -3,7 +3,7 @@
 #include "include/core/SkRefCnt.h"
 #include "include/core/SkSurfaceProps.h"
 #include "include/gpu/GrTypes.h"
-#include "tools/sk_app/DisplayParams.h"
+#include "DisplayParams.h"
 
 class GrDirectContext;
 class SkSurface;

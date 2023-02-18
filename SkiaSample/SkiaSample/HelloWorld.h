@@ -1,7 +1,6 @@
 #pragma once
 #include <Windows.h>
-#include "tools/sk_app/Application.h"
-#include "tools/sk_app/Window.h"
+#include "sk_app/Window.h"
 
 class HelloWorld : sk_app::Window::Layer {
 public:

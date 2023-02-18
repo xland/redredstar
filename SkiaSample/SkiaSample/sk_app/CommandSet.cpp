@@ -1,4 +1,4 @@
-#include "tools/sk_app/CommandSet.h"
+#include "CommandSet.h"
 #include "include/core/SkCanvas.h"
 #include "include/core/SkFont.h"
 #include "src/core/SkStringUtils.h"

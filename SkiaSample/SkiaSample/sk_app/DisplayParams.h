@@ -1,5 +1,4 @@
 #pragma once
-
 #include "include/core/SkImageInfo.h"
 #include "include/core/SkSurfaceProps.h"
 #include "include/gpu/GrContextOptions.h"

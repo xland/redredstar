@@ -1,11 +1,3 @@
-
-/*
- * Copyright 2015 Google Inc.
- *
- * Use of this source code is governed by a BSD-style license that can be
- * found in the LICENSE file.
- */
-
 #include "include/core/SkCanvas.h"
 #include "include/core/SkSurface.h"
 #include "include/gpu/GrBackendSurface.h"
@@ -16,7 +8,7 @@
 #include "src/gpu/gl/GrGLDefines.h"
 #include "src/gpu/gl/GrGLUtil.h"
 #include "src/image/SkImage_Base.h"
-#include "tools/sk_app/GLWindowContext.h"
+#include "GLWindowContext.h"
 
 namespace sk_app {
 

@@ -1,5 +1,4 @@
-#include "tools/sk_app/WindowContext.h"
-
+#include "WindowContext.h"
 #include "include/gpu/GrDirectContext.h"
 
 namespace sk_app {
