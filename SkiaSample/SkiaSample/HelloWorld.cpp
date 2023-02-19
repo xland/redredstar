@@ -86,7 +86,12 @@ void HelloWorld::onIdle() {
     // Just re-paint continuously
     fWindow->inval();
 }
-
+/// <summary>
+/// 这里原本是用来切换渲染引擎的，精简过之后，就不起作用了
+/// </summary>
+/// <param name="c"></param>
+/// <param name="modifiers"></param>
+/// <returns></returns>
 bool HelloWorld::onChar(SkUnichar c, skui::ModifierKey modifiers) {
     if (' ' == c) {
         fWindow->detach();
