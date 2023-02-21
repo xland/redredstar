@@ -1,2 +1,5 @@
-
-
+/x64/
+/.vs/
+/RedRedStar/x64/
+/Sample/**/x64/
+/SkiaSample/**/x64/
