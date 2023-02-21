@@ -4,7 +4,6 @@
 #include <windowsx.h>
 #include "src/utils/SkUTF.h"
 #include "../WindowContext.h"
-#include "WindowContextFactory_win.h"
 #include "tools/skui/ModifierKey.h"
 
 namespace sk_app {
@@ -330,7 +329,10 @@ void Window_win::show() {
 
 bool Window_win::attach() {
     fInitializedBackend = true;
-    fWindowContext = window_context_factory::MakeGLForWin(fHWnd, fRequestedDisplayParams);
+    fWindowContext =  std::unique_ptr<WindowContext>(new WindowContext(fHWnd, fRequestedDisplayParams));
+    if (!fWindowContext->isValid()) {
+        return false;
+    }
     this->onBackendCreated();
     return (SkToBool(fWindowContext));
 }

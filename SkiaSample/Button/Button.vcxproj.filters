@@ -21,16 +21,10 @@
     <ClInclude Include="sk_app\win\Window_win.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="sk_app\win\WindowContextFactory_win.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="sk_app\CommandSet.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="sk_app\DisplayParams.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="sk_app\GLWindowContext.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="sk_app\Window.h">
@@ -44,16 +38,10 @@
     <ClCompile Include="HelloWorld.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="sk_app\win\GLWindowContext_win.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="sk_app\win\Window_win.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="sk_app\CommandSet.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="sk_app\GLWindowContext.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="sk_app\Window.cpp">

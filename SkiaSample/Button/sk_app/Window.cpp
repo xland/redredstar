@@ -96,9 +96,6 @@ void Window::onResize(int w, int h) {
 }
 
 void Window::onActivate(bool isActive) {
-    if (fWindowContext) {
-        fWindowContext->activate(isActive);
-    }
     fIsActive = isActive;
 }
 

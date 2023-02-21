@@ -1,9 +1,11 @@
 #pragma once
-
+#include "include/gpu/gl/GrGLInterface.h"
+#include "include/core/SkSurface.h"
 #include "include/core/SkRefCnt.h"
 #include "include/core/SkSurfaceProps.h"
 #include "include/gpu/GrTypes.h"
 #include "DisplayParams.h"
+#include <Windows.h>
 
 class GrDirectContext;
 class SkSurface;
@@ -12,25 +14,15 @@ namespace sk_app {
 
 class WindowContext {
 public:
-    WindowContext(const DisplayParams&);
-
+    WindowContext(HWND, const DisplayParams&);
     virtual ~WindowContext();
-
-    virtual sk_sp<SkSurface> getBackbufferSurface() = 0;
-
-    virtual void swapBuffers() = 0;
-
-    virtual bool isValid() = 0;
-
-    virtual void resize(int w, int h) = 0;
-
-    virtual void activate(bool isActive) {}
-
+    sk_sp<SkSurface> getBackbufferSurface();
+    void swapBuffers();
+    bool isValid();
+    void resize(int w, int h);
     const DisplayParams& getDisplayParams() { return fDisplayParams; }
-    virtual void setDisplayParams(const DisplayParams& params) = 0;
-
+    void setDisplayParams(const DisplayParams& params);
     GrDirectContext* directContext() const { return fContext.get(); }
-
     int width() const { return fWidth; }
     int height() const { return fHeight; }
     SkISize dimensions() const { return {fWidth, fHeight}; }
@@ -38,19 +30,25 @@ public:
     int stencilBits() const { return fStencilBits; }
 
 protected:
-    virtual bool isGpuContext() { return true;  }
-
+    void initializeContext();
+    // This should be called by subclass destructor. It is also called when window/display
+    // parameters change prior to initializing a new GL context. This will in turn call
+    // onDestroyContext().
+    void destroyContext();
+    sk_sp<const GrGLInterface> onInitializeContext();
     sk_sp<GrDirectContext> fContext;
-
     int               fWidth;
     int               fHeight;
     DisplayParams     fDisplayParams;
-
     // parameters obtained from the native window
     // Note that the platform .cpp file is responsible for
     // initializing fSampleCount and fStencilBits!
     int               fSampleCount = 1;
     int               fStencilBits = 0;
+    HWND              fHWND;
+    HGLRC             fHGLRC;
+    sk_sp<const GrGLInterface> fBackendContext;
+    sk_sp<SkSurface>           fSurface;
 };
 
 }
