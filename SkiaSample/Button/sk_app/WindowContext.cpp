@@ -84,7 +84,6 @@ sk_sp<SkSurface> WindowContext::getBackbufferSurface() {
                 fSampleCount,
                 fStencilBits,
                 fbInfo);
-
             fSurface = SkSurface::MakeFromBackendRenderTarget(fContext.get(), backendRT,
                 kBottomLeft_GrSurfaceOrigin,
                 kRGBA_8888_SkColorType,
