@@ -1,5 +1,7 @@
 #pragma once
 #include <Windows.h>
+#include "../../src/DisplayParams.h"
+#include "../../src/WindowContext.h"
 namespace RRS {
 	class WindowBase
 	{
@@ -12,7 +14,8 @@ namespace RRS {
 		int Width;
 		int Height;
 	protected:
-		std::unique_ptr<WindowContext> fWindowContext;
+		DisplayParams requestedDisplayParams;
+		std::unique_ptr<WindowContext> windowContext;
 	private:
 		/// <summary>
 		/// 无边框窗口可拖拽区域

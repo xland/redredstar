@@ -19,7 +19,8 @@ namespace RRS {
         }
         return win->winProc(hwnd, msg, wParam, lParam);
     }
-	WindowBase::WindowBase(int width, int height) :Width{ width }, Height{ height }
+	WindowBase::WindowBase(int width, int height) 
+		: Width{ width }, Height{ height },requestedDisplayParams { DisplayParams() }
 	{
         static const TCHAR gSZWindowClass[] = L"RRS";
         static WNDCLASSEX wcex;
@@ -50,6 +51,8 @@ namespace RRS {
 		}
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)this);
 		RegisterTouchWindow(hwnd, 0);
+
+		windowContext = std::unique_ptr<WindowContext> ctx(new WindowContext(hwnd, requestedDisplayParams));
 	}
 
 	WindowBase::~WindowBase()
