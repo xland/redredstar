@@ -1,14 +1,19 @@
 #pragma once
 #include <Windows.h>
-#include "../../src/DisplayParams.h"
-#include "../../src/WindowContext.h"
+#include <memory>
+#include <string>
+
 namespace RRS {
+	class DisplayParams;
+	class WindowContext;
+
 	class WindowBase
 	{
 	public:
 		~WindowBase();
 		bool Load();
 		LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
+		void Show();
 		virtual bool IsMouseInCaptionArea(int x, int y) = 0;
 		virtual void OnLoad() = 0;
 		HWND hwnd;
@@ -25,8 +30,8 @@ namespace RRS {
 		/// <returns></returns>
 		LRESULT hitTest(HWND hwnd, LPARAM lParam);
 		void onPaint();
-		DisplayParams requestedDisplayParams;
-		std::unique_ptr<WindowContext> windowContext;
+		DisplayParams* displayParams;
+		WindowContext* windowContext;
 		bool isContentInvalidated = true;
 
 	};

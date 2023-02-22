@@ -14,14 +14,14 @@ namespace RRS {
 
 class WindowContext {
 public:
-    WindowContext(HWND, const DisplayParams&);
+    WindowContext(HWND, DisplayParams*);
     virtual ~WindowContext();
     sk_sp<SkSurface> getBackbufferSurface();
     void swapBuffers();
     bool isValid();
     void resize(int w, int h);
-    const DisplayParams& getDisplayParams() { return fDisplayParams; }
-    void setDisplayParams(const DisplayParams& params);
+    DisplayParams* getDisplayParams() { return displayParams; }
+    void setDisplayParams(DisplayParams* params);
     GrDirectContext* directContext() const { return fContext.get(); }
     int width() const { return fWidth; }
     int height() const { return fHeight; }
@@ -39,7 +39,7 @@ protected:
     sk_sp<GrDirectContext> fContext;
     int               fWidth;
     int               fHeight;
-    DisplayParams     fDisplayParams;
+    DisplayParams*    displayParams;
     // parameters obtained from the native window
     // Note that the platform .cpp file is responsible for
     // initializing fSampleCount and fStencilBits!

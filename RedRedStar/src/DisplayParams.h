@@ -4,8 +4,8 @@
 #include "include/gpu/GrContextOptions.h"
 
 namespace RRS {
-
-    struct DisplayParams {
+    class DisplayParams {
+    public:
         DisplayParams()
             : colorType(kN32_SkColorType)
             , fColorSpace(nullptr) 

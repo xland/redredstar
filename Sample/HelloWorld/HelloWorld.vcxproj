@@ -102,7 +102,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;NOMINMAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>../../RedRedStar/include</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -111,8 +111,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>RedRedStar.lib;zlib.lib;svg.lib;skunicode.lib;sktext.lib;skshaper.lib;sksg.lib;skresources.lib;skparagraph.lib;skottie.lib;skia.lib;pathkit.lib;particles.lib;libwebp_sse41.lib;libwebp.lib;libpng.lib;libjpeg.lib;icu.lib;harfbuzz.lib;expat.lib;compression_utils_portable.lib;OpenGL32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;D:\sdk\skia\out\$(configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -135,8 +135,8 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>RedRedStar.lib;zlib.lib;svg.lib;skunicode.lib;sktext.lib;skshaper.lib;sksg.lib;skresources.lib;skparagraph.lib;skottie.lib;skia.lib;pathkit.lib;particles.lib;libwebp_sse41.lib;libwebp.lib;libpng.lib;libjpeg.lib;icu.lib;harfbuzz.lib;expat.lib;compression_utils_portable.lib;OpenGL32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;D:\sdk\skia\out\$(configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
@@ -147,12 +147,12 @@
     <ClCompile Include="WindowHelloWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="WindowHelloWorld.h" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\RedRedStar\RedRedStar.vcxproj">
       <Project>{20b501a5-d475-45bf-9f67-2ec981d48061}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="WindowHelloWorld.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

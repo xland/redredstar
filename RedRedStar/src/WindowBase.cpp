@@ -2,6 +2,8 @@
 #include "../include/RRS/App.h"
 #include "include/core/SkCanvas.h"
 #include "include/core/SkSurface.h"
+#include "DisplayParams.h"
+#include "WindowContext.h"
 #include <windowsx.h>
 namespace RRS {
     LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -50,7 +52,8 @@ namespace RRS {
 		}
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)this);
 		RegisterTouchWindow(hwnd, 0);
-		windowContext = std::unique_ptr<WindowContext>(new WindowContext(hwnd, requestedDisplayParams));
+		this->displayParams = new DisplayParams();
+		windowContext = new WindowContext(hwnd, displayParams);
 		OnLoad();
 	}
 
@@ -142,5 +145,8 @@ namespace RRS {
 		canvas->drawRoundRect(rect, 12, 32, paint);
 		backbuffer->flushAndSubmit();
 		windowContext->swapBuffers();
+	}
+	void WindowBase::Show() {
+		ShowWindow(hwnd, SW_SHOW);
 	}
 }

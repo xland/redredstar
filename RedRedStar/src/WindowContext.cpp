@@ -15,10 +15,10 @@
 
 namespace RRS {
 
-WindowContext::WindowContext(HWND wnd, const DisplayParams& params)
-        : fDisplayParams(params), fBackendContext(nullptr) , fSurface(nullptr) , fHWND(wnd) , fHGLRC(nullptr)
+WindowContext::WindowContext(HWND wnd, DisplayParams* params)
+        : displayParams(params), fBackendContext(nullptr) , fSurface(nullptr) , fHWND(wnd) , fHGLRC(nullptr)
 {
-    fDisplayParams.fMSAASampleCount = GrNextPow2(fDisplayParams.fMSAASampleCount);
+    displayParams->fMSAASampleCount = GrNextPow2(displayParams->fMSAASampleCount);
     // any config code here (particularly for msaa)?
     this->initializeContext();
 }
@@ -42,9 +42,9 @@ void WindowContext::destroyContext() {
 void WindowContext::initializeContext() {
     SkASSERT(!fContext);
     fBackendContext = this->onInitializeContext();
-    fContext = GrDirectContext::MakeGL(fBackendContext, fDisplayParams.fGrContextOptions);
-    if (!fContext && fDisplayParams.fMSAASampleCount > 1) {
-        fDisplayParams.fMSAASampleCount /= 2;
+    fContext = GrDirectContext::MakeGL(fBackendContext, displayParams->fGrContextOptions);
+    if (!fContext && displayParams->fMSAASampleCount > 1) {
+        displayParams->fMSAASampleCount /= 2;
         this->initializeContext();
         return;
     }
@@ -63,8 +63,8 @@ void WindowContext::resize(int w, int h) {
     this->initializeContext();
 }
 
-void WindowContext::setDisplayParams(const DisplayParams& params) {
-    fDisplayParams = params;
+void WindowContext::setDisplayParams(DisplayParams* params) {
+    displayParams = params;
     this->destroyContext();
     this->initializeContext();
 }
@@ -87,8 +87,8 @@ sk_sp<SkSurface> WindowContext::getBackbufferSurface() {
             fSurface = SkSurface::MakeFromBackendRenderTarget(fContext.get(), backendRT,
                 kBottomLeft_GrSurfaceOrigin,
                 kRGBA_8888_SkColorType,
-                fDisplayParams.fColorSpace,
-                &fDisplayParams.fSurfaceProps);
+                displayParams->fColorSpace,
+                &displayParams->fSurfaceProps);
         }
     }
 
@@ -97,14 +97,14 @@ sk_sp<SkSurface> WindowContext::getBackbufferSurface() {
 
 sk_sp<const GrGLInterface> WindowContext::onInitializeContext() {
     HDC dc = GetDC(fHWND);
-    fHGLRC = SkCreateWGLContext(dc, fDisplayParams.fMSAASampleCount, false /* deepColor */,
+    fHGLRC = SkCreateWGLContext(dc, displayParams->fMSAASampleCount, false /* deepColor */,
         kGLPreferCompatibilityProfile_SkWGLContextRequest);
     if (nullptr == fHGLRC) {
         return nullptr;
     }
     SkWGLExtensions extensions;
     if (extensions.hasExtension(dc, "WGL_EXT_swap_control")) {
-        extensions.swapInterval(fDisplayParams.fDisableVsync ? 0 : 1);
+        extensions.swapInterval(displayParams->fDisableVsync ? 0 : 1);
     }
     // Look to see if RenderDoc is attached. If so, re-create the context with a core profile
     if (wglMakeCurrent(dc, fHGLRC)) {
@@ -113,7 +113,7 @@ sk_sp<const GrGLInterface> WindowContext::onInitializeContext() {
         interfaceObj.reset(nullptr);
         if (renderDocAttached) {
             wglDeleteContext(fHGLRC);
-            fHGLRC = SkCreateWGLContext(dc, fDisplayParams.fMSAASampleCount, false /* deepColor */,
+            fHGLRC = SkCreateWGLContext(dc, displayParams->fMSAASampleCount, false /* deepColor */,
                 kGLPreferCoreProfile_SkWGLContextRequest);
             if (nullptr == fHGLRC) {
                 return nullptr;
