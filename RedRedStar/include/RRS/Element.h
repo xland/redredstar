@@ -1,4 +1,6 @@
 #pragma once
+class SkCanvas;
+class YGNode;
 namespace RRS {
 	class WindowBase;
 	class Element
@@ -16,15 +18,19 @@ namespace RRS {
 		/// </summary>
 		void Hide();
 		/// <summary>
+		/// Add an element to the window
+		/// </summary>
+		void AddElement(Element* element);
+		/// <summary>
 		/// element position x
 		/// ShowInCenterScreen must be set to false
 		/// </summary>
-		int X = CW_USEDEFAULT;
+		int X = 0;
 		/// <summary>
 		/// element position y
 		/// ShowInCenterScreen must be set to false
 		/// </summary>
-		int Y = CW_USEDEFAULT;
+		int Y = 0;
 		/// <summary>
 		/// element width
 		/// </summary>
@@ -41,6 +47,10 @@ namespace RRS {
 		/// 
 		/// </summary>
 		std::vector<Element*> Children;
+		/// <summary>
+		/// 
+		/// </summary>
+		YGNode* Layout;
 	private:
 
 	};

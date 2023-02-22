@@ -4,7 +4,8 @@
 #include <string>
 #include <vector>
 #include "Element.h"
-
+class YGConfig;
+class YGNode;
 namespace RRS {
 	class DisplayParams;
 	class WindowContext;
@@ -83,6 +84,7 @@ namespace RRS {
 		/// 
 		/// </summary>
 		std::vector<Element*> Children;
+		
 	protected:
 		/// <summary>
 		/// OnLoad method will be called after window and drawing engine are initialized
@@ -116,6 +118,8 @@ namespace RRS {
 		LRESULT hitTest(HWND hwnd, LPARAM lParam);
 		void onPaint();
 		DisplayParams* displayParams;
-		WindowContext* windowContext;
+		WindowContext* windowContext; 
+		YGConfig* layoutConfig;
+		YGNode* layoutRoot;
 	};
 }

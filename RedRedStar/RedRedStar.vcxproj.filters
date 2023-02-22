@@ -24,7 +24,7 @@
     <ClInclude Include="include\RRS\WindowBase.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\RRS\Node.h">
+    <ClInclude Include="include\RRS\Element.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="src\DisplayParams.h">
@@ -42,6 +42,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\WindowContext.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Element.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

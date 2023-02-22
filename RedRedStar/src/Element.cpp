@@ -1,12 +1,16 @@
 #include "include/core/SkCanvas.h"
 #include "../include/RRS/Element.h"
+#include <Yoga.h>
 
 namespace RRS {
-	Element::Element()
+	Element::Element():Layout{ YGNodeNew() },OwnerWindow {nullptr}
 	{
+		YGNodeStyleSetWidth(Layout, Width);
+		YGNodeStyleSetHeight(Layout, Height);
 	}
 	Element::~Element()
 	{
+		YGNodeFreeRecursive(Layout);
 	}
 	void Element::Paint(SkCanvas* canvas)
 	{
@@ -24,5 +28,10 @@ namespace RRS {
 	}
 	void Element::Hide() {
 		//todo
+	}
+	void Element::AddElement(Element* element)
+	{
+		element->OwnerWindow = OwnerWindow;
+		Children.push_back(element);
 	}
 }

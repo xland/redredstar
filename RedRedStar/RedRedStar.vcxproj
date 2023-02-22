@@ -107,7 +107,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;SK_GL;NOMINMAX;_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\sdk\skia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\sdk\skia;D:\sdk\yoga\yoga</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -129,7 +129,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;SK_GL;NOMINMAX;_SILENCE_ALL_CXX20_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>D:\sdk\skia</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\sdk\skia;D:\sdk\yoga\yoga</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -147,7 +147,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\RRS\App.h" />
-    <ClInclude Include="include\RRS\Node.h" />
+    <ClInclude Include="include\RRS\Element.h" />
     <ClInclude Include="include\RRS\RRS.h" />
     <ClInclude Include="include\RRS\WindowBase.h" />
     <ClInclude Include="src\DisplayParams.h" />
@@ -155,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\Element.cpp" />
     <ClCompile Include="src\WindowBase.cpp" />
     <ClCompile Include="src\WindowContext.cpp" />
   </ItemGroup>

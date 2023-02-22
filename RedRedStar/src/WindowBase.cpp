@@ -3,9 +3,11 @@
 #include "include/core/SkCanvas.h"
 #include "include/core/SkSurface.h"
 #include "../include/RRS/Element.h"
+#include <Yoga.h>
 #include "DisplayParams.h"
 #include "WindowContext.h"
 #include <windowsx.h>
+
 namespace RRS {
     LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
         WindowBase* win;
@@ -62,6 +64,13 @@ namespace RRS {
 		RegisterTouchWindow(hwnd, 0);
 		displayParams = new DisplayParams();
 		windowContext = new WindowContext(hwnd, displayParams);
+
+		layoutConfig = YGConfigNew();
+		layoutRoot = YGNodeNewWithConfig(layoutConfig);
+		YGNodeStyleSetFlexDirection(layoutRoot, YGFlexDirectionRow);
+		YGNodeStyleSetPadding(layoutRoot, YGEdgeAll, 20);
+		YGNodeStyleSetMargin(layoutRoot, YGEdgeAll, 20);
+
 		OnLoad();
 		return true;
 	}
@@ -71,6 +80,8 @@ namespace RRS {
 		if (flag) {
 			delete displayParams;
 			delete windowContext;
+			YGNodeFreeRecursive(layoutRoot);
+			YGConfigFree(layoutConfig);
 			DestroyWindow(hwnd);
 		}
 		OnClosed();
@@ -149,6 +160,7 @@ namespace RRS {
 		}
 	}
 	void WindowBase::onPaint() {
+		YGNodeCalculateLayout(layoutRoot, Width, Height, YGDirectionLTR);
 		sk_sp<SkSurface> backbuffer = windowContext->getBackbufferSurface();
 		if (backbuffer == nullptr) {
 			return;
@@ -173,6 +185,8 @@ namespace RRS {
 	}
 	void WindowBase::AddElement(Element* element)
 	{
+		element->OwnerWindow = this;
+		YGNodeInsertChild(layoutRoot, element->Layout, Children.size());
 		Children.push_back(element);
 	}
 }
