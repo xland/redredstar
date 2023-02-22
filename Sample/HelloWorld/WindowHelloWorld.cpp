@@ -1,4 +1,5 @@
 #include "WindowHelloWorld.h"
+#include <RRS/App.h>
 WindowHelloWorld::WindowHelloWorld()
 {
 	title = L"Hello World";
@@ -6,4 +7,8 @@ WindowHelloWorld::WindowHelloWorld()
 void WindowHelloWorld::OnLoad() 
 {
 	Show();
+}
+void WindowHelloWorld::OnClosed()
+{
+	RRS::App::Quit();
 }

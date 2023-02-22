@@ -31,13 +31,13 @@ namespace RRS {
 			wcex.lpfnWndProc = WindowProc;
 			wcex.cbClsExtra = 0;
 			wcex.cbWndExtra = 0;
-			wcex.hInstance = App::Get()->hInstance;
-			wcex.hIcon = LoadIcon(App::Get()->hInstance, (LPCTSTR)IDI_WINLOGO);
+			wcex.hInstance = App::Get()->HInstance;
+			wcex.hIcon = LoadIcon(App::Get()->HInstance, (LPCTSTR)IDI_WINLOGO);
 			wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
 			wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 			wcex.lpszMenuName = nullptr;
 			wcex.lpszClassName = windowClassName.c_str();
-			wcex.hIconSm = LoadIcon(App::Get()->hInstance, (LPCTSTR)IDI_WINLOGO);
+			wcex.hIconSm = LoadIcon(App::Get()->HInstance, (LPCTSTR)IDI_WINLOGO);
 			if (!RegisterClassEx(&wcex)) {
 				//todo log
 				return false;
@@ -51,7 +51,7 @@ namespace RRS {
 			Y = (screenRect.bottom - Height) / 2;
 		}
 		hwnd = CreateWindow(windowClassName.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW, X, Y, Width, Height,
-			nullptr, nullptr, App::Get()->hInstance, nullptr);
+			nullptr, nullptr, App::Get()->HInstance, nullptr);
 		if (!hwnd)
 		{
 			//todo log
@@ -64,13 +64,6 @@ namespace RRS {
 		OnLoad();
 		return true;
 	}
-
-	WindowBase::~WindowBase()
-	{
-		delete displayParams;
-		delete windowContext;
-		DestroyWindow(hwnd);
-	}
 	void WindowBase::Close()
 	{
 		auto flag = OnClose();
@@ -79,10 +72,7 @@ namespace RRS {
 			delete windowContext;
 			DestroyWindow(hwnd);
 		}
-	}
-	bool WindowBase::OnClose()
-	{
-		return true;
+		OnClosed();
 	}
 
 	LRESULT CALLBACK WindowBase::winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {

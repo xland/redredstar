@@ -6,18 +6,29 @@ namespace RRS {
 		public:
 			App(const App&) = delete;
 			App& operator=(const App&) = delete;
+			~App();
 			/// <summary>
-			/// 获取App全局实例
+			/// Get Global App Instance
 			/// </summary>
 			/// <returns></returns>
 			static App* Get();
 			/// <summary>
-			/// 初始化App对象
+			/// Initialize Global App object
 			/// </summary>
 			static void Init(HINSTANCE hInstance);
-			~App();
+			/// <summary>
+			/// Start message loop
+			/// </summary>
+			/// <returns></returns>
 			static int Exec();
-			HINSTANCE hInstance;
+			/// <summary>
+			/// Quit Application
+			/// </summary>
+			static void Quit();
+			/// <summary>
+			/// Native application instance
+			/// </summary>
+			HINSTANCE HInstance;
 		private:
 			App(HINSTANCE hInstance);
 			inline static App* app{ nullptr };

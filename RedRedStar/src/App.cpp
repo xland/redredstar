@@ -1,6 +1,6 @@
 #include "../include/RRS/App.h"
 namespace RRS {
-	App::App(HINSTANCE hInstance):hInstance{hInstance}
+	App::App(HINSTANCE hInstance):HInstance{hInstance}
 	{
 	}
 	App::~App()
@@ -21,5 +21,8 @@ namespace RRS {
 	}
 	App* App::Get() {
 		return app;
+	}
+	void App::Quit() {
+		PostQuitMessage(0);
 	}
 }

@@ -5,5 +5,6 @@ class WindowHelloWorld : public RRS::WindowBase
 public:
 	WindowHelloWorld();
 	void OnLoad() override;
+	void OnClosed() override;
 };
 
