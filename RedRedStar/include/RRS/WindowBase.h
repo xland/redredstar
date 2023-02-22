@@ -6,16 +6,16 @@ namespace RRS {
 	class WindowBase
 	{
 	public:
-		WindowBase(int width,int height);
 		~WindowBase();
+		bool Load();
 		LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		virtual bool IsMouseInCaptionArea(int x, int y) = 0;
+		virtual void OnLoad() = 0;
 		HWND hwnd;
-		int Width;
-		int Height;
+		int Width = 1000;
+		int Height = 700;
+		std::wstring title = L"Window";
 	protected:
-		DisplayParams requestedDisplayParams;
-		std::unique_ptr<WindowContext> windowContext;
 	private:
 		/// <summary>
 		/// 无边框窗口可拖拽区域
@@ -25,6 +25,9 @@ namespace RRS {
 		/// <returns></returns>
 		LRESULT hitTest(HWND hwnd, LPARAM lParam);
 		void onPaint();
+		DisplayParams requestedDisplayParams;
+		std::unique_ptr<WindowContext> windowContext;
+		bool isContentInvalidated = true;
 
 	};
 }

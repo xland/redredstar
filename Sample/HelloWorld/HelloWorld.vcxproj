@@ -144,11 +144,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="WindowHelloWorld.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\RedRedStar\RedRedStar.vcxproj">
       <Project>{20b501a5-d475-45bf-9f67-2ec981d48061}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="WindowHelloWorld.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -144,7 +144,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="HelloWorld.h" />
-    <ClInclude Include="sk_app\CommandSet.h" />
     <ClInclude Include="sk_app\DisplayParams.h" />
     <ClInclude Include="sk_app\Window.h" />
     <ClInclude Include="sk_app\WindowContext.h" />
@@ -152,7 +151,6 @@
   <ItemGroup>
     <ClCompile Include="HelloWorld.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="sk_app\CommandSet.cpp" />
     <ClCompile Include="sk_app\Window.cpp" />
     <ClCompile Include="sk_app\WindowContext.cpp" />
   </ItemGroup>

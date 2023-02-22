@@ -24,11 +24,11 @@ class WindowContext;
 
 class Window {
 public:
-    static Window* CreateNativeWindow(HINSTANCE hInstance);
+    Window(HINSTANCE instance, const DisplayParams& params);
     ~Window();
     void setTitle(const char*);
     void show();
-    bool init(HINSTANCE instance);
+    
     // Schedules an invalidation event for window if one is not currently pending.
     // Make sure that either onPaint or markInvalReceived is called when the client window consumes
     // the the inval event. They unset fIsContentInvalided which allow future onInval.
@@ -92,7 +92,6 @@ public:
     virtual float scaleFactor() const { return 1.0f; }
 
     virtual const DisplayParams& getRequestedDisplayParams() { return fRequestedDisplayParams; }
-    void setRequestedDisplayParams(const DisplayParams&);
 
     // Actual parameters in effect, obtained from the native window.
     int sampleCount() const;
@@ -112,18 +111,10 @@ protected:
 
     std::unique_ptr<WindowContext> fWindowContext;
 
-    void onInval();
-
-    // Uncheck fIsContentInvalided to allow future inval/onInval.
-    void markInvalProcessed();
-
     bool fIsContentInvalidated = false;  // use this to avoid duplicate invalidate events
 
     void visitLayers(std::function<void(Layer*)> visitor);
     bool signalLayers(std::function<bool(Layer*)> visitor);
-
-private:
-    bool        fInitializedBackend = false;
 };
 
 }

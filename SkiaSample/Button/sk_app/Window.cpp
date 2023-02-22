@@ -11,20 +11,9 @@ namespace sk_app {
 
     LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
-Window* Window::CreateNativeWindow(HINSTANCE hInstance)
+
+Window::Window(HINSTANCE hInstance, const DisplayParams& params):fHInstance{ hInstance },fRequestedDisplayParams{ params }
 {
-    Window* window = new Window();
-    if (!window->init(hInstance)) {
-        delete window;
-        return nullptr;
-    }
-    return window;
-}
-
-
-bool Window::init(HINSTANCE hInstance) {
-    fHInstance = hInstance ? hInstance : GetModuleHandle(nullptr);
-
     // The main window class name
     static const TCHAR gSZWindowClass[] = _T("SkiaApp");
 
@@ -46,7 +35,7 @@ bool Window::init(HINSTANCE hInstance) {
         wcex.hIconSm = LoadIcon(fHInstance, (LPCTSTR)IDI_WINLOGO);
 
         if (!RegisterClassEx(&wcex)) {
-            return false;
+            return;
         }
         wcexInit = true;
     }
@@ -77,13 +66,13 @@ bool Window::init(HINSTANCE hInstance) {
         nullptr, nullptr, fHInstance, nullptr);
     if (!fHWnd)
     {
-        return false;
+        return;
     }
 
     SetWindowLongPtr(fHWnd, GWLP_USERDATA, (LONG_PTR)this);
     RegisterTouchWindow(fHWnd, 0);
 
-    return true;
+    return;
 }
 
 static skui::Key get_key(WPARAM vk) {
@@ -377,7 +366,7 @@ void Window::onPaint() {
         // TODO: try recreating testcontext
         return;
     }
-    markInvalProcessed();
+    fIsContentInvalidated = false;
     // draw into the canvas of this surface
     this->visitLayers([](Layer* layer) { layer->onPrePaint(); });
     this->visitLayers([=](Layer* layer) { layer->onPaint(backbuffer.get()); });
@@ -413,13 +402,6 @@ int Window::height() const {
     return fWindowContext->height();
 }
 
-void Window::setRequestedDisplayParams(const DisplayParams& params) {
-    fRequestedDisplayParams = params;
-    if (fWindowContext) {
-        fWindowContext->setDisplayParams(fRequestedDisplayParams);
-    }
-}
-
 int Window::sampleCount() const {
     if (!fWindowContext) {
         return 0;
@@ -447,12 +429,8 @@ void Window::inval() {
     }
     if (!fIsContentInvalidated) {
         fIsContentInvalidated = true;
-        onInval();
+        InvalidateRect(fHWnd, nullptr, false);
     }
-}
-
-void Window::markInvalProcessed() {
-    fIsContentInvalidated = false;
 }
 
 void Window::setTitle(const char* title) {
@@ -461,12 +439,8 @@ void Window::setTitle(const char* title) {
 void Window::show() {
     ShowWindow(fHWnd, SW_SHOW);
 }
-void Window::onInval() {
-    InvalidateRect(fHWnd, nullptr, false);
-}
 
 bool Window::attach() {
-    fInitializedBackend = true;
     fWindowContext = std::unique_ptr<WindowContext>(new WindowContext(fHWnd, fRequestedDisplayParams));
     if (!fWindowContext->isValid()) {
         return false;

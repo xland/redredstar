@@ -9,8 +9,7 @@ using namespace sk_app;
 
 HelloWorld::HelloWorld(HINSTANCE hinstance):fRotationAngle(0) {
     SkGraphics::Init();
-    fWindow = Window::CreateNativeWindow(hinstance);
-    fWindow->setRequestedDisplayParams(DisplayParams());
+    fWindow = new Window(hinstance, DisplayParams());
     // register callbacks
     fWindow->pushLayer(this);
     fWindow->attach();

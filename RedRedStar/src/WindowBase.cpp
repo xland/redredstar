@@ -19,39 +19,39 @@ namespace RRS {
         }
         return win->winProc(hwnd, msg, wParam, lParam);
     }
-	WindowBase::WindowBase(int width, int height) 
-		: Width{ width }, Height{ height },requestedDisplayParams { DisplayParams() }
-	{
-        static const TCHAR gSZWindowClass[] = L"RRS";
-        static WNDCLASSEX wcex;
-        static bool wcexInit = false;
-        if (!wcexInit) {
-            wcex.cbSize = sizeof(WNDCLASSEX);
-            wcex.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-            wcex.lpfnWndProc = WindowProc;
-            wcex.cbClsExtra = 0;
-            wcex.cbWndExtra = 0;
-            wcex.hInstance = App::Get()->hInstance;
-            wcex.hIcon = LoadIcon(App::Get()->hInstance, (LPCTSTR)IDI_WINLOGO);
-            wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-            wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-            wcex.lpszMenuName = nullptr;
-            wcex.lpszClassName = gSZWindowClass;
-            wcex.hIconSm = LoadIcon(App::Get()->hInstance, (LPCTSTR)IDI_WINLOGO);
-            if (!RegisterClassEx(&wcex)) {
-                //todo log
-            }
-            wcexInit = true;
-        }
-		hwnd = CreateWindow(gSZWindowClass, nullptr, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, Width, Height,
+	bool WindowBase::Load() {
+		static std::wstring windowClassName = L"RRS_Window_Class";
+		static WNDCLASSEX wcex;
+		static bool wcexInit = false;
+		if (!wcexInit) {
+			wcex.cbSize = sizeof(WNDCLASSEX);
+			wcex.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+			wcex.lpfnWndProc = WindowProc;
+			wcex.cbClsExtra = 0;
+			wcex.cbWndExtra = 0;
+			wcex.hInstance = App::Get()->hInstance;
+			wcex.hIcon = LoadIcon(App::Get()->hInstance, (LPCTSTR)IDI_WINLOGO);
+			wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
+			wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+			wcex.lpszMenuName = nullptr;
+			wcex.lpszClassName = windowClassName.c_str();
+			wcex.hIconSm = LoadIcon(App::Get()->hInstance, (LPCTSTR)IDI_WINLOGO);
+			if (!RegisterClassEx(&wcex)) {
+				//todo log
+			}
+			wcexInit = true;
+		}
+		hwnd = CreateWindow(windowClassName.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, Width, Height,
 			nullptr, nullptr, App::Get()->hInstance, nullptr);
 		if (!hwnd)
 		{
 			//todo log
+			return false;
 		}
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)this);
 		RegisterTouchWindow(hwnd, 0);
 		windowContext = std::unique_ptr<WindowContext>(new WindowContext(hwnd, requestedDisplayParams));
+		OnLoad();
 	}
 
 	WindowBase::~WindowBase()
@@ -127,23 +127,20 @@ namespace RRS {
 		}
 	}
 	void WindowBase::onPaint() {
-		if (!fWindowContext) {
-			return;
-		}
-		if (!fIsActive) {
-			return;
-		}
-		sk_sp<SkSurface> backbuffer = fWindowContext->getBackbufferSurface();
+		sk_sp<SkSurface> backbuffer = windowContext->getBackbufferSurface();
 		if (backbuffer == nullptr) {
-			printf("no backbuffer!?\n");
-			// TODO: try recreating testcontext
 			return;
 		}
-		markInvalProcessed();
-		// draw into the canvas of this surface
-		this->visitLayers([](Layer* layer) { layer->onPrePaint(); });
-		this->visitLayers([=](Layer* layer) { layer->onPaint(backbuffer.get()); });
+		isContentInvalidated = false;
+		SkSurface* surface = backbuffer.get();
+		auto canvas = surface->getCanvas();
+		canvas->clear(SK_ColorWHITE);
+		SkPaint paint;
+		paint.setColor(SkColorSetARGB(255, 220, 220, 220));
+		paint.setStrokeJoin(SkPaint::Join::kRound_Join);
+		SkRect rect = SkRect::MakeXYWH(20, 20, 180, 50);
+		canvas->drawRoundRect(rect, 12, 32, paint);
 		backbuffer->flushAndSubmit();
-		fWindowContext->swapBuffers();
+		windowContext->swapBuffers();
 	}
 }
