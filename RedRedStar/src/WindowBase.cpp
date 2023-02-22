@@ -51,8 +51,7 @@ namespace RRS {
 		}
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)this);
 		RegisterTouchWindow(hwnd, 0);
-
-		windowContext = std::unique_ptr<WindowContext> ctx(new WindowContext(hwnd, requestedDisplayParams));
+		windowContext = std::unique_ptr<WindowContext>(new WindowContext(hwnd, requestedDisplayParams));
 	}
 
 	WindowBase::~WindowBase()

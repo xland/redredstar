@@ -94,7 +94,7 @@ public:
     virtual float scaleFactor() const { return 1.0f; }
 
     virtual const DisplayParams& getRequestedDisplayParams() { return fRequestedDisplayParams; }
-    virtual void setRequestedDisplayParams(const DisplayParams&, bool allowReattach = true);
+    void setRequestedDisplayParams(const DisplayParams&);
 
     // Actual parameters in effect, obtained from the native window.
     int sampleCount() const;
@@ -102,7 +102,6 @@ public:
 
     // Returns null if there is not a GPU backend or if the backend is not yet created.
     GrDirectContext* directContext() const;
-    skgpu::Context* graphiteContext() const;
 
 protected:
     Window();

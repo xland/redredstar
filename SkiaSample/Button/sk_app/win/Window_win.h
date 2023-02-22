@@ -13,7 +13,6 @@ public:
     void show() override;
     bool attach() override;
     void onInval() override;
-    void setRequestedDisplayParams(const DisplayParams&, bool allowReattach) override;
 private:
     void closeWindow();
     HINSTANCE   fHInstance;
