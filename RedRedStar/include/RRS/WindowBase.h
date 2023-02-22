@@ -2,6 +2,8 @@
 #include <Windows.h>
 #include <memory>
 #include <string>
+#include <vector>
+#include "Element.h"
 
 namespace RRS {
 	class DisplayParams;
@@ -32,9 +34,17 @@ namespace RRS {
 		/// </summary>
 		void Show();
 		/// <summary>
+		/// show the window
+		/// </summary>
+		void Hide();
+		/// <summary>
 		/// close the window
 		/// </summary>
 		void Close();
+		/// <summary>
+		/// Add an element to the window
+		/// </summary>
+		void AddElement(Element* element);
 		/// <summary>
 		/// window's handle
 		/// </summary>
@@ -69,6 +79,10 @@ namespace RRS {
 		/// window title
 		/// </summary>
 		std::wstring title = L"Window";
+		/// <summary>
+		/// 
+		/// </summary>
+		std::vector<Element*> Children;
 	protected:
 		/// <summary>
 		/// OnLoad method will be called after window and drawing engine are initialized
@@ -103,6 +117,5 @@ namespace RRS {
 		void onPaint();
 		DisplayParams* displayParams;
 		WindowContext* windowContext;
-		bool isContentInvalidated = true;
 	};
 }

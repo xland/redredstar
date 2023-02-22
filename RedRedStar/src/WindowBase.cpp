@@ -2,6 +2,7 @@
 #include "../include/RRS/App.h"
 #include "include/core/SkCanvas.h"
 #include "include/core/SkSurface.h"
+#include "../include/RRS/Element.h"
 #include "DisplayParams.h"
 #include "WindowContext.h"
 #include <windowsx.h>
@@ -152,19 +153,26 @@ namespace RRS {
 		if (backbuffer == nullptr) {
 			return;
 		}
-		isContentInvalidated = false;
 		SkSurface* surface = backbuffer.get();
 		auto canvas = surface->getCanvas();
 		canvas->clear(SK_ColorWHITE);
-		SkPaint paint;
-		paint.setColor(SkColorSetARGB(255, 220, 220, 220));
-		paint.setStrokeJoin(SkPaint::Join::kRound_Join);
-		SkRect rect = SkRect::MakeXYWH(20, 20, 180, 50);
-		canvas->drawRoundRect(rect, 12, 32, paint);
+		for (auto element:Children)
+		{
+			element->Paint(canvas);
+		}
 		backbuffer->flushAndSubmit();
 		windowContext->swapBuffers();
 	}
-	void WindowBase::Show() {
+	void WindowBase::Show() 
+	{
 		ShowWindow(hwnd, SW_SHOW);
+	}
+	void WindowBase::Hide() 
+	{
+		//todo
+	}
+	void WindowBase::AddElement(Element* element)
+	{
+		Children.push_back(element);
 	}
 }
