@@ -40,10 +40,17 @@ namespace RRS {
 			wcex.hIconSm = LoadIcon(App::Get()->hInstance, (LPCTSTR)IDI_WINLOGO);
 			if (!RegisterClassEx(&wcex)) {
 				//todo log
+				return false;
 			}
 			wcexInit = true;
+		}		
+		if (ShowInCenterScreen) {
+			RECT screenRect;
+			SystemParametersInfo(SPI_GETWORKAREA, 0, &screenRect, 0);
+			X = (screenRect.right - Width) / 2; 
+			Y = (screenRect.bottom - Height) / 2;
 		}
-		hwnd = CreateWindow(windowClassName.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, Width, Height,
+		hwnd = CreateWindow(windowClassName.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW, X, Y, Width, Height,
 			nullptr, nullptr, App::Get()->hInstance, nullptr);
 		if (!hwnd)
 		{
@@ -52,13 +59,30 @@ namespace RRS {
 		}
 		SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)this);
 		RegisterTouchWindow(hwnd, 0);
-		this->displayParams = new DisplayParams();
+		displayParams = new DisplayParams();
 		windowContext = new WindowContext(hwnd, displayParams);
 		OnLoad();
+		return true;
 	}
 
 	WindowBase::~WindowBase()
 	{
+		delete displayParams;
+		delete windowContext;
+		DestroyWindow(hwnd);
+	}
+	void WindowBase::Close()
+	{
+		auto flag = OnClose();
+		if (flag) {
+			delete displayParams;
+			delete windowContext;
+			DestroyWindow(hwnd);
+		}
+	}
+	bool WindowBase::OnClose()
+	{
+		return true;
 	}
 
 	LRESULT CALLBACK WindowBase::winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -81,6 +105,10 @@ namespace RRS {
 			}
 			else if (wp.showCmd == SW_SHOWNORMAL) {
 			}
+			return 0;
+		}
+		case WM_CLOSE: {
+			Close();
 			return 0;
 		}
 		case WM_NCHITTEST: {
