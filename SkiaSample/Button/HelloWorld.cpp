@@ -22,9 +22,6 @@ HelloWorld::~HelloWorld() {
 }
 
 void HelloWorld::updateTitle() {
-    if (!fWindow || fWindow->sampleCount() <= 1) {
-        return;
-    }
     SkString title("Hello World OpenGL");
     fWindow->setTitle(title.c_str());
 }

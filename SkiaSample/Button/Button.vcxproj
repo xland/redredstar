@@ -148,7 +148,6 @@
     <ClInclude Include="sk_app\DisplayParams.h" />
     <ClInclude Include="sk_app\Window.h" />
     <ClInclude Include="sk_app\WindowContext.h" />
-    <ClInclude Include="sk_app\win\Window_win.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="HelloWorld.cpp" />
@@ -156,7 +155,6 @@
     <ClCompile Include="sk_app\CommandSet.cpp" />
     <ClCompile Include="sk_app\Window.cpp" />
     <ClCompile Include="sk_app\WindowContext.cpp" />
-    <ClCompile Include="sk_app\win\Window_win.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

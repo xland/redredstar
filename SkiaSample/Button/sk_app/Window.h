@@ -25,18 +25,16 @@ class WindowContext;
 class Window {
 public:
     static Window* CreateNativeWindow(HINSTANCE hInstance);
-    virtual ~Window();
-    virtual void setTitle(const char*) = 0;
-    virtual void show() = 0;
-    virtual void setClipboardText(const char*) {}
-
+    ~Window();
+    void setTitle(const char*);
+    void show();
+    bool init(HINSTANCE instance);
     // Schedules an invalidation event for window if one is not currently pending.
     // Make sure that either onPaint or markInvalReceived is called when the client window consumes
     // the the inval event. They unset fIsContentInvalided which allow future onInval.
     void inval();
     virtual bool scaleContentToFit() const { return false; }
-
-    virtual bool attach() = 0;
+    bool attach();
     void detach();
 
     // input handling
@@ -109,10 +107,12 @@ protected:
     SkTDArray<Layer*>      fLayers;
     DisplayParams          fRequestedDisplayParams;
     bool                   fIsActive = true;
+    HINSTANCE   fHInstance;
+    HWND        fHWnd;
 
     std::unique_ptr<WindowContext> fWindowContext;
 
-    virtual void onInval() = 0;
+    void onInval();
 
     // Uncheck fIsContentInvalided to allow future inval/onInval.
     void markInvalProcessed();
@@ -121,6 +121,9 @@ protected:
 
     void visitLayers(std::function<void(Layer*)> visitor);
     bool signalLayers(std::function<bool(Layer*)> visitor);
+
+private:
+    bool        fInitializedBackend = false;
 };
 
 }
