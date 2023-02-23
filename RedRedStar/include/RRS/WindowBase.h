@@ -21,7 +21,7 @@ namespace RRS {
 		/// You can set the parameters of the window in the constructor of the subclass, 
 		/// such as Height and Width
 		/// </summary>
-		WindowBase() = default;
+		WindowBase();
 		/// <summary>
 		/// You need to release the objects of the subclass and the resources created by yourself.
 		/// Don't worry about the resources created by WindowBase

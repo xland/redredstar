@@ -30,18 +30,12 @@
     <ClInclude Include="src\DisplayParams.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="src\WindowContext.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\WindowBase.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\WindowContext.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Element.cpp">

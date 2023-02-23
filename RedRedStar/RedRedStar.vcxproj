@@ -151,7 +151,6 @@
     <ClInclude Include="include\RRS\RRS.h" />
     <ClInclude Include="include\RRS\WindowBase.h" />
     <ClInclude Include="src\DisplayParams.h" />
-    <ClInclude Include="src\WindowContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
@@ -160,7 +159,6 @@
     <ClCompile Include="src\WindowBaseLayout.cpp" />
     <ClCompile Include="src\WindowBaseNative.cpp" />
     <ClCompile Include="src\WindowBaseSurface.cpp" />
-    <ClCompile Include="src\WindowContext.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

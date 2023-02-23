@@ -7,10 +7,10 @@
 #include "src/gpu/GrCaps.h"
 #include "src/gpu/GrDirectContextPriv.h"
 #include "src/gpu/gl/GrGLDefines.h"
-#include "src/gpu/gl/GrGLUtil.h"
 #include "src/image/SkImage_Base.h"
 #include "src/utils/win/SkWGL.h"
 #include <GL/gl.h>
+#include "src/gpu/gl/GrGLUtil.h"
 #include "DisplayParams.h"
 
 namespace RRS
@@ -49,14 +49,14 @@ namespace RRS
             }
         }
         auto param = GrGLMakeNativeInterface();
-        backendContext = param.get();
+        backendContext = param.release();
         auto context = GrDirectContext::MakeGL(param, displayParam.fGrContextOptions);
-        directContext = context.get();
-        //if (!directContext && displayParams->fMSAASampleCount > 1) {
-        //    displayParams->fMSAASampleCount /= 2;
-        //    this->initializeContext();
-        //    return;
-        //}
+        directContext = context.release();
+        if (!directContext && displayParam.fMSAASampleCount > 1) {
+            //displayParams->fMSAASampleCount /= 2;
+            //this->initializeContext();
+            return;
+        }
 	}
 
     SkSurface* WindowBase::getSurface(int w, int h)
@@ -74,27 +74,8 @@ namespace RRS
             kRGBA_8888_SkColorType,
             displayParam.fColorSpace,
             &displayParam.fSurfaceProps);
-        return fSurface.get();
+        return fSurface.release();
     }
 
-    void WindowBase::paint() {
-        calculateLayout();
-        SkSurface* surface = getSurface(Width, Height);
-        if (surface == nullptr) {
-            return;
-        }
-        auto h = surface->height();
-        auto canvas = surface->getCanvas();
-        canvas->clear(SK_ColorWHITE);
-        for (auto element : Children)
-        {
-            element->Paint(canvas);
-        }
-        surface->flushAndSubmit();
-        HDC dc = GetDC(hwnd);
-        SwapBuffers(dc);
-        ReleaseDC(hwnd, dc);
-        delete surface;
-        //todo destroy context
-    }
+
 }
