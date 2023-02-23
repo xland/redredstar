@@ -142,6 +142,7 @@ namespace RRS {
 		void paint();
 		bool createNativeWindow();
 		SkSurface* getSurface(int w, int h);
+		void disposeSurfaceResource();
 		WindowContext* windowContext; 
 		YGConfig* layoutConfig;
 		YGNode* layout;

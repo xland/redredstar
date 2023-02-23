@@ -18,7 +18,8 @@ namespace RRS
 	static DisplayParams displayParam;
 	void WindowBase::initSurface()
 	{
-		displayParam.fMSAASampleCount = GrNextPow2(displayParam.fMSAASampleCount);
+        //todo settings.antialiasingLevel = 8;
+		displayParam.fMSAASampleCount = GrNextPow2(displayParam.fMSAASampleCount); // todo 好像8更好一些
         HDC dc = GetDC(hwnd);
         hglrc = SkCreateWGLContext(dc, displayParam.fMSAASampleCount, false, kGLPreferCompatibilityProfile_SkWGLContextRequest);
         if (nullptr == hglrc) {
@@ -67,7 +68,6 @@ namespace RRS
         GrGLFramebufferInfo fbInfo;
         fbInfo.fFBOID = buffer;
         fbInfo.fFormat = GR_GL_RGBA8;
-        //todo settings.antialiasingLevel = 8;
         GrBackendRenderTarget backendRT(w, h, sampleCount, stencilBits, fbInfo);
         auto fSurface = SkSurface::MakeFromBackendRenderTarget(directContext, backendRT,
             kBottomLeft_GrSurfaceOrigin,
@@ -76,6 +76,14 @@ namespace RRS
             &displayParam.fSurfaceProps);
         return fSurface.release();
     }
-
-
+    void WindowBase::disposeSurfaceResource() 
+    {
+        if (directContext) {
+            directContext->abandonContext();
+            delete directContext;
+        }
+        delete backendContext;
+        wglDeleteContext(hglrc);
+        hglrc = nullptr;
+    }
 }

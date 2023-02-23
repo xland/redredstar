@@ -25,13 +25,13 @@ namespace RRS
 		auto flag = OnClose();
 		if (flag) {
 			disposeLayout();
+			disposeSurfaceResource();
 			DestroyWindow(hwnd);
 		}
 		OnClosed();
 	}
 	void WindowBase::paint() {
 		calculateLayout();
-		//SkSurface* surface = pointer->getBackbufferSurface(Width, Height).get();
 		SkSurface* surface = getSurface(Width, Height);
 		if (surface == nullptr) {
 			return;
