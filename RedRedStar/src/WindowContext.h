@@ -18,16 +18,7 @@ public:
     virtual ~WindowContext();
     sk_sp<SkSurface> getBackbufferSurface(int w,int h);
     void swapBuffers();
-    bool isValid();
-    void resize(int w, int h);
-    DisplayParams* getDisplayParams() { return displayParams; }
     void setDisplayParams(DisplayParams* params);
-    GrDirectContext* directContext() const { return fContext.get(); }
-    int width() const { return fWidth; }
-    int height() const { return fHeight; }
-    SkISize dimensions() const { return {fWidth, fHeight}; }
-    int sampleCount() const { return fSampleCount; }
-    int stencilBits() const { return fStencilBits; }
 
 protected:
     void initializeContext();
@@ -37,8 +28,6 @@ protected:
     void destroyContext();
     sk_sp<const GrGLInterface> onInitializeContext();
     sk_sp<GrDirectContext> fContext;
-    int               fWidth;
-    int               fHeight;
     DisplayParams*    displayParams;
     // parameters obtained from the native window
     // Note that the platform .cpp file is responsible for

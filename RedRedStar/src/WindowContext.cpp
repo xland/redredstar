@@ -48,18 +48,10 @@ void WindowContext::initializeContext() {
         return;
     }
 }
-bool WindowContext::isValid() { 
-    return SkToBool(fBackendContext.get());
-}
 void WindowContext::swapBuffers() {
     HDC dc = GetDC(fHWND);
     SwapBuffers(dc);
     ReleaseDC(fHWND, dc);
-}
-
-void WindowContext::resize(int w, int h) {
-    this->destroyContext();
-    this->initializeContext();
 }
 
 void WindowContext::setDisplayParams(DisplayParams* params) {
@@ -108,12 +100,7 @@ sk_sp<const GrGLInterface> WindowContext::onInitializeContext() {
         // Get sample count if the MSAA WGL extension is present
         if (extensions.hasExtension(dc, "WGL_ARB_multisample")) {
             static const int kSampleCountAttr = SK_WGL_SAMPLES;
-            extensions.getPixelFormatAttribiv(dc,
-                pixelFormat,
-                0,
-                1,
-                &kSampleCountAttr,
-                &fSampleCount);
+            extensions.getPixelFormatAttribiv(dc,pixelFormat,0,1,&kSampleCountAttr,&fSampleCount);
             fSampleCount = std::max(fSampleCount, 1);
         }
         else {

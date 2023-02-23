@@ -157,6 +157,9 @@
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Element.cpp" />
     <ClCompile Include="src\WindowBase.cpp" />
+    <ClCompile Include="src\WindowBaseLayout.cpp" />
+    <ClCompile Include="src\WindowBaseNative.cpp" />
+    <ClCompile Include="src\WindowBaseSurface.cpp" />
     <ClCompile Include="src\WindowContext.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -6,6 +6,10 @@
 #include "Element.h"
 class YGConfig;
 class YGNode;
+struct GrGLInterface;
+class GrDirectContext;
+class SkSurface;
+
 namespace RRS {
 	class DisplayParams;
 	class WindowContext;
@@ -31,22 +35,33 @@ namespace RRS {
 		/// </returns>
 		bool Load();
 		/// <summary>
-		/// show the window
+		/// Show the window
 		/// </summary>
 		void Show();
 		/// <summary>
-		/// show the window
+		/// Hide the window
 		/// </summary>
 		void Hide();
 		/// <summary>
-		/// close the window
+		/// Close the window
 		/// </summary>
 		void Close();
 		/// <summary>
 		/// Add an element to the window
 		/// </summary>
 		void AddElement(Element* element);
+		/// <summary>
+		/// set window's layout padding with one integer to all edge
+		/// </summary>
+		/// <param name="padding"></param>
 		void SetLayoutPadding(int padding);
+		/// <summary>
+		/// set window layout padding
+		/// </summary>
+		/// <param name="left"></param>
+		/// <param name="top"></param>
+		/// <param name="right"></param>
+		/// <param name="bottom"></param>
 		void SetLayoutPadding(int left,int top,int right,int bottom);
 		void SetLayoutMargin(int margin);
 		void SetLayoutMargin(int left, int top, int right, int bottom);
@@ -120,10 +135,21 @@ namespace RRS {
 		friend LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		LRESULT hitTest(HWND hwnd, LPARAM lParam);
-		void onPaint();
-		DisplayParams* displayParams;
+		void initLayout();
+		void initSurface();
+		void disposeLayout();
+		void calculateLayout();
+		void paint();
+		bool createNativeWindow();
+		SkSurface* getSurface(int w, int h);
 		WindowContext* windowContext; 
 		YGConfig* layoutConfig;
-		YGNode* layoutRoot;
+		YGNode* layout;
+
+		int sampleCount = 1;
+		int stencilBits = 0;
+		HGLRC hglrc;
+		const GrGLInterface* backendContext;
+		GrDirectContext* directContext; 
 	};
 }

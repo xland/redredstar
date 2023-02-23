@@ -47,5 +47,14 @@
     <ClCompile Include="src\Element.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="src\WindowBaseLayout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WindowBaseNative.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WindowBaseSurface.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
