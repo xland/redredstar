@@ -48,17 +48,17 @@ namespace RRS {
 			X = (screenRect.right - Width) / 2;
 			Y = (screenRect.bottom - Height) / 2;
 		}
-		hwnd = CreateWindow(windowClassName.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW, X, Y, Width, Height,
+		Hwnd = CreateWindow(windowClassName.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW, X, Y, Width, Height,
 			nullptr, nullptr, App::Get()->HInstance, nullptr);
-		if (!hwnd)
+		if (!Hwnd)
 		{
 			//todo log
 			return false;
 		}
 		//RECT frame;
 		//GetClientRect(hwnd, &frame);
-		SetWindowLongPtr(hwnd, GWLP_USERDATA, (LONG_PTR)this);
-		RegisterTouchWindow(hwnd, 0);
+		SetWindowLongPtr(Hwnd, GWLP_USERDATA, (LONG_PTR)this);
+		RegisterTouchWindow(Hwnd, 0);
 		return true;
     }
 	LRESULT CALLBACK WindowBase::winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {

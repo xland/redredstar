@@ -10,8 +10,6 @@ namespace RRS {
 	}
 	void WindowBase::initLayout() 
 	{
-		layoutConfig = YGConfigNew();
-		layout = YGNodeNewWithConfig(layoutConfig);
 		YGNodeStyleSetFlexDirection(layout, YGFlexDirectionColumn);
 		YGNodeStyleSetJustifyContent(layout, YGJustifyCenter);
 	}

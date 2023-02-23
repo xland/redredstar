@@ -68,7 +68,7 @@ namespace RRS {
 		/// <summary>
 		/// window's handle
 		/// </summary>
-		HWND hwnd;
+		HWND Hwnd;
 		/// <summary>
 		/// window position x
 		/// ShowInCenterScreen must be set to false
@@ -143,7 +143,7 @@ namespace RRS {
 		bool createNativeWindow();
 		SkSurface* getSurface(int w, int h);
 		void disposeSurfaceResource();
-		WindowContext* windowContext; 
+
 		YGConfig* layoutConfig;
 		YGNode* layout;
 

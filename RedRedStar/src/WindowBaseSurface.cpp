@@ -20,7 +20,7 @@ namespace RRS
 	{
         //todo settings.antialiasingLevel = 8;
 		displayParam.fMSAASampleCount = GrNextPow2(displayParam.fMSAASampleCount); // todo 好像8更好一些
-        HDC dc = GetDC(hwnd);
+        HDC dc = GetDC(Hwnd);
         hglrc = SkCreateWGLContext(dc, displayParam.fMSAASampleCount, false, kGLPreferCompatibilityProfile_SkWGLContextRequest);
         if (nullptr == hglrc) {
             return;

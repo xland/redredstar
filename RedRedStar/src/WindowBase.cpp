@@ -3,11 +3,14 @@
 #include "include/core/SkSurface.h"
 #include "../include/RRS/Element.h"
 #include <GL/gl.h>
+#include <Yoga.h>
 
 namespace RRS 
 {
-	WindowContext* pointer;
-	WindowBase::WindowBase():backendContext{nullptr},hglrc{nullptr}
+	WindowBase::WindowBase()
+		:backendContext{nullptr},hglrc{nullptr},directContext{nullptr}
+		,layoutConfig{ YGConfigNew() }, layout{ YGNodeNewWithConfig(layoutConfig) }
+		,Hwnd{nullptr}
 	{
 
 	}
@@ -26,7 +29,7 @@ namespace RRS
 		if (flag) {
 			disposeLayout();
 			disposeSurfaceResource();
-			DestroyWindow(hwnd);
+			DestroyWindow(Hwnd);
 		}
 		OnClosed();
 	}
@@ -43,15 +46,15 @@ namespace RRS
 			element->Paint(canvas);
 		}
 		surface->flushAndSubmit();
-		HDC dc = GetDC(hwnd);
+		HDC dc = GetDC(Hwnd);
 		SwapBuffers(dc);
-		ReleaseDC(hwnd, dc);
+		ReleaseDC(Hwnd, dc);
 		delete surface;
 		//todo destroy context
 	}
 	void WindowBase::Show() 
 	{
-		ShowWindow(hwnd, SW_SHOW);
+		ShowWindow(Hwnd, SW_SHOW);
 	}
 	void WindowBase::Hide() 
 	{
