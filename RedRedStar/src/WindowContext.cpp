@@ -74,16 +74,11 @@ sk_sp<SkSurface> WindowContext::getBackbufferSurface() {
         if (fContext) {
             GrGLint buffer;
             GR_GL_CALL(fBackendContext.get(), GetIntegerv(GR_GL_FRAMEBUFFER_BINDING, &buffer));
-
             GrGLFramebufferInfo fbInfo;
             fbInfo.fFBOID = buffer;
             fbInfo.fFormat = GR_GL_RGBA8;
-
-            GrBackendRenderTarget backendRT(fWidth,
-                fHeight,
-                fSampleCount,
-                fStencilBits,
-                fbInfo);
+            //todo settings.antialiasingLevel = 8;
+            GrBackendRenderTarget backendRT(fWidth, fHeight, fSampleCount, fStencilBits, fbInfo);
             fSurface = SkSurface::MakeFromBackendRenderTarget(fContext.get(), backendRT,
                 kBottomLeft_GrSurfaceOrigin,
                 kRGBA_8888_SkColorType,

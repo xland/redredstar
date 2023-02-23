@@ -46,6 +46,10 @@ namespace RRS {
 		/// Add an element to the window
 		/// </summary>
 		void AddElement(Element* element);
+		void SetLayoutPadding(int padding);
+		void SetLayoutPadding(int left,int top,int right,int bottom);
+		void SetLayoutMargin(int margin);
+		void SetLayoutMargin(int left, int top, int right, int bottom);
 		/// <summary>
 		/// window's handle
 		/// </summary>

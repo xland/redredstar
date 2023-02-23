@@ -14,7 +14,7 @@ namespace RRS {
 
 class WindowContext {
 public:
-    WindowContext(HWND, DisplayParams*);
+    WindowContext(HWND, RRS::DisplayParams*);
     virtual ~WindowContext();
     sk_sp<SkSurface> getBackbufferSurface();
     void swapBuffers();

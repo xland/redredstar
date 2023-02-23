@@ -7,6 +7,7 @@
 #include "DisplayParams.h"
 #include "WindowContext.h"
 #include <windowsx.h>
+#include <GL/gl.h>
 
 namespace RRS {
     LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -67,9 +68,8 @@ namespace RRS {
 
 		layoutConfig = YGConfigNew();
 		layoutRoot = YGNodeNewWithConfig(layoutConfig);
-		YGNodeStyleSetFlexDirection(layoutRoot, YGFlexDirectionRow);
-		YGNodeStyleSetPadding(layoutRoot, YGEdgeAll, 20);
-		YGNodeStyleSetMargin(layoutRoot, YGEdgeAll, 20);
+		YGNodeStyleSetFlexDirection(layoutRoot, YGFlexDirectionColumn);	
+		YGNodeStyleSetJustifyContent(layoutRoot, YGJustifyCenter);
 
 		OnLoad();
 		return true;
@@ -95,19 +95,22 @@ namespace RRS {
 			onPaint();
 			EndPaint(hwnd, &ps);
 		case WM_NCCALCSIZE: {
-			WINDOWPLACEMENT      wp;
-			LPNCCALCSIZE_PARAMS  szr;
-			wp.length = sizeof(WINDOWPLACEMENT);
-			GetWindowPlacement(hwnd, &wp);
-			szr = LPNCCALCSIZE_PARAMS(lParam);
-			if (wp.showCmd == SW_SHOWMAXIMIZED) {
-				RECT WorkAreaRect;
-				SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkAreaRect, 0);
-				szr->rgrc[0] = WorkAreaRect;
-			}
-			else if (wp.showCmd == SW_SHOWNORMAL) {
-			}
-			return 0;
+			//WINDOWPLACEMENT      wp;
+			//LPNCCALCSIZE_PARAMS  szr;
+			//wp.length = sizeof(WINDOWPLACEMENT);
+			//GetWindowPlacement(hwnd, &wp);
+			//szr = LPNCCALCSIZE_PARAMS(lParam);
+			//if (szr) {
+			//	if (szr && wp.showCmd == SW_SHOWMAXIMIZED) {
+			//		RECT WorkAreaRect;
+			//		SystemParametersInfo(SPI_GETWORKAREA, 0, &WorkAreaRect, 0);
+			//		szr->rgrc[0] = WorkAreaRect;
+			//	}
+			//	//else if (wp.showCmd == SW_SHOWNORMAL) {
+			//	//}
+			//}
+			//return 0;
+			return DefWindowProc(hwnd, msg, wParam, lParam);
 		}
 		case WM_CLOSE: {
 			Close();
@@ -166,6 +169,7 @@ namespace RRS {
 			return;
 		}
 		SkSurface* surface = backbuffer.get();
+		auto h = surface->height();
 		auto canvas = surface->getCanvas();
 		canvas->clear(SK_ColorWHITE);
 		for (auto element:Children)
@@ -188,5 +192,27 @@ namespace RRS {
 		element->OwnerWindow = this;
 		YGNodeInsertChild(layoutRoot, element->Layout, Children.size());
 		Children.push_back(element);
+	}
+	void WindowBase::SetLayoutPadding(int padding) 
+	{
+		YGNodeStyleSetPadding(layoutRoot, YGEdgeAll, padding);
+	}
+	void WindowBase::SetLayoutPadding(int left, int top, int right, int bottom)
+	{
+		YGNodeStyleSetPadding(layoutRoot, YGEdgeLeft, left);
+		YGNodeStyleSetPadding(layoutRoot, YGEdgeTop, top);
+		YGNodeStyleSetPadding(layoutRoot, YGEdgeRight, right);
+		YGNodeStyleSetPadding(layoutRoot, YGEdgeBottom, bottom);
+	}
+	void WindowBase::SetLayoutMargin(int margin)
+	{
+		YGNodeStyleSetMargin(layoutRoot, YGEdgeAll, 20);
+	}
+	void WindowBase::SetLayoutMargin(int left, int top, int right, int bottom)
+	{
+		YGNodeStyleSetMargin(layoutRoot, YGEdgeLeft, left);
+		YGNodeStyleSetMargin(layoutRoot, YGEdgeTop, top);
+		YGNodeStyleSetMargin(layoutRoot, YGEdgeRight, right);
+		YGNodeStyleSetMargin(layoutRoot, YGEdgeBottom, bottom);
 	}
 }
