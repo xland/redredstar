@@ -16,7 +16,7 @@ class WindowContext {
 public:
     WindowContext(HWND, RRS::DisplayParams*);
     virtual ~WindowContext();
-    sk_sp<SkSurface> getBackbufferSurface();
+    sk_sp<SkSurface> getBackbufferSurface(int w,int h);
     void swapBuffers();
     bool isValid();
     void resize(int w, int h);
@@ -48,7 +48,6 @@ protected:
     HWND              fHWND;
     HGLRC             fHGLRC;
     sk_sp<const GrGLInterface> fBackendContext;
-    sk_sp<SkSurface>           fSurface;
 };
 
 }

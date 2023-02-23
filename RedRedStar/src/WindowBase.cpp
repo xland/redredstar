@@ -65,7 +65,8 @@ namespace RRS {
 		RegisterTouchWindow(hwnd, 0);
 		displayParams = new DisplayParams();
 		windowContext = new WindowContext(hwnd, displayParams);
-
+		//RECT frame;
+		//GetClientRect(hwnd, &frame);
 		layoutConfig = YGConfigNew();
 		layoutRoot = YGNodeNewWithConfig(layoutConfig);
 		YGNodeStyleSetFlexDirection(layoutRoot, YGFlexDirectionColumn);	
@@ -164,7 +165,7 @@ namespace RRS {
 	}
 	void WindowBase::onPaint() {
 		YGNodeCalculateLayout(layoutRoot, Width, Height, YGDirectionLTR);
-		sk_sp<SkSurface> backbuffer = windowContext->getBackbufferSurface();
+		sk_sp<SkSurface> backbuffer = windowContext->getBackbufferSurface(Width,Height);
 		if (backbuffer == nullptr) {
 			return;
 		}
@@ -178,6 +179,7 @@ namespace RRS {
 		}
 		backbuffer->flushAndSubmit();
 		windowContext->swapBuffers();
+		backbuffer.reset(nullptr);
 	}
 	void WindowBase::Show() 
 	{

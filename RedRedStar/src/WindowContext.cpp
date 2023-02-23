@@ -16,7 +16,7 @@
 namespace RRS {
 
 WindowContext::WindowContext(HWND wnd, DisplayParams* params)
-        : displayParams(params), fBackendContext(nullptr) , fSurface(nullptr) , fHWND(wnd) , fHGLRC(nullptr)
+        : displayParams(params), fBackendContext(nullptr) , fHWND(wnd) , fHGLRC(nullptr)
 {
     displayParams->fMSAASampleCount = GrNextPow2(displayParams->fMSAASampleCount);
     // any config code here (particularly for msaa)?
@@ -28,7 +28,6 @@ WindowContext::~WindowContext() {
 }
 
 void WindowContext::destroyContext() {
-    fSurface.reset(nullptr);
     if (fContext) {
         // in case we have outstanding refs to this (lua?)
         fContext->abandonContext();
@@ -53,9 +52,9 @@ bool WindowContext::isValid() {
     return SkToBool(fBackendContext.get());
 }
 void WindowContext::swapBuffers() {
-    HDC dc = GetDC((HWND)fHWND);
+    HDC dc = GetDC(fHWND);
     SwapBuffers(dc);
-    ReleaseDC((HWND)fHWND, dc);
+    ReleaseDC(fHWND, dc);
 }
 
 void WindowContext::resize(int w, int h) {
@@ -69,31 +68,26 @@ void WindowContext::setDisplayParams(DisplayParams* params) {
     this->initializeContext();
 }
 
-sk_sp<SkSurface> WindowContext::getBackbufferSurface() {
-    if (nullptr == fSurface) {
-        if (fContext) {
-            GrGLint buffer;
-            GR_GL_CALL(fBackendContext.get(), GetIntegerv(GR_GL_FRAMEBUFFER_BINDING, &buffer));
-            GrGLFramebufferInfo fbInfo;
-            fbInfo.fFBOID = buffer;
-            fbInfo.fFormat = GR_GL_RGBA8;
-            //todo settings.antialiasingLevel = 8;
-            GrBackendRenderTarget backendRT(fWidth, fHeight, fSampleCount, fStencilBits, fbInfo);
-            fSurface = SkSurface::MakeFromBackendRenderTarget(fContext.get(), backendRT,
-                kBottomLeft_GrSurfaceOrigin,
-                kRGBA_8888_SkColorType,
-                displayParams->fColorSpace,
-                &displayParams->fSurfaceProps);
-        }
-    }
-
+sk_sp<SkSurface> WindowContext::getBackbufferSurface(int w,int h) {
+    glViewport(0, 0, w, h);
+    GrGLint buffer;
+    GR_GL_CALL(fBackendContext.get(), GetIntegerv(GR_GL_FRAMEBUFFER_BINDING, &buffer));
+    GrGLFramebufferInfo fbInfo;
+    fbInfo.fFBOID = buffer;
+    fbInfo.fFormat = GR_GL_RGBA8;
+    //todo settings.antialiasingLevel = 8;
+    GrBackendRenderTarget backendRT(w, h, fSampleCount, fStencilBits, fbInfo);
+    auto fSurface = SkSurface::MakeFromBackendRenderTarget(fContext.get(), backendRT,
+        kBottomLeft_GrSurfaceOrigin,
+        kRGBA_8888_SkColorType,
+        displayParams->fColorSpace,
+        &displayParams->fSurfaceProps);
     return fSurface;
 }
 
 sk_sp<const GrGLInterface> WindowContext::onInitializeContext() {
     HDC dc = GetDC(fHWND);
-    fHGLRC = SkCreateWGLContext(dc, displayParams->fMSAASampleCount, false /* deepColor */,
-        kGLPreferCompatibilityProfile_SkWGLContextRequest);
+    fHGLRC = SkCreateWGLContext(dc, displayParams->fMSAASampleCount, false,kGLPreferCompatibilityProfile_SkWGLContextRequest);
     if (nullptr == fHGLRC) {
         return nullptr;
     }
@@ -101,32 +95,16 @@ sk_sp<const GrGLInterface> WindowContext::onInitializeContext() {
     if (extensions.hasExtension(dc, "WGL_EXT_swap_control")) {
         extensions.swapInterval(displayParams->fDisableVsync ? 0 : 1);
     }
-    // Look to see if RenderDoc is attached. If so, re-create the context with a core profile
-    if (wglMakeCurrent(dc, fHGLRC)) {
-        auto interfaceObj = GrGLMakeNativeInterface();
-        bool renderDocAttached = interfaceObj->hasExtension("GL_EXT_debug_tool");
-        interfaceObj.reset(nullptr);
-        if (renderDocAttached) {
-            wglDeleteContext(fHGLRC);
-            fHGLRC = SkCreateWGLContext(dc, displayParams->fMSAASampleCount, false /* deepColor */,
-                kGLPreferCoreProfile_SkWGLContextRequest);
-            if (nullptr == fHGLRC) {
-                return nullptr;
-            }
-        }
-    }
     if (wglMakeCurrent(dc, fHGLRC)) {
         glClearStencil(0);
         glClearColor(0, 0, 0, 0);
         glStencilMask(0xffffffff);
         glClear(GL_STENCIL_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-
         // use DescribePixelFormat to get the stencil and color bit depth.
         int pixelFormat = GetPixelFormat(dc);
         PIXELFORMATDESCRIPTOR pfd;
         DescribePixelFormat(dc, pixelFormat, sizeof(pfd), &pfd);
         fStencilBits = pfd.cStencilBits;
-
         // Get sample count if the MSAA WGL extension is present
         if (extensions.hasExtension(dc, "WGL_ARB_multisample")) {
             static const int kSampleCountAttr = SK_WGL_SAMPLES;
@@ -140,13 +118,7 @@ sk_sp<const GrGLInterface> WindowContext::onInitializeContext() {
         }
         else {
             fSampleCount = 1;
-        }
-
-        RECT rect;
-        GetClientRect(fHWND, &rect);
-        fWidth = rect.right - rect.left;
-        fHeight = rect.bottom - rect.top;
-        glViewport(0, 0, fWidth, fHeight);
+        }        
     }
     return GrGLMakeNativeInterface();
 }
