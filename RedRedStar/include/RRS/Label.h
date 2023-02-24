@@ -10,6 +10,8 @@ namespace RRS {
 			const char* Text;
 	private:
 		SkFont* font;
+		float advanceX;
+		float advanceY;
 	};
 }
 

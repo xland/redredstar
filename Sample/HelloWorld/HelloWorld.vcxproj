@@ -135,7 +135,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>zlib.lib;svg.lib;skunicode.lib;sktext.lib;skshaper.lib;sksg.lib;skresources.lib;skparagraph.lib;skottie.lib;skia.lib;pathkit.lib;particles.lib;libwebp_sse41.lib;libwebp.lib;libpng.lib;libjpeg.lib;icu.lib;harfbuzz.lib;expat.lib;compression_utils_portable.lib;OpenGL32.Lib;yogacore.lib;RedRedStar.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>RedRedStar.lib;zlib.lib;svg.lib;skunicode.lib;sktext.lib;skshaper.lib;sksg.lib;skresources.lib;skparagraph.lib;skottie.lib;skia.lib;pathkit.lib;particles.lib;libwebp_sse41.lib;libwebp.lib;libpng.lib;libjpeg.lib;icu.lib;harfbuzz.lib;expat.lib;compression_utils_portable.lib;OpenGL32.Lib;yogacore.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;D:\sdk\skia\out\$(configuration);D:\sdk\yoga\build\yoga\$(configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Manifest>

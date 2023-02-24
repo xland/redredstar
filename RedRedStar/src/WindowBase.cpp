@@ -43,7 +43,9 @@ namespace RRS
 		canvas->clear(BackgroundColor);
 		for (auto element : Children)
 		{
+			canvas->save();
 			element->Paint(canvas);
+			canvas->restore();
 		}
 		surface->flushAndSubmit();
 		HDC dc = GetDC(Hwnd);

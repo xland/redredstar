@@ -4,21 +4,22 @@
 #include "../include/RRS/Layout.h"
 #include "modules/skparagraph/include/TextStyle.h"
 namespace RRS {
-	Label::Label(const char* text):Text {text},font{new SkFont(nullptr,20)}
+	Label::Label(const char* text):Text {text},font{new SkFont(nullptr,40)}
 	{
 		SkRect rect;
 		SkString str{ Text };
-		font->setSubpixel(true);
 		font->measureText(Text, strlen(Text), SkTextEncoding::kUTF8, &rect);
+		font->setSubpixel(true);
+		advanceX = rect.x();
+		advanceY = -rect.y();
 		Layout->SetSize(rect.width(), rect.height());
 	}
 	void Label::Paint(SkCanvas* canvas)
-	{
-		SkPaint paint;
-		paint.setColor(BackgroundColor);
-		paint.setStrokeJoin(SkPaint::Join::kRound_Join);
+	{		
 		auto layoutRect = Layout->GetRectangle();
-		paint.setColor(SK_ColorBLACK);		
-		canvas->drawString(Text, layoutRect.X, layoutRect.Y, *font, paint);
+		canvas->translate(layoutRect.X, layoutRect.Y);
+		SkPaint paint;
+		paint.setColor(SK_ColorWHITE);
+		canvas->drawString(Text, advanceX, advanceY, *font, paint);
 	}
 }

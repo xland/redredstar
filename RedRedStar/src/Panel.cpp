@@ -9,12 +9,13 @@ namespace RRS {
 	}
 	void Panel::Paint(SkCanvas* canvas)
 	{
+		auto layoutRect = Layout->GetRectangle();
+		canvas->translate(layoutRect.X, layoutRect.Y);
 		SkPaint paint;
 		paint.setColor(BackgroundColor);
 		paint.setStrokeJoin(SkPaint::Join::kRound_Join);
-		auto layoutRect = Layout->GetRectangle();
-		SkRect rect = SkRect::MakeXYWH(layoutRect.X, layoutRect.Y, layoutRect.W, layoutRect.H);
-		canvas->drawRoundRect(rect, 12, 12, paint);
+		SkRect rect = SkRect::MakeXYWH(0, 0, layoutRect.W, layoutRect.H);
+		canvas->drawRoundRect(rect, 12.0, 12.0, paint);
 		for (auto element : Children)
 		{
 			element->Paint(canvas);
