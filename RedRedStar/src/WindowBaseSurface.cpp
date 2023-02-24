@@ -18,8 +18,6 @@ namespace RRS
 	static DisplayParams displayParam;
 	void WindowBase::initSurface()
 	{
-        //todo settings.antialiasingLevel = 8;
-		displayParam.fMSAASampleCount = GrNextPow2(displayParam.fMSAASampleCount); // todo 好像8更好一些
         HDC dc = GetDC(Hwnd);
         hglrc = SkCreateWGLContext(dc, displayParam.fMSAASampleCount, false, kGLPreferCompatibilityProfile_SkWGLContextRequest);
         if (nullptr == hglrc) {
@@ -39,25 +37,11 @@ namespace RRS
             PIXELFORMATDESCRIPTOR pfd;
             DescribePixelFormat(dc, pixelFormat, sizeof(pfd), &pfd);
             stencilBits = pfd.cStencilBits;
-            // Get sample count if the MSAA WGL extension is present
-            if (extensions.hasExtension(dc, "WGL_ARB_multisample")) {
-                static const int sampleCountAttr = SK_WGL_SAMPLES;
-                extensions.getPixelFormatAttribiv(dc, pixelFormat, 0, 1, &sampleCountAttr, &sampleCount);
-                sampleCount = std::max(sampleCount, 1);
-            }
-            else {
-                sampleCount = 1;
-            }
         }
         auto param = GrGLMakeNativeInterface();
         backendContext = param.release();
         auto context = GrDirectContext::MakeGL(param, displayParam.fGrContextOptions);
         directContext = context.release();
-        if (!directContext && displayParam.fMSAASampleCount > 1) {
-            //displayParams->fMSAASampleCount /= 2;
-            //this->initializeContext();
-            return;
-        }
 	}
 
     SkSurface* WindowBase::getSurface(int w, int h)
@@ -68,7 +52,7 @@ namespace RRS
         GrGLFramebufferInfo fbInfo;
         fbInfo.fFBOID = buffer;
         fbInfo.fFormat = GR_GL_RGBA8;
-        GrBackendRenderTarget backendRT(w, h, sampleCount, stencilBits, fbInfo);
+        GrBackendRenderTarget backendRT(w, h, displayParam.fMSAASampleCount, stencilBits, fbInfo);
         auto fSurface = SkSurface::MakeFromBackendRenderTarget(directContext, backendRT,
             kBottomLeft_GrSurfaceOrigin,
             kRGBA_8888_SkColorType,

@@ -96,8 +96,8 @@ namespace RRS {
 		case WM_GETMINMAXINFO: {
 			MINMAXINFO* mminfo;
 			mminfo = (PMINMAXINFO)lParam;
-			mminfo->ptMinTrackSize.x = 1024;
-			mminfo->ptMinTrackSize.y = 768;
+			mminfo->ptMinTrackSize.x = WidthMinimum;
+			mminfo->ptMinTrackSize.y = HeightMinimum;
 			mminfo->ptMaxPosition.x = 0;
 			mminfo->ptMaxPosition.y = 0;
 			return 0;

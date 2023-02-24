@@ -35,14 +35,6 @@ namespace RRS {
 		/// ShowInCenterScreen must be set to false
 		/// </summary>
 		int Y = 0;
-		/// <summary>
-		/// element width
-		/// </summary>
-		float Width = 200;
-		/// <summary>
-		/// element height
-		/// </summary>
-		float Height = 200;
 		Color BackgroundColor;
 		/// <summary>
 		/// The window pointer this element belong to

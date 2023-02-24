@@ -72,6 +72,22 @@ namespace RRS {
 		/// </summary>
 		int Height = 700;
 		/// <summary>
+		/// window width
+		/// </summary>
+		int WidthMinimum = 1000;
+		/// <summary>
+		/// window height
+		/// </summary>
+		int HeightMinimum = 700;
+		/// <summary>
+		/// window width
+		/// </summary>
+		int WidthMaximum = 2000;
+		/// <summary>
+		/// window height
+		/// </summary>
+		int HeightMaximum = 1400;
+		/// <summary>
 		/// does window has frame
 		/// </summary>
 		bool Frame = true;
@@ -125,7 +141,6 @@ namespace RRS {
 		bool createNativeWindow();
 		SkSurface* getSurface(int w, int h);
 		void disposeSurfaceResource();
-		int sampleCount = 1;
 		int stencilBits = 0;
 		HGLRC hglrc;
 		const GrGLInterface* backendContext;

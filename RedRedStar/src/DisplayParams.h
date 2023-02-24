@@ -9,7 +9,7 @@ namespace RRS {
         DisplayParams()
             : colorType(kN32_SkColorType)
             , fColorSpace(nullptr) 
-            , fMSAASampleCount(1)
+            , fMSAASampleCount(8)
             , fSurfaceProps(0, kRGB_H_SkPixelGeometry)
             , fDisableVsync(false)
             , fDelayDrawableAcquisition(false)
