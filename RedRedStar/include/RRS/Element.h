@@ -1,8 +1,10 @@
 #pragma once
+#include "CommonType.h"
+#include "Color.h"
 class SkCanvas;
-class YGNode;
 namespace RRS {
 	class WindowBase;
+	class Layout;
 	class Element
 	{
 	public:
@@ -21,11 +23,8 @@ namespace RRS {
 		/// Add an element to the window
 		/// </summary>
 		void AddElement(Element* element);
-		void SetLayoutPadding(int padding);
-		void SetLayoutPadding(int left, int top, int right, int bottom);
-		void SetLayoutMargin(int margin);
-		void SetLayoutMargin(int left, int top, int right, int bottom);
-		void SetBackgroundColor(unsigned r, unsigned g, unsigned b, unsigned a);
+		
+		void SetBackgroundColor(Color);
 		/// <summary>
 		/// element position x
 		/// ShowInCenterScreen must be set to false
@@ -39,12 +38,12 @@ namespace RRS {
 		/// <summary>
 		/// element width
 		/// </summary>
-		int Width = 200;
+		float Width = 200;
 		/// <summary>
 		/// element height
 		/// </summary>
-		int Height = 200;
-		uint32_t BackgroundColor;
+		float Height = 200;
+		Color BackgroundColor;
 		/// <summary>
 		/// The window pointer this element belong to
 		/// </summary>
@@ -57,10 +56,8 @@ namespace RRS {
 		/// 
 		/// </summary>
 		std::vector<Element*> Children;
-		/// <summary>
-		/// 
-		/// </summary>
-		YGNode* Layout;
+		Layout* Layout;
+		
 	private:
 
 	};

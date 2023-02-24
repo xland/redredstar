@@ -4,8 +4,6 @@
 #include <string>
 #include <vector>
 #include "Element.h"
-class YGConfig;
-class YGNode;
 struct GrGLInterface;
 class GrDirectContext;
 class SkSurface;
@@ -13,6 +11,7 @@ class SkSurface;
 namespace RRS {
 	class DisplayParams;
 	class WindowContext;
+	class Layout;
 	class WindowBase
 	{
 	public:
@@ -51,21 +50,6 @@ namespace RRS {
 		/// </summary>
 		void AddElement(Element* element);
 		/// <summary>
-		/// set window's layout padding with one integer to all edge
-		/// </summary>
-		/// <param name="padding"></param>
-		void SetLayoutPadding(int padding);
-		/// <summary>
-		/// set window layout padding
-		/// </summary>
-		/// <param name="left"></param>
-		/// <param name="top"></param>
-		/// <param name="right"></param>
-		/// <param name="bottom"></param>
-		void SetLayoutPadding(int left,int top,int right,int bottom);
-		void SetLayoutMargin(int margin);
-		void SetLayoutMargin(int left, int top, int right, int bottom);
-		/// <summary>
 		/// window's handle
 		/// </summary>
 		HWND Hwnd;
@@ -103,6 +87,7 @@ namespace RRS {
 		/// 
 		/// </summary>
 		std::vector<Element*> Children;
+		Layout* Layout;
 		
 	protected:
 		/// <summary>
@@ -135,18 +120,11 @@ namespace RRS {
 		friend LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		LRESULT CALLBACK winProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 		LRESULT hitTest(HWND hwnd, LPARAM lParam);
-		void initLayout();
 		void initSurface();
-		void disposeLayout();
-		void calculateLayout();
 		void paint();
 		bool createNativeWindow();
 		SkSurface* getSurface(int w, int h);
 		void disposeSurfaceResource();
-
-		YGConfig* layoutConfig;
-		YGNode* layout;
-
 		int sampleCount = 1;
 		int stencilBits = 0;
 		HGLRC hglrc;

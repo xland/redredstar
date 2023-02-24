@@ -2,24 +2,21 @@
 #include "include/core/SkCanvas.h"
 #include "include/core/SkSurface.h"
 #include "../include/RRS/Element.h"
-#include <GL/gl.h>
+#include "../include/RRS/Layout.h"
 #include <Yoga.h>
 
 namespace RRS 
 {
 	WindowBase::WindowBase()
 		:backendContext{nullptr},hglrc{nullptr},directContext{nullptr}
-		,layoutConfig{ YGConfigNew() }, layout{ YGNodeNewWithConfig(layoutConfig) }
-		,Hwnd{nullptr}
+		,Layout{ new RRS::Layout() } ,Hwnd{nullptr}
 	{
-
 	}
 	bool WindowBase::Load() 
 	{
 		auto flag = createNativeWindow(); 
 		if (!flag) return flag;
 		initSurface();
-		initLayout();
 		OnLoad();
 		return true;
 	}
@@ -27,14 +24,14 @@ namespace RRS
 	{
 		auto flag = OnClose();
 		if (flag) {
-			disposeLayout();
+			delete Layout;
 			disposeSurfaceResource();
 			DestroyWindow(Hwnd);
 		}
 		OnClosed();
 	}
 	void WindowBase::paint() {
-		calculateLayout();
+		Layout->CalculateLayout(Width,Height);
 		SkSurface* surface = getSurface(Width, Height);
 		if (surface == nullptr) {
 			return;
@@ -59,5 +56,11 @@ namespace RRS
 	void WindowBase::Hide() 
 	{
 		//todo
+	}
+	void WindowBase::AddElement(Element* element)
+	{
+		element->OwnerWindow = this;
+		Layout->AddChild(element->Layout);
+		Children.push_back(element);
 	}
 }

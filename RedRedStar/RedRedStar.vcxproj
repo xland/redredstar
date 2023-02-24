@@ -146,17 +146,20 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\RRS\Color.h" />
+    <ClInclude Include="include\RRS\CommonType.h" />
     <ClInclude Include="include\RRS\App.h" />
     <ClInclude Include="include\RRS\Element.h" />
     <ClInclude Include="include\RRS\RRS.h" />
     <ClInclude Include="include\RRS\WindowBase.h" />
+    <ClInclude Include="include\RRS\Layout.h" />
     <ClInclude Include="src\DisplayParams.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Layout.cpp" />
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Element.cpp" />
     <ClCompile Include="src\WindowBase.cpp" />
-    <ClCompile Include="src\WindowBaseLayout.cpp" />
     <ClCompile Include="src\WindowBaseNative.cpp" />
     <ClCompile Include="src\WindowBaseSurface.cpp" />
   </ItemGroup>

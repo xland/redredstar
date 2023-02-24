@@ -30,6 +30,15 @@
     <ClInclude Include="src\DisplayParams.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\RRS\Layout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RRS\CommonType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RRS\Color.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
@@ -41,13 +50,13 @@
     <ClCompile Include="src\Element.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\WindowBaseLayout.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\WindowBaseNative.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\WindowBaseSurface.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layout.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
