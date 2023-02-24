@@ -26,6 +26,11 @@ namespace RRS {
 		
 		void SetBackgroundColor(Color);
 		/// <summary>
+		/// Get the element's owner window.
+		/// </summary>
+		/// <returns></returns>
+		WindowBase* GetOwnerWindow();
+		/// <summary>
 		/// element position x
 		/// ShowInCenterScreen must be set to false
 		/// </summary>
@@ -36,10 +41,6 @@ namespace RRS {
 		/// </summary>
 		int Y = 0;
 		Color BackgroundColor;
-		/// <summary>
-		/// The window pointer this element belong to
-		/// </summary>
-		WindowBase* OwnerWindow = nullptr;
 		/// <summary>
 		/// 
 		/// </summary>

@@ -1,3 +1,4 @@
+#include "../include/RRS/App.h"
 #include "../include/RRS/WindowBase.h"
 #include "include/core/SkCanvas.h"
 #include "include/core/SkSurface.h"
@@ -10,7 +11,9 @@ namespace RRS
 	WindowBase::WindowBase()
 		:backendContext{nullptr},hglrc{nullptr},directContext{nullptr}
 		,Layout{ new RRS::Layout() } ,Hwnd{nullptr}
+		,BackgroundColor{ RRS::GetColor(255, 255, 255, 255) }
 	{
+		App::Get()->Windows.push_back(this);
 	}
 	bool WindowBase::Load() 
 	{
@@ -24,6 +27,7 @@ namespace RRS
 	{
 		auto flag = OnClose();
 		if (flag) {
+			App::Get()->RemoveWindow(this);
 			delete Layout;
 			disposeSurfaceResource();
 			DestroyWindow(Hwnd);
@@ -37,7 +41,7 @@ namespace RRS
 			return;
 		}
 		auto canvas = surface->getCanvas();
-		canvas->clear(SK_ColorWHITE);
+		canvas->clear(BackgroundColor);
 		for (auto element : Children)
 		{
 			element->Paint(canvas);
@@ -59,7 +63,6 @@ namespace RRS
 	}
 	void WindowBase::AddElement(Element* element)
 	{
-		element->OwnerWindow = this;
 		Layout->AddChild(element->Layout);
 		Children.push_back(element);
 	}

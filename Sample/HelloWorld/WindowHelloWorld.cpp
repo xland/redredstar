@@ -6,15 +6,21 @@
 WindowHelloWorld::WindowHelloWorld()
 {
 	title = L"Hello World";
+	BackgroundColor = RRS::GetColor(30, 30, 30);
 	Layout->SetFlexDirection(RRS::FlexDirection::Column);
 	Layout->SetJustifyContent(RRS::JustifyContent::Center);
 }
 void WindowHelloWorld::OnLoad() 
 {
 	auto ele = new RRS::Element();
-	ele->Layout->SetSize(200, 200);
+	ele->Layout->SetSize(380, 120);
+	ele->Layout->SetFlexDirection(RRS::FlexDirection::Column);
+	ele->Layout->SetJustifyContent(RRS::JustifyContent::Center);
 	ele->Layout->SetAlignSelf(RRS::LayoutAlign::Center);
-	ele->BackgroundColor = RRS::GetColor(100, 60, 80, 255);
+	ele->BackgroundColor = RRS::GetColor(14, 99, 156);
+
+
+
 	AddElement(ele);
 	Show();
 }

@@ -25,4 +25,13 @@ namespace RRS {
 	void App::Quit() {
 		PostQuitMessage(0);
 	}
+	void App::RemoveWindow(WindowBase* window)
+	{
+		for (int i = 0; i < Windows.size(); i++) {
+			if (Windows.at(i) == window) {
+				Windows.erase(Windows.begin() + i);
+				break;
+			}
+		}
+	}
 }

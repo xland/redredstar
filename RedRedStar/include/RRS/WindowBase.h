@@ -104,7 +104,7 @@ namespace RRS {
 		/// </summary>
 		std::vector<Element*> Children;
 		Layout* Layout;
-		
+		Color BackgroundColor;		
 	protected:
 		/// <summary>
 		/// OnLoad method will be called after window and drawing engine are initialized

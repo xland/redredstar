@@ -1,6 +1,8 @@
 #pragma once
 #include <Windows.h>
+#include <vector>
 namespace RRS {
+	class WindowBase;
 	class App
 	{
 		public:
@@ -25,12 +27,16 @@ namespace RRS {
 			/// Quit Application
 			/// </summary>
 			static void Quit();
+			void RemoveWindow(WindowBase* window);
 			/// <summary>
 			/// Native application instance
 			/// </summary>
 			HINSTANCE HInstance;
+			std::vector<WindowBase*> Windows;
+
 		private:
 			App(HINSTANCE hInstance);
+			
 			inline static App* app{ nullptr };
 	};
 }
