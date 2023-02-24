@@ -7,7 +7,7 @@
 struct GrGLInterface;
 class GrDirectContext;
 class SkSurface;
-
+//todo onload做成事件型的，允许注册多个onload事件，不要叫windowbase了
 namespace RRS {
 	class DisplayParams;
 	class WindowContext;

@@ -10,7 +10,7 @@ namespace RRS {
 	public:
 		Element();
 		~Element();
-		void Paint(SkCanvas* canvas);
+		virtual void Paint(SkCanvas* canvas) = 0;
 		/// <summary>
 		/// show the element
 		/// </summary>
@@ -19,10 +19,6 @@ namespace RRS {
 		/// show the element
 		/// </summary>
 		void Hide();
-		/// <summary>
-		/// Add an element to the window
-		/// </summary>
-		void AddElement(Element* element);
 		
 		void SetBackgroundColor(Color);
 		/// <summary>
@@ -30,25 +26,11 @@ namespace RRS {
 		/// </summary>
 		/// <returns></returns>
 		WindowBase* GetOwnerWindow();
-		/// <summary>
-		/// element position x
-		/// ShowInCenterScreen must be set to false
-		/// </summary>
-		int X = 0;
-		/// <summary>
-		/// element position y
-		/// ShowInCenterScreen must be set to false
-		/// </summary>
-		int Y = 0;
 		Color BackgroundColor;
 		/// <summary>
 		/// 
 		/// </summary>
 		Element* ParentElement;
-		/// <summary>
-		/// 
-		/// </summary>
-		std::vector<Element*> Children;
 		Layout* Layout;
 		
 	private:

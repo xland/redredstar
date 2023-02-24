@@ -39,6 +39,12 @@
     <ClInclude Include="include\RRS\Color.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\RRS\Label.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RRS\Panel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
@@ -57,6 +63,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Layout.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Label.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Panel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,8 +11,7 @@ namespace RRS
 	WindowBase::WindowBase()
 		:backendContext{nullptr},hglrc{nullptr},directContext{nullptr}
 		,Layout{ new RRS::Layout() } ,Hwnd{nullptr}
-		,BackgroundColor{ RRS::GetColor(255, 255, 255, 255) }
-	{
+		,BackgroundColor{ RRS::GetColor(255, 255, 255, 255) }	{
 		App::Get()->Windows.push_back(this);
 	}
 	bool WindowBase::Load() 
