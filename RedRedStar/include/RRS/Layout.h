@@ -1,35 +1,9 @@
 #pragma once
 #include "CommonType.h"
+#include "LayoutEnum.h"
 struct YGNode;
 struct YGConfig;
 namespace RRS {
-	enum class LayoutAlign
-	{
-		Auto,
-		FlexStart,
-		Center,
-		FlexEnd,
-		Stretch,
-		Baseline,
-		SpaceBetween,
-		SpaceAround
-	};
-	enum class FlexDirection
-	{
-		Column,
-		ColumnReverse,
-		Row,
-		RowReverse
-	};
-	enum class JustifyContent
-	{
-		FlexStart,
-		Center,
-		FlexEnd,
-		SpaceBetwee,
-		SpaceAroundn,
-		SpaceEvenly
-	};
 	class Layout
 	{
 	public:
@@ -48,6 +22,7 @@ namespace RRS {
 		~Layout();
 		void addLayoutChild(Layout* target);
 		void calculateLayout(float w, float h); //todo 是不是只有window base访问权力才合适
+	private:
 		YGNode* layout;
 	};
 }

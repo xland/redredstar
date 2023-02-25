@@ -150,6 +150,7 @@
     <ClInclude Include="include\RRS\CommonType.h" />
     <ClInclude Include="include\RRS\App.h" />
     <ClInclude Include="include\RRS\Element.h" />
+    <ClInclude Include="include\RRS\LayoutEnum.h" />
     <ClInclude Include="include\RRS\RRS.h" />
     <ClInclude Include="include\RRS\WindowBase.h" />
     <ClInclude Include="include\RRS\Layout.h" />

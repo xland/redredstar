@@ -45,6 +45,9 @@
     <ClInclude Include="include\RRS\Panel.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\RRS\LayoutEnum.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">

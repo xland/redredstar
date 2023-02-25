@@ -14,6 +14,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决�
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{505F65D1-967F-41ED-80D9-28671E6AA2E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{A25F21C8-ED77-4B55-86A8-519511C03CDE}"
+	ProjectSection(SolutionItems) = preProject
+		Doc\img\helloWorld.png = Doc\img\helloWorld.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -44,6 +51,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{390C7DF5-67B4-432E-9DBF-B6922AFF7013} = {1B33FCF8-68A2-4DE2-8FC3-66EA75A525EC}
+		{505F65D1-967F-41ED-80D9-28671E6AA2E1} = {E8D7682B-2E70-4C52-8BC7-9A7CD6D015D1}
+		{A25F21C8-ED77-4B55-86A8-519511C03CDE} = {505F65D1-967F-41ED-80D9-28671E6AA2E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D995C14-0C2D-4597-91B4-B348726163E6}
