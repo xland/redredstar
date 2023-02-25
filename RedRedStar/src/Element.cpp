@@ -6,14 +6,12 @@
 
 namespace RRS {
 	Element::Element()
-		:ParentElement{nullptr}, Layout{new RRS::Layout()}
-		,BackgroundColor { RRS::GetColor(255, 255, 255, 255) }
+		:ParentElement{nullptr} ,BackgroundColor { RRS::GetColor(255, 255, 255, 255) }
 	{
 		
 	}
 	Element::~Element()
 	{
-		delete Layout;
 	}
 	void Element::Show() {
 	}

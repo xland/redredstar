@@ -9,7 +9,7 @@ namespace RRS {
 	}
 	void Panel::Paint(SkCanvas* canvas)
 	{
-		auto layoutRect = Layout->GetRectangle();
+		auto layoutRect = GetRectangle();
 		canvas->translate(layoutRect.X, layoutRect.Y);
 		SkPaint paint;
 		paint.setColor(BackgroundColor);
@@ -25,7 +25,7 @@ namespace RRS {
 	void Panel::AddElement(Element* element)
 	{
 		element->ParentElement = this;
-		Layout->AddChild(element->Layout);
+		addLayoutChild(element);
 		Children.push_back(element);
 	}
 }

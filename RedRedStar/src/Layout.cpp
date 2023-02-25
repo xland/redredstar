@@ -34,7 +34,7 @@ namespace RRS {
 		YGNodeStyleSetMargin(layout, YGEdgeRight, right);
 		YGNodeStyleSetMargin(layout, YGEdgeBottom, bottom);
 	}
-	void Layout::AddChild(Layout* target)
+	void Layout::addLayoutChild(Layout* target)
 	{
 		auto index = YGNodeGetChildCount(layout);
 		YGNodeInsertChild(layout, target->layout, index);
@@ -65,7 +65,7 @@ namespace RRS {
 	{
 		YGNodeStyleSetJustifyContent(layout, (YGJustify)justifyContent);
 	}
-	void Layout::CalculateLayout(float w, float h)
+	void Layout::calculateLayout(float w, float h)
 	{
 		YGNodeCalculateLayout(layout, w, h, YGDirectionLTR);
 	}

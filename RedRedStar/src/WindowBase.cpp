@@ -10,8 +10,8 @@ namespace RRS
 {
 	WindowBase::WindowBase()
 		:backendContext{nullptr},hglrc{nullptr},directContext{nullptr}
-		,Layout{ new RRS::Layout() } ,Hwnd{nullptr}
-		,BackgroundColor{ RRS::GetColor(255, 255, 255, 255) }	{
+		,Hwnd{nullptr} ,BackgroundColor{ RRS::GetColor(255, 255, 255, 255) }	
+	{
 		App::Get()->Windows.push_back(this);
 	}
 	bool WindowBase::Load() 
@@ -27,14 +27,13 @@ namespace RRS
 		auto flag = OnClose();
 		if (flag) {
 			App::Get()->RemoveWindow(this);
-			delete Layout;
 			disposeSurfaceResource();
 			DestroyWindow(Hwnd);
 		}
 		OnClosed();
 	}
 	void WindowBase::paint() {
-		Layout->CalculateLayout(Width,Height);
+		calculateLayout(Width,Height);
 		SkSurface* surface = getSurface(Width, Height);
 		if (surface == nullptr) {
 			return;
@@ -64,7 +63,7 @@ namespace RRS
 	}
 	void WindowBase::AddElement(Element* element)
 	{
-		Layout->AddChild(element->Layout);
+		addLayoutChild(element);
 		Children.push_back(element);
 	}
 }

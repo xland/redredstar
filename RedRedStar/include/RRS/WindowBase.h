@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include "Layout.h"
 #include "Element.h"
 struct GrGLInterface;
 class GrDirectContext;
@@ -11,8 +12,7 @@ class SkSurface;
 namespace RRS {
 	class DisplayParams;
 	class WindowContext;
-	class Layout;
-	class WindowBase
+	class WindowBase : public Layout
 	{
 	public:
 		/// <summary>

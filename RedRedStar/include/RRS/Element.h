@@ -1,11 +1,11 @@
 #pragma once
 #include "CommonType.h"
 #include "Color.h"
+#include "Layout.h"
 class SkCanvas;
 namespace RRS {
 	class WindowBase;
-	class Layout;
-	class Element
+	class Element:public Layout
 	{
 	public:
 		Element();
@@ -31,7 +31,6 @@ namespace RRS {
 		/// 
 		/// </summary>
 		Element* ParentElement;
-		Layout* Layout;
 		
 	private:
 

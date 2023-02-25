@@ -7,20 +7,20 @@
 WindowHelloWorld::WindowHelloWorld()
 {
 	title = L"Hello World";
-	Layout->SetFlexDirection(RRS::FlexDirection::Column);
-	Layout->SetJustifyContent(RRS::JustifyContent::Center);
+	SetFlexDirection(RRS::FlexDirection::Column);
+	SetJustifyContent(RRS::JustifyContent::Center);
 }
 void WindowHelloWorld::OnLoad() 
 {
 	auto panel = new RRS::Panel();
-	panel->Layout->SetSize(380, 120);
-	panel->Layout->SetAlignSelf(RRS::LayoutAlign::Center);
+	panel->SetSize(380, 120);
+	panel->SetAlignSelf(RRS::LayoutAlign::Center);
 	panel->BackgroundColor = RRS::GetColor(14, 99, 156);
-	panel->Layout->SetFlexDirection(RRS::FlexDirection::Column);
-	panel->Layout->SetJustifyContent(RRS::JustifyContent::Center);
+	panel->SetFlexDirection(RRS::FlexDirection::Column);
+	panel->SetJustifyContent(RRS::JustifyContent::Center);
 
 	auto label = new RRS::Label("Hello World");
-	label->Layout->SetAlignSelf(RRS::LayoutAlign::Center);
+	label->SetAlignSelf(RRS::LayoutAlign::Center);
 	panel->AddElement(label);
 
 	AddElement(panel);

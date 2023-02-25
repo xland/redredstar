@@ -12,11 +12,11 @@ namespace RRS {
 		font->setSubpixel(true);
 		advanceX = rect.x();
 		advanceY = -rect.y();
-		Layout->SetSize(rect.width(), rect.height());
+		SetSize(rect.width(), rect.height());
 	}
 	void Label::Paint(SkCanvas* canvas)
 	{		
-		auto layoutRect = Layout->GetRectangle();
+		auto layoutRect = GetRectangle();
 		canvas->translate(layoutRect.X, layoutRect.Y);
 		SkPaint paint;
 		paint.setColor(SK_ColorWHITE);
