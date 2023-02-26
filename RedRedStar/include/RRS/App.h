@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include <vector>
 namespace RRS {
-	class WindowBase;
+	class Window;
 	class App
 	{
 		public:
@@ -27,12 +27,12 @@ namespace RRS {
 			/// Quit Application
 			/// </summary>
 			static void Quit();
-			void RemoveWindow(WindowBase* window);
+			void RemoveWindow(Window* window);
 			/// <summary>
 			/// Native application instance
 			/// </summary>
 			HINSTANCE HInstance;
-			std::vector<WindowBase*> Windows;
+			std::vector<Window*> Windows;
 
 		private:
 			App(HINSTANCE hInstance);

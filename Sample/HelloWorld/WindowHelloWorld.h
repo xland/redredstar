@@ -1,6 +1,6 @@
 #pragma once
-#include <RRS/WindowBase.h>
-class WindowHelloWorld : public RRS::WindowBase
+#include <RRS/Window.h>
+class WindowHelloWorld : public RRS::Window
 {
 public:
 	WindowHelloWorld();

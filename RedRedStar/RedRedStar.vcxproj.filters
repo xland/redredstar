@@ -21,7 +21,7 @@
     <ClInclude Include="include\RRS\App.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\RRS\WindowBase.h">
+    <ClInclude Include="include\RRS\Window.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\RRS\Element.h">
@@ -48,21 +48,96 @@
     <ClInclude Include="include\RRS\LayoutEnum.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\RRS\EventType.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RRS\EventListener.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\internal\eventpolicies_i.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\internal\eventqueue_i.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\internal\hetercallbacklist_i.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\internal\typeutil_i.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\mixins\mixinfilter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\mixins\mixinheterfilter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\utilities\anyid.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\utilities\argumentadapter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\utilities\conditionalfunctor.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\utilities\conditionalremover.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\utilities\counterremover.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\utilities\eventmaker.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\utilities\eventutil.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\utilities\orderedqueuelist.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\utilities\scopedremover.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\callbacklist.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\eventdispatcher.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\eventpolicies.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\eventqueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\hetercallbacklist.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\hetereventdispatcher.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\event\hetereventqueue.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="src\EventDispatcher.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\WindowBase.cpp">
+    <ClCompile Include="src\Window.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Element.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\WindowBaseNative.cpp">
+    <ClCompile Include="src\WindowNative.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\WindowBaseSurface.cpp">
+    <ClCompile Include="src\WindowSurface.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Layout.cpp">
@@ -72,6 +147,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Panel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EventListener.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EventDispatcher.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

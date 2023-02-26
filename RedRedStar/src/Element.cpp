@@ -1,7 +1,7 @@
 #include "../include/RRS/Element.h"
 #include "../include/RRS/Layout.h"
 #include "../include/RRS/App.h"
-#include "../include/RRS/WindowBase.h"
+#include "../include/RRS/Window.h"
 #include <ranges>
 
 namespace RRS {
@@ -24,9 +24,9 @@ namespace RRS {
 		BackgroundColor = color;
 	}
 
-	WindowBase* Element::GetOwnerWindow()
+	Window* Element::GetOwnerWindow()
 	{
-		WindowBase* result = nullptr;
+		Window* result = nullptr;
 		Element* ele = this->ParentElement;
 		while (ele)
 		{

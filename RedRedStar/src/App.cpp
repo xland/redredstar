@@ -25,7 +25,7 @@ namespace RRS {
 	void App::Quit() {
 		PostQuitMessage(0);
 	}
-	void App::RemoveWindow(WindowBase* window)
+	void App::RemoveWindow(Window* window)
 	{
 		for (int i = 0; i < Windows.size(); i++) {
 			if (Windows.at(i) == window) {

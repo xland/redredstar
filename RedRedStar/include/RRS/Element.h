@@ -4,7 +4,7 @@
 #include "Layout.h"
 class SkCanvas;
 namespace RRS {
-	class WindowBase;
+	class Window;
 	class Element:public Layout
 	{
 	public:
@@ -25,7 +25,7 @@ namespace RRS {
 		/// Get the element's owner window.
 		/// </summary>
 		/// <returns></returns>
-		WindowBase* GetOwnerWindow();
+		Window* GetOwnerWindow();
 		Color BackgroundColor;
 		/// <summary>
 		/// 
