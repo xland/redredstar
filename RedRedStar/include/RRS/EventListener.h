@@ -1,8 +1,10 @@
 #pragma once
 #include "EventType.h"
+#include <map>
+#include <vector>
 
 namespace RRS {
-	class EventDispatcher;
+	using Dispatcher = std::map<EventType, std::vector<EventCallBack>>;
 	class EventListener
 	{
 	public:
@@ -10,7 +12,7 @@ namespace RRS {
 		~EventListener();
 		void AddEventListener(EventType eventType, EventCallBack callBack);
 		void EmitEvent(EventType eventType);
-	private:
-		EventDispatcher* eventDispatcher;
+	protected:	
+		Dispatcher dispatcher;
 	};
 }

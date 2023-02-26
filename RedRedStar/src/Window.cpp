@@ -20,7 +20,7 @@ namespace RRS
 		if (!flag) return flag;
 		initSurface();
 		OnLoad();
-		
+		EmitEvent(EventType::Loaded);
 		return true;
 	}
 	void Window::Close()
@@ -30,8 +30,9 @@ namespace RRS
 			App::Get()->RemoveWindow(this);
 			disposeSurfaceResource();
 			DestroyWindow(Hwnd);
+			OnClosed();
+			EmitEvent(EventType::WindowClosed);
 		}
-		OnClosed();
 	}
 	void Window::paint() {
 		calculateLayout(Width,Height);
@@ -57,10 +58,12 @@ namespace RRS
 	void Window::Show() 
 	{
 		ShowWindow(Hwnd, SW_SHOW);
+		EmitEvent(EventType::Show);
 	}
 	void Window::Hide() 
 	{
 		//todo
+		EmitEvent(EventType::Hide);
 	}
 	void Window::AddElement(Element* element)
 	{

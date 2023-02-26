@@ -146,7 +146,6 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\EventDispatcher.h" />
     <ClInclude Include="include\RRS\Color.h" />
     <ClInclude Include="include\RRS\CommonType.h" />
     <ClInclude Include="include\RRS\App.h" />
@@ -160,31 +159,8 @@
     <ClInclude Include="include\RRS\EventType.h" />
     <ClInclude Include="src\DisplayParams.h" />
     <ClInclude Include="include\RRS\Label.h" />
-    <ClInclude Include="src\event\callbacklist.h" />
-    <ClInclude Include="src\event\eventdispatcher.h" />
-    <ClInclude Include="src\event\eventpolicies.h" />
-    <ClInclude Include="src\event\eventqueue.h" />
-    <ClInclude Include="src\event\hetercallbacklist.h" />
-    <ClInclude Include="src\event\hetereventdispatcher.h" />
-    <ClInclude Include="src\event\hetereventqueue.h" />
-    <ClInclude Include="src\event\internal\eventpolicies_i.h" />
-    <ClInclude Include="src\event\internal\eventqueue_i.h" />
-    <ClInclude Include="src\event\internal\hetercallbacklist_i.h" />
-    <ClInclude Include="src\event\internal\typeutil_i.h" />
-    <ClInclude Include="src\event\mixins\mixinfilter.h" />
-    <ClInclude Include="src\event\mixins\mixinheterfilter.h" />
-    <ClInclude Include="src\event\utilities\anyid.h" />
-    <ClInclude Include="src\event\utilities\argumentadapter.h" />
-    <ClInclude Include="src\event\utilities\conditionalfunctor.h" />
-    <ClInclude Include="src\event\utilities\conditionalremover.h" />
-    <ClInclude Include="src\event\utilities\counterremover.h" />
-    <ClInclude Include="src\event\utilities\eventmaker.h" />
-    <ClInclude Include="src\event\utilities\eventutil.h" />
-    <ClInclude Include="src\event\utilities\orderedqueuelist.h" />
-    <ClInclude Include="src\event\utilities\scopedremover.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\EventDispatcher.cpp" />
     <ClCompile Include="src\EventListener.cpp" />
     <ClCompile Include="src\Panel.cpp" />
     <ClCompile Include="src\Layout.cpp" />

@@ -99,7 +99,7 @@ namespace RRS {
 		/// <summary>
 		/// window title
 		/// </summary>
-		std::wstring title = L"Window";
+		std::wstring Title = L"Window";
 		/// <summary>
 		/// 
 		/// </summary>
@@ -110,7 +110,7 @@ namespace RRS {
 		/// <summary>
 		/// OnLoad method will be called after window and drawing engine are initialized
 		/// </summary>
-		virtual void OnLoad() = 0;
+		virtual void OnLoad(){};
 		/// <summary>
 		/// OnClose method will be called before window closes
 		/// </summary>

@@ -48,7 +48,7 @@ namespace RRS {
 			X = (screenRect.right - Width) / 2;
 			Y = (screenRect.bottom - Height) / 2;
 		}
-		Hwnd = CreateWindow(windowClassName.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW, X, Y, Width, Height,
+		Hwnd = CreateWindow(windowClassName.c_str(), Title.c_str(), WS_OVERLAPPEDWINDOW, X, Y, Width, Height,
 			nullptr, nullptr, App::Get()->HInstance, nullptr);
 		if (!Hwnd)
 		{

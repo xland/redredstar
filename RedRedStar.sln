@@ -11,6 +11,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HelloWorld", "Sample\HelloW
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{E8D7682B-2E70-4C52-8BC7-9A7CD6D015D1}"
 	ProjectSection(SolutionItems) = preProject
+		Change.md = Change.md
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
@@ -20,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{A25F21C8-ED7
 	ProjectSection(SolutionItems) = preProject
 		Doc\img\helloWorld.png = Doc\img\helloWorld.png
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Licence", "Licence", "{03067637-9D9B-46D6-B184-CB0A50D0B7DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +56,7 @@ Global
 		{390C7DF5-67B4-432E-9DBF-B6922AFF7013} = {1B33FCF8-68A2-4DE2-8FC3-66EA75A525EC}
 		{505F65D1-967F-41ED-80D9-28671E6AA2E1} = {E8D7682B-2E70-4C52-8BC7-9A7CD6D015D1}
 		{A25F21C8-ED77-4B55-86A8-519511C03CDE} = {505F65D1-967F-41ED-80D9-28671E6AA2E1}
+		{03067637-9D9B-46D6-B184-CB0A50D0B7DC} = {505F65D1-967F-41ED-80D9-28671E6AA2E1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0D995C14-0C2D-4597-91B4-B348726163E6}

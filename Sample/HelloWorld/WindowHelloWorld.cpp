@@ -6,7 +6,7 @@
 #include <RRS/Label.h>
 WindowHelloWorld::WindowHelloWorld()
 {
-	title = L"Hello World";
+	Title = L"Hello World";
 	SetFlexDirection(RRS::FlexDirection::Column);
 	SetJustifyContent(RRS::JustifyContent::Center);
 }
