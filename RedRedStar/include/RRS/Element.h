@@ -2,10 +2,11 @@
 #include "CommonType.h"
 #include "Color.h"
 #include "Layout.h"
+#include "EventListener.h"
 class SkCanvas;
 namespace RRS {
 	class Window;
-	class Element:public Layout
+	class Element:public Layout,public EventListener
 	{
 	public:
 		Element();

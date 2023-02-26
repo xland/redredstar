@@ -1,8 +1,5 @@
 #pragma once
-#include <functional>
 namespace RRS {	
-	class EventListener;
-	using EventCallBack = std::function<void(EventListener*)>;
 	enum class EventType
 	{
 		WindowClosed,

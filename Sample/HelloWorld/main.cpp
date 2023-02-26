@@ -30,12 +30,14 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		win->AddElement(panel);
 		win->Show();
 	});
-	win->AddEventListener(EventType::WindowClosed, [](EventListener* arg) {
+	win->AddEventListener(EventType::WindowClosed, [](EventListener* /* event emitter pointer */) {
 		App::Quit();
 	});
 	win->Load();
+
 	//If you want to implement your own window class to gain more control, read the following code.
 	//auto win = std::make_unique<WindowHelloWorld>();
 	//win->Load();
+
 	return App::Exec();
 }
