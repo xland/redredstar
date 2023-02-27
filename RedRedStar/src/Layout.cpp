@@ -46,15 +46,6 @@ namespace RRS {
 	{
 		YGNodeStyleSetAlignSelf(layout, (YGAlign)align);
 	}
-	Rectangle Layout::GetRectangle()
-	{
-		Rectangle rect;
-		rect.X = YGNodeLayoutGetLeft(layout); 
-		rect.Y = YGNodeLayoutGetTop(layout);
-		rect.W = YGNodeLayoutGetWidth(layout);
-		rect.H = YGNodeLayoutGetHeight(layout);
-		return rect;
-	}
 	void Layout::SetFlexDirection(FlexDirection direction)
 	{
 		YGNodeStyleSetFlexDirection(layout, (YGFlexDirection)direction);
@@ -63,8 +54,15 @@ namespace RRS {
 	{
 		YGNodeStyleSetJustifyContent(layout, (YGJustify)justifyContent);
 	}
-	void Layout::calculateLayout(float w, float h)
+	void Layout::calculateLayout()
 	{
-		YGNodeCalculateLayout(layout, w, h, YGDirectionLTR);
+		
+	}
+	void Layout::calculateOffsetPosition()
+	{
+		XOffset = YGNodeLayoutGetLeft(layout);
+		YOffset = YGNodeLayoutGetTop(layout);
+		Width = YGNodeLayoutGetWidth(layout);
+		Height = YGNodeLayoutGetHeight(layout);
 	}
 }

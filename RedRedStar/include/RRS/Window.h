@@ -58,20 +58,12 @@ namespace RRS {
 		/// window position x
 		/// ShowInCenterScreen must be set to false
 		/// </summary>
-		int X = CW_USEDEFAULT;
+		int XWindow = CW_USEDEFAULT;
 		/// <summary>
 		/// window position y
 		/// ShowInCenterScreen must be set to false
 		/// </summary>
-		int Y = CW_USEDEFAULT;
-		/// <summary>
-		/// window width
-		/// </summary>
-		int Width = 1000;
-		/// <summary>
-		/// window height
-		/// </summary>
-		int Height = 700;
+		int YWindow = CW_USEDEFAULT;
 		/// <summary>
 		/// window width
 		/// </summary>
@@ -141,7 +133,7 @@ namespace RRS {
 		void paint();
 		bool createNativeWindow();
 		void mouseMove(int x, int y);
-		SkSurface* getSurface(int w, int h);
+		SkSurface* getSurface();
 		void disposeSurfaceResource();
 		int stencilBits = 0;
 		HGLRC hglrc;

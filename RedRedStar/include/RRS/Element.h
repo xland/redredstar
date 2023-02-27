@@ -31,9 +31,10 @@ namespace RRS {
 		/// <summary>
 		/// 
 		/// </summary>
-		Element* ParentElement;
-		
+		Element* ParentElement;		
+		void calculatePosition();
 	private:
-
+		friend Window;
+		virtual void checkMouseOver(int x, int y);
 	};
 }

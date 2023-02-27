@@ -46,4 +46,22 @@ namespace RRS {
 		}
 		return result;
 	}
+	void Element::calculatePosition()
+	{
+		calculateOffsetPosition();
+		if (ParentElement) {
+			XAbsolute = ParentElement->XAbsolute + XOffset;
+			YAbsolute = ParentElement->YAbsolute + YOffset;
+		}
+		else
+		{
+			XAbsolute = XOffset;
+			YAbsolute = YOffset;
+		}
+	}
+	void Element::checkMouseOver(int x, int y)
+	{
+		//getre
+		//if(x < )
+	}
 }

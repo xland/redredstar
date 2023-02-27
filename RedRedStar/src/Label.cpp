@@ -17,11 +17,12 @@ namespace RRS {
 	}
 	void Label::Paint(SkCanvas* canvas)
 	{		
-		auto layoutRect = GetRectangle();
-		canvas->translate(layoutRect.X, layoutRect.Y);
+		calculatePosition();
+		XAbsolute = ParentElement->XAbsolute + XOffset;
+		YAbsolute = ParentElement->YAbsolute + YOffset;
 		SkPaint paint;
 		paint.setColor(SK_ColorWHITE);
 		//paint.setAntiAlias(true);
-		canvas->drawString(Text, advanceX, advanceY, *font, paint);
+		canvas->drawString(Text, XAbsolute+advanceX, YAbsolute+advanceY, *font, paint);
 	}
 }

@@ -17,13 +17,13 @@ namespace RRS {
 		void SetAlignSelf(LayoutAlign align);
 		void SetFlexDirection(FlexDirection direction);
 		void SetJustifyContent(JustifyContent justifyContent);
-		Rectangle GetRectangle();
+		float XAbsolute,YAbsolute,XOffset,YOffset,Width,Height;
 	protected:
 		Layout();
 		~Layout();
 		void addLayoutChild(std::shared_ptr<Element> target);
-		void calculateLayout(float w, float h); //todo 是不是只有window base访问权力才合适
-	private:
+		void calculateLayout(); //todo 是不是只有window base访问权力才合适
+		void calculateOffsetPosition();
 		YGNode* layout;
 	};
 }

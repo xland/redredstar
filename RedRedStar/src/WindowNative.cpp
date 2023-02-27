@@ -1,5 +1,8 @@
 #include "../include/RRS/Window.h"
 #include "../include/RRS/App.h"
+#include "include/core/SkCanvas.h"
+#include "include/core/SkSurface.h"
+#include <Yoga.h>
 #include <windowsx.h>
 namespace RRS {
     LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
@@ -42,13 +45,15 @@ namespace RRS {
 			}
 			wcexInit = true;
 		}
+		if (Width < WidthMinimum) Width = WidthMinimum;
+		if (Height < HeightMinimum) Height = HeightMinimum;
 		if (ShowInCenterScreen) {
 			RECT screenRect;
 			SystemParametersInfo(SPI_GETWORKAREA, 0, &screenRect, 0);
-			X = (screenRect.right - Width) / 2;
-			Y = (screenRect.bottom - Height) / 2;
+			XWindow = (screenRect.right - Width) / 2;
+			YWindow = (screenRect.bottom - Height) / 2;
 		}
-		Hwnd = CreateWindow(windowClassName.c_str(), Title.c_str(), WS_OVERLAPPEDWINDOW, X, Y, Width, Height,
+		Hwnd = CreateWindow(windowClassName.c_str(), Title.c_str(), WS_OVERLAPPEDWINDOW, XWindow, YWindow, Width, Height,
 			nullptr, nullptr, App::Get()->HInstance, nullptr);
 		if (!Hwnd)
 		{
@@ -115,10 +120,32 @@ namespace RRS {
 		}
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
-
+	void Window::paint() {
+		YGNodeCalculateLayout(layout, Width, Height, YGDirectionLTR);
+		SkSurface* surface = getSurface();
+		if (surface == nullptr) {
+			return;
+		}
+		auto canvas = surface->getCanvas();
+		canvas->clear(BackgroundColor);
+		for (auto element : Children)
+		{
+			element->calculatePosition();
+			element->Paint(canvas);
+		}
+		surface->flushAndSubmit();
+		HDC dc = GetDC(Hwnd);
+		SwapBuffers(dc);
+		ReleaseDC(Hwnd, dc);
+		delete surface;
+		//todo destroy context
+	}
 	void Window::mouseMove(int x, int y)
 	{
-
+		for (auto element : Children)
+		{
+			element->checkMouseOver(x, y);
+		}
 	}
 	LRESULT Window::hitTest(HWND hwnd, LPARAM lParam) {
 		POINT absoluteCursor = POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
