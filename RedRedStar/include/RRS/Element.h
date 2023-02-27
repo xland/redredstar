@@ -26,15 +26,17 @@ namespace RRS {
 		/// Get the element's owner window.
 		/// </summary>
 		/// <returns></returns>
-		Window* GetOwnerWindow();
-		Color BackgroundColor;
+		Window* OwnerWindow;
 		/// <summary>
 		/// 
 		/// </summary>
 		Element* ParentElement;		
 		void calculatePosition();
+	protected:
+		Color BackgroundColor;
 	private:
 		friend Window;
-		virtual void checkMouseOver(int x, int y);
+		virtual void checkMousePosition(int x, int y);
+		bool isMouseEnter = false;
 	};
 }

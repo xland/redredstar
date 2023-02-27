@@ -16,7 +16,7 @@ void WindowHelloWorld::OnLoad()
 	auto panel = std::make_shared<Panel>();
 	panel->SetSize(380, 120);
 	panel->SetAlignSelf(LayoutAlign::Center);
-	panel->BackgroundColor = GetColor(14, 99, 156);
+	panel->SetBackgroundColor( GetColor(14, 99, 156));
 	panel->SetFlexDirection(FlexDirection::Column);
 	panel->SetJustifyContent(JustifyContent::Center);
 

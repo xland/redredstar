@@ -6,7 +6,9 @@
 
 namespace RRS {
 	Element::Element()
-		:ParentElement{nullptr} ,BackgroundColor { RRS::GetColor(255, 255, 255, 255) }
+		:ParentElement{nullptr} 
+		,BackgroundColor { RRS::GetColor(255, 255, 255, 255) }
+		,OwnerWindow {nullptr}
 	{
 		
 	}
@@ -21,30 +23,13 @@ namespace RRS {
 	
 	void Element::SetBackgroundColor(Color color) 
 	{
-		BackgroundColor = color;
-	}
-
-	Window* Element::GetOwnerWindow()
-	{
-		Window* result = nullptr;
-		Element* ele = this->ParentElement;
-		while (ele)
-		{
-			ele = ele->ParentElement;
+		if (color != BackgroundColor) {
+			BackgroundColor = color;
+			if (OwnerWindow) {
+				InvalidateRect(OwnerWindow->Hwnd, nullptr, false);
+			}			
 		}
-		for (auto win: App::Get()->Windows)
-		{
-			for (auto eleItem : win->Children)
-			{
-				if (eleItem.get() == ele)
-				{
-					result = win;
-					break;
-				}
-			}
-			if (result) break;
-		}
-		return result;
+		
 	}
 	void Element::calculatePosition()
 	{
@@ -59,9 +44,17 @@ namespace RRS {
 			YAbsolute = YOffset;
 		}
 	}
-	void Element::checkMouseOver(int x, int y)
+	void Element::checkMousePosition(int x, int y)
 	{
-		//getre
-		//if(x < )
+		bool flag = x > XAbsolute && y > YAbsolute && x < XAbsolute + Width && y < YAbsolute + Height;
+		if (!isMouseEnter && flag) {
+			isMouseEnter = true;
+			EmitEvent(EventType::MouseOver);
+		}
+		else if(isMouseEnter && !flag)
+		{
+			isMouseEnter = false;
+			EmitEvent(EventType::MouseOut);
+		}
 	}
 }

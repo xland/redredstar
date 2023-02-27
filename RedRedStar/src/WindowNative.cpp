@@ -142,9 +142,10 @@ namespace RRS {
 	}
 	void Window::mouseMove(int x, int y)
 	{
+		bool flag = false;
 		for (auto element : Children)
 		{
-			element->checkMouseOver(x, y);
+			element->checkMousePosition(x, y);
 		}
 	}
 	LRESULT Window::hitTest(HWND hwnd, LPARAM lParam) {

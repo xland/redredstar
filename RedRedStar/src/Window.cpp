@@ -45,6 +45,7 @@ namespace RRS
 	}
 	void Window::AddElement(std::shared_ptr<Element> element)
 	{
+		element->OwnerWindow = this;
 		addLayoutChild(element);
 		Children.push_back(element);
 	}

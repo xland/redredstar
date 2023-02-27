@@ -27,6 +27,7 @@ namespace RRS {
 
 	void Panel::AddElement(std::shared_ptr<Element> element)
 	{
+		element->OwnerWindow = this->OwnerWindow;
 		element->ParentElement = this;
 		addLayoutChild(element);
 		Children.push_back(element);

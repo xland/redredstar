@@ -19,15 +19,17 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		auto panel = std::make_shared<Panel>();
 		panel->SetSize(380, 120);
 		panel->SetAlignSelf(LayoutAlign::Center);
-		panel->BackgroundColor = GetColor(28, 88, 156);
+		constexpr Color bgColor = GetColor(28, 88, 156);
+		constexpr Color hoverColor = GetColor(88, 28, 156);
+		panel->SetBackgroundColor(bgColor);
 		panel->SetFlexDirection(FlexDirection::Column);
 		panel->SetJustifyContent(JustifyContent::Center);
 
-		panel->AddEventListener(EventType::MouseOver, [&panel](EventListener* arg) {
-			panel->BackgroundColor = GetColor(88, 28, 156);
+		panel->AddEventListener(EventType::MouseOver, [panel,hoverColor](EventListener* arg) {
+			panel->SetBackgroundColor(hoverColor);
 		});
-		panel->AddEventListener(EventType::MouseOut, [&panel](EventListener* arg) {
-			panel->BackgroundColor = GetColor(28, 88, 156);
+		panel->AddEventListener(EventType::MouseOut, [panel,bgColor](EventListener* arg) {
+			panel->SetBackgroundColor(bgColor);
 		});
 
 		auto label = std::make_shared<Label>("Hello World");
