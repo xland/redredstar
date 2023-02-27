@@ -4,23 +4,24 @@
 #include <RRS/Layout.h>
 #include <RRS/Color.h>
 #include <RRS/Label.h>
+using namespace RRS;
 WindowHelloWorld::WindowHelloWorld()
 {
 	Title = L"Hello World";
-	SetFlexDirection(RRS::FlexDirection::Column);
-	SetJustifyContent(RRS::JustifyContent::Center);
+	SetFlexDirection(FlexDirection::Column);
+	SetJustifyContent(JustifyContent::Center);
 }
 void WindowHelloWorld::OnLoad() 
 {
-	auto panel = new RRS::Panel();
+	auto panel = std::make_shared<Panel>();
 	panel->SetSize(380, 120);
-	panel->SetAlignSelf(RRS::LayoutAlign::Center);
-	panel->BackgroundColor = RRS::GetColor(14, 99, 156);
-	panel->SetFlexDirection(RRS::FlexDirection::Column);
-	panel->SetJustifyContent(RRS::JustifyContent::Center);
+	panel->SetAlignSelf(LayoutAlign::Center);
+	panel->BackgroundColor = GetColor(14, 99, 156);
+	panel->SetFlexDirection(FlexDirection::Column);
+	panel->SetJustifyContent(JustifyContent::Center);
 
-	auto label = new RRS::Label("Hello World");
-	label->SetAlignSelf(RRS::LayoutAlign::Center);
+	auto label = std::make_shared<Label>("Hello World");
+	label->SetAlignSelf(LayoutAlign::Center);
 	panel->AddElement(label);
 
 	AddElement(panel);

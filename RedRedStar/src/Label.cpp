@@ -8,6 +8,7 @@ namespace RRS {
 	{
 		SkRect rect;
 		SkString str{ Text };
+		
 		font->measureText(Text, strlen(Text), SkTextEncoding::kUTF8, &rect);
 		font->setSubpixel(true);
 		advanceX = rect.x();
@@ -20,6 +21,7 @@ namespace RRS {
 		canvas->translate(layoutRect.X, layoutRect.Y);
 		SkPaint paint;
 		paint.setColor(SK_ColorWHITE);
+		//paint.setAntiAlias(true);
 		canvas->drawString(Text, advanceX, advanceY, *font, paint);
 	}
 }

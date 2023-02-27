@@ -36,7 +36,7 @@ namespace RRS {
 		{
 			for (auto eleItem : win->Children)
 			{
-				if (eleItem == ele) 
+				if (eleItem.get() == ele)
 				{
 					result = win;
 					break;

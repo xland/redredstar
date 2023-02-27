@@ -1,12 +1,10 @@
 #include "../include/RRS/Layout.h"
+#include "../include/RRS/Element.h"
 #include <Yoga.h>
+#include <memory>
 namespace RRS {
 	Layout::Layout() :layout{ YGNodeNew() }
 	{
-	}
-	Layout::Layout(YGConfig* config) : layout{ YGNodeNewWithConfig(config) }
-	{
-
 	}
 	Layout::~Layout()
 	{
@@ -34,7 +32,7 @@ namespace RRS {
 		YGNodeStyleSetMargin(layout, YGEdgeRight, right);
 		YGNodeStyleSetMargin(layout, YGEdgeBottom, bottom);
 	}
-	void Layout::addLayoutChild(Layout* target)
+	void Layout::addLayoutChild(std::shared_ptr<Element> target)
 	{
 		auto index = YGNodeGetChildCount(layout);
 		YGNodeInsertChild(layout, target->layout, index);

@@ -1,11 +1,15 @@
 #include "../include/RRS/Panel.h"
 #include "include/core/SkCanvas.h"
 #include "../include/RRS/Layout.h"
+#include "../include/RRS/Element.h"
 
 namespace RRS {
 	Panel::Panel()
 	{
 
+	}
+	Panel::~Panel()
+	{
 	}
 	void Panel::Paint(SkCanvas* canvas)
 	{
@@ -14,6 +18,7 @@ namespace RRS {
 		SkPaint paint;
 		paint.setColor(BackgroundColor);
 		paint.setStrokeJoin(SkPaint::Join::kRound_Join);
+		//paint.setAntiAlias(true);
 		SkRect rect = SkRect::MakeXYWH(0, 0, layoutRect.W, layoutRect.H);
 		canvas->drawRoundRect(rect, 12.0, 12.0, paint);
 		for (auto element : Children)
@@ -22,7 +27,7 @@ namespace RRS {
 		}
 	}
 
-	void Panel::AddElement(Element* element)
+	void Panel::AddElement(std::shared_ptr<Element> element)
 	{
 		element->ParentElement = this;
 		addLayoutChild(element);

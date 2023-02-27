@@ -65,7 +65,7 @@ namespace RRS
 		//todo
 		EmitEvent(EventType::Hide);
 	}
-	void Window::AddElement(Element* element)
+	void Window::AddElement(std::shared_ptr<Element> element)
 	{
 		addLayoutChild(element);
 		Children.push_back(element);

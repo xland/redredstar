@@ -49,7 +49,7 @@ namespace RRS {
 		/// <summary>
 		/// Add an element to the window
 		/// </summary>
-		void AddElement(Element* element);		
+		void AddElement(std::shared_ptr<Element> element);
 		/// <summary>
 		/// window's handle
 		/// </summary>
@@ -103,7 +103,7 @@ namespace RRS {
 		/// <summary>
 		/// 
 		/// </summary>
-		std::vector<Element*> Children;
+		std::vector<std::shared_ptr<Element>> Children;
 		Layout* Layout;
 		Color BackgroundColor;		
 	protected:
@@ -140,6 +140,7 @@ namespace RRS {
 		void initSurface();
 		void paint();
 		bool createNativeWindow();
+		void mouseMove(int x, int y);
 		SkSurface* getSurface(int w, int h);
 		void disposeSurfaceResource();
 		int stencilBits = 0;

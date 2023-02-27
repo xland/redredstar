@@ -16,14 +16,21 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	win->SetFlexDirection(FlexDirection::Column);
 	win->SetJustifyContent(JustifyContent::Center);
 	win->AddEventListener(EventType::Loaded, [&win](EventListener* arg) {
-		auto panel = new Panel();
+		auto panel = std::make_shared<Panel>();
 		panel->SetSize(380, 120);
 		panel->SetAlignSelf(LayoutAlign::Center);
-		panel->BackgroundColor = GetColor(14, 99, 156);
+		panel->BackgroundColor = GetColor(28, 88, 156);
 		panel->SetFlexDirection(FlexDirection::Column);
 		panel->SetJustifyContent(JustifyContent::Center);
 
-		auto label = new Label("Hello World");
+		panel->AddEventListener(EventType::MouseOver, [&panel](EventListener* arg) {
+			panel->BackgroundColor = GetColor(88, 28, 156);
+		});
+		panel->AddEventListener(EventType::MouseOut, [&panel](EventListener* arg) {
+			panel->BackgroundColor = GetColor(28, 88, 156);
+		});
+
+		auto label = std::make_shared<Label>("Hello World");
 		label->SetAlignSelf(LayoutAlign::Center);
 		panel->AddElement(label);
 

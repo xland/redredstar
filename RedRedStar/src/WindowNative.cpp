@@ -107,8 +107,18 @@ namespace RRS {
 			Height = HIWORD(lParam);
 			return 0;
 		}
+		case WM_MOUSEMOVE: {
+			auto x = GET_X_LPARAM(lParam);
+			auto y = GET_Y_LPARAM(lParam);
+			mouseMove(x, y);
+		}
 		}
 		return DefWindowProc(hwnd, msg, wParam, lParam);
+	}
+
+	void Window::mouseMove(int x, int y)
+	{
+
 	}
 	LRESULT Window::hitTest(HWND hwnd, LPARAM lParam) {
 		POINT absoluteCursor = POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };

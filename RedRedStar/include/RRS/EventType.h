@@ -10,5 +10,10 @@ namespace RRS {
 		Resize,
 		Focs,
 		Blur,
+		/// <summary>
+		/// 
+		/// </summary>
+		MouseOver,
+		MouseOut,
 	};
 }
