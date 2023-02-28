@@ -24,11 +24,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		panel->SetBackgroundColor(bgColor);
 		panel->SetFlexDirection(FlexDirection::Column);
 		panel->SetJustifyContent(JustifyContent::Center);
-
-		panel->AddEventListener(EventType::MouseOver, [panel,hoverColor](EventListener* arg) {
+		auto pointer = panel->AddEventListener(EventType::MouseOver, [panel, &hoverColor](EventListener* arg) {
 			panel->SetBackgroundColor(hoverColor);
 		});
-		panel->AddEventListener(EventType::MouseOut, [panel,bgColor](EventListener* arg) {
+		panel->AddEventListener(EventType::MouseOut, [panel,&bgColor](EventListener* arg) {
 			panel->SetBackgroundColor(bgColor);
 		});
 
