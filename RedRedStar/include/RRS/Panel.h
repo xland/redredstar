@@ -9,6 +9,7 @@ namespace RRS {
 		Panel();
 		~Panel();
 		void Paint(SkCanvas* canvas) override;
+		void CheckMousePosition(int x, int y) override;
 		/// <summary>
 		/// Add an element to the window
 		/// </summary>

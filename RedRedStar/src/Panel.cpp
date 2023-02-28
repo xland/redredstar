@@ -23,8 +23,15 @@ namespace RRS {
 		{
 			element->Paint(canvas);
 		}
+	}	
+	void Panel::CheckMousePosition(int x, int y)
+	{
+		Element::CheckMousePosition(x, y);
+		for (auto& item : Children)
+		{
+			item->CheckMousePosition(x, y);
+		}
 	}
-
 	void Panel::AddElement(std::shared_ptr<Element> element)
 	{
 		element->OwnerWindow = this->OwnerWindow;

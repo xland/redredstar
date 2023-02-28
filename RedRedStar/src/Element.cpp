@@ -20,7 +20,6 @@ namespace RRS {
 	void Element::Hide() {
 		//todo
 	}
-	
 	void Element::SetBackgroundColor(Color color) 
 	{
 		if (color != BackgroundColor) {
@@ -44,7 +43,7 @@ namespace RRS {
 			YAbsolute = YOffset;
 		}
 	}
-	void Element::checkMousePosition(int x, int y)
+	void Element::CheckMousePosition(int x, int y)
 	{
 		bool flag = x > XAbsolute && y > YAbsolute && x < XAbsolute + Width && y < YAbsolute + Height;
 		if (!isMouseEnter && flag) {

@@ -31,12 +31,12 @@ namespace RRS {
 		/// 
 		/// </summary>
 		Element* ParentElement;		
-		void calculatePosition();
+		virtual void calculatePosition();
+		virtual void CheckMousePosition(int x, int y);
 	protected:
 		Color BackgroundColor;
 	private:
 		friend Window;
-		virtual void checkMousePosition(int x, int y);
 		bool isMouseEnter = false;
 	};
 }

@@ -145,7 +145,7 @@ namespace RRS {
 		bool flag = false;
 		for (auto element : Children)
 		{
-			element->checkMousePosition(x, y);
+			element->CheckMousePosition(x, y);
 		}
 	}
 	LRESULT Window::hitTest(HWND hwnd, LPARAM lParam) {
