@@ -46,13 +46,13 @@ namespace RRS
 
     SkSurface* Window::getSurface()
     {
-        glViewport(0, 0, Width, Height);
+        glViewport(0, 0, width, height);
         GrGLint buffer;
         GR_GL_CALL(backendContext, GetIntegerv(GR_GL_FRAMEBUFFER_BINDING, &buffer));
         GrGLFramebufferInfo fbInfo;
         fbInfo.fFBOID = buffer;
         fbInfo.fFormat = GR_GL_RGBA8;
-        GrBackendRenderTarget backendRT(Width, Height, displayParam.fMSAASampleCount, stencilBits, fbInfo);
+        GrBackendRenderTarget backendRT(width, height, displayParam.fMSAASampleCount, stencilBits, fbInfo);
         auto fSurface = SkSurface::MakeFromBackendRenderTarget(directContext, backendRT,
             kBottomLeft_GrSurfaceOrigin,
             kRGBA_8888_SkColorType,

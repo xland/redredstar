@@ -45,15 +45,13 @@ namespace RRS {
 			}
 			wcexInit = true;
 		}
-		if (Width < WidthMinimum) Width = WidthMinimum;
-		if (Height < HeightMinimum) Height = HeightMinimum;
 		if (ShowInCenterScreen) {
 			RECT screenRect;
 			SystemParametersInfo(SPI_GETWORKAREA, 0, &screenRect, 0);
-			XWindow = (screenRect.right - Width) / 2;
-			YWindow = (screenRect.bottom - Height) / 2;
+			XWindow = (screenRect.right - width) / 2;
+			YWindow = (screenRect.bottom - height) / 2;
 		}
-		Hwnd = CreateWindow(windowClassName.c_str(), Title.c_str(), WS_OVERLAPPEDWINDOW, XWindow, YWindow, Width, Height,
+		Hwnd = CreateWindow(windowClassName.c_str(), Title.c_str(), WS_OVERLAPPEDWINDOW, XWindow, YWindow, width, height,
 			nullptr, nullptr, App::Get()->HInstance, nullptr);
 		if (!Hwnd)
 		{
@@ -101,15 +99,16 @@ namespace RRS {
 		case WM_GETMINMAXINFO: {
 			MINMAXINFO* mminfo;
 			mminfo = (PMINMAXINFO)lParam;
-			mminfo->ptMinTrackSize.x = WidthMinimum;
-			mminfo->ptMinTrackSize.y = HeightMinimum;
+			mminfo->ptMinTrackSize.x = widthMinimum;
+			mminfo->ptMinTrackSize.y = heightMinimum;
 			mminfo->ptMaxPosition.x = 0;
 			mminfo->ptMaxPosition.y = 0;
 			return 0;
 		}
 		case WM_SIZE: {
-			Width = LOWORD(lParam);
-			Height = HIWORD(lParam);
+			auto w = LOWORD(lParam);
+			auto h = HIWORD(lParam);
+			SetSize(w, h);
 			return 0;
 		}
 		case WM_MOUSEMOVE: {
@@ -121,7 +120,7 @@ namespace RRS {
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
 	void Window::paint() {
-		YGNodeCalculateLayout(layout, Width, Height, YGDirectionLTR);
+		YGNodeCalculateLayout(layout, width, height, YGDirectionLTR);
 		SkSurface* surface = getSurface();
 		if (surface == nullptr) {
 			return;

@@ -13,18 +13,25 @@ namespace RRS {
 		void SetLayoutPadding(float left, float top, float right, float bottom);
 		void SetLayoutMargin(float margin);
 		void SetLayoutMargin(float left, float top, float right, float bottom);
-		void SetSize(float w, float h);
+		virtual void SetSize(float w, float h);
+		virtual float GetWidth();
+		virtual float GetHeight();
+		virtual void SetWidth(float w);
+		virtual void SetHeight(float h);
+		float GetXOffset();
+		float GetYOffset();
+		float GetXAbsolute();
+		float GetYAbsolute();
 		void SetAlignSelf(LayoutAlign align);
 		void SetFlexDirection(FlexDirection direction);
 		void SetJustifyContent(JustifyContent justifyContent);
-		float XAbsolute,YAbsolute,XOffset,YOffset,Width,Height;
 	protected:
 		Layout();
 		~Layout();
 		void addLayoutChild(std::shared_ptr<Element> target);
-		void calculateLayout(); //todo 是不是只有window base访问权力才合适
-		void calculateOffsetPosition();
 		YGNode* layout;
+		float xAbsolute = 0;
+		float yAbsolute = 0;
 	};
 }
 

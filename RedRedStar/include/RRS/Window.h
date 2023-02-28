@@ -50,6 +50,25 @@ namespace RRS {
 		/// Add an element to the window
 		/// </summary>
 		void AddElement(std::shared_ptr<Element> element);
+
+		void SetSize(float w, float h) override;
+		float GetWidth() override;
+		float GetHeight() override;
+		void SetWidth(float w) override;
+		void SetHeight(float h) override;
+
+		int GetWidthMinimum();
+		int GetHeightMinimum();
+		void SetWidthMinimum(int w);
+		void SetHeightMinimum(int h);
+		void SetSizeMinimum(int w, int h);
+
+		int GetWidthMaximum();
+		int GetHeightMaximum();
+		void SetWidthMaximum(int w);
+		void SetHeightMaximum(int h);
+		void SetSizeMaximum(int w, int h);
+
 		/// <summary>
 		/// window's handle
 		/// </summary>
@@ -64,22 +83,7 @@ namespace RRS {
 		/// ShowInCenterScreen must be set to false
 		/// </summary>
 		int YWindow = CW_USEDEFAULT;
-		/// <summary>
-		/// window width
-		/// </summary>
-		int WidthMinimum = 1000;
-		/// <summary>
-		/// window height
-		/// </summary>
-		int HeightMinimum = 700;
-		/// <summary>
-		/// window width
-		/// </summary>
-		int WidthMaximum = 2000;
-		/// <summary>
-		/// window height
-		/// </summary>
-		int HeightMaximum = 1400;
+		
 		/// <summary>
 		/// does window has frame
 		/// </summary>
@@ -139,5 +143,11 @@ namespace RRS {
 		HGLRC hglrc;
 		const GrGLInterface* backendContext;
 		GrDirectContext* directContext; 
+		float width = 1000;
+		float height = 700;
+		int widthMinimum = 800;
+		int heightMinimum = 600;
+		int widthMaximum = 2000;
+		int heightMaximum = 1400;
 	};
 }

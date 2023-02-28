@@ -32,20 +32,19 @@ namespace RRS {
 	}
 	void Element::calculatePosition()
 	{
-		calculateOffsetPosition();
 		if (ParentElement) {
-			XAbsolute = ParentElement->XAbsolute + XOffset;
-			YAbsolute = ParentElement->YAbsolute + YOffset;
+			xAbsolute = ParentElement->xAbsolute + GetXOffset();
+			yAbsolute = ParentElement->yAbsolute + GetYOffset();
 		}
 		else
 		{
-			XAbsolute = XOffset;
-			YAbsolute = YOffset;
+			xAbsolute = GetXOffset();
+			yAbsolute = GetYOffset();
 		}
 	}
 	void Element::CheckMousePosition(int x, int y)
 	{
-		bool flag = x > XAbsolute && y > YAbsolute && x < XAbsolute + Width && y < YAbsolute + Height;
+		bool flag = x > xAbsolute && y > yAbsolute && x < xAbsolute + GetWidth() && y < yAbsolute + GetHeight();
 		if (!isMouseEnter && flag) {
 			isMouseEnter = true;
 			EmitEvent(EventType::MouseOver);

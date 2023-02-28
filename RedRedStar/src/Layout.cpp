@@ -42,6 +42,22 @@ namespace RRS {
 		YGNodeStyleSetWidth(layout, w);
 		YGNodeStyleSetHeight(layout, h);
 	}
+	void Layout::SetWidth(float w)
+	{
+		YGNodeStyleSetWidth(layout, w);
+	}
+	void Layout::SetHeight(float h)
+	{
+		YGNodeStyleSetHeight(layout, h);
+	}
+	float Layout::GetWidth()
+	{
+		return YGNodeStyleGetWidth(layout).value;
+	}
+	float Layout::GetHeight()
+	{
+		return YGNodeStyleGetHeight(layout).value;
+	}
 	void Layout::SetAlignSelf(LayoutAlign align)
 	{
 		YGNodeStyleSetAlignSelf(layout, (YGAlign)align);
@@ -54,15 +70,21 @@ namespace RRS {
 	{
 		YGNodeStyleSetJustifyContent(layout, (YGJustify)justifyContent);
 	}
-	void Layout::calculateLayout()
+	float Layout::GetXOffset()
 	{
-		
+		return YGNodeLayoutGetLeft(layout);
 	}
-	void Layout::calculateOffsetPosition()
+	float Layout::GetYOffset()
 	{
-		XOffset = YGNodeLayoutGetLeft(layout);
-		YOffset = YGNodeLayoutGetTop(layout);
-		Width = YGNodeLayoutGetWidth(layout);
-		Height = YGNodeLayoutGetHeight(layout);
+		return YGNodeLayoutGetTop(layout);
+	}
+
+	float Layout::GetXAbsolute()
+	{
+		return xAbsolute;
+	}
+	float Layout::GetYAbsolute()
+	{
+		return yAbsolute;
 	}
 }

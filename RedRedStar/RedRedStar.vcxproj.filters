@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\RRS\RRS.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\RRS\App.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -54,6 +51,9 @@
     <ClInclude Include="include\RRS\EventListener.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\RRS\Button.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
@@ -81,6 +81,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\EventListener.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Button.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

@@ -12,6 +12,95 @@ namespace RRS
 	{
 		App::Get()->Windows.push_back(this);
 	}
+	void Window::SetSize(float w, float h)
+	{
+		if (w < widthMinimum) {
+			w = widthMinimum;
+		}
+		if (h < heightMinimum) {
+			h = heightMinimum;
+		}
+		width = w;
+		height = h;
+		Layout::SetSize(width, height);
+	}
+	float Window::GetWidth()
+	{
+		return width;
+	}
+	float Window::GetHeight()
+	{
+		return height;
+	}
+	void Window::SetWidth(float w)
+	{
+		if (w < widthMinimum) {
+			w = widthMinimum;
+		}
+		width = w;
+		Layout::SetWidth(w);
+	}
+
+	void Window::SetHeight(float h)
+	{
+		if (h < heightMinimum) {
+			h = heightMinimum;
+		}
+		width = h;
+		Layout::SetHeight(h);
+	}
+
+	int Window::GetWidthMinimum()
+	{
+		return widthMinimum;
+	}
+	int Window::GetHeightMinimum()
+	{
+		return heightMinimum;
+	}
+	void Window::SetWidthMinimum(int w)
+	{
+		//todo
+		widthMinimum = w;
+	}
+	void Window::SetHeightMinimum(int h)
+	{
+		//todo
+		heightMinimum = h;
+	}
+	void Window::SetSizeMinimum(int w, int h)
+	{
+		//todo
+		widthMinimum = w;
+		heightMinimum = h;
+	}
+
+	int Window::GetWidthMaximum()
+	{
+		return widthMaximum;
+	}
+	int Window::GetHeightMaximum()
+	{
+		return heightMaximum;
+	}
+	void Window::SetWidthMaximum(int w)
+	{
+		//todo
+		widthMaximum = w;
+	}
+	void Window::SetHeightMaximum(int h)
+	{
+		//todo
+		heightMaximum = h;
+	}
+	void Window::SetSizeMaximum(int w, int h)
+	{
+		//todo
+		widthMaximum = w;
+		heightMaximum = h;
+	}
+
+
 	bool Window::Load() 
 	{
 		auto flag = createNativeWindow(); 

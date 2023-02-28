@@ -17,7 +17,7 @@ namespace RRS {
 		SkPaint paint;
 		paint.setColor(BackgroundColor);
 		paint.setStrokeJoin(SkPaint::Join::kRound_Join);
-		SkRect rect = SkRect::MakeXYWH(XAbsolute, YAbsolute, Width, Height);
+		SkRect rect = SkRect::MakeXYWH(xAbsolute, yAbsolute, GetWidth(), GetHeight());
 		canvas->drawRoundRect(rect, 12.0, 12.0, paint);
 		for (auto element : Children)
 		{
