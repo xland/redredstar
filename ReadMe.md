@@ -12,5 +12,19 @@ Currently under development.
 
 # Work in progress
 
-- Import event engine 
+- More layout method
+- A layout demo
+- Button element
+- Load Image
+- A image viewer demo
+- Table element
+- Tree element
+- Splitter element
+- More Doc
+- More Test
 - More Demo
+- Choose a licence
+
+# Work in plan
+
+- Support more OS
