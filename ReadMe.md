@@ -1,6 +1,6 @@
 ﻿# RedRedStar 
 
-A Gui Framework with easy-to-use API , powered by Skia and Yoga. 
+A Gui Framework powered by Skia and Yoga. 
 
 Currently under development.
 

@@ -1,11 +1,16 @@
 #pragma once
-#include "Element.h"
+#include "Panel.h"
+#include "Color.h"
+#include <memory>
 namespace RRS {
-	class Button :public Element
+	class Panel;
+	class Label;
+	class Button : public Panel
 	{
 	public:
 		Button();
 		~Button();
+
 	};
 }
 

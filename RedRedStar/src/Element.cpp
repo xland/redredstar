@@ -1,13 +1,11 @@
 #include "../include/RRS/Element.h"
 #include "../include/RRS/Layout.h"
 #include "../include/RRS/App.h"
-#include "../include/RRS/Window.h"
 #include <ranges>
 
 namespace RRS {
 	Element::Element()
 		:ParentElement{nullptr} 
-		,BackgroundColor { RRS::GetColor(255, 255, 255, 255) }
 		,OwnerWindow {nullptr}
 	{
 		
@@ -19,16 +17,6 @@ namespace RRS {
 	}
 	void Element::Hide() {
 		//todo
-	}
-	void Element::SetBackgroundColor(Color color) 
-	{
-		if (color != BackgroundColor) {
-			BackgroundColor = color;
-			if (OwnerWindow) {
-				InvalidateRect(OwnerWindow->Hwnd, nullptr, false);
-			}			
-		}
-		
 	}
 	void Element::calculatePosition()
 	{
@@ -42,7 +30,11 @@ namespace RRS {
 			yAbsolute = GetYOffset();
 		}
 	}
-	void Element::CheckMousePosition(int x, int y)
+	bool Element::GetIsMouseEnter()
+	{
+		return isMouseEnter;
+	}
+	void Element::SetIsMouseEnter(int x, int y)
 	{
 		bool flag = x > xAbsolute && y > yAbsolute && x < xAbsolute + GetWidth() && y < yAbsolute + GetHeight();
 		if (!isMouseEnter && flag) {

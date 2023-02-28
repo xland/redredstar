@@ -21,7 +21,7 @@ namespace RRS {
 		/// </summary>
 		void Hide();
 		
-		void SetBackgroundColor(Color);
+		
 		/// <summary>
 		/// Get the element's owner window.
 		/// </summary>
@@ -32,9 +32,9 @@ namespace RRS {
 		/// </summary>
 		Element* ParentElement;		
 		virtual void calculatePosition();
-		virtual void CheckMousePosition(int x, int y);
-	protected:
-		Color BackgroundColor;
+		virtual void SetIsMouseEnter(int x, int y);
+		bool GetIsMouseEnter();
+		
 	private:
 		friend Window;
 		bool isMouseEnter = false;
