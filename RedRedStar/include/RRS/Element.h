@@ -19,24 +19,18 @@ namespace RRS {
 		/// <summary>
 		/// show the element
 		/// </summary>
-		void Hide();
-		
-		
-		/// <summary>
-		/// Get the element's owner window.
-		/// </summary>
-		/// <returns></returns>
-		Window* OwnerWindow;
-		/// <summary>
-		/// 
-		/// </summary>
-		Element* ParentElement;		
+		void Hide();			
 		virtual void calculatePosition();
 		virtual void SetIsMouseEnter(int x, int y);
 		bool GetIsMouseEnter();
+		Window* GetOwnerWindow();
+		Element* GetParentElement();
+		void SetParentElement(Element* element);
 		
 	private:
 		friend Window;
 		bool isMouseEnter = false;
+		Window* ownerWindow;
+		Element* parentElement;
 	};
 }

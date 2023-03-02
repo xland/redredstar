@@ -154,6 +154,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\RRS\EventCallback.h" />
     <ClInclude Include="include\RRS\Button.h" />
     <ClInclude Include="include\RRS\Color.h" />
     <ClInclude Include="include\RRS\CommonType.h" />
@@ -164,11 +165,11 @@
     <ClInclude Include="include\RRS\Window.h" />
     <ClInclude Include="include\RRS\Layout.h" />
     <ClInclude Include="include\RRS\Panel.h" />
-    <ClInclude Include="include\RRS\EventType.h" />
     <ClInclude Include="src\DisplayParams.h" />
     <ClInclude Include="include\RRS\Label.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\EventCallback.cpp" />
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\EventListener.cpp" />
     <ClCompile Include="src\Panel.cpp" />

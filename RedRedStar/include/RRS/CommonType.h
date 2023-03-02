@@ -12,4 +12,20 @@ namespace RRS {
 		float W;
 		float H;
 	};
+	enum class EventType
+	{
+		WindowClosed,
+		WindowClosing,
+		Loaded,
+		Hide,
+		Show,
+		Resize,
+		Focs,
+		Blur,
+		/// <summary>
+		/// 
+		/// </summary>
+		MouseOver,
+		MouseOut,
+	};
 }

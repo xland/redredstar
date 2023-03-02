@@ -144,10 +144,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="WindowHelloWorld.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="WindowHelloWorld.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\RedRedStar\RedRedStar.vcxproj">

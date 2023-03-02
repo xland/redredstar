@@ -5,8 +5,8 @@
 
 namespace RRS {
 	Element::Element()
-		:ParentElement{nullptr} 
-		,OwnerWindow {nullptr}
+		:parentElement{nullptr}
+		,ownerWindow {nullptr}
 	{
 		
 	}
@@ -20,9 +20,9 @@ namespace RRS {
 	}
 	void Element::calculatePosition()
 	{
-		if (ParentElement) {
-			xAbsolute = ParentElement->xAbsolute + GetXOffset();
-			yAbsolute = ParentElement->yAbsolute + GetYOffset();
+		if (parentElement) {
+			xAbsolute = parentElement->xAbsolute + GetXOffset();
+			yAbsolute = parentElement->yAbsolute + GetYOffset();
 		}
 		else
 		{
@@ -33,6 +33,29 @@ namespace RRS {
 	bool Element::GetIsMouseEnter()
 	{
 		return isMouseEnter;
+	}
+	void Element::SetParentElement(Element* element)
+	{
+		parentElement = element;
+	}
+	Window* Element::GetOwnerWindow()
+	{
+		Window* result = ownerWindow;
+		if (!result) {
+			auto parent = parentElement;
+			while (!result && parent)
+			{
+				result = parent->ownerWindow;
+				parent = parent->parentElement;
+			}
+			ownerWindow = result;
+		}
+		return result;
+	}
+
+	Element* Element::GetParentElement()
+	{
+		return parentElement;
 	}
 	void Element::SetIsMouseEnter(int x, int y)
 	{

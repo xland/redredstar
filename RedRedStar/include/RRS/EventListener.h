@@ -1,23 +1,21 @@
 #pragma once
-#include "EventType.h"
+#include "CommonType.h"
 #include <map>
 #include <list>
+#include <memory>
 #include <functional>
 
 namespace RRS {
-	class EventListener;
-	using EventCallBack = std::function<void(EventListener*)>;
-	using Dispatcher = std::multimap<EventType, EventCallBack>;
-	using EventPointer = void*;
+	class EventCallback;
 	class EventListener
 	{
 	public:
 		EventListener();
 		~EventListener();
-		virtual EventPointer AddEventListener(EventType eventType, EventCallBack&& callBack);
-		virtual void RemoveEventListener(EventType eventType, EventPointer callBack);
+		virtual int AddEventListener(EventType eventType, std::function<void(EventListener*)> callBack);
+		virtual void RemoveEventListener(EventType eventType, int callBackId);
 		void EmitEvent(EventType eventType);
 	protected:	
-		Dispatcher dispatcher;
+		std::multimap<EventType, std::shared_ptr<EventCallback>> dispatcher;
 	};
 }

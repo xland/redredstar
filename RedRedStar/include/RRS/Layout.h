@@ -28,7 +28,7 @@ namespace RRS {
 	protected:
 		Layout();
 		~Layout();
-		void addLayoutChild(std::shared_ptr<Element> target);
+		void addLayoutChild(Layout* target);
 		YGNode* layout;
 		float xAbsolute = 0;
 		float yAbsolute = 0;

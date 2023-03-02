@@ -1,5 +1,5 @@
 #include "../include/RRS/EventListener.h"
-
+#include "../include/RRS/EventCallback.h"
 
 namespace RRS {
 	
@@ -12,17 +12,17 @@ namespace RRS {
 	{
 	}
 	//todo 这些都是同步事件，要搞一套异步事件出来
-	EventPointer EventListener::AddEventListener(EventType eventType, EventCallBack&& callBack)
+	int EventListener::AddEventListener(EventType eventType, std::function<void(EventListener*)> callBack)
 	{
-		auto iter = dispatcher.insert({ eventType ,callBack });
-		auto a = &iter->second;		
-		return a;
+		std::shared_ptr<EventCallback> functor = std::make_shared<EventCallback>(callBack);
+		dispatcher.insert({ eventType ,functor });
+		return functor->Id;
 	}
-	void EventListener::RemoveEventListener(EventType eventType, EventPointer callBack)
+	void EventListener::RemoveEventListener(EventType eventType, int callBackId)
 	{
 		for (auto it = dispatcher.begin(); it != dispatcher.end();)
 		{
-			if (it->first == eventType && (&it->second) == (EventCallBack*)callBack)
+			if (it->first == eventType && it->second->Id == callBackId)
 			{
 				it = dispatcher.erase(it);
 			}
@@ -36,7 +36,7 @@ namespace RRS {
 	{
 		auto range = dispatcher.equal_range(eventType);
 		for (auto it = range.first; it != range.second; ++it) {
-			it->second(this);
+			it->second->Execute(this);
 		}
 	}
 }

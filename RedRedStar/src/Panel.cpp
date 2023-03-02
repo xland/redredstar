@@ -8,10 +8,10 @@ namespace RRS {
 	Panel::Panel()
 	{
 		AddEventListener(EventType::MouseOver, [this](EventListener* arg) {
-			InvalidateRect(OwnerWindow->Hwnd, nullptr, false);
+			//InvalidateRect(OwnerWindow->Hwnd, nullptr, false);
 		});
 		AddEventListener(EventType::MouseOut, [this](EventListener* arg) {
-			InvalidateRect(OwnerWindow->Hwnd, nullptr, false);
+			//InvalidateRect(OwnerWindow->Hwnd, nullptr, false);
 		});
 	}
 	Panel::~Panel()
@@ -38,7 +38,7 @@ namespace RRS {
 		paint.setStrokeJoin(SkPaint::Join::kRound_Join);
 		SkRect rect = SkRect::MakeXYWH(xAbsolute, yAbsolute, GetWidth(), GetHeight());
 		canvas->drawRoundRect(rect, 12.0, 12.0, paint);
-		for (auto element : Children)
+		for (auto element : children)
 		{
 			element->Paint(canvas);
 		}
@@ -46,16 +46,15 @@ namespace RRS {
 	void Panel::SetIsMouseEnter(int x, int y)
 	{
 		Element::SetIsMouseEnter(x, y);
-		for (auto& item : Children)
+		for (auto& item : children)
 		{
 			item->SetIsMouseEnter(x, y);
 		}
 	}
-	void Panel::AddElement(std::shared_ptr<Element> element)
+	void Panel::AddChildElement(std::shared_ptr<Element> element)
 	{
-		element->OwnerWindow = this->OwnerWindow;
-		element->ParentElement = this;
-		addLayoutChild(element);
-		Children.push_back(element);
+		element->SetParentElement(this);
+		addLayoutChild(element.get());
+		children.push_back(element);
 	}
 }

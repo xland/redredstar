@@ -8,7 +8,6 @@ namespace RRS {
 	{
 		SkRect rect;
 		SkString str{ Text };
-		
 		font->measureText(Text, strlen(Text), SkTextEncoding::kUTF8, &rect);
 		font->setSubpixel(true);
 		advanceX = rect.x();
@@ -16,10 +15,10 @@ namespace RRS {
 		SetSize(rect.width(), rect.height());
 	}
 	void Label::Paint(SkCanvas* canvas)
-	{		
+	{
 		calculatePosition();
 		SkPaint paint;
-		paint.setColor(SK_ColorWHITE);
+		paint.setColor(SK_ColorBLACK);
 		//paint.setAntiAlias(true);
 		canvas->drawString(Text, xAbsolute+advanceX, yAbsolute+advanceY, *font, paint);
 	}

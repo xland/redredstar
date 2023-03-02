@@ -13,7 +13,7 @@ namespace RRS {
 		SetJustifyContent(JustifyContent::Center);
 		auto label = std::make_shared<Label>("Hello World");
 		label->SetAlignSelf(LayoutAlign::Center);
-		AddElement(label);	
+		AddChildElement(label);	
 		SetSize(380, 120);
 	}
 	Button::~Button()

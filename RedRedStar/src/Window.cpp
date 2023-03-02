@@ -22,7 +22,6 @@ namespace RRS
 		}
 		width = w;
 		height = h;
-		Layout::SetSize(width, height);
 	}
 	float Window::GetWidth()
 	{
@@ -38,7 +37,6 @@ namespace RRS
 			w = widthMinimum;
 		}
 		width = w;
-		Layout::SetWidth(w);
 	}
 
 	void Window::SetHeight(float h)
@@ -47,7 +45,6 @@ namespace RRS
 			h = heightMinimum;
 		}
 		width = h;
-		Layout::SetHeight(h);
 	}
 
 	int Window::GetWidthMinimum()
@@ -104,6 +101,7 @@ namespace RRS
 	bool Window::Load() 
 	{
 		auto flag = createNativeWindow(); 
+		Layout::SetSize(width, height);
 		if (!flag) return flag;
 		initSurface();
 		OnLoad();
@@ -121,7 +119,6 @@ namespace RRS
 			EmitEvent(EventType::WindowClosed);
 		}
 	}
-
 	void Window::Show() 
 	{
 		ShowWindow(Hwnd, SW_SHOW);
@@ -132,10 +129,11 @@ namespace RRS
 		//todo
 		EmitEvent(EventType::Hide);
 	}
-	void Window::AddElement(std::shared_ptr<Element> element)
+	void Window::AddChildElement(std::shared_ptr<Element> element)
 	{
-		element->OwnerWindow = this;
-		addLayoutChild(element);
+		//todo assert not loaded
+		element->ownerWindow = this;
+		addLayoutChild(element.get());
 		Children.push_back(element);
 	}
 }

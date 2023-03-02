@@ -1,10 +1,10 @@
 #include <Windows.h>
 #include <memory>
 #include <RRS/App.h>
-#include "WindowHelloWorld.h"
-#include <RRS/EventType.h>
+#include <RRS/CommonType.h>
 #include <RRS/Window.h>
 #include <RRS/Button.h>
+#include <functional>
 
 using namespace RRS;
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow) 
@@ -17,10 +17,10 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	win->AddEventListener(EventType::Loaded, [&win](EventListener* arg) {
 		auto btn = std::make_shared<Button>();
 		btn->SetAlignSelf(LayoutAlign::Center);
-		win->AddElement(btn);
+		win->AddChildElement(btn);
 		win->Show();
 	});
-	win->AddEventListener(EventType::WindowClosed, [](EventListener* /* event emitter pointer */) {
+	win->AddEventListener(EventType::WindowClosed, [](EventListener* arg) {
 		App::Quit();
 	});
 	win->Load();

@@ -13,7 +13,7 @@ namespace RRS {
 		/// <summary>
 		/// Add an element to the window
 		/// </summary>
-		void AddElement(std::shared_ptr<Element> element);
+		void AddChildElement(std::shared_ptr<Element> element);
 		void SetBackgroundColor(Color color);
 		void SetBackgroundColorHover(Color color);
 	private:
@@ -22,7 +22,7 @@ namespace RRS {
 		/// <summary>
 		/// 
 		/// </summary>
-		std::vector<std::shared_ptr<Element>> Children;
+		std::vector<std::shared_ptr<Element>> children;
 	};
 }
 

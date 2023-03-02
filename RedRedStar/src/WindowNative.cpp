@@ -106,9 +106,10 @@ namespace RRS {
 			return 0;
 		}
 		case WM_SIZE: {
-			auto w = LOWORD(lParam);
-			auto h = HIWORD(lParam);
-			SetSize(w, h);
+			widthClient = LOWORD(lParam);
+			heightClient = HIWORD(lParam);
+			YGNodeStyleSetWidth(layout, widthClient);
+			YGNodeStyleSetHeight(layout, heightClient);
 			return 0;
 		}
 		case WM_MOUSEMOVE: {
@@ -120,16 +121,13 @@ namespace RRS {
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
 	void Window::paint() {
-		YGNodeCalculateLayout(layout, width, height, YGDirectionLTR);
+		
+		YGNodeCalculateLayout(layout, widthClient, heightClient, YGDirectionLTR);
 		SkSurface* surface = getSurface();
-		if (surface == nullptr) {
-			return;
-		}
 		auto canvas = surface->getCanvas();
 		canvas->clear(BackgroundColor);
 		for (auto element : Children)
 		{
-			element->calculatePosition();
 			element->Paint(canvas);
 		}
 		surface->flushAndSubmit();
@@ -137,7 +135,7 @@ namespace RRS {
 		SwapBuffers(dc);
 		ReleaseDC(Hwnd, dc);
 		delete surface;
-		//todo destroy context
+		//delete backendContext directContext
 	}
 	void Window::mouseMove(int x, int y)
 	{

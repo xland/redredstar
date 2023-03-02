@@ -45,13 +45,13 @@
     <ClInclude Include="include\RRS\LayoutEnum.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\RRS\EventType.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\RRS\EventListener.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\RRS\Button.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RRS\EventCallback.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -84,6 +84,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\Button.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\EventCallback.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

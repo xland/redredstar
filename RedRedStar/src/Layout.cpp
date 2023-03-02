@@ -32,7 +32,7 @@ namespace RRS {
 		YGNodeStyleSetMargin(layout, YGEdgeRight, right);
 		YGNodeStyleSetMargin(layout, YGEdgeBottom, bottom);
 	}
-	void Layout::addLayoutChild(std::shared_ptr<Element> target)
+	void Layout::addLayoutChild(Layout* target)
 	{
 		auto index = YGNodeGetChildCount(layout);
 		YGNodeInsertChild(layout, target->layout, index);

@@ -49,7 +49,7 @@ namespace RRS {
 		/// <summary>
 		/// Add an element to the window
 		/// </summary>
-		void AddElement(std::shared_ptr<Element> element);
+		void AddChildElement(std::shared_ptr<Element> element);
 
 		void SetSize(float w, float h) override;
 		float GetWidth() override;
@@ -100,7 +100,6 @@ namespace RRS {
 		/// 
 		/// </summary>
 		std::vector<std::shared_ptr<Element>> Children;
-		Layout* Layout;
 		Color BackgroundColor;		
 	protected:
 		/// <summary>
@@ -145,6 +144,8 @@ namespace RRS {
 		GrDirectContext* directContext; 
 		float width = 1000;
 		float height = 700;
+		float widthClient = 0;
+		float heightClient = 0;
 		int widthMinimum = 800;
 		int heightMinimum = 600;
 		int widthMaximum = 2000;
