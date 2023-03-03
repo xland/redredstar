@@ -8,18 +8,17 @@
 
 namespace RRS {
 	Button::Button(std::wstring labelStr): labelStr {labelStr}
-	{
-		
+	{		
 		SetBackgroundColor(GetColor(88, 28, 156));
 		SetBackgroundColorHover(GetColor(28, 88, 156));
 		SetFlexDirection(FlexDirection::Column);
 		SetJustifyContent(JustifyContent::Center);
-		this->SetBorderRadius(4.f);
+		SetBorderRadius(4.f);
 		auto label = std::make_shared<Label>(labelStr);
 		label->SetFontColor(GetColor(255, 255, 255));
 		label->SetAlignSelf(LayoutAlign::Center);
 		AddChildElement(label);	
-		SetSize(label->GetWidth() + 50, 60);		
+		SetSize(label->GetWidth() + 50, label->GetHeight() + 30);
 	}
 	Button::~Button()
 	{

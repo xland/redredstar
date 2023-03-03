@@ -1,4 +1,6 @@
 #include "../include/RRS/App.h"
+#include <ShellScalingAPI.h>
+#include <winuser.h>
 namespace RRS {
 	App::App(HINSTANCE hInstance):HInstance{hInstance}
 	{
@@ -7,7 +9,9 @@ namespace RRS {
 	{
 		delete app;
 	}
-	void App::Init(HINSTANCE hInstance) {
+	void App::Init(HINSTANCE hInstance) 
+	{
+		SetProcessDpiAwareness(PROCESS_SYSTEM_DPI_AWARE);
 		app = new App(hInstance);
 	}
 	int App::Exec() {

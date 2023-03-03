@@ -7,7 +7,7 @@
 namespace RRS {
 Label::Label(std::wstring text)
 	:Text {text}
-	,font{new SkFont(SkTypeface::MakeFromName("STSong", SkFontStyle::Normal()),20)} //Microsoft Yahei
+	,font{new SkFont(SkTypeface::MakeFromName("Microsoft YaHei", SkFontStyle::Normal()),22)} //Microsoft Yahei
 	,fontColor { GetColor(0, 0, 0) }
 {
 	SkRect rect;
