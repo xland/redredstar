@@ -16,9 +16,14 @@ namespace RRS {
 		void AddChildElement(std::shared_ptr<Element> element);
 		void SetBackgroundColor(Color color);
 		void SetBackgroundColorHover(Color color);
+		void SetBorderRadius(float borderRadius);
 	private:
+		void regMouseHoverEvent();
+		int hoverId=-1;
+		int hoverOffId = -1;
 		Color backgroundColor;
 		Color backgroundColorHover;
+		float borderRadius = 0.f;
 		/// <summary>
 		/// 
 		/// </summary>

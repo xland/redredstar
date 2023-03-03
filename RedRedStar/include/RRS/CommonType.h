@@ -22,6 +22,7 @@ namespace RRS {
 		Resize,
 		Focs,
 		Blur,
+		Click,
 		/// <summary>
 		/// 
 		/// </summary>
