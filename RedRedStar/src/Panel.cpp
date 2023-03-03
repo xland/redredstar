@@ -13,6 +13,7 @@ namespace RRS {
 	}
 	Panel::~Panel()
 	{
+		
 	}
 	void Panel::regMouseHoverEvent()
 	{
@@ -38,8 +39,15 @@ namespace RRS {
 		{
 			backgroundColor = color;
 			regMouseHoverEvent();
+		}		
+	}
+	void Panel::EmitClickEvent()
+	{
+		Element::EmitClickEvent();
+		for (auto& item : children)
+		{
+			item->EmitClickEvent();
 		}
-		
 	}
 	void Panel::SetBackgroundColorHover(Color color)
 	{
@@ -56,7 +64,7 @@ namespace RRS {
 	}
 	void Panel::Paint(SkCanvas* canvas)
 	{
-		calculatePosition();
+		CalculatePosition();
 		SkPaint paint;
 		paint.setAntiAlias(true);
 		paint.setColor(GetIsMouseEnter()?backgroundColor:backgroundColorHover);

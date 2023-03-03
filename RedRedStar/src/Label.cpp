@@ -5,7 +5,7 @@
 #include "../include/RRS/Layout.h"
 #include "modules/skparagraph/include/TextStyle.h"
 namespace RRS {
-Label::Label(std::wstring&& text)
+Label::Label(std::wstring text)
 	:Text {text}
 	,font{new SkFont(SkTypeface::MakeFromName("STSong", SkFontStyle::Normal()),20)} //Microsoft Yahei
 	,fontColor { GetColor(0, 0, 0) }
@@ -22,7 +22,7 @@ void Label::SetFontColor(Color fontColor)
 }
 void Label::Paint(SkCanvas* canvas)
 {
-	calculatePosition();
+	CalculatePosition();
 	SkPaint paint;
 	paint.setColor(fontColor);
 	paint.setAntiAlias(true);

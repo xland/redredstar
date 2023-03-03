@@ -12,6 +12,10 @@ namespace RRS
 	{
 		App::Get()->Windows.push_back(this);
 	}
+	void Window::SetTitle(std::wstring& title)
+	{
+		this->title = title;
+	}
 	void Window::SetSize(float w, float h)
 	{
 		if (w < widthMinimum) {

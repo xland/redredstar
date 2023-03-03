@@ -50,7 +50,7 @@ namespace RRS {
 		/// Add an element to the window
 		/// </summary>
 		void AddChildElement(std::shared_ptr<Element> element);
-
+		void SetTitle(std::wstring& title);
 		void SetSize(float w, float h) override;
 		float GetWidth() override;
 		float GetHeight() override;
@@ -92,13 +92,7 @@ namespace RRS {
 		/// is window shown in the center of the screen
 		/// </summary>
 		bool ShowInCenterScreen = true;
-		/// <summary>
-		/// window title
-		/// </summary>
-		std::wstring Title = L"Window";
-		/// <summary>
-		/// 
-		/// </summary>
+		
 		std::vector<std::shared_ptr<Element>> Children;
 		Color BackgroundColor;		
 	protected:
@@ -150,5 +144,6 @@ namespace RRS {
 		int heightMinimum = 600;
 		int widthMaximum = 2000;
 		int heightMaximum = 1400;
+		std::wstring title = L"Window";
 	};
 }

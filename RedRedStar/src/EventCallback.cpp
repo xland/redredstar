@@ -2,7 +2,7 @@
 #include <random>
 namespace RRS {
 	static int index = 0;
-	EventCallback::EventCallback(std::function<void(EventListener*)> callBack)
+	EventCallback::EventCallback(std::function<void(EventListener*)>&& callBack)
 		:callBack{ callBack },Id{index++}
 	{
 		

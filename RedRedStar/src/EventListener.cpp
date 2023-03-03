@@ -12,9 +12,9 @@ namespace RRS {
 	{
 	}
 	//todo 这些都是同步事件，要搞一套异步事件出来
-	int EventListener::AddEventListener(EventType eventType, std::function<void(EventListener*)> callBack)
+	int EventListener::AddEventListener(EventType eventType, std::function<void(EventListener*)>&& callBack)
 	{
-		std::shared_ptr<EventCallback> functor = std::make_shared<EventCallback>(callBack);
+		std::shared_ptr<EventCallback> functor = std::make_shared<EventCallback>(std::move(callBack));
 		dispatcher.insert({ eventType ,functor });
 		return functor->Id;
 	}

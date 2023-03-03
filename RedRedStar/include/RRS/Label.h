@@ -6,7 +6,7 @@ namespace RRS {
 	class Label:public Element
 	{
 		public:
-			Label(std::wstring&& text);
+			Label(std::wstring text);
 			void Paint(SkCanvas* canvas) override;
 			void SetFontColor(Color fontColor);
 			std::wstring Text;

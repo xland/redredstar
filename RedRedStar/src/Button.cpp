@@ -7,23 +7,19 @@
 #include <Windows.h>
 
 namespace RRS {
-	Button::Button() 
+	Button::Button(std::wstring labelStr): labelStr {labelStr}
 	{
+		
 		SetBackgroundColor(GetColor(88, 28, 156));
 		SetBackgroundColorHover(GetColor(28, 88, 156));
 		SetFlexDirection(FlexDirection::Column);
 		SetJustifyContent(JustifyContent::Center);
 		this->SetBorderRadius(4.f);
-		auto label = std::make_shared<Label>(L"Hello  ¿ΩÁ");
+		auto label = std::make_shared<Label>(labelStr);
 		label->SetFontColor(GetColor(255, 255, 255));
 		label->SetAlignSelf(LayoutAlign::Center);
 		AddChildElement(label);	
-		SetSize(label->GetWidth() + 50, 60);
-
-		
-		AddEventListener(EventType::Click, [this](EventListener* arg) {
-			InvalidateRect(this->GetOwnerWindow()->Hwnd, nullptr, false);
-		});
+		SetSize(label->GetWidth() + 50, 60);		
 	}
 	Button::~Button()
 	{

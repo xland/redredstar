@@ -18,7 +18,13 @@ namespace RRS {
 	void Element::Hide() {
 		//todo
 	}
-	void Element::calculatePosition()
+	void Element::EmitClickEvent()
+	{
+		if (isMouseEnter) {
+			EmitEvent(RRS::EventType::Click);
+		}
+	}
+	void Element::CalculatePosition()
 	{
 		if (parentElement) {
 			xAbsolute = parentElement->xAbsolute + GetXOffset();

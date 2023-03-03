@@ -10,6 +10,7 @@ namespace RRS {
 		~Panel();
 		void Paint(SkCanvas* canvas) override;
 		void SetIsMouseEnter(int x, int y) override;
+		void EmitClickEvent() override;
 		/// <summary>
 		/// Add an element to the window
 		/// </summary>

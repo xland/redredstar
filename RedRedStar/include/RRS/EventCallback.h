@@ -7,7 +7,7 @@ namespace RRS {
 	class EventCallback
 	{
 	public:
-		EventCallback(std::function<void(EventListener*)> callBack);
+		EventCallback(std::function<void(EventListener*)>&& callBack);
 		~EventCallback();
 		void Execute(EventListener* target);
 		int Id;

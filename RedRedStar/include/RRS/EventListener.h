@@ -12,7 +12,7 @@ namespace RRS {
 	public:
 		EventListener();
 		~EventListener();
-		virtual int AddEventListener(EventType eventType, std::function<void(EventListener*)> callBack);
+		virtual int AddEventListener(EventType eventType, std::function<void(EventListener*)>&& callBack);
 		virtual void RemoveEventListener(EventType eventType, int callBackId);
 		void EmitEvent(EventType eventType);
 	protected:	

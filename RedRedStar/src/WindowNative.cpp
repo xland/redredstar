@@ -51,7 +51,7 @@ namespace RRS {
 			XWindow = (screenRect.right - width) / 2;
 			YWindow = (screenRect.bottom - height) / 2;
 		}
-		Hwnd = CreateWindow(windowClassName.c_str(), Title.c_str(), WS_OVERLAPPEDWINDOW, XWindow, YWindow, width, height,
+		Hwnd = CreateWindow(windowClassName.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW, XWindow, YWindow, width, height,
 			nullptr, nullptr, App::Get()->HInstance, nullptr);
 		if (!Hwnd)
 		{
@@ -92,6 +92,12 @@ namespace RRS {
 		case WM_CLOSE: {
 			Close();
 			return 0;
+		}
+		case WM_LBUTTONUP: {
+			for (auto element : Children)
+			{
+				element->EmitClickEvent();
+			}
 		}
 		case WM_NCHITTEST: {
 			return hitTest(hwnd, lParam);
@@ -139,7 +145,6 @@ namespace RRS {
 	}
 	void Window::mouseMove(int x, int y)
 	{
-		bool flag = false;
 		for (auto element : Children)
 		{
 			element->SetIsMouseEnter(x, y);
