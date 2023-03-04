@@ -10,19 +10,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	App::Init(hInstance);
 	std::wstring hello = L"Hello 世界！";
 	auto win = std::make_unique<Window>();
-	win->SetTitle(hello);
-	win->SetFlexDirection(FlexDirection::Column);
-	win->SetJustifyContent(JustifyContent::Center);
-	win->AddEventListener(EventType::Loaded, [&win,&hello](EventListener* arg) {		
+	win->WindowTitle = hello;
+	win->AddEventListener(EventType::Loaded, [&win,&hello]() {		
 		auto btn = std::make_shared<Button>(hello);
-		btn->SetAlignSelf(LayoutAlign::Center);
-		btn->AddEventListener(EventType::Click, [&win,&hello](EventListener* arg) {
-			MessageBox(win->Hwnd, hello.c_str(), L"系统提示", MB_ICONWARNING | MB_OK | MB_DEFBUTTON1);
-		});
-		win->AddChildElement(btn);
+		//btn->AddEventListener(EventType::Click, [&win,&hello]() {
+		//	MessageBox(win->Hwnd, hello.c_str(), L"系统提示", MB_ICONWARNING | MB_OK | MB_DEFBUTTON1);
+		//});
+		win->AddChild(btn);
 		win->Show();
 	});
-	win->AddEventListener(EventType::WindowClosed, [](EventListener* arg) {
+	win->AddEventListener(EventType::WindowClosed, []() {
 		App::Quit();
 	});
 	win->Load();

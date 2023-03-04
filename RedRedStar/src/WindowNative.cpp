@@ -48,18 +48,16 @@ namespace RRS {
 		if (ShowInCenterScreen) {
 			RECT screenRect;
 			SystemParametersInfo(SPI_GETWORKAREA, 0, &screenRect, 0);
-			XWindow = (screenRect.right - width) / 2;
-			YWindow = (screenRect.bottom - height) / 2;
+			X = (screenRect.right - Width) / 2;
+			Y = (screenRect.bottom - Height) / 2;
 		}
-		Hwnd = CreateWindow(windowClassName.c_str(), title.c_str(), WS_OVERLAPPEDWINDOW, XWindow, YWindow, width, height,
+		Hwnd = CreateWindow(windowClassName.c_str(), WindowTitle.c_str(), WS_OVERLAPPEDWINDOW, X, Y, Width, Height,
 			nullptr, nullptr, App::Get()->HInstance, nullptr);
 		if (!Hwnd)
 		{
 			//todo log
 			return false;
 		}
-		//RECT frame;
-		//GetClientRect(hwnd, &frame);
 		SetWindowLongPtr(Hwnd, GWLP_USERDATA, (LONG_PTR)this);
 		RegisterTouchWindow(Hwnd, 0);
 		return true;
@@ -94,10 +92,7 @@ namespace RRS {
 			return 0;
 		}
 		case WM_LBUTTONUP: {
-			for (auto element : Children)
-			{
-				element->EmitClickEvent();
-			}
+			RootElement->Click();
 		}
 		case WM_NCHITTEST: {
 			return hitTest(hwnd, lParam);
@@ -105,50 +100,43 @@ namespace RRS {
 		case WM_GETMINMAXINFO: {
 			MINMAXINFO* mminfo;
 			mminfo = (PMINMAXINFO)lParam;
-			mminfo->ptMinTrackSize.x = widthMinimum;
-			mminfo->ptMinTrackSize.y = heightMinimum;
+			mminfo->ptMinTrackSize.x = WidthMinimum;
+			mminfo->ptMinTrackSize.y = HeightMinimum;
 			mminfo->ptMaxPosition.x = 0;
 			mminfo->ptMaxPosition.y = 0;
 			return 0;
 		}
 		case WM_SIZE: {
-			widthClient = LOWORD(lParam);
-			heightClient = HIWORD(lParam);
-			YGNodeStyleSetWidth(layout, widthClient);
-			YGNodeStyleSetHeight(layout, heightClient);
+			WidthClient = LOWORD(lParam);
+			HeightClient = HIWORD(lParam);
+			RootElement->Width = WidthClient;
+			RootElement->Height = HeightClient;
 			return 0;
 		}
 		case WM_MOUSEMOVE: {
 			auto x = GET_X_LPARAM(lParam);
 			auto y = GET_Y_LPARAM(lParam);
-			mouseMove(x, y);
+			RootElement->SetIsMouseEnter(x, y);
+		}
+		case WM_MOUSELEAVE: {
+			//todo mouse leave window work area 
+			//https://stackoverflow.com/questions/27272944/popup-window-on-wm-mousehover-in-win32-api-how-to-close-it
+			auto a = 1;
 		}
 		}
 		return DefWindowProc(hwnd, msg, wParam, lParam);
 	}
 	void Window::paint() {
-		
-		YGNodeCalculateLayout(layout, widthClient, heightClient, YGDirectionLTR);
 		SkSurface* surface = getSurface();
 		auto canvas = surface->getCanvas();
-		canvas->clear(BackgroundColor);
-		for (auto element : Children)
-		{
-			element->Paint(canvas);
-		}
+		//canvas->clear(BackgroundColor);
+		RootElement->Paint(canvas);
 		surface->flushAndSubmit();
 		HDC dc = GetDC(Hwnd);
 		SwapBuffers(dc);
 		ReleaseDC(Hwnd, dc);
 		delete surface;
 		//delete backendContext directContext
-	}
-	void Window::mouseMove(int x, int y)
-	{
-		for (auto element : Children)
-		{
-			element->SetIsMouseEnter(x, y);
-		}
 	}
 	LRESULT Window::hitTest(HWND hwnd, LPARAM lParam) {
 		POINT absoluteCursor = POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };

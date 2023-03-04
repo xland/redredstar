@@ -12,8 +12,8 @@ namespace RRS {
 	public:
 		EventListener();
 		~EventListener();
-		virtual int AddEventListener(EventType eventType, std::function<void(EventListener*)>&& callBack);
-		virtual void RemoveEventListener(EventType eventType, int callBackId);
+		virtual int AddEventListener(EventType eventType, std::function<void()>&& callBack);
+		virtual void RemoveEventListener(int callBackId);
 		void EmitEvent(EventType eventType);
 	protected:	
 		std::multimap<EventType, std::shared_ptr<EventCallback>> dispatcher;

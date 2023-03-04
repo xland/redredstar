@@ -164,8 +164,6 @@
     <ClInclude Include="include\RRS\EventListener.h" />
     <ClInclude Include="include\RRS\LayoutEnum.h" />
     <ClInclude Include="include\RRS\Window.h" />
-    <ClInclude Include="include\RRS\Layout.h" />
-    <ClInclude Include="include\RRS\Panel.h" />
     <ClInclude Include="src\DisplayParams.h" />
     <ClInclude Include="include\RRS\Label.h" />
   </ItemGroup>
@@ -174,8 +172,6 @@
     <ClCompile Include="src\EventCallback.cpp" />
     <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\EventListener.cpp" />
-    <ClCompile Include="src\Panel.cpp" />
-    <ClCompile Include="src\Layout.cpp" />
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Element.cpp" />
     <ClCompile Include="src\Window.cpp" />

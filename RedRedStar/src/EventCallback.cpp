@@ -1,8 +1,8 @@
 #include "../include/RRS/EventCallback.h"
 #include <random>
 namespace RRS {
-	static int index = 0;
-	EventCallback::EventCallback(std::function<void(EventListener*)>&& callBack)
+	static unsigned int index = 0;
+	EventCallback::EventCallback(std::function<void()>&& callBack)
 		:callBack{ callBack },Id{index++}
 	{
 		
@@ -10,8 +10,8 @@ namespace RRS {
 	EventCallback::~EventCallback()
 	{
 	}
-	void EventCallback::Execute(EventListener* target)
+	void EventCallback::Execute()
 	{
-		callBack(target);
+		callBack();
 	}
 }

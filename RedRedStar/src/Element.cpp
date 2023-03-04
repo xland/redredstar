@@ -1,79 +1,105 @@
 #include "../include/RRS/Element.h"
-#include "../include/RRS/Layout.h"
 #include "../include/RRS/App.h"
-#include <ranges>
+#include "include/core/SkCanvas.h"
+#include "../include/RRS/Window.h"
+#include <vector>
+#include <algorithm>
 
 namespace RRS {
 	Element::Element()
-		:parentElement{nullptr}
-		,ownerWindow {nullptr}
 	{
-		
 	}
 	Element::~Element()
 	{
 	}
-	void Element::Show() {
-	}
-	void Element::Hide() {
-		//todo
-	}
-	void Element::EmitClickEvent()
+	void Element::regMouseHoverEvent()
 	{
-		if (isMouseEnter) {
-			EmitEvent(RRS::EventType::Click);
+		if (backgroundColor != backgroundColorHover && hoverId == -1 && hoverOffId == -1) {
+			hoverId = AddEventListener(EventType::MouseOver, [this]() {
+				InvalidateRect(this->OwnerWindow->Hwnd, nullptr, false);
+			});
+			hoverOffId = AddEventListener(EventType::MouseOut, [this]() {
+				InvalidateRect(this->OwnerWindow->Hwnd, nullptr, false);
+			});
+		}
+		if (backgroundColor == backgroundColorHover && hoverId != -1 && hoverOffId != -1)
+		{
+			RemoveEventListener(hoverId);
+			RemoveEventListener(hoverOffId);
+			hoverId = -1;
+			hoverOffId = -1;
 		}
 	}
-	void Element::CalculatePosition()
+	void Element::AddChild(std::shared_ptr<Element> child)
 	{
-		if (parentElement) {
-			xAbsolute = parentElement->xAbsolute + GetXOffset();
-			yAbsolute = parentElement->yAbsolute + GetYOffset();
+		child->ParentElement = this;
+		Children.push_back(child);
+	}
+	void Element::SetBackgroundColor(Color color)
+	{
+		if (backgroundColor == color) return;
+		backgroundColor = color;
+		regMouseHoverEvent();
+	}
+	void Element::SetBackgroundColorHover(Color color)
+	{
+		if (backgroundColorHover == color) return;
+		backgroundColorHover = color;
+		regMouseHoverEvent();
+	}
+	void Element::Paint(SkCanvas* canvas)
+	{
+		if (isHide) return;
+		Color color = IsMouseEnter ? backgroundColorHover : backgroundColor;
+		SkPaint paint;
+		paint.setColor(color);
+		SkRect rect = SkRect::MakeXYWH(X, Y, Width, Height);
+		if (BorderRadius != 0.f) {
+			canvas->drawRoundRect(rect, BorderRadius, BorderRadius, paint);
 		}
 		else
 		{
-			xAbsolute = GetXOffset();
-			yAbsolute = GetYOffset();
+			canvas->drawRect(rect, paint);
+		}
+		for (auto ele : Children)
+		{
+			ele->Paint(canvas);
 		}
 	}
-	bool Element::GetIsMouseEnter()
+	void Element::Show() 
 	{
-		return isMouseEnter;
+		isHide = false;
 	}
-	void Element::SetParentElement(Element* element)
+	void Element::Hide() 
 	{
-		parentElement = element;
-	}
-	Window* Element::GetOwnerWindow()
-	{
-		Window* result = ownerWindow;
-		if (!result) {
-			auto parent = parentElement;
-			while (!result && parent)
-			{
-				result = parent->ownerWindow;
-				parent = parent->parentElement;
-			}
-			ownerWindow = result;
-		}
-		return result;
-	}
-
-	Element* Element::GetParentElement()
-	{
-		return parentElement;
+		isHide = true;
 	}
 	void Element::SetIsMouseEnter(int x, int y)
 	{
-		bool flag = x > xAbsolute && y > yAbsolute && x < xAbsolute + GetWidth() && y < yAbsolute + GetHeight();
-		if (!isMouseEnter && flag) {
-			isMouseEnter = true;
-			EmitEvent(EventType::MouseOver);
-		}
-		else if(isMouseEnter && !flag)
+		if (!OwnerWindow|| X > OwnerWindow->WidthClient || Y > OwnerWindow->HeightClient || isHide) return;
+		bool flag = x > X && y > Y && x < X + Width && y < Y + Height;
+		if (!IsMouseEnter && flag) 
 		{
-			isMouseEnter = false;
-			EmitEvent(EventType::MouseOut);
+			IsMouseEnter = true;
+			EmitEvent(RRS::EventType::MouseOver);
 		}
+		else if(IsMouseEnter && !flag)
+		{
+			IsMouseEnter = false;
+			EmitEvent(RRS::EventType::MouseOut);
+		}
+		for (auto& ele : Children)
+		{
+			ele->SetIsMouseEnter(x, y);
+		}
+	}
+	void Element::Click()
+	{
+		if (!IsMouseEnter) return;
+		EmitEvent(RRS::EventType::Click);
+		for (auto& ele : Children)
+		{
+			ele->EmitEvent(RRS::EventType::Click);
+		}			
 	}
 }

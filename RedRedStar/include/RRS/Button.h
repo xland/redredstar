@@ -1,12 +1,8 @@
 #pragma once
-#include "Panel.h"
-#include "Color.h"
-#include <memory>
 #include <string>
+#include "Element.h"
 namespace RRS {
-	class Panel;
-	class Label;
-	class Button : public Panel
+	class Button : public Element
 	{
 	public:
 		Button(std::wstring label);

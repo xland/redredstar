@@ -27,9 +27,6 @@
     <ClInclude Include="src\DisplayParams.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="include\RRS\Layout.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="include\RRS\CommonType.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -37,9 +34,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\RRS\Label.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="include\RRS\Panel.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="include\RRS\LayoutEnum.h">
@@ -74,13 +68,7 @@
     <ClCompile Include="src\WindowSurface.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="src\Layout.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="src\Label.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Panel.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\EventListener.cpp">
