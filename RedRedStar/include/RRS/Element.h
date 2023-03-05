@@ -27,7 +27,6 @@ namespace RRS {
 		void SetIsMouseEnter(int x, int y);
 		void Click();
 		void AddChild(std::shared_ptr<Element> child);
-		std::vector<std::shared_ptr<Element>> Children;
 		void SetBackgroundColor(Color color);
 		void SetBackgroundColorHover(Color color);
 		void SetDirty(bool flag) override;
@@ -42,7 +41,6 @@ namespace RRS {
 
 		float width = 0.f;
 		float height = 0.f;
-		void regMouseHoverEvent();
 		int hoverId = -1;
 		int hoverOffId = -1;
 		Color backgroundColorHover = GetColor(255, 255, 255);

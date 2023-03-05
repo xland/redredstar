@@ -1,7 +1,38 @@
 #include "../include/RRS/Layout.h"
+#include "../include/RRS/Element.h"
+#include <vector>
+#include <memory>
 
 namespace RRS {
-
+	void Layout::CaculateLayout()
+	{
+		auto alignHorizontal = GetAlignHorizontal();
+		switch (alignHorizontal)
+		{
+		case RRS::Align::Start:
+			{
+			for (const auto& element : Children)
+			{
+				 
+			}
+			}
+			break;
+		case RRS::Align::Center:
+			break;
+		case RRS::Align::End:
+			break;
+		default:
+			break;
+		}
+		//if (GetAlignHorizontal() == Align::Center) {
+		//	auto x = (parent->GetWidth() - width) / 2 + parent->GetXAbsolute();
+		//	SetXAbsolute(x);
+		//}
+		//if (GetAlignVertical() == Align::Center) {
+		//	auto y = (parent->GetHeight() - height) / 2 + parent->GetYAbsolute();
+		//	SetYAbsolute(y);
+		//}
+	}
 	void Layout::SetXAbsolute(float xAbsolute)
 	{ 
 		this->xAbsolute = xAbsolute;

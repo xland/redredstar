@@ -10,8 +10,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	App::Init(hInstance);
 	std::wstring hello = L"Hello  ¿ΩÁ";
 	auto win = std::make_unique<Window>();
-	//win->SetAlignHorizontal(Align::Center);
-	//win->SetAlignVertical(Align::Center);
+	win->SetAlignHorizontal(Align::Center);
+	win->SetAlignVertical(Align::Center);
 	win->WindowTitle = hello;
 	win->AddEventListener(EventType::Loaded, [&win,&hello]() {		
 		auto btn = std::make_shared<Button>(hello);

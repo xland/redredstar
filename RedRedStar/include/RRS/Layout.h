@@ -1,12 +1,16 @@
 #pragma once
 #include "LayoutEnum.h"
+#include <vector>
+#include <memory>
 
 namespace RRS {
+	class Element;
 	class Layout
 	{
 	public:
 		Layout() = default;
 		~Layout() = default;
+		void CaculateLayout();
 		void  SetXAbsolute(float xAbsolute);
 		void  SetYAbsolute(float yAbsolute);
 		void  SetWidthPercent(float widthPercent);
@@ -31,11 +35,21 @@ namespace RRS {
 		virtual void SetHeight(float height) = 0;
 		virtual float GetWidth() = 0;
 		virtual float GetHeight() = 0;
+
+		std::vector<std::shared_ptr<Element>> Children;
 	private:
 		float xAbsolute = 0.f;
 		float yAbsolute = 0.f;
 		float widthPercent = 0.f;
 		float heightPercent = 0.f;
+		float marginLeft = 0.f;
+		float marginRight = 0.f;
+		float marginTop = 0.f;
+		float marginBottom = 0.f;
+		float paddingLeft = 0.f;
+		float paddingRight = 0.f;
+		float paddingTop = 0.f;
+		float paddingBottom = 0.f;
 		bool useWidthPercent = false;
 		bool useHeightPercent = false;
 		FlexDirection flexDirection = FlexDirection::Row;

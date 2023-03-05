@@ -12,24 +12,6 @@ namespace RRS {
 	Element::~Element()
 	{
 	}
-	void Element::regMouseHoverEvent()
-	{
-		//if (backgroundColor != backgroundColorHover && hoverId == -1 && hoverOffId == -1) {
-		//	hoverId = AddEventListener(EventType::MouseOver, [this]() {
-		//		InvalidateRect(this->OwnerWindow->Hwnd, nullptr, false);
-		//	});
-		//	hoverOffId = AddEventListener(EventType::MouseOut, [this]() {
-		//		InvalidateRect(this->OwnerWindow->Hwnd, nullptr, false);
-		//	});
-		//}
-		//if (backgroundColor == backgroundColorHover && hoverId != -1 && hoverOffId != -1)
-		//{
-		//	RemoveEventListener(hoverId);
-		//	RemoveEventListener(hoverOffId);
-		//	hoverId = -1;
-		//	hoverOffId = -1;
-		//}
-	}
 	void Element::AddChild(std::shared_ptr<Element> child)
 	{
 		child->ParentElement = this;
@@ -37,15 +19,11 @@ namespace RRS {
 	}
 	void Element::SetBackgroundColor(Color color)
 	{
-		if (backgroundColor == color) return;
 		backgroundColor = color;
-		regMouseHoverEvent();
 	}
 	void Element::SetBackgroundColorHover(Color color)
 	{
-		if (backgroundColorHover == color) return;
 		backgroundColorHover = color;
-		regMouseHoverEvent();
 	}
 	void Element::SetDirty(bool flag) {
 		Layout::SetDirty(flag);

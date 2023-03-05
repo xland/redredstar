@@ -83,7 +83,6 @@ namespace RRS {
 		bool HasFrame = true;
 		std::wstring WindowTitle = L"Red Red Star Window";
 		Color BackgroundColor = GetColor(255, 255, 255);
-		std::vector<std::shared_ptr<Element>> Children;
 	protected:
 		/// <summary>
 		/// OnLoad method will be called after window and drawing engine are initialized
