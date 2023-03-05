@@ -5,6 +5,7 @@
 #include <vector>
 #include "EventListener.h"
 #include "Element.h"
+#include "Layout.h"
 struct GrGLInterface;
 class GrDirectContext;
 class SkSurface;
@@ -13,7 +14,7 @@ class SkSurface;
 namespace RRS {
 	class DisplayParams;
 	class WindowContext;
-	class Window :public EventListener
+	class Window :public EventListener,public Layout
 	{
 	public:
 		/// <summary>
@@ -46,7 +47,10 @@ namespace RRS {
 		/// Close the window
 		/// </summary>
 		void Close();
-
+		void SetWidth(float width) override;
+		void SetHeight(float height) override;
+		float GetWidth() override;
+		float GetHeight() override;
 		void AddChild(std::shared_ptr<Element> child);
 		/// <summary>
 		/// window's handle
@@ -78,7 +82,8 @@ namespace RRS {
 		bool CanResize = true;
 		bool HasFrame = true;
 		std::wstring WindowTitle = L"Red Red Star Window";
-		Element* RootElement = nullptr;
+		Color BackgroundColor = GetColor(255, 255, 255);
+		std::vector<std::shared_ptr<Element>> Children;
 	protected:
 		/// <summary>
 		/// OnLoad method will be called after window and drawing engine are initialized
@@ -112,6 +117,7 @@ namespace RRS {
 		LRESULT hitTest(HWND hwnd, LPARAM lParam);
 		void initSurface();
 		void paint();
+		void paintLoopThread();
 		bool createNativeWindow();
 		SkSurface* getSurface();
 		void disposeSurfaceResource();

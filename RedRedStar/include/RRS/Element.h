@@ -2,14 +2,19 @@
 #include "CommonType.h"
 #include "Color.h"
 #include "EventListener.h"
+#include "Layout.h"
 class SkCanvas;
 namespace RRS {
 	class Window;
-	class Element:public EventListener
+	class Element:public EventListener,public Layout
 	{
 	public:
 		Element();
 		~Element();
+		void SetWidth(float width) override;
+		void SetHeight(float height) override;
+		float GetWidth() override;
+		float GetHeight() override;
 		virtual void Paint(SkCanvas* canvas);
 		/// <summary>
 		/// show the element
@@ -25,22 +30,18 @@ namespace RRS {
 		std::vector<std::shared_ptr<Element>> Children;
 		void SetBackgroundColor(Color color);
 		void SetBackgroundColorHover(Color color);
-		Window* OwnerWindow = nullptr;
+		void SetDirty(bool flag) override;
+		void CaculateLayout();
+		bool IsOutOfView();
 		Element* ParentElement = nullptr;
-		bool IsMouseEnter = false;
-		float X = 0.f;
-		float Y = 0.f;
-		float Width = 0.f;
-		float Height = 0.f;
-		bool IsWidthPercent = false;
-		bool IsHeightPercent = false;
-		bool IsFlexDirectionRow = true;
-		unsigned AlignmentVertical = 0;
-		unsigned AlignmentHorizontal = 0;
-		float Flex = 0.f;
+		bool IsMouseEnter = false;		
+		Window* OwnerWindow = nullptr;
 		float BorderRadius = 0.f;
 	protected:
 	private:
+
+		float width = 0.f;
+		float height = 0.f;
 		void regMouseHoverEvent();
 		int hoverId = -1;
 		int hoverOffId = -1;

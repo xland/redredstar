@@ -7,21 +7,21 @@
 using namespace RRS;
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow)
 {
-	App::Init(hInstance);
-	std::wstring hello = L"Hello 世界！";
-	auto win = std::make_unique<Window>();
-	win->SetTitle(hello);
-	win->SetFlexDirection(FlexDirection::Row);
-	
-	win->AddEventListener(EventType::Loaded, [&win](EventListener* arg) {
-		auto panel = std::make_shared<Panel>();
-		panel->SetWidth(100);
-		win->AddChildElement(panel);
-		win->Show();
-	});
-	win->AddEventListener(EventType::WindowClosed, [](EventListener* arg) {
-		App::Quit();
-	});
-	win->Load();
-	return App::Exec();
+	//App::Init(hInstance);
+	//std::wstring hello = L"Hello 世界！";
+	//auto win = std::make_unique<Window>();
+	//win->SetTitle(hello);
+	//win->SetFlexDirection(FlexDirection::Row);
+	//
+	//win->AddEventListener(EventType::Loaded, [&win](EventListener* arg) {
+	//	auto panel = std::make_shared<Panel>();
+	//	panel->SetWidth(100);
+	//	win->AddChildElement(panel);
+	//	win->Show();
+	//});
+	//win->AddEventListener(EventType::WindowClosed, [](EventListener* arg) {
+	//	App::Quit();
+	//});
+	//win->Load();
+	//return App::Exec();
 }

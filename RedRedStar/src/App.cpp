@@ -1,4 +1,5 @@
 #include "../include/RRS/App.h"
+#include "../include/RRS/Window.h"
 #include <ShellScalingAPI.h>
 #include <winuser.h>
 namespace RRS {
@@ -9,10 +10,11 @@ namespace RRS {
 	{
 		delete app;
 	}
+
 	void App::Init(HINSTANCE hInstance) 
 	{
 		SetProcessDpiAwareness(PROCESS_SYSTEM_DPI_AWARE);
-		app = new App(hInstance);
+		app = new App(hInstance);		
 	}
 	int App::Exec() {
 		MSG msg = { };
@@ -32,7 +34,7 @@ namespace RRS {
 	void App::RemoveWindow(Window* window)
 	{
 		for (int i = 0; i < Windows.size(); i++) {
-			if (Windows.at(i) == window) {
+			if (Windows[i] == window) {
 				Windows.erase(Windows.begin() + i);
 				break;
 			}

@@ -10,11 +10,14 @@ namespace RRS {
 	{
 		SetBackgroundColor(GetColor(88, 28, 156));
 		SetBackgroundColorHover(GetColor(28, 88, 156));
-		AlignmentHorizontal = 1;
+		SetAlignHorizontal(Align::Center);
+		SetAlignVertical(Align::Center);
 		auto label = std::make_shared<Label>(labelStr);
 		label->SetFontColor(GetColor(255, 255, 255));
-		Width = label->Width + 50;
-		Height = label->Height + 30;
+		auto w = label->GetWidth() + 50;
+		auto h = label->GetHeight() + 30;
+		SetWidth(w);
+		SetHeight(h);
 		AddChild(label);
 	}
 	Button::~Button()

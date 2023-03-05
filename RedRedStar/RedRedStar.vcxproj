@@ -121,8 +121,8 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <Lib>
-      <AdditionalLibraryDirectories>D:\sdk\skia\out\$(configuration);D:\sdk\yoga\build\yoga\$(configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenGL32.Lib;skunicode.lib;sktext.lib;sksg.lib;skparagraph.lib;skottie.lib;skia.lib;yogacore.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;Shcore.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sdk\skia\out\$(configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.Lib;skunicode.lib;sktext.lib;sksg.lib;skparagraph.lib;skottie.lib;skia.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;Shcore.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -149,8 +149,8 @@
       <EnableDpiAwareness>PerMonitorHighDPIAware</EnableDpiAwareness>
     </Manifest>
     <Lib>
-      <AdditionalLibraryDirectories>D:\sdk\skia\out\$(configuration);D:\sdk\yoga\build\yoga\$(configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>OpenGL32.Lib;skunicode.lib;sktext.lib;sksg.lib;skparagraph.lib;skottie.lib;skia.lib;yogacore.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\sdk\skia\out\$(configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>OpenGL32.Lib;skunicode.lib;sktext.lib;sksg.lib;skparagraph.lib;skottie.lib;skia.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -164,10 +164,12 @@
     <ClInclude Include="include\RRS\EventListener.h" />
     <ClInclude Include="include\RRS\LayoutEnum.h" />
     <ClInclude Include="include\RRS\Window.h" />
+    <ClInclude Include="include\RRS\Layout.h" />
     <ClInclude Include="src\DisplayParams.h" />
     <ClInclude Include="include\RRS\Label.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Layout.cpp" />
     <ClCompile Include="src\ButtonSelectable.cpp" />
     <ClCompile Include="src\EventCallback.cpp" />
     <ClCompile Include="src\Button.cpp" />

@@ -2,7 +2,6 @@
 #include "../include/RRS/App.h"
 #include "include/core/SkCanvas.h"
 #include "include/core/SkSurface.h"
-#include <Yoga.h>
 #include <windowsx.h>
 namespace RRS {
     LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) 
@@ -92,7 +91,10 @@ namespace RRS {
 			return 0;
 		}
 		case WM_LBUTTONUP: {
-			RootElement->Click();
+			for (size_t i = 0; i < Children.size(); i++)
+			{
+				Children[i]->Click();
+			}
 		}
 		case WM_NCHITTEST: {
 			return hitTest(hwnd, lParam);
@@ -109,14 +111,19 @@ namespace RRS {
 		case WM_SIZE: {
 			WidthClient = LOWORD(lParam);
 			HeightClient = HIWORD(lParam);
-			RootElement->Width = WidthClient;
-			RootElement->Height = HeightClient;
+			for (size_t i = 0; i < Children.size(); i++)
+			{
+				Children[i]->SetDirty(true);
+			}
 			return 0;
 		}
 		case WM_MOUSEMOVE: {
 			auto x = GET_X_LPARAM(lParam);
 			auto y = GET_Y_LPARAM(lParam);
-			RootElement->SetIsMouseEnter(x, y);
+			for (size_t i = 0; i < Children.size(); i++)
+			{
+				Children[i]->SetIsMouseEnter(x, y);
+			}
 		}
 		case WM_MOUSELEAVE: {
 			//todo mouse leave window work area 
@@ -129,8 +136,11 @@ namespace RRS {
 	void Window::paint() {
 		SkSurface* surface = getSurface();
 		auto canvas = surface->getCanvas();
-		//canvas->clear(BackgroundColor);
-		RootElement->Paint(canvas);
+		canvas->clear(BackgroundColor);
+		for (size_t i = 0; i < Children.size(); i++)
+		{
+			Children[i]->Paint(canvas);
+		}
 		surface->flushAndSubmit();
 		HDC dc = GetDC(Hwnd);
 		SwapBuffers(dc);

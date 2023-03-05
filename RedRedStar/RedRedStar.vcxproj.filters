@@ -51,6 +51,9 @@
     <ClInclude Include="include\RRS\ButtonSelectable.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="include\RRS\Layout.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp">
@@ -81,6 +84,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="src\ButtonSelectable.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Layout.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

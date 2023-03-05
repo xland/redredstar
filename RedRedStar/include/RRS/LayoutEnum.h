@@ -1,30 +1,14 @@
 #pragma once
 namespace RRS {
-	enum class LayoutAlign
+	enum class Align
 	{
-		Auto,
-		FlexStart,
+		Start,
 		Center,
-		FlexEnd,
-		Stretch,
-		Baseline,
-		SpaceBetween,
-		SpaceAround
+		End
 	};
 	enum class FlexDirection
 	{
 		Column,
-		ColumnReverse,
-		Row,
-		RowReverse
-	};
-	enum class JustifyContent
-	{
-		FlexStart,
-		Center,
-		FlexEnd,
-		SpaceBetwee,
-		SpaceAroundn,
-		SpaceEvenly
+		Row
 	};
 }
