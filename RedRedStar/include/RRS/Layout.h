@@ -18,6 +18,14 @@ namespace RRS {
 		void  SetflexDirection(FlexDirection flexDirection);
 		void  SetAlignVertical(Align alignVertical);
 		void  SetAlignHorizontal(Align alignHorizontal);
+		void SetMarginLeft(float marginLeft);
+		void SetMarginRight(float marginRight);
+		void SetMarginTop(float marginTop);
+		void SetMarginBottom(float marginBottom);
+		void SetPaddingLeft(float paddingLeft);
+		void SetPaddingRight(float paddingRight);
+		void SetPaddingTop(float paddingTop);
+		void SetPaddingBottom(float paddingBottom);
 		void  SetFlex(float flex);
 		virtual void  SetDirty(bool flag);
 
@@ -28,6 +36,16 @@ namespace RRS {
 		FlexDirection  GetflexDirection();
 		Align  GetAlignVertical();
 		Align  GetAlignHorizontal();
+
+		float GetMarginLeft();
+		float GetMarginRight();
+		float GetMarginTop();
+		float GetMarginBottom();
+		float GetPaddingLeft();
+		float GetPaddingRight();
+		float GetPaddingTop();
+		float GetPaddingBottom();
+
 		float  GetFlex();
 		bool  GetDirty();
 
@@ -38,6 +56,8 @@ namespace RRS {
 
 		std::vector<std::shared_ptr<Element>> Children;
 	private:
+		void caculateAlignHorizontal();
+		void caculateAlignVertical();
 		float xAbsolute = 0.f;
 		float yAbsolute = 0.f;
 		float widthPercent = 0.f;

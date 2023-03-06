@@ -137,6 +137,7 @@ namespace RRS {
 		SkSurface* surface = getSurface();
 		auto canvas = surface->getCanvas();
 		canvas->clear(BackgroundColor);
+		CaculateLayout();
 		for (size_t i = 0; i < Children.size(); i++)
 		{
 			Children[i]->Paint(canvas);

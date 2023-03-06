@@ -30,7 +30,7 @@ namespace RRS {
 		void SetBackgroundColor(Color color);
 		void SetBackgroundColorHover(Color color);
 		void SetDirty(bool flag) override;
-		void CaculateLayout();
+		//void CaculateLayout();
 		bool IsOutOfView();
 		Element* ParentElement = nullptr;
 		bool IsMouseEnter = false;		
