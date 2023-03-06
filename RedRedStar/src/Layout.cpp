@@ -68,7 +68,6 @@ namespace RRS {
 			break;
 		}
 	}
-
 	void Layout::caculateAlignVertical()
 	{
 		auto alignVertical = GetAlignVertical();

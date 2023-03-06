@@ -2,6 +2,8 @@
 #include "../include/RRS/Window.h"
 #include <ShellScalingAPI.h>
 #include <winuser.h>
+#include <thread>
+#include <chrono>
 namespace RRS {
 	App::App(HINSTANCE hInstance):HInstance{hInstance}
 	{
@@ -31,6 +33,30 @@ namespace RRS {
 	void App::Quit() {
 		PostQuitMessage(0);
 	}
+	void App::OnAllWindowClosed(std::function<void()>&& cb)
+	{
+		app->onAllWindowClosed = cb;
+	}
+
+	void App::paintLoopThread(Window* window)
+	{
+		while (window->Hwnd)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(18));
+			if (window->Hwnd && window->GetDirty())
+			{
+				InvalidateRect(window->Hwnd, nullptr, false);
+				window->SetDirty(false);
+			}
+		}
+		delete window;
+	}
+	void App::AddWindow(Window* window)
+	{
+		Windows.push_back(window);
+		std::thread t(&App::paintLoopThread, app,window);
+		t.detach();
+	}
 	void App::RemoveWindow(Window* window)
 	{
 		for (int i = 0; i < Windows.size(); i++) {
@@ -38,6 +64,10 @@ namespace RRS {
 				Windows.erase(Windows.begin() + i);
 				break;
 			}
+		}
+		if (Windows.size() < 1 && onAllWindowClosed) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(20)); //等待资源释放完毕
+			onAllWindowClosed();
 		}
 	}
 }

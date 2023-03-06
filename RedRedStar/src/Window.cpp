@@ -1,14 +1,12 @@
 #include "../include/RRS/App.h"
 #include "../include/RRS/Window.h"
 #include "../include/RRS/Element.h"
-#include <thread>
-#include <chrono>
 
 namespace RRS 
 {
 	Window::Window()
 	{
-		App::Get()->Windows.push_back(this);
+		
 	}
 	Window::~Window()
 	{
@@ -20,9 +18,8 @@ namespace RRS
 		initSurface();
 		OnLoad();
 		EmitEvent(EventType::Loaded);
-		SetDirty(false);
-		std::thread t(&Window::paintLoopThread, this);
-		t.detach();
+		SetDirty(false); //第一次不需要重绘，因为操作系统会自动重绘
+		App::Get()->AddWindow(this);		
 		return true;
 	}
 	void Window::AddChild(std::shared_ptr<Element> child)
@@ -46,23 +43,12 @@ namespace RRS
 	{
 		auto flag = OnClose();
 		if (flag) {
-			App::Get()->RemoveWindow(this);
-			disposeSurfaceResource();
 			DestroyWindow(Hwnd);
 			OnClosed();
 			EmitEvent(EventType::WindowClosed);
-		}
-	}
-	void Window::paintLoopThread()
-	{
-		while (true)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(18));
-			if (GetDirty())
-			{
-				InvalidateRect(Hwnd, nullptr, false);
-				SetDirty(false);
-			}
+			disposeSurfaceResource();
+			App::Get()->RemoveWindow(this);
+			Hwnd = nullptr;
 		}
 	}
 	void Window::SetWidth(float width)

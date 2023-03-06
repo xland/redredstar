@@ -15,13 +15,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	win->WindowTitle = hello;
 	win->AddEventListener(EventType::Loaded, [&win,&hello]() {		
 		auto btn = std::make_shared<Button>(hello);
-		//btn->AddEventListener(EventType::Click, [&win,&hello]() {
-		//	MessageBox(win->Hwnd, hello.c_str(), L"系统提示", MB_ICONWARNING | MB_OK | MB_DEFBUTTON1);
-		//});
+		btn->AddEventListener(EventType::Click, [&win,&hello]() {
+			MessageBox(win->Hwnd, hello.c_str(), L"系统提示", MB_ICONWARNING | MB_OK | MB_DEFBUTTON1);
+		});
 		win->AddChild(btn);
 		win->Show();
 	});
-	win->AddEventListener(EventType::WindowClosed, []() {
+	App::OnAllWindowClosed([]() {
 		App::Quit();
 	});
 	win->Load();

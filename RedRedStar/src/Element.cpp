@@ -47,19 +47,6 @@ namespace RRS {
 	float Element::GetHeight() {
 		return height;
 	}
-	//void Element::CaculateLayout()
-	//{
-	//	Layout* parent = ParentElement;
-	//	if (!parent) parent = OwnerWindow;
-	//	if (parent->GetAlignHorizontal() == Align::Center) {
-	//		auto x = (parent->GetWidth() - width) / 2 + parent->GetXAbsolute();
-	//		SetXAbsolute(x);
-	//	}
-	//	if (parent->GetAlignVertical() == Align::Center) {
-	//		auto y = (parent->GetHeight() - height) / 2 + parent->GetYAbsolute();
-	//		SetYAbsolute(y);
-	//	}
-	//}
 	void Element::Paint(SkCanvas* canvas)
 	{
 		CaculateLayout();

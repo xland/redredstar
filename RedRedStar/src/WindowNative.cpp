@@ -147,6 +147,7 @@ namespace RRS {
 		SwapBuffers(dc);
 		ReleaseDC(Hwnd, dc);
 		delete surface;
+		SetDirty(false);
 		//delete backendContext directContext
 	}
 	LRESULT Window::hitTest(HWND hwnd, LPARAM lParam) {

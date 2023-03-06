@@ -1,6 +1,7 @@
 #pragma once
 #include <Windows.h>
 #include <vector>
+#include <functional>
 namespace RRS {
 	class Window;
 	class App
@@ -27,16 +28,18 @@ namespace RRS {
 			/// Quit Application
 			/// </summary>
 			static void Quit();
+			static void OnAllWindowClosed(std::function<void()>&& cb);
 			void RemoveWindow(Window* window);
+			void AddWindow(Window* window);
 			/// <summary>
 			/// Native application instance
 			/// </summary>
 			HINSTANCE HInstance;
 			std::vector<Window*> Windows;
-
 		private:
 			App(HINSTANCE hInstance);
-			
+			void paintLoopThread(Window* window);
+			std::function<void()> onAllWindowClosed;
 			inline static App* app{ nullptr };
 	};
 }
