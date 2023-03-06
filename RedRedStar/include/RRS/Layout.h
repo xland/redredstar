@@ -13,8 +13,6 @@ namespace RRS {
 		void CaculateLayout();
 		void  SetXAbsolute(float xAbsolute);
 		void  SetYAbsolute(float yAbsolute);
-		void  SetWidthPercent(float widthPercent);
-		void  SetHeightPercent(float heightPercent);
 		void  SetflexDirection(FlexDirection flexDirection);
 		void  SetAlignVertical(Align alignVertical);
 		void  SetAlignHorizontal(Align alignHorizontal);
@@ -37,8 +35,6 @@ namespace RRS {
 
 		float  GetXAbsolute();
 		float  GetYAbsolute();
-		float  GetWidthPercent();
-		float  GetHeightPercent();
 		FlexDirection  GetflexDirection();
 		Align  GetAlignVertical();
 		Align  GetAlignHorizontal();
@@ -60,19 +56,29 @@ namespace RRS {
 		float  GetFlex();
 		bool  GetDirty();
 
-		virtual void SetWidth(float width) = 0;
-		virtual void SetHeight(float height) = 0;
-		virtual float GetWidth() = 0;
-		virtual float GetHeight() = 0;
+		virtual void SetWidth(float width,bool isPercent = false);
+		virtual void SetHeight(float height,bool isPercent = false);
+		virtual void SetWidthReal(float widthReal);
+		virtual void SetHeightReal(float heightReal);
+		virtual float GetWidth();
+		virtual float GetHeight();
+		virtual float GetWidthReal();
+		virtual float GetHeightReal();
 
 		std::vector<std::shared_ptr<Element>> Children;
+
+		
 	private:
 		void caculateAlignHorizontal();
 		void caculateAlignVertical();
+		float caculateWidthReal(Layout* element);
+		float caculateHeightReal(Layout* element);
+		float width = 0.f;
+		float height = 0.f;
+		float widthReal = 0.f;
+		float heightReal = 0.f;
 		float xAbsolute = 0.f;
 		float yAbsolute = 0.f;
-		float widthPercent = 0.f;
-		float heightPercent = 0.f;
 		float marginLeft = 0.f;
 		float marginRight = 0.f;
 		float marginTop = 0.f;
@@ -85,8 +91,8 @@ namespace RRS {
 		float borderRight = 0.f;
 		float borderTop = 0.f;
 		float borderBottom = 0.f;
-		bool useWidthPercent = false;
-		bool useHeightPercent = false;
+		bool isWidthPercent = false;
+		bool isHeightPercent = false;
 		FlexDirection flexDirection = FlexDirection::Row;
 		Align alignVertical = Align::Start;
 		Align alignHorizontal = Align::Start;

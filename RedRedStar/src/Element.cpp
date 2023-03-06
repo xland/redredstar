@@ -30,23 +30,6 @@ namespace RRS {
 		if (!OwnerWindow) return;
 		OwnerWindow->SetDirty(flag);
 	}
-	void Element::SetWidth(float width)
-	{
-		this->width = width;
-		SetDirty(true);
-	}
-	void Element::SetHeight(float height)
-	{
-		this->height = height;
-		SetDirty(true);
-	}
-
-	float Element::GetWidth() {
-		return width;
-	}
-	float Element::GetHeight() {
-		return height;
-	}
 	void Element::Paint(SkCanvas* canvas)
 	{
 		CaculateLayout();
@@ -57,7 +40,7 @@ namespace RRS {
 			paint.setColor(color);
 			auto x = GetXAbsolute();
 			auto y = GetYAbsolute();
-			SkRect rect = SkRect::MakeXYWH(x, y, width, height);
+			SkRect rect = SkRect::MakeXYWH(x, y, GetWidthReal(), GetHeightReal());
 			if (BorderRadius != 0.f) 
 			{
 				canvas->drawRoundRect(rect, BorderRadius, BorderRadius, paint);
@@ -93,7 +76,7 @@ namespace RRS {
 		if (IsOutOfView()) return;
 		auto X = GetXAbsolute();
 		auto Y = GetYAbsolute();
-		bool flag = x > X && y > Y && x < X + width && y < Y + height;
+		bool flag = x > X && y > Y && x < X + GetWidthReal() && y < Y + GetHeightReal();
 		if (!IsMouseEnter && flag) 
 		{
 			IsMouseEnter = true;

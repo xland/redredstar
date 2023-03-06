@@ -14,7 +14,7 @@ Currently under development.
 
 - More layout method
 - A layout demo
-- Button element
+- Element cursor
 - Load Image
 - A image viewer demo
 - Table element

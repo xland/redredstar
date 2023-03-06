@@ -11,10 +11,7 @@ namespace RRS {
 	public:
 		Element();
 		~Element();
-		void SetWidth(float width) override;
-		void SetHeight(float height) override;
-		float GetWidth() override;
-		float GetHeight() override;
+		
 		virtual void Paint(SkCanvas* canvas);
 		/// <summary>
 		/// show the element
@@ -37,9 +34,6 @@ namespace RRS {
 		float BorderRadius = 0.f;
 	protected:
 	private:
-
-		float width = 0.f;
-		float height = 0.f;
 		int hoverId = -1;
 		int hoverOffId = -1;
 		Color backgroundColorHover = GetColor(255, 255, 255);

@@ -48,10 +48,12 @@ namespace RRS {
 		/// Close the window
 		/// </summary>
 		void Close();
-		void SetWidth(float width) override;
-		void SetHeight(float height) override;
+		void SetWidth(float width, bool isPercent = false) override {};
+		void SetHeight(float height, bool isPercent = false) override {};
 		float GetWidth() override;
 		float GetHeight() override;
+		float GetWidthReal();
+		float GetHeightReal();
 		void AddChild(std::shared_ptr<Element> child);
 		/// <summary>
 		/// window's handle

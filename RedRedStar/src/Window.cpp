@@ -57,7 +57,7 @@ namespace RRS
 	{
 		while (Hwnd)
 		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(2118)); //60帧左右，也不一定每帧都刷新
+			std::this_thread::sleep_for(std::chrono::milliseconds(18)); //60帧左右，也不一定每帧都刷新
 			if (GetDirty())
 			{
 				InvalidateRect(Hwnd, nullptr, false);
@@ -65,17 +65,18 @@ namespace RRS
 			}
 		}
 	}
-	void Window::SetWidth(float width)
-	{
-	}
-	void Window::SetHeight(float height)
-	{
-	}
-
 	float Window::GetWidth() {
 		return WidthClient;
 	}
 	float Window::GetHeight() {
+		return HeightClient;
+	}
+	float Window::GetWidthReal()
+	{
+		return WidthClient;
+	}
+	float Window::GetHeightReal()
+	{
 		return HeightClient;
 	}
 	void Window::Show() 
