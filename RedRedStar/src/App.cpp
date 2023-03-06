@@ -33,6 +33,10 @@ namespace RRS {
 	void App::Quit() {
 		PostQuitMessage(0);
 	}
+	const std::vector<Window*> App::GetWindows()
+	{
+		return app->windows;
+	}
 	void App::OnAllWindowClosed(std::function<void()>&& cb)
 	{
 		app->onAllWindowClosed = cb;

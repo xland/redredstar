@@ -26,6 +26,12 @@ namespace RRS {
 		void SetPaddingRight(float paddingRight);
 		void SetPaddingTop(float paddingTop);
 		void SetPaddingBottom(float paddingBottom);
+
+		void SetBorderLeft(float borderLeft);
+		void SetBorderRight(float borderRight);
+		void SetBorderTop(float borderTop);
+		void SetBorderBottom(float borderBottom);
+
 		void  SetFlex(float flex);
 		virtual void  SetDirty(bool flag);
 
@@ -45,6 +51,11 @@ namespace RRS {
 		float GetPaddingRight();
 		float GetPaddingTop();
 		float GetPaddingBottom();
+
+		float GetBorderLeft();
+		float GetBorderRight();
+		float GetBorderTop();
+		float GetBorderBottom();
 
 		float  GetFlex();
 		bool  GetDirty();
@@ -70,6 +81,10 @@ namespace RRS {
 		float paddingRight = 0.f;
 		float paddingTop = 0.f;
 		float paddingBottom = 0.f;
+		float borderLeft = 0.f;
+		float borderRight = 0.f;
+		float borderTop = 0.f;
+		float borderBottom = 0.f;
 		bool useWidthPercent = false;
 		bool useHeightPercent = false;
 		FlexDirection flexDirection = FlexDirection::Row;

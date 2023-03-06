@@ -148,7 +148,6 @@ namespace RRS {
 		ReleaseDC(Hwnd, dc);
 		delete surface;
 		SetDirty(false);
-		//delete backendContext directContext
 	}
 	LRESULT Window::hitTest(HWND hwnd, LPARAM lParam) {
 		POINT absoluteCursor = POINT{ GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };

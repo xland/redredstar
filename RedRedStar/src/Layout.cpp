@@ -207,6 +207,23 @@ namespace RRS {
 		SetDirty(true);
 	}
 
+	void Layout::SetBorderLeft(float borderLeft){
+		this->borderLeft = borderLeft;
+		SetDirty(true);
+	}
+	void Layout::SetBorderRight(float borderRight){
+		this->borderRight = borderRight;
+		SetDirty(true);
+	}
+	void Layout::SetBorderTop(float borderTop){
+		this->borderTop = borderTop;
+		SetDirty(true);
+	}
+	void Layout::SetBorderBottom(float borderBottom){
+		this->borderBottom = borderBottom;
+		SetDirty(true);
+	}
+
 	void Layout::SetFlex(float flex)
 	{ 
 		this->flex = flex;
@@ -262,6 +279,19 @@ namespace RRS {
 	}
 	float Layout::GetPaddingBottom(){ 
 		return paddingBottom;
+	}
+
+	float Layout::GetBorderLeft(){
+		return borderLeft;
+	}
+	float Layout::GetBorderRight(){
+		return borderRight;
+	}
+	float Layout::GetBorderTop(){
+		return borderTop;
+	}
+	float Layout::GetBorderBottom(){
+		return borderBottom;
 	}
 
 	float Layout::GetFlex(){

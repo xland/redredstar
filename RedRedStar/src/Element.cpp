@@ -97,18 +97,18 @@ namespace RRS {
 		if (!IsMouseEnter && flag) 
 		{
 			IsMouseEnter = true;
-			EmitEvent(RRS::EventType::MouseOver);
 			if (backgroundColor != backgroundColorHover) {
 				SetDirty(true);
 			}
+			EmitEvent(RRS::EventType::MouseOver);
 		}
 		else if(IsMouseEnter && !flag)
 		{
 			IsMouseEnter = false;
-			EmitEvent(RRS::EventType::MouseOut);
 			if (backgroundColor != backgroundColorHover) {
 				SetDirty(true);
 			}
+			EmitEvent(RRS::EventType::MouseOut);
 		}
 		for (auto& ele : Children)
 		{

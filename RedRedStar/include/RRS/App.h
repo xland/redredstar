@@ -29,6 +29,7 @@ namespace RRS {
 			/// </summary>
 			static void Quit();
 			static void OnAllWindowClosed(std::function<void()>&& cb);
+			static const std::vector<Window*> GetWindows();
 			void RemoveWindow(Window* window);
 			void AddWindow(Window* window);
 			/// <summary>
