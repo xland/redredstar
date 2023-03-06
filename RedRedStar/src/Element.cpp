@@ -32,9 +32,9 @@ namespace RRS {
 	}
 	void Element::Paint(SkCanvas* canvas)
 	{
-		CaculateLayout();
 		if (IsOutOfView()) return;
-		if (GetDirty()) {				
+		if (GetDirty()) {	
+			CaculateLayout();
 			Color color = IsMouseEnter ? backgroundColorHover : backgroundColor;
 			SkPaint paint;
 			paint.setColor(color);
@@ -48,6 +48,31 @@ namespace RRS {
 			else
 			{
 				canvas->drawRect(rect, paint);
+			}
+			paint.setStyle(SkPaint::kStroke_Style);
+			auto border = GetBorderTop();
+			if (border > 0) {
+				paint.setStrokeWidth(border);
+				paint.setColor(GetBorderTopColor());
+				canvas->drawLine({ x,y }, { x + rect.width(),y}, paint);
+			}
+			border = GetBorderRight();
+			if (border > 0) {
+				paint.setStrokeWidth(border);
+				paint.setColor(GetBorderRightColor());
+				canvas->drawLine({ x + rect.width()-border,y }, { x + rect.width()-border,y+rect.height()}, paint);
+			}
+			border = GetBorderBottom();
+			if (border > 0) {
+				paint.setStrokeWidth(border);
+				paint.setColor(GetBorderBottomColor());
+				canvas->drawLine({ x,y+rect.height()-border}, {x + rect.width(),y + rect.height() - border }, paint);
+			}
+			border = GetBorderLeft();
+			if (border > 0) {
+				paint.setStrokeWidth(border);
+				paint.setColor(GetBorderLeftColor());
+				canvas->drawLine({ x,y }, { x,y+rect.height()}, paint);
 			}
 			SetDirty(false);
 		}		

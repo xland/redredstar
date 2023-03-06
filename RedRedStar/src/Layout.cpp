@@ -27,7 +27,7 @@ namespace RRS {
 		{
 		case RRS::Align::Start:
 		{
-			auto x = GetXAbsolute() + GetPaddingLeft();
+			auto x = GetXAbsolute() + GetBorderLeft() + GetPaddingLeft();
 			for (size_t i = 0; i < Children.size(); i++)
 			{
 				auto& element = Children[i];
@@ -47,7 +47,7 @@ namespace RRS {
 				childrenWidth += caculateWidthReal(element.get());
 				childrenWidth += element->GetMarginRight();
 			}
-			float boxWidth = GetWidthReal() - GetPaddingLeft() - GetPaddingRight();
+			float boxWidth = GetWidthReal() - GetBorderLeft() - GetPaddingLeft() - GetBorderRight() - GetPaddingRight();
 			float x = (boxWidth - childrenWidth) / 2 + GetXAbsolute();
 			for (size_t i = 0; i < Children.size(); i++)
 			{
@@ -68,7 +68,7 @@ namespace RRS {
 				childrenWidth += caculateWidthReal(element.get());
 				childrenWidth += element->GetMarginRight();
 			}
-			float boxWidth = GetWidthReal() - GetPaddingLeft() - GetPaddingRight();
+			float boxWidth = GetWidthReal() - GetBorderLeft() - GetPaddingLeft() -  GetPaddingRight() - GetBorderRight();
 			float x = boxWidth - childrenWidth + GetXAbsolute();
 			for (size_t i = 0; i < Children.size(); i++)
 			{
@@ -91,7 +91,7 @@ namespace RRS {
 		{
 		case RRS::Align::Start:
 		{
-			auto y = GetYAbsolute() + GetPaddingTop();
+			auto y = GetYAbsolute() + GetPaddingTop() + GetBorderTop();
 			for (size_t i = 0; i < Children.size(); i++)
 			{
 				auto& element = Children[i];
@@ -111,7 +111,7 @@ namespace RRS {
 				childrenHeight += caculateHeightReal(element.get());
 				childrenHeight += element->GetMarginBottom();
 			}
-			float boxHeight = GetHeightReal() - GetPaddingTop() - GetPaddingBottom();
+			float boxHeight = GetHeightReal() - GetBorderTop() - GetPaddingTop() - GetPaddingBottom() - GetBorderBottom();
 			float y = (boxHeight - childrenHeight) / 2 + GetYAbsolute();
 			for (size_t i = 0; i < Children.size(); i++)
 			{
@@ -132,7 +132,7 @@ namespace RRS {
 				childrenHeight += caculateHeightReal(element.get());
 				childrenHeight += element->GetMarginBottom();
 			}
-			float boxHeight = GetHeightReal() - GetPaddingTop() - GetPaddingBottom();
+			float boxHeight = GetHeightReal() - GetBorderTop() - GetPaddingTop() - GetPaddingBottom() - GetBorderBottom();
 			float y = boxHeight - childrenHeight + GetYAbsolute();
 			for (size_t i = 0; i < Children.size(); i++)
 			{
@@ -251,22 +251,34 @@ namespace RRS {
 		SetDirty(true);
 	}
 
-	void Layout::SetBorderLeft(float borderLeft){
+	void Layout::SetBorderLeft(float borderLeft, Color color){
 		this->borderLeft = borderLeft;
+		borderLeftColor = color;
 		SetDirty(true);
 	}
-	void Layout::SetBorderRight(float borderRight){
+	void Layout::SetBorderRight(float borderRight, Color color){
 		this->borderRight = borderRight;
+		borderRightColor = color;
 		SetDirty(true);
 	}
-	void Layout::SetBorderTop(float borderTop){
+	void Layout::SetBorderTop(float borderTop, Color color){
 		this->borderTop = borderTop;
+		borderTopColor = color;
 		SetDirty(true);
 	}
-	void Layout::SetBorderBottom(float borderBottom){
+	void Layout::SetBorderBottom(float borderBottom, Color color){
 		this->borderBottom = borderBottom;
+		borderBottomColor = color;
 		SetDirty(true);
 	}
+
+
+	Color Layout::GetBorderLeftColor() { 
+		return borderLeftColor; 
+	}
+	Color Layout::GetBorderRightColor() { return borderRightColor; }
+	Color Layout::GetBorderTopColor() { return borderTopColor ; }
+	Color Layout::GetBorderBottomColor() { return borderBottomColor; }
 
 	void Layout::SetFlex(float flex)
 	{ 

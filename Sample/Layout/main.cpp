@@ -13,7 +13,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	win->WindowTitle = L"Hello ÊÀ½ç£¡";
 	win->AddEventListener(EventType::Loaded, [&win]() {
 		auto panel = std::make_shared<Element>();
-		panel->SetBackgroundColorHover(GetColor(123, 99, 12));
+		panel->SetBackgroundColor(GetColor(230, 231, 232));
+		panel->SetBorderRight(2, GetColor(204, 213, 240));
 		panel->SetWidth(300);
 		panel->SetHeight(100,true);
 		win->AddChild(panel);

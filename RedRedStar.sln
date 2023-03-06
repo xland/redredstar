@@ -19,6 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{505F65D1-967
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "img", "img", "{A25F21C8-ED77-4B55-86A8-519511C03CDE}"
 	ProjectSection(SolutionItems) = preProject
+		Doc\img\box.jpg = Doc\img\box.jpg
 		Doc\img\helloWorld.png = Doc\img\helloWorld.png
 	EndProjectSection
 EndProject

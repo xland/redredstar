@@ -4,7 +4,9 @@ namespace RRS {
 	{
 		Start,
 		Center,
-		End
+		End,
+		SpaceBetween, // |- - -|
+		SpaceAround // | - - - |
 	};
 	enum class FlexDirection
 	{

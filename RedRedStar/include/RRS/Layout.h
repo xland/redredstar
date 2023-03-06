@@ -2,6 +2,7 @@
 #include "LayoutEnum.h"
 #include <vector>
 #include <memory>
+#include "Color.h"
 
 namespace RRS {
 	class Element;
@@ -9,7 +10,8 @@ namespace RRS {
 	{
 	public:
 		Layout() = default;
-		~Layout() = default;
+		~Layout() = default; 
+		//todo |- - - -|   
 		void CaculateLayout();
 		void  SetXAbsolute(float xAbsolute);
 		void  SetYAbsolute(float yAbsolute);
@@ -25,10 +27,10 @@ namespace RRS {
 		void SetPaddingTop(float paddingTop);
 		void SetPaddingBottom(float paddingBottom);
 
-		void SetBorderLeft(float borderLeft);
-		void SetBorderRight(float borderRight);
-		void SetBorderTop(float borderTop);
-		void SetBorderBottom(float borderBottom);
+		void SetBorderLeft(float borderLeft,Color color = GetColor(0, 0, 0));
+		void SetBorderRight(float borderRight, Color color = GetColor(0, 0, 0));
+		void SetBorderTop(float borderTop, Color color = GetColor(0, 0, 0));
+		void SetBorderBottom(float borderBottom, Color color = GetColor(0, 0, 0));
 
 		void  SetFlex(float flex);
 		virtual void  SetDirty(bool flag);
@@ -52,6 +54,10 @@ namespace RRS {
 		float GetBorderRight();
 		float GetBorderTop();
 		float GetBorderBottom();
+		Color GetBorderLeftColor();
+		Color GetBorderRightColor();
+		Color GetBorderTopColor();
+		Color GetBorderBottomColor();
 
 		float  GetFlex();
 		bool  GetDirty();
@@ -87,10 +93,17 @@ namespace RRS {
 		float paddingRight = 0.f;
 		float paddingTop = 0.f;
 		float paddingBottom = 0.f;
+
 		float borderLeft = 0.f;
 		float borderRight = 0.f;
 		float borderTop = 0.f;
 		float borderBottom = 0.f;
+		Color borderLeftColor = GetColor(0, 0, 0);
+		Color borderRightColor = GetColor(0, 0, 0);
+		Color borderTopColor = GetColor(0, 0, 0);
+		Color borderBottomColor = GetColor(0, 0, 0);
+
+
 		bool isWidthPercent = false;
 		bool isHeightPercent = false;
 		FlexDirection flexDirection = FlexDirection::Row;
