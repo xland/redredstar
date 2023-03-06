@@ -21,7 +21,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		win->AddChild(btn);
 		win->Show();
 	});
-	App::OnAllWindowClosed([]() {
+	win->AddEventListener(EventType::WindowClosed, [&win]() {
+		win.reset();
 		App::Quit();
 	});
 	win->Load();

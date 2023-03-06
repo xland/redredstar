@@ -35,10 +35,9 @@ namespace RRS {
 			/// Native application instance
 			/// </summary>
 			HINSTANCE HInstance;
-			std::vector<Window*> Windows;
 		private:
+			std::vector<Window*> windows;
 			App(HINSTANCE hInstance);
-			void paintLoopThread(Window* window);
 			std::function<void()> onAllWindowClosed;
 			inline static App* app{ nullptr };
 	};

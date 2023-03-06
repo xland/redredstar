@@ -37,36 +37,19 @@ namespace RRS {
 	{
 		app->onAllWindowClosed = cb;
 	}
-
-	void App::paintLoopThread(Window* window)
-	{
-		while (window->Hwnd)
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(18));
-			if (window->Hwnd && window->GetDirty())
-			{
-				InvalidateRect(window->Hwnd, nullptr, false);
-				window->SetDirty(false);
-			}
-		}
-		delete window;
-	}
 	void App::AddWindow(Window* window)
 	{
-		Windows.push_back(window);
-		std::thread t(&App::paintLoopThread, app,window);
-		t.detach();
+		windows.push_back(window);		
 	}
 	void App::RemoveWindow(Window* window)
 	{
-		for (int i = 0; i < Windows.size(); i++) {
-			if (Windows[i] == window) {
-				Windows.erase(Windows.begin() + i);
+		for (int i = 0; i < windows.size(); i++) {
+			if (windows[i] == window) {
+				windows.erase(windows.begin() + i);
 				break;
 			}
 		}
-		if (Windows.size() < 1 && onAllWindowClosed) {
-			std::this_thread::sleep_for(std::chrono::milliseconds(20)); //等待资源释放完毕
+		if (windows.size() < 1 && onAllWindowClosed) {
 			onAllWindowClosed();
 		}
 	}

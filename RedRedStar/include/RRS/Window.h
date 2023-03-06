@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <future>
 #include "EventListener.h"
 #include "Element.h"
 #include "Layout.h"
@@ -117,6 +118,7 @@ namespace RRS {
 		void initSurface();
 		void paint();
 		void paintLoopThread();
+		std::shared_future<void> paintLoopThreadResult;
 		bool createNativeWindow();
 		SkSurface* getSurface();
 		void disposeSurfaceResource();

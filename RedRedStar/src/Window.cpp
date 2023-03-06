@@ -19,7 +19,8 @@ namespace RRS
 		OnLoad();
 		EmitEvent(EventType::Loaded);
 		SetDirty(false); //第一次不需要重绘，因为操作系统会自动重绘
-		App::Get()->AddWindow(this);		
+		App::Get()->AddWindow(this);
+		paintLoopThreadResult = std::async(&Window::paintLoopThread, this);
 		return true;
 	}
 	void Window::AddChild(std::shared_ptr<Element> child)
@@ -44,11 +45,24 @@ namespace RRS
 		auto flag = OnClose();
 		if (flag) {
 			DestroyWindow(Hwnd);
+			disposeSurfaceResource();
+			Hwnd = nullptr;
+			paintLoopThreadResult.wait();
+			App::Get()->RemoveWindow(this);
 			OnClosed();
 			EmitEvent(EventType::WindowClosed);
-			disposeSurfaceResource();
-			App::Get()->RemoveWindow(this);
-			Hwnd = nullptr;
+		}
+	}
+	void Window::paintLoopThread()
+	{
+		while (Hwnd)
+		{
+			std::this_thread::sleep_for(std::chrono::milliseconds(2118)); //60帧左右，也不一定每帧都刷新
+			if (GetDirty())
+			{
+				InvalidateRect(Hwnd, nullptr, false);
+				SetDirty(false);
+			}
 		}
 	}
 	void Window::SetWidth(float width)
