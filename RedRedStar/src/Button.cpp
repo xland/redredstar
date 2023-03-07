@@ -1,7 +1,6 @@
 #include "../include/RRS/Button.h"
 #include "../include/RRS/Label.h"
 #include "../include/RRS/Color.h"
-#include "include/core/SkCanvas.h"
 #include <Windows.h>
 
 namespace RRS {

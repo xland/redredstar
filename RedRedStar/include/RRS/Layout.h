@@ -12,7 +12,7 @@ namespace RRS {
 		Layout() = default;
 		~Layout() = default; 
 		void CaculateLayout();
-		void CaculateRealSize(float w, float h);
+		void CaculateRealSize(Layout* parent);
 		void  SetXAbsolute(float xAbsolute);
 		void  SetYAbsolute(float yAbsolute);
 		void  SetLayoutDirection(LayoutDirection layoutDirection);
@@ -75,7 +75,8 @@ namespace RRS {
 
 	
 	private:
-		void caculateRowVertical(Element* element);
+		inline void caculateRowVertical(Element* element);
+		inline void caculateColumnHorizontal(Element* element);
 		void caculateAlignHorizontal();
 		void caculateAlignVertical();
 		float width = 0.f;

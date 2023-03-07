@@ -40,6 +40,7 @@ namespace RRS {
 				color = backgroundColorHover;
 			}
 			SkPaint paint;
+			paint.setAntiAlias(true);
 			paint.setColor(color);
 			auto x = GetXAbsolute();
 			auto y = GetYAbsolute();
@@ -57,13 +58,15 @@ namespace RRS {
 			if (border > 0) {
 				paint.setStrokeWidth(border);
 				paint.setColor(GetBorderTopColor());
-				canvas->drawLine({ x,y }, { x + rect.width(),y}, paint);
+				auto temp = y + border / 2;
+				canvas->drawLine({ x,temp }, { x + rect.width(),temp}, paint);
 			}
 			border = GetBorderRight();
 			if (border > 0) {
 				paint.setStrokeWidth(border);
 				paint.setColor(GetBorderRightColor());
-				canvas->drawLine({ x + rect.width()-border,y }, { x + rect.width()-border,y+rect.height()}, paint);
+				auto temp = x + rect.width() - border/2;
+				canvas->drawLine({ temp,y }, { temp,y+rect.height()}, paint);
 			}
 			border = GetBorderBottom();
 			if (border > 0) {

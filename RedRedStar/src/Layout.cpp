@@ -5,12 +5,18 @@
 
 namespace RRS {
 
-	void Layout::CaculateRealSize(float w,float h)
+	void Layout::CaculateRealSize(Layout* parent)
 	{
 		if (isWidthPercent) {
+			auto w = parent->GetWidthReal() 
+				- parent->GetBorderLeft()  - parent->GetPaddingLeft() 
+				- parent->GetPaddingRight() - parent->GetBorderRight();
 			widthReal = w * width / 100;
 		}
 		if (isHeightPercent) {
+			auto h = parent->GetHeightReal()
+				- parent->GetBorderTop() - parent->GetPaddingTop()
+				- parent->GetPaddingBottom() - parent->GetBorderBottom();
 			heightReal = h * height / 100;
 		}
 	}
@@ -200,7 +206,7 @@ namespace RRS {
 		}
 	}
 	void Layout::caculateRowVertical(Element* element) {
-		if (alignVertical == Align::Start || alignVertical == Align::Flex || alignVertical == Align::SpaceBetween || alignVertical == Align::SpaceAround) {
+		if (alignVertical == Align::Start) {
 			auto itemY = yAbsolute + borderTop + paddingTop + element->GetMarginTop();
 			element->SetYAbsolute(itemY);
 		}
@@ -210,6 +216,29 @@ namespace RRS {
 		}
 		else if (alignVertical == Align::End) {
 			auto itemY = yAbsolute + heightReal - element->GetHeightReal() - element->GetMarginBottom();
+			element->SetYAbsolute(itemY);
+		}
+		else if (alignVertical == Align::Flex || alignVertical == Align::SpaceBetween || alignVertical == Align::SpaceAround) {
+			auto itemY = yAbsolute + borderTop + paddingTop + element->GetMarginTop();
+			element->SetYAbsolute(itemY);
+		}
+	}
+	void Layout::caculateColumnHorizontal(Element* element) 
+	{
+		if (alignHorizontal == Align::Start) {
+			auto itemX = xAbsolute + borderLeft + paddingLeft + element->GetMarginLeft();
+			element->SetXAbsolute(itemX);
+		}
+		else if (alignHorizontal == Align::Center) {
+			auto itemX = xAbsolute + widthReal / 2 - element->GetWidthReal() / 2 + element->GetMarginLeft();
+			element->SetXAbsolute(itemX);
+		}
+		else if (alignHorizontal == Align::End) {
+			auto itemX = xAbsolute + widthReal - element->GetWidthReal() - element->GetMarginRight();
+			element->SetXAbsolute(itemX);
+		}
+		else if (alignHorizontal == Align::Flex || alignVertical == Align::SpaceBetween || alignVertical == Align::SpaceAround) {
+			auto itemY = yAbsolute + borderTop + paddingTop + element->GetMarginTop();
 			element->SetYAbsolute(itemY);
 		}
 	}
@@ -222,7 +251,7 @@ namespace RRS {
 				auto x = xAbsolute + borderLeft + paddingLeft;
 				for (auto& element : Children)
 				{
-					element->CaculateRealSize(widthReal, heightReal);
+					element->CaculateRealSize(this);
 					x += element->GetMarginLeft();
 					element->SetXAbsolute(x);
 					caculateRowVertical(element.get());
@@ -234,7 +263,7 @@ namespace RRS {
 				float childrenWidth = 0.f;
 				for (const auto& element : Children)
 				{
-					element->CaculateRealSize(widthReal, heightReal);
+					element->CaculateRealSize(this);
 					childrenWidth += element->GetMarginLeft()+element->GetWidthReal()+element->GetMarginRight();
 				}
 				float boxWidth = widthReal - borderLeft - paddingLeft - borderRight - paddingRight;
@@ -257,7 +286,7 @@ namespace RRS {
 				auto flexSum = 0;
 				for (auto& element:Children)
 				{
-					element->CaculateRealSize(widthReal, heightReal);
+					element->CaculateRealSize(this);
 					if (element->GetFlex() == 0.f) {
 						w = w - element->GetMarginLeft() - element->GetWidthReal() - element->GetMarginRight();
 					}
@@ -276,6 +305,21 @@ namespace RRS {
 					element->SetXAbsolute(x);
 					caculateRowVertical(element.get());
 					x += element->GetWidthReal() + element->GetMarginRight();
+				}
+			}
+		}
+		else if (layoutDirection == LayoutDirection::Column)
+		{
+			if (alignVertical == Align::Start)
+			{
+				auto y = yAbsolute + paddingTop + borderTop;
+				for (auto& element : Children)
+				{
+					element->CaculateRealSize(this);
+					y += element->GetMarginTop();
+					element->SetYAbsolute(y);
+					caculateColumnHorizontal(element.get());
+					y += element->GetMarginBottom();
 				}
 			}
 		}
