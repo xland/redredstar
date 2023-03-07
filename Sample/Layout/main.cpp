@@ -23,14 +23,32 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		menu->SetHeight(100,true);
 
 		auto menuItem1 = std::make_shared<ButtonSelectable>(L"Row Layout");
+		menuItem1->SetAlignHorizontal(Align::Start);
+		menuItem1->SetPaddingLeft(26);
 		menuItem1->SetWidth(100, true);
 		menuItem1->SetBorderBottom(1, borderColor);
-		menu->AddChild(menuItem1);
+		menu->AddChild(menuItem1);		
 
-		auto menuItem2 = std::make_shared<ButtonSelectable>(L"Column Layout");
+		auto menuItem2 = std::make_shared<ButtonSelectable>(L"Row Flex Layout");
+		menuItem2->SetAlignHorizontal(Align::Start);
+		menuItem2->SetPaddingLeft(26);
 		menuItem2->SetWidth(100, true);
 		menuItem2->SetBorderBottom(1, borderColor);
 		menu->AddChild(menuItem2);
+
+		auto menuItem3 = std::make_shared<ButtonSelectable>(L"Column Layout");
+		menuItem3->SetAlignHorizontal(Align::Start);
+		menuItem3->SetPaddingLeft(26);
+		menuItem3->SetWidth(100, true);
+		menuItem3->SetBorderBottom(1, borderColor);
+		menu->AddChild(menuItem3);
+
+		auto menuItem4 = std::make_shared<ButtonSelectable>(L"Column Flex Layout");
+		menuItem4->SetAlignHorizontal(Align::Start);
+		menuItem4->SetPaddingLeft(26);
+		menuItem4->SetWidth(100, true);
+		menuItem4->SetBorderBottom(1, borderColor);
+		menu->AddChild(menuItem4);
 
 		auto body = std::make_shared<Element>();
 		body->SetBorderTop(1, borderColor);
