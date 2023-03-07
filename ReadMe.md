@@ -20,6 +20,8 @@ Currently under development.
 - Table element
 - Tree element
 - Splitter element
+- Text paragraph
+- Animation
 - More Doc
 - More Test
 - More Demo

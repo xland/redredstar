@@ -48,12 +48,10 @@ namespace RRS {
 		/// Close the window
 		/// </summary>
 		void Close();
-		void SetWidth(float width, bool isPercent = false) override {};
-		void SetHeight(float height, bool isPercent = false) override {};
-		float GetWidth() override;
-		float GetHeight() override;
-		float GetWidthReal();
-		float GetHeightReal();
+		void SetWidth(float width, bool isPercent = false) override {}; //todo assert
+		void SetHeight(float height, bool isPercent = false) override {}; //todo assert
+		void SetWidthReal(float widthReal) override {}; //todo assert
+		void SetHeightReal(float heightReal) override {}; //todo assert
 		void AddChild(std::shared_ptr<Element> child);
 		/// <summary>
 		/// window's handle
@@ -75,8 +73,6 @@ namespace RRS {
 		bool ShowInCenterScreen = true;	
 		float Width = 1000;
 		float Height = 700;
-		float WidthClient = 0;
-		float HeightClient = 0;
 		int WidthMinimum = 800;
 		int HeightMinimum = 600;
 		int WidthMaximum = 2000;

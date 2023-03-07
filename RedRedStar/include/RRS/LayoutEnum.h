@@ -6,9 +6,11 @@ namespace RRS {
 		Center,
 		End,
 		SpaceBetween, // |- - -|
-		SpaceAround // | - - - |
+		SpaceAround, // | - - - |
+		Flex,
 	};
-	enum class FlexDirection
+	//todo AlignSelf
+	enum class LayoutDirection
 	{
 		Column,
 		Row

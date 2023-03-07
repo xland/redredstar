@@ -10,14 +10,24 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 {
 	App::Init(hInstance);
 	auto win = std::make_unique<Window>();
-	win->WindowTitle = L"Hello ÊÀ½ç£¡";
+	win->WindowTitle = L"RedRedStar Layout";
+	win->SetAlignHorizontal(Align::Flex);
 	win->AddEventListener(EventType::Loaded, [&win]() {
-		auto panel = std::make_shared<Element>();
-		panel->SetBackgroundColor(GetColor(230, 231, 232));
-		panel->SetBorderRight(2, GetColor(204, 213, 240));
-		panel->SetWidth(300);
-		panel->SetHeight(100,true);
-		win->AddChild(panel);
+		auto menu = std::make_shared<Element>();
+		menu->SetBackgroundColor(GetColor(247, 248, 249));
+		menu->SetBorderRight(1, GetColor(221, 221, 221));
+		menu->SetBorderTop(1, GetColor(221, 221, 221));
+		menu->SetWidth(300);
+		menu->SetHeight(100,true);
+
+		auto body = std::make_shared<Element>();
+		body->SetBorderTop(1, GetColor(221, 221, 221));
+		body->SetFlex(1.f);
+		body->SetHeight(100, true);
+		body->SetBackgroundColor(GetColor(229, 229, 229));
+
+		win->AddChild(menu);
+		win->AddChild(body);
 		win->Show();
 	});
 	win->AddEventListener(EventType::WindowClosed, [&win]() {

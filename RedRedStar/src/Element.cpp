@@ -34,8 +34,11 @@ namespace RRS {
 	{
 		if (IsOutOfView()) return;
 		if (GetDirty()) {	
-			CaculateLayout();
-			Color color = IsMouseEnter ? backgroundColorHover : backgroundColor;
+			CaculateLayout();			
+			Color color = backgroundColor;
+			if (IsMouseEnter && backgroundColorHover != UINT32_MAX) {
+				color = backgroundColorHover;
+			}
 			SkPaint paint;
 			paint.setColor(color);
 			auto x = GetXAbsolute();
@@ -93,7 +96,7 @@ namespace RRS {
 	{
 		auto x = GetXAbsolute();
 		auto y = GetYAbsolute();
-		auto flag = !OwnerWindow || isHide || x > OwnerWindow->GetWidth() || y > OwnerWindow->GetHeight() ;
+		auto flag = !OwnerWindow || isHide || x > OwnerWindow->GetWidthReal() || y > OwnerWindow->GetHeightReal() ;
 		return flag;
 	}
 	void Element::SetIsMouseEnter(int x, int y)

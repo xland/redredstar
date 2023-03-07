@@ -11,11 +11,11 @@ namespace RRS {
 	public:
 		Layout() = default;
 		~Layout() = default; 
-		//todo |- - - -|   
 		void CaculateLayout();
+		void CaculateRealSize(float w, float h);
 		void  SetXAbsolute(float xAbsolute);
 		void  SetYAbsolute(float yAbsolute);
-		void  SetflexDirection(FlexDirection flexDirection);
+		void  SetLayoutDirection(LayoutDirection layoutDirection);
 		void  SetAlignVertical(Align alignVertical);
 		void  SetAlignHorizontal(Align alignHorizontal);
 		void SetMarginLeft(float marginLeft);
@@ -37,7 +37,7 @@ namespace RRS {
 
 		float  GetXAbsolute();
 		float  GetYAbsolute();
-		FlexDirection  GetflexDirection();
+		LayoutDirection  GetLayoutDirection();
 		Align  GetAlignVertical();
 		Align  GetAlignHorizontal();
 
@@ -73,12 +73,11 @@ namespace RRS {
 
 		std::vector<std::shared_ptr<Element>> Children;
 
-		
+	
 	private:
+		void caculateRowVertical(Element* element);
 		void caculateAlignHorizontal();
 		void caculateAlignVertical();
-		float caculateWidthReal(Layout* element);
-		float caculateHeightReal(Layout* element);
 		float width = 0.f;
 		float height = 0.f;
 		float widthReal = 0.f;
@@ -106,7 +105,7 @@ namespace RRS {
 
 		bool isWidthPercent = false;
 		bool isHeightPercent = false;
-		FlexDirection flexDirection = FlexDirection::Row;
+		LayoutDirection layoutDirection = LayoutDirection::Row;
 		Align alignVertical = Align::Start;
 		Align alignHorizontal = Align::Start;
 		float flex = 0.f;

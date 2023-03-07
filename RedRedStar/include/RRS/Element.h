@@ -36,7 +36,7 @@ namespace RRS {
 	private:
 		int hoverId = -1;
 		int hoverOffId = -1;
-		Color backgroundColorHover = GetColor(255, 255, 255);
+		Color backgroundColorHover = UINT32_MAX;
 		Color backgroundColor = GetColor(255, 255, 255);
 		bool isHide = false;
 	};

@@ -65,20 +65,6 @@ namespace RRS
 			}
 		}
 	}
-	float Window::GetWidth() {
-		return WidthClient;
-	}
-	float Window::GetHeight() {
-		return HeightClient;
-	}
-	float Window::GetWidthReal()
-	{
-		return WidthClient;
-	}
-	float Window::GetHeightReal()
-	{
-		return HeightClient;
-	}
 	void Window::Show() 
 	{
 		ShowWindow(Hwnd, SW_SHOW);

@@ -109,8 +109,8 @@ namespace RRS {
 			return 0;
 		}
 		case WM_SIZE: {
-			WidthClient = LOWORD(lParam);
-			HeightClient = HIWORD(lParam);
+			Layout::SetWidthReal(LOWORD(lParam));
+			Layout::SetHeightReal(HIWORD(lParam));
 			for (size_t i = 0; i < Children.size(); i++)
 			{
 				Children[i]->SetDirty(true);
