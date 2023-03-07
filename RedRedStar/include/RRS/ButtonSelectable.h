@@ -7,9 +7,11 @@ namespace RRS {
 	public:
 		ButtonSelectable(std::wstring label);
 		~ButtonSelectable();
+		bool GetIsSelected() { return isSelected; }
+		bool SetIsSelected(bool flag) { isSelected = flag; }
 	private:
 		std::wstring labelStr;
-
+		bool isSelected = false;
 	};
 }
 

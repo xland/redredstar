@@ -13,7 +13,7 @@ namespace RRS {
 		SetAlignVertical(Align::Center);
 		auto label = std::make_shared<Label>(labelStr);
 		label->SetFontColor(GetColor(255, 255, 255));
-		auto w = label->GetWidth() + 50;
+		auto w = label->GetWidth() + 50; //todo 可以通过pading来自动设置宽度吗
 		auto h = label->GetHeight() + 30;
 		SetWidth(w);
 		SetHeight(h);

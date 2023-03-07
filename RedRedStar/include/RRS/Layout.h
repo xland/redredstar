@@ -77,8 +77,6 @@ namespace RRS {
 	private:
 		inline void caculateRowVertical(Element* element);
 		inline void caculateColumnHorizontal(Element* element);
-		void caculateAlignHorizontal();
-		void caculateAlignVertical();
 		float width = 0.f;
 		float height = 0.f;
 		float widthReal = 0.f;

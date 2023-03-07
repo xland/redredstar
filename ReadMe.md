@@ -26,6 +26,7 @@ Currently under development.
 - More Test
 - More Demo
 - Choose a licence
+- CMake Script
 
 # Work in plan
 

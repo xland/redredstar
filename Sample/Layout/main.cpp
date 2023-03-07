@@ -22,9 +22,15 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		menu->SetWidth(300);
 		menu->SetHeight(100,true);
 
-		auto menuItem = std::make_shared<ButtonSelectable>(L"Row Layout");
-		menuItem->SetWidth(100, true);
-		menu->AddChild(menuItem);
+		auto menuItem1 = std::make_shared<ButtonSelectable>(L"Row Layout");
+		menuItem1->SetWidth(100, true);
+		menuItem1->SetBorderBottom(1, borderColor);
+		menu->AddChild(menuItem1);
+
+		auto menuItem2 = std::make_shared<ButtonSelectable>(L"Column Layout");
+		menuItem2->SetWidth(100, true);
+		menuItem2->SetBorderBottom(1, borderColor);
+		menu->AddChild(menuItem2);
 
 		auto body = std::make_shared<Element>();
 		body->SetBorderTop(1, borderColor);

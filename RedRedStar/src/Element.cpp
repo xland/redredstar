@@ -72,13 +72,15 @@ namespace RRS {
 			if (border > 0) {
 				paint.setStrokeWidth(border);
 				paint.setColor(GetBorderBottomColor());
-				canvas->drawLine({ x,y+rect.height()-border}, {x + rect.width(),y + rect.height() - border }, paint);
+				auto temp = y + rect.height() - border / 2;
+				canvas->drawLine({ x,temp}, {x + rect.width(),temp }, paint);
 			}
 			border = GetBorderLeft();
 			if (border > 0) {
 				paint.setStrokeWidth(border);
 				paint.setColor(GetBorderLeftColor());
-				canvas->drawLine({ x,y }, { x,y+rect.height()}, paint);
+				auto temp = x + border / 2;
+				canvas->drawLine({ temp,y }, { temp,y+rect.height()}, paint);
 			}
 			SetDirty(false);
 		}		
