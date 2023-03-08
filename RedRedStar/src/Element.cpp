@@ -30,6 +30,42 @@ namespace RRS {
 		if (!OwnerWindow) return;
 		OwnerWindow->SetDirty(flag);
 	}
+	void Element::drawBorder(SkPaint& paint, SkCanvas* canvas, SkRect& rect)
+	{
+		paint.setStyle(SkPaint::kStroke_Style);
+		auto x = rect.x();
+		auto y = rect.y();
+		auto right = rect.right();
+		auto bottom = rect.bottom();
+		auto border = GetBorderTop();
+		if (border > 0) {
+			paint.setStrokeWidth(border);
+			paint.setColor(GetBorderTopColor());
+			auto temp = y + border / 2;
+			canvas->drawLine({ x,temp }, { right,temp }, paint);
+		}
+		border = GetBorderRight();
+		if (border > 0) {
+			paint.setStrokeWidth(border);
+			paint.setColor(GetBorderRightColor());
+			auto temp = x + rect.width() - border / 2;
+			canvas->drawLine({ temp,y }, { temp,bottom }, paint);
+		}
+		border = GetBorderBottom();
+		if (border > 0) {
+			paint.setStrokeWidth(border);
+			paint.setColor(GetBorderBottomColor());
+			auto temp = bottom - border / 2;
+			canvas->drawLine({ x,temp }, { right,temp }, paint);
+		}
+		border = GetBorderLeft();
+		if (border > 0) {
+			paint.setStrokeWidth(border);
+			paint.setColor(GetBorderLeftColor());
+			auto temp = x + border / 2;
+			canvas->drawLine({ temp,y }, { temp,bottom }, paint);
+		}
+	}
 	void Element::Paint(SkCanvas* canvas)
 	{
 		if (IsOutOfView()) return;
@@ -53,35 +89,7 @@ namespace RRS {
 			{
 				canvas->drawRect(rect, paint);
 			}
-			paint.setStyle(SkPaint::kStroke_Style);
-			auto border = GetBorderTop();
-			if (border > 0) {
-				paint.setStrokeWidth(border);
-				paint.setColor(GetBorderTopColor());
-				auto temp = y + border / 2;
-				canvas->drawLine({ x,temp }, { x + rect.width(),temp}, paint);
-			}
-			border = GetBorderRight();
-			if (border > 0) {
-				paint.setStrokeWidth(border);
-				paint.setColor(GetBorderRightColor());
-				auto temp = x + rect.width() - border/2;
-				canvas->drawLine({ temp,y }, { temp,y+rect.height()}, paint);
-			}
-			border = GetBorderBottom();
-			if (border > 0) {
-				paint.setStrokeWidth(border);
-				paint.setColor(GetBorderBottomColor());
-				auto temp = y + rect.height() - border / 2;
-				canvas->drawLine({ x,temp}, {x + rect.width(),temp }, paint);
-			}
-			border = GetBorderLeft();
-			if (border > 0) {
-				paint.setStrokeWidth(border);
-				paint.setColor(GetBorderLeftColor());
-				auto temp = x + border / 2;
-				canvas->drawLine({ temp,y }, { temp,y+rect.height()}, paint);
-			}
+			drawBorder(paint, canvas, rect);
 			SetDirty(false);
 		}		
 		for (auto ele : Children)

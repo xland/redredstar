@@ -4,6 +4,8 @@
 #include "EventListener.h"
 #include "Layout.h"
 class SkCanvas;
+class SkPaint;
+class SkRect;
 namespace RRS {
 	class Window;
 	class Element:public EventListener,public Layout
@@ -34,6 +36,7 @@ namespace RRS {
 		float BorderRadius = 0.f;
 	protected:
 	private:
+		void drawBorder(SkPaint& paint, SkCanvas* canvas, SkRect& rect);
 		int hoverId = -1;
 		int hoverOffId = -1;
 		Color backgroundColorHover = UINT32_MAX;

@@ -57,153 +57,162 @@ namespace RRS {
 			element->SetYAbsolute(itemY);
 		}
 	}
+	inline void Layout::caculateRow()
+	{
+		if (alignHorizontal == Align::Start) {
+			auto x = xAbsolute + borderLeft + paddingLeft;
+			for (auto& element : Children)
+			{
+				element->CaculateRealSize(this);
+				x += element->GetMarginLeft();
+				element->SetXAbsolute(x);
+				caculateRowVertical(element.get());
+				x += element->GetWidthReal() + element->GetMarginRight();
+			}
+		}
+		else if (alignHorizontal == Align::Center)
+		{
+			float childrenWidth = 0.f;
+			for (const auto& element : Children)
+			{
+				element->CaculateRealSize(this);
+				childrenWidth += element->GetMarginLeft() + element->GetWidthReal() + element->GetMarginRight();
+			}
+			float x = xAbsolute + widthReal / 2 - childrenWidth / 2;
+			for (auto& element : Children)
+			{
+				x += element->GetMarginLeft();
+				element->SetXAbsolute(x);
+				caculateRowVertical(element.get());
+				x += element->GetWidthReal() + element->GetMarginRight();
+			}
+		}
+		else if (alignHorizontal == Align::End)
+		{
+			float x = xAbsolute + widthReal - paddingRight - borderRight;
+			for (int i = Children.size() - 1; i > -1; i--)
+			{
+				auto& element = Children[i];
+				element->CaculateRealSize(this);
+				x -= element->GetMarginRight();
+				x -= element->GetWidthReal();
+				element->SetXAbsolute(x);
+				caculateRowVertical(element.get());
+				x -= element->GetMarginLeft();
+			}
+		}
+		else if (alignHorizontal == Align::Flex)
+		{
+			auto x = xAbsolute + borderLeft + paddingLeft;
+			auto w = widthReal - borderLeft - paddingLeft - borderRight - paddingRight;
+			auto flexSum = 0;
+			for (auto& element : Children)
+			{
+				element->CaculateRealSize(this);
+				if (element->GetFlex() == 0.f) {
+					w = w - element->GetMarginLeft() - element->GetWidthReal() - element->GetMarginRight();
+				}
+				else
+				{
+					flexSum += element->GetFlex();
+				}
+			}
+			for (auto& element : Children)
+			{
+				x = x + element->GetMarginLeft();
+				if (element->GetFlex() != 0.f)
+				{
+					element->SetWidthReal(w / flexSum * element->GetFlex());
+				}
+				element->SetXAbsolute(x);
+				caculateRowVertical(element.get());
+				x += element->GetWidthReal() + element->GetMarginRight();
+			}
+		}
+	}
+	inline void Layout::caculateColumn()
+	{
+		if (alignVertical == Align::Start)
+		{
+			auto y = yAbsolute + paddingTop + borderTop;
+			for (auto& element : Children)
+			{
+				element->CaculateRealSize(this);
+				y += element->GetMarginTop();
+				element->SetYAbsolute(y);
+				caculateColumnHorizontal(element.get());
+				y += element->GetHeightReal() + element->GetMarginBottom();
+			}
+		}
+		else if (alignVertical == Align::Center)
+		{
+			float childrenHeight = 0.f;
+			for (const auto& element : Children)
+			{
+				element->CaculateRealSize(this);
+				childrenHeight += element->GetMarginTop() + element->GetHeightReal() + element->GetMarginBottom();
+			}
+			float y = yAbsolute + heightReal / 2 - childrenHeight / 2;
+			for (auto& element : Children)
+			{
+				y += element->GetMarginTop();
+				element->SetYAbsolute(y);
+				caculateColumnHorizontal(element.get());
+				y += element->GetHeightReal() + element->GetMarginBottom();
+			}
+		}
+		else if (alignVertical == Align::End)
+		{
+			float y = yAbsolute + heightReal - paddingBottom - borderBottom;
+			for (int i = Children.size() - 1; i > -1; i--)
+			{
+				auto& element = Children[i];
+				element->CaculateRealSize(this);
+				y -= element->GetMarginBottom();
+				y -= element->GetHeightReal();
+				element->SetYAbsolute(y);
+				caculateColumnHorizontal(element.get());
+				y -= element->GetMarginTop();
+			}
+		}
+		else if (alignVertical == Align::Flex)
+		{
+			auto y = yAbsolute + borderTop + paddingTop;
+			auto h = heightReal - borderTop - paddingTop - borderBottom - paddingBottom;
+			auto flexSum = 0;
+			for (auto& element : Children)
+			{
+				element->CaculateRealSize(this);
+				if (element->GetFlex() == 0.f) {
+					h = h - element->GetMarginTop() - element->GetHeightReal() - element->GetMarginBottom();
+				}
+				else
+				{
+					flexSum += element->GetFlex();
+				}
+			}
+			for (auto& element : Children)
+			{
+				y = y + element->GetMarginTop();
+				if (element->GetFlex() != 0.f)
+				{
+					element->SetHeightReal(h / flexSum * element->GetFlex());
+				}
+				element->SetYAbsolute(y);
+				caculateColumnHorizontal(element.get());
+				y += element->GetHeightReal() + element->GetMarginBottom();
+			}
+		}
+	}
 	void Layout::CaculateLayout()
 	{
-		if (layoutDirection == LayoutDirection::Row) {
-			if (alignHorizontal == Align::Start) {
-				auto x = xAbsolute + borderLeft + paddingLeft;
-				for (auto& element : Children)
-				{
-					element->CaculateRealSize(this);
-					x += element->GetMarginLeft();
-					element->SetXAbsolute(x);
-					caculateRowVertical(element.get());
-					x += element->GetWidthReal() + element->GetMarginRight();
-				}
-			}
-			else if(alignHorizontal == Align::Center)
-			{
-				float childrenWidth = 0.f;
-				for (const auto& element : Children)
-				{
-					element->CaculateRealSize(this);
-					childrenWidth += element->GetMarginLeft()+element->GetWidthReal()+element->GetMarginRight();
-				}
-				float x = xAbsolute+ widthReal/2-childrenWidth/2;
-				for (auto& element : Children)
-				{
-					x += element->GetMarginLeft();
-					element->SetXAbsolute(x);
-					caculateRowVertical(element.get());
-					x += element->GetWidthReal() + element->GetMarginRight();
-				}
-			}
-			else if (alignHorizontal == Align::End)
-			{
-				float x = xAbsolute + widthReal - paddingRight - borderRight;
-				for (int i = Children.size() - 1; i > -1; i--)
-				{
-					auto& element = Children[i];
-					element->CaculateRealSize(this);
-					x -= element->GetMarginRight();
-					x -= element->GetWidthReal();
-					element->SetXAbsolute(x);
-					caculateRowVertical(element.get());
-					x -= element->GetMarginLeft();
-				}
-			}
-			else if (alignHorizontal == Align::Flex)
-			{
-				auto x = xAbsolute + borderLeft + paddingLeft;
-				auto w = widthReal - borderLeft - paddingLeft - borderRight - paddingRight;
-				auto flexSum = 0;
-				for (auto& element:Children)
-				{
-					element->CaculateRealSize(this);
-					if (element->GetFlex() == 0.f) {
-						w = w - element->GetMarginLeft() - element->GetWidthReal() - element->GetMarginRight();
-					}
-					else
-					{
-						flexSum += element->GetFlex();
-					}
-				}
-				for (auto& element : Children)
-				{
-					x = x + element->GetMarginLeft();
-					if (element->GetFlex() != 0.f)
-					{
-						element->SetWidthReal(w / flexSum * element->GetFlex());
-					}
-					element->SetXAbsolute(x);
-					caculateRowVertical(element.get());
-					x += element->GetWidthReal() + element->GetMarginRight();
-				}
-			}
+		if (layoutDirection == LayoutDirection::Row) 
+		{
+			caculateRow();
 		}
 		else if (layoutDirection == LayoutDirection::Column)
 		{
-			if (alignVertical == Align::Start)
-			{
-				auto y = yAbsolute + paddingTop + borderTop;
-				for (auto& element : Children)
-				{
-					element->CaculateRealSize(this);
-					y += element->GetMarginTop();
-					element->SetYAbsolute(y);
-					caculateColumnHorizontal(element.get());
-					y += element->GetHeightReal() + element->GetMarginBottom();
-				}
-			}
-			else if (alignVertical == Align::Center)
-			{
-				float childrenHeight = 0.f;
-				for (const auto& element : Children)
-				{
-					element->CaculateRealSize(this);
-					childrenHeight += element->GetMarginTop() + element->GetHeightReal() + element->GetMarginBottom();
-				}
-				float y = yAbsolute  + heightReal/2 - childrenHeight/2;
-				for (auto& element : Children)
-				{
-					y += element->GetMarginTop();
-					element->SetYAbsolute(y);
-					caculateColumnHorizontal(element.get());
-					y += element->GetHeightReal()+ element->GetMarginBottom();
-				}
-			}
-			else if (alignVertical == Align::End)
-			{
-				float y = yAbsolute + heightReal - paddingBottom - borderBottom;
-				for (int i = Children.size()-1; i >-1; i--)
-				{
-					auto& element = Children[i];
-					element->CaculateRealSize(this);
-					y -= element->GetMarginBottom();
-					y -= element->GetHeightReal();
-					element->SetYAbsolute(y);
-					caculateColumnHorizontal(element.get());
-					y -= element->GetMarginTop();
-				}
-			}
-			else if (alignVertical == Align::Flex)
-			{
-				auto y = yAbsolute + borderTop + paddingTop;
-				auto h = heightReal - borderTop - paddingTop - borderBottom - paddingBottom;
-				auto flexSum = 0;
-				for (auto& element : Children)
-				{
-					element->CaculateRealSize(this);
-					if (element->GetFlex() == 0.f) {
-						h = h - element->GetMarginTop() - element->GetHeightReal() - element->GetMarginBottom();
-					}
-					else
-					{
-						flexSum += element->GetFlex();
-					}
-				}
-				for (auto& element : Children)
-				{
-					y = y + element->GetMarginTop();
-					if (element->GetFlex() != 0.f)
-					{
-						element->SetHeightReal(h / flexSum * element->GetFlex());
-					}
-					element->SetYAbsolute(y);
-					caculateColumnHorizontal(element.get());
-					y += element->GetHeightReal() + element->GetMarginBottom();
-				}
-			}
+			caculateColumn();
 		}
 	}
 
