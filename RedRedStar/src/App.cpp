@@ -16,7 +16,7 @@ namespace RRS {
 	void App::Init(HINSTANCE hInstance) 
 	{
 		SetProcessDpiAwareness(PROCESS_SYSTEM_DPI_AWARE);
-		app = new App(hInstance);		
+		app = new App(hInstance);
 	}
 	int App::Exec() {
 		MSG msg = { };

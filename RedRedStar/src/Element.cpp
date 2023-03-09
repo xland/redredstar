@@ -20,10 +20,16 @@ namespace RRS {
 	void Element::SetBackgroundColor(Color color)
 	{
 		backgroundColor = color;
+		if (!IsMouseEnter) {
+			SetDirty(true);
+		}		
 	}
 	void Element::SetBackgroundColorHover(Color color)
 	{
 		backgroundColorHover = color;
+		if (IsMouseEnter) {
+			SetDirty(true);
+		}
 	}
 	void Element::SetDirty(bool flag) {
 		Layout::SetDirty(flag);
@@ -66,21 +72,24 @@ namespace RRS {
 			canvas->drawLine({ temp,y }, { temp,bottom }, paint);
 		}
 	}
+	Color Element::GetCurrentBackgroundColor()
+	{
+		Color color = backgroundColor;
+		if (IsMouseEnter && backgroundColorHover != UINT32_MAX) {
+			color = backgroundColorHover;
+		}
+		return color;
+	}
 	void Element::Paint(SkCanvas* canvas)
 	{
 		if (IsOutOfView()) return;
 		if (GetDirty()) {	
 			CaculateLayout();			
-			Color color = backgroundColor;
-			if (IsMouseEnter && backgroundColorHover != UINT32_MAX) {
-				color = backgroundColorHover;
-			}
+			Color color = GetCurrentBackgroundColor();
 			SkPaint paint;
 			paint.setAntiAlias(true);
 			paint.setColor(color);
-			auto x = GetXAbsolute();
-			auto y = GetYAbsolute();
-			SkRect rect = SkRect::MakeXYWH(x, y, GetWidthReal(), GetHeightReal());
+			SkRect rect = SkRect::MakeXYWH(GetXAbsolute(), GetYAbsolute(), GetWidthReal(), GetHeightReal());
 			if (BorderRadius != 0.f) 
 			{
 				canvas->drawRoundRect(rect, BorderRadius, BorderRadius, paint);
@@ -121,18 +130,20 @@ namespace RRS {
 		if (!IsMouseEnter && flag) 
 		{
 			IsMouseEnter = true;
-			if (backgroundColor != backgroundColorHover) {
+			OnMouseEnter();
+			EmitEvent(RRS::EventType::MouseOver);
+			if (backgroundColorHover != UINT32_MAX &&  backgroundColor != backgroundColorHover) {
 				SetDirty(true);
 			}
-			EmitEvent(RRS::EventType::MouseOver);
 		}
 		else if(IsMouseEnter && !flag)
 		{
 			IsMouseEnter = false;
-			if (backgroundColor != backgroundColorHover) {
+			OnMouseOut();
+			EmitEvent(RRS::EventType::MouseOut);
+			if (backgroundColorHover != UINT32_MAX && backgroundColor != backgroundColorHover) {
 				SetDirty(true);
 			}
-			EmitEvent(RRS::EventType::MouseOut);
 		}
 		for (auto& ele : Children)
 		{
@@ -142,10 +153,11 @@ namespace RRS {
 	void Element::Click()
 	{
 		if (!IsMouseEnter) return;
+		OnClick();
 		EmitEvent(RRS::EventType::Click);
 		for (auto& ele : Children)
 		{
-			ele->EmitEvent(RRS::EventType::Click);
-		}			
+			ele->Click();
+		}
 	}
 }

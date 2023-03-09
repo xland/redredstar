@@ -14,6 +14,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	win->SetAlignHorizontal(Align::Flex);
 	win->AddEventListener(EventType::Loaded, [&win]() {
 		constexpr Color borderColor = GetColor(188, 188, 168);
+		constexpr Color selectedColor = GetColor(168, 188, 168);
 		auto menu = std::make_shared<Element>();
 		menu->SetLayoutDirection(LayoutDirection::Column);
 		menu->SetBackgroundColor(GetColor(247, 248, 249));

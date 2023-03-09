@@ -70,18 +70,18 @@ namespace RRS {
 		/// <summary>
 		/// is window shown in the center of the screen
 		/// </summary>
-		bool ShowInCenterScreen = true;	
-		float Width = 1000;
-		float Height = 700;
-		int WidthMinimum = 800;
-		int HeightMinimum = 600;
-		int WidthMaximum = 2000;
-		int HeightMaximum = 1400;
-		bool CanMaximize = true;
-		bool CanResize = true;
-		bool HasFrame = true;
-		std::wstring WindowTitle = L"Red Red Star Window";
-		Color BackgroundColor = GetColor(255, 255, 255);
+		bool ShowInCenterScreen{ true };
+		float Width{ 1000 };
+		float Height{ 700 };
+		int WidthMinimum{ 800 };
+		int HeightMinimum{ 600 };
+		int WidthMaximum{ 2000 };
+		int HeightMaximum{ 1400 };
+		bool CanMaximize{ true };
+		bool CanResize{ true };
+		bool HasFrame{ true };
+		std::wstring WindowTitle{ L"Red Red Star Window" };
+		Color BackgroundColor{ GetColor(255, 255, 255) };
 	protected:
 		/// <summary>
 		/// OnLoad method will be called after window and drawing engine are initialized
@@ -120,10 +120,10 @@ namespace RRS {
 		bool createNativeWindow();
 		SkSurface* getSurface();
 		void disposeSurfaceResource();
-		int stencilBits = 0;
-		HGLRC hglrc = nullptr;		
-		const GrGLInterface* backendContext = nullptr;
-		GrDirectContext* directContext = nullptr;
+		int stencilBits{0};
+		HGLRC hglrc{ nullptr };
+		const GrGLInterface* backendContext{ nullptr };
+		GrDirectContext* directContext{ nullptr };
 		
 	};
 }

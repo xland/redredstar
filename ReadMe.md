@@ -14,6 +14,8 @@ Currently under development.
 
 - More layout method
 - A layout demo
+- Frameless window demo
+- Embed SkCanvas* canvas
 - Element cursor
 - Load Image
 - A image viewer demo
