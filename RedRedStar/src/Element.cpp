@@ -83,7 +83,7 @@ namespace RRS {
 	void Element::Paint(SkCanvas* canvas)
 	{
 		if (IsOutOfView()) return;
-		if (GetDirty()) {	
+		if (GetDirty()) {	// window dirty 的时候，子元素肯定也dirty了
 			CaculateLayout();			
 			Color color = GetCurrentBackgroundColor();
 			SkPaint paint;
